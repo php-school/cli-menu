@@ -9,13 +9,6 @@ namespace MikeyMike\CliMenu\Terminal;
 interface TerminalInterface
 {
     /**
-     * Initialise the terminal from resource
-     *
-     * @param string $resource
-     */
-    public function __construct($resource = STDOUT);
-
-    /**
      * Get terminal details
      *
      * @return string
@@ -68,4 +61,9 @@ interface TerminalInterface
      * @param bool $enableCursor
      */
     public function enableCursor($enableCursor = true);
+
+    /**
+     * @return string
+     */
+    public function getKeyedInput();
 }

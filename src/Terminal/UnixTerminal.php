@@ -9,33 +9,32 @@ namespace MikeyMike\CliMenu\Terminal;
 class UnixTerminal implements TerminalInterface
 {
     /**
-     * @var string TODO: Check is this really a string ??
-     */
-    protected $resource;
-
-    /**
      * @var bool
      */
-    protected $isTTY;
+    private $isTTY;
 
     /**
      * @var int
      */
-    protected $width;
+    private $width;
 
     /**
      * @var string
      */
-    protected $details;
+    private $details;
+
+    /**
+     * @var string
+     */
+    private $originalConfiguration;
 
     /**
      * Initialise the terminal from resource
      *
-     * @param string $resource
      */
-    public function __construct($resource = STDOUT)
+    public function __construct()
     {
-        $this->resource = $resource;
+        $this->getOriginalConfiguration();
     }
 
     /**
@@ -47,7 +46,7 @@ class UnixTerminal implements TerminalInterface
     {
         $this->setRawMode(false);
 
-        posix_kill(posix_getpid(), SIGKILL);
+//        posix_kill(posix_getpid(), SIGKILL);
     }
 
     /**
@@ -67,7 +66,13 @@ class UnixTerminal implements TerminalInterface
      */
     public function getDetails()
     {
-        return $this->details ?: $this->details = posix_ttyname($this->resource);
+        return 'some fucking shell init bro';
+//        return $this->details ?: $this->details = posix_ttyname(STDOUT);
+    }
+
+    private function getOriginalConfiguration()
+    {
+        return $this->originalConfiguration ?: $this->originalConfiguration = system('stty -g');
     }
 
     /**
@@ -77,7 +82,7 @@ class UnixTerminal implements TerminalInterface
      */
     public function setRawMode($useRaw = true)
     {
-        $useRaw ? system('stty raw') : system('stty sane');
+        $useRaw ? system('stty raw') : system('stty ' . $this->getOriginalConfiguration());
     }
 
     /**
@@ -97,7 +102,8 @@ class UnixTerminal implements TerminalInterface
      */
     public function isTTY()
     {
-        return $this->isTTY ?: $this->isTTY = posix_isatty($this->resource);
+        return true;
+//        return $this->isTTY ?: $this->isTTY = posix_isatty(STDOUT);
     }
 
     /**
@@ -105,7 +111,7 @@ class UnixTerminal implements TerminalInterface
      */
     public function clear()
     {
-        // TODO: Implement clear() method.
+        echo sprintf('%c[1J', 27);
     }
 
     /**
@@ -118,5 +124,26 @@ class UnixTerminal implements TerminalInterface
         echo $enableCursor
             ? exec('tput cnorm')
             : exec('tput civis');
+    }
+
+    /**
+     * @return string
+     */
+    public function getKeyedInput()
+    {
+        // TODO: Move to class var?
+        // TODO: up, down, enter etc in Abstract CONSTs
+        $map = [
+            "\033[A" => 'up',
+            "\033[B" => 'down',
+            "\n"     => 'enter',
+            " "      => 'enter',
+        ];
+
+        $input = fread(STDIN, 4);
+
+        return array_key_exists($input, $map)
+            ? $map[$input]
+            : $input;
     }
 }
