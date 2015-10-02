@@ -19,6 +19,11 @@ class UnixTerminal implements TerminalInterface
     private $width;
 
     /**
+     * @var int
+     */
+    private $height;
+
+    /**
      * @var string
      */
     private $details;
@@ -56,7 +61,7 @@ class UnixTerminal implements TerminalInterface
      */
     public function getWidth()
     {
-        return $this->width ?: $this->width = exec('tput cols');
+        return $this->width ?: $this->width = (int) exec('tput cols');
     }
 
     /**
@@ -66,7 +71,7 @@ class UnixTerminal implements TerminalInterface
      */
     public function getHeight()
     {
-        return $this->width ?: $this->width = exec('tput lines');
+        return $this->height ?: $this->height = (int) exec('tput lines');
     }
 
     /**
@@ -80,6 +85,11 @@ class UnixTerminal implements TerminalInterface
 //        return $this->details ?: $this->details = posix_ttyname(STDOUT);
     }
 
+    /**
+     * Get the original terminal configuration / mode
+     *
+     * @return string
+     */
     private function getOriginalConfiguration()
     {
         return $this->originalConfiguration ?: $this->originalConfiguration = system('stty -g');
@@ -88,19 +98,19 @@ class UnixTerminal implements TerminalInterface
     /**
      * Toggle raw mode on TTY
      *
-     * @param bool $useRaw
+     * @param bool $useCanonicalMode
      */
-    public function setRawMode($useRaw = true)
+    public function setCanonicalMode($useCanonicalMode = true)
     {
-        $useRaw ? system('stty -icanon') : system('stty ' . $this->getOriginalConfiguration());
+        $useCanonicalMode ? system('stty -icanon') : system('stty ' . $this->getOriginalConfiguration());
     }
 
     /**
-     * Check if TTY is in raw mode
+     * Check if TTY is in canonical mode
      *
      * @return bool
      */
-    public function isRaw()
+    public function isCanonical()
     {
         // TODO: Implement isRaw() method.
     }
@@ -121,23 +131,23 @@ class UnixTerminal implements TerminalInterface
      */
     public function clear()
     {
-        echo "\033[1J";
+        echo "\033[2J";
     }
 
     /**
-     * Toggle cursor display
+     * Enable cursor
      */
-    public function toggleCursor()
+    public function enableCursor()
     {
-        echo "\e[?25l";
+        echo "\033[?25h";
     }
 
     /**
-     * Toggle cursor display
+     * Disable cursor
      */
     public function disableCursor()
     {
-        echo "\e[?25l";
+        echo "\033[?25l";
     }
 
     /**
@@ -156,9 +166,7 @@ class UnixTerminal implements TerminalInterface
         ];
 
         $input = fread(STDIN, 4);
-        echo "\r      ";
-
-        pcntl_signal_dispatch();
+        $this->clearLine();
 
         return array_key_exists($input, $map)
             ? $map[$input]
@@ -173,5 +181,15 @@ class UnixTerminal implements TerminalInterface
     public function moveCursorToTop()
     {
         echo "\033[H";
+    }
+
+    /**
+     * Clear the current cursors line
+     *
+     * @return void
+     */
+    public function clearLine()
+    {
+        echo sprintf("\033[%dD\033[K", $this->getWidth());
     }
 }

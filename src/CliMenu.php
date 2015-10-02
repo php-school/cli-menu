@@ -111,8 +111,8 @@ class CliMenu
             );
         }
 
-        $this->terminal->setRawMode();
-        $this->terminal->toggleCursor();
+        $this->terminal->setCanonicalMode();
+        $this->terminal->disableCursor();
         $this->terminal->clear();
     }
 
@@ -129,8 +129,8 @@ class CliMenu
             );
         }
 
-        $this->terminal->setRawMode(false);
-        $this->terminal->toggleCursor();
+        $this->terminal->setCanonicalMode(false);
+        $this->terminal->enableCursor();
     }
 
     /**

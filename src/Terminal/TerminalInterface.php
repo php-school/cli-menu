@@ -37,18 +37,18 @@ interface TerminalInterface
     public function getHeight();
 
     /**
-     * Toggle raw mode on TTY
+     * Toggle canonical mode on TTY
      *
-     * @param bool $useRaw
+     * @param bool $useCanonicalMode
      */
-    public function setRawMode($useRaw = true);
+    public function setCanonicalMode($useCanonicalMode = true);
 
     /**
-     * Check if TTY is in raw mode
+     * Check if TTY is in canonical mode
      *
      * @return bool
      */
-    public function isRaw();
+    public function isCanonical();
 
     /**
      * Test whether terminal is valid TTY
@@ -72,12 +72,24 @@ interface TerminalInterface
     public function moveCursorToTop();
 
     /**
-     * Toggle cursor display
+     * Enable cursor display
      */
-    public function toggleCursor();
+    public function enableCursor();
+
+    /**
+     * Disable cursor display
+     */
+    public function disableCursor();
 
     /**
      * @return string
      */
     public function getKeyedInput();
+
+    /**
+     * Clear the current cursors line
+     *
+     * @return void
+     */
+    public function clearLine();
 }
