@@ -3,12 +3,13 @@
 namespace MikeyMike\CliMenu;
 
 use MikeyMike\CliMenu\Exception\InvalidTerminalException;
-use MikeyMike\CliMenu\MenuItem\ActionItem;
 use MikeyMike\CliMenu\MenuItem\LineBreakItem;
+use MikeyMike\CliMenu\MenuItem\MenuItem;
 use MikeyMike\CliMenu\MenuItem\MenuItemInterface;
-use MikeyMike\CliMenu\MenuItem\TextItem;
+use MikeyMike\CliMenu\MenuItem\SelectableItem;
+use MikeyMike\CliMenu\MenuItem\StaticItem;
+use MikeyMike\CliMenu\Terminal\TerminalFactory;
 use \MikeyMike\CliMenu\Terminal\TerminalInterface;
-use \MikeyMike\CliMenu\Terminal\UnixTerminal;
 
 /**
  * Class CliMenu
@@ -54,7 +55,7 @@ class CliMenu
     /**
      * @var int
      */
-    protected $selectedItem = 0;
+    protected $selectedItem;
 
     /**
      * Initiate the Menu
@@ -77,15 +78,22 @@ class CliMenu
     ) {
         $this->title      = $title;
         $this->itemAction = $itemAction;
-        $this->terminal   = $terminal ?: new UnixTerminal();
+        $this->terminal   = $terminal ?: TerminalFactory::fromSystem();
         $this->style      = $style ?: new MenuStyle($this->terminal);
-        $this->items      = $items ?: [new TextItem('An empty menu is never fun... ⊙_⊙')];
+        $this->items      = $items ?: [new StaticItem('An empty menu is never fun...')];
         $this->actions    = array_merge(
             [new LineBreakItem('-')],
             $actions,
             $this->getDefaultActions()
         );
         $this->allItems   = array_merge($this->items, $this->actions);
+
+        foreach ($this->allItems as $key => $item) {
+            if ($item->canSelect()) {
+                $this->selectedItem = $key;
+                break;
+            }
+        }
 
         $this->configureTerminal();
     }
@@ -133,7 +141,7 @@ class CliMenu
     protected function getDefaultActions()
     {
         return [
-            new ActionItem('Exit', function (CliMenu $menu) {
+            new SelectableItem('Exit', function (CliMenu $menu) {
                 $menu->close();
             })
         ];
@@ -189,7 +197,7 @@ class CliMenu
     /**
      * @return MenuItemInterface
      */
-    protected function getSelectedItem()
+    public function getSelectedItem()
     {
         return $this->allItems[$this->selectedItem];
     }
@@ -199,23 +207,26 @@ class CliMenu
      */
     protected function executeCurrentItem()
     {
-        $item = $this->getSelectedItem();
+        $action = $this->getSelectedItem() instanceof MenuItem
+            ? $this->itemAction
+            : $this->getSelectedItem()->getSelectAction();
 
-        if ($this->getSelectedItem() instanceof TextItem) {
-            call_user_func($this->itemAction, $item, $this);
-        } elseif ($item->canSelect()) {
-            $item->execute($this);
+        if (is_callable($action)) {
+            $action($this);
         }
     }
 
+    /**
+     * Draw the menu to stdout
+     */
     protected function draw()
     {
-        echo sprintf('%c[H', 27);
-        echo "\n";
-        echo "\n";
+        $this->terminal->moveCursorToTop();
+
+        echo "\n\n";
 
         $this->drawMenuItem(new LineBreakItem());
-        $this->drawMenuItem(new TextItem($this->title));
+        $this->drawMenuItem(new StaticItem($this->title));
         $this->drawMenuItem(new LineBreakItem('='));
 
         array_map(function ($item, $index) {
@@ -224,8 +235,7 @@ class CliMenu
 
         $this->drawMenuItem(new LineBreakItem());
 
-        echo "\n";
-        echo "\n";
+        echo "\n\n";
     }
 
     /**
@@ -236,7 +246,7 @@ class CliMenu
      */
     protected function drawMenuItem(MenuItemInterface $item, $selected = false)
     {
-        $text   = $item->getText($this->style);
+        $rows = $item->getRows($this->style->getContentWidth());
 
         $setColour = $selected
             ? $this->style->getSelectedSetCode()
@@ -246,18 +256,20 @@ class CliMenu
             ? $this->style->getSelectedUnsetCode()
             : $this->style->getUnselectedUnsetCode();
 
-        echo sprintf(
-            "%s%s%s%s%s%s%s",
-            str_repeat(' ', $this->style->getMargin()),
-            $setColour,
-            str_repeat(' ', $this->style->getPadding()),
-            $text,
-            str_repeat(' ', $this->style->getRightHandPadding(mb_strlen($text))),
-            $unsetColour,
-            str_repeat(' ', $this->style->getMargin())
-        );
+        foreach ($rows as $row) {
+            echo sprintf(
+                "%s%s%s%s%s%s%s",
+                str_repeat(' ', $this->style->getMargin()),
+                $setColour,
+                str_repeat(' ', $this->style->getPadding()),
+                $row,
+                str_repeat(' ', $this->style->getRightHandPadding(mb_strlen($row))),
+                $unsetColour,
+                str_repeat(' ', $this->style->getMargin())
+            );
 
-        echo "\n\r";
+            echo "\n\r";
+        }
     }
 
     /**
@@ -276,5 +288,6 @@ class CliMenu
     public function close()
     {
         $this->tearDownTerminal();
+        exit();
     }
 }

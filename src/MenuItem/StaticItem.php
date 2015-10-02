@@ -2,14 +2,12 @@
 
 namespace MikeyMike\CliMenu\MenuItem;
 
-use MikeyMike\CliMenu\CliMenu;
-use MikeyMike\CliMenu\MenuStyle;
-
 /**
- * Class TextItem
+ * Class StaticItem
+ *
  * @author Michael Woodward <michael@wearejh.com>
  */
-class TextItem implements MenuItemInterface
+class StaticItem implements MenuItemInterface
 {
     /**
      * @var string
@@ -17,8 +15,6 @@ class TextItem implements MenuItemInterface
     private $text;
 
     /**
-     * Initialise text item
-     *
      * @param string $text
      */
     public function __construct($text)
@@ -29,12 +25,12 @@ class TextItem implements MenuItemInterface
     /**
      * The output text for the item
      *
-     * @param MenuStyle $menu
-     * @return string
+     * @param int $menuWidth
+     * @return array
      */
-    public function getText(MenuStyle $menu)
+    public function getRows($menuWidth)
     {
-        return $this->text;
+        return explode("\n", wordwrap($this->text, $menuWidth));
     }
 
     /**
@@ -44,15 +40,26 @@ class TextItem implements MenuItemInterface
      */
     public function canSelect()
     {
-        return true;
+        return false;
     }
 
     /**
-     * @param CliMenu $menu
+     * Execute the items callable if required
+     *
      * @return void
      */
-    public function execute(CliMenu $menu)
+    public function getSelectAction()
     {
         return;
+    }
+
+    /**
+     * Return the raw string of text
+     *
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
     }
 }

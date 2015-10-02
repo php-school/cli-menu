@@ -2,7 +2,7 @@
 
 use MikeyMike\CliMenu\CliMenu;
 use MikeyMike\CliMenu\MenuItem\LineBreakItem;
-use MikeyMike\CliMenu\MenuItem\TextItem;
+use MikeyMike\CliMenu\MenuItem\MenuItem;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
@@ -11,17 +11,17 @@ ini_set('display_errors', 1);
 $menu = new CliMenu(
     'Basic CLI Menu',
     [
-      new TextItem('First Item'),
-      new TextItem('Second Item'),
-      new TextItem('Third Item'),
+      new MenuItem('First Item'),
+      new MenuItem('Second Item'),
+      new MenuItem('Third Item'),
       new LineBreakItem('-'),
-      new TextItem('Fourth Item'),
-      new TextItem('Fifth Item'),
-      new TextItem('Sixth Item'),
+      new MenuItem('Fourth Item'),
+      new MenuItem('Fifth Item'),
+      new MenuItem('Sixth Item'),
       new LineBreakItem('-'),
-      new TextItem('Seventh Item'),
+      new MenuItem('Seventh Item'),
     ],
-    function (TextItem $item, CliMenu $menu) {
+    function (MenuItem $item, CliMenu $menu) {
         $menu->close();
         echo sprintf('You selected %s', $item->getText($menu->getStyle()));
     },

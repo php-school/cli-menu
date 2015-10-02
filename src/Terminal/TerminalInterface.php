@@ -23,11 +23,18 @@ interface TerminalInterface
     public function killProcess();
 
     /**
-     * Get the available width of the width
+     * Get the available width of the terminal
      *
      * @return int
      */
     public function getWidth();
+
+    /**
+     * Get the available height of the terminal
+     *
+     * @return int
+     */
+    public function getHeight();
 
     /**
      * Toggle raw mode on TTY
@@ -52,8 +59,17 @@ interface TerminalInterface
 
     /**
      * Clear the terminal window
+     *
+     * @return void
      */
     public function clear();
+
+    /**
+     * Move the cursor to the top left of the window
+     *
+     * @return void
+     */
+    public function moveCursorToTop();
 
     /**
      * Toggle cursor display

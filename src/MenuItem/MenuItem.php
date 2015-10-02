@@ -3,31 +3,23 @@
 namespace MikeyMike\CliMenu\MenuItem;
 
 /**
- * Class LineBreakItem
+ * Class MenuItem
+ *
  * @author Michael Woodward <michael@wearejh.com>
  */
-class LineBreakItem implements MenuItemInterface
+class MenuItem implements MenuItemInterface
 {
     /**
      * @var string
      */
-    private $breakChar;
+    private $text;
 
     /**
-     * @var int
+     * @param string $text
      */
-    private $lines;
-
-    /**
-     * Initialise text item
-     *
-     * @param string $breakChar
-     * @param int    $lines
-     */
-    public function __construct($breakChar = ' ', $lines = 1)
+    public function __construct($text)
     {
-        $this->breakChar = $breakChar;
-        $this->lines     = $lines;
+        $this->text = $text;
     }
 
     /**
@@ -40,7 +32,10 @@ class LineBreakItem implements MenuItemInterface
     {
         return explode(
             "\n",
-            rtrim(str_repeat(sprintf("%s\n", str_repeat($this->breakChar, $menuWidth)), $this->lines))
+            wordwrap(
+                sprintf('>> %s', $this->text),
+                $menuWidth - 3
+            )
         );
     }
 
@@ -51,7 +46,7 @@ class LineBreakItem implements MenuItemInterface
      */
     public function canSelect()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -71,6 +66,6 @@ class LineBreakItem implements MenuItemInterface
      */
     public function getText()
     {
-        return $this->breakChar;
+       return $this->text;
     }
 }

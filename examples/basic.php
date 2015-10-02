@@ -1,24 +1,23 @@
 <?php
 
 use MikeyMike\CliMenu\CliMenu;
-use MikeyMike\CliMenu\MenuItem\TextItem;
+use MikeyMike\CliMenu\MenuItem\MenuItem;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
-
-ini_set('display_errors', 1);
 
 $menu = new CliMenu(
     'Basic CLI Menu',
     [
-      new TextItem('First Item'),
-      new TextItem('Second Item'),
-      new TextItem('Third Item'),
+        new MenuItem('First Item'),
+        new MenuItem('Second Item'),
+        new MenuItem('Third Item')
     ],
-    function (TextItem $item, CliMenu $menu) {
-        $menu->close();
-        echo sprintf('You selected %s', $item->getText($menu->getStyle()));
-    },
-    []
+    function (CliMenu $menu) {
+        echo sprintf(
+            "\n%s\n",
+            $menu->getSelectedItem()->getText()
+        );
+    }
 );
 
 $menu->display();

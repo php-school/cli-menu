@@ -50,13 +50,23 @@ class UnixTerminal implements TerminalInterface
     }
 
     /**
-     * Get the available width of the width
+     * Get the available width of the terminal
      *
      * @return int
      */
     public function getWidth()
     {
         return $this->width ?: $this->width = exec('tput cols');
+    }
+
+    /**
+     * Get the available height of the terminal
+     *
+     * @return int
+     */
+    public function getHeight()
+    {
+        return $this->width ?: $this->width = exec('tput lines');
     }
 
     /**
@@ -111,7 +121,7 @@ class UnixTerminal implements TerminalInterface
      */
     public function clear()
     {
-        echo sprintf('%c[1J', 27);
+        echo "\033[1J";
     }
 
     /**
@@ -145,5 +155,15 @@ class UnixTerminal implements TerminalInterface
         return array_key_exists($input, $map)
             ? $map[$input]
             : $input;
+    }
+
+    /**
+     * Move the cursor to the top left of the window
+     *
+     * @return void
+     */
+    public function moveCursorToTop()
+    {
+        echo "\033[H";
     }
 }

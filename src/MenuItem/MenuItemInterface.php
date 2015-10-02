@@ -2,9 +2,6 @@
 
 namespace MikeyMike\CliMenu\MenuItem;
 
-use MikeyMike\CliMenu\CliMenu;
-use MikeyMike\CliMenu\MenuStyle;
-
 /**
  * Class MenuItemInterface
  * @author Michael Woodward <michael@wearejh.com>
@@ -14,10 +11,17 @@ interface MenuItemInterface
     /**
      * The output text for the item
      *
-     * @param MenuStyle $menu
+     * @param int $menuWidth
+     * @return array
+     */
+    public function getRows($menuWidth);
+
+    /**
+     * Return the raw string of text
+     *
      * @return string
      */
-    public function getText(MenuStyle $menu);
+    public function getText();
 
     /**
      * Can the item be selected
@@ -29,7 +33,7 @@ interface MenuItemInterface
     /**
      * Execute the items callable if required
      *
-     * @return void
+     * @return callable|void
      */
-    public function execute(CliMenu $menu);
+    public function getSelectAction();
 }
