@@ -16,13 +16,6 @@ interface TerminalInterface
     public function getDetails();
 
     /**
-     * Kill the application
-     *
-     * @return void
-     */
-    public function killProcess();
-
-    /**
      * Get the available width of the terminal
      *
      * @return int
@@ -65,6 +58,13 @@ interface TerminalInterface
     public function clear();
 
     /**
+     * Clear the current cursors line
+     *
+     * @return void
+     */
+    public function clearLine();
+
+    /**
      * Move the cursor to the top left of the window
      *
      * @return void
@@ -85,11 +85,4 @@ interface TerminalInterface
      * @return string
      */
     public function getKeyedInput();
-
-    /**
-     * Clear the current cursors line
-     *
-     * @return void
-     */
-    public function clearLine();
 }

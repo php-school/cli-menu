@@ -14,6 +14,11 @@ class UnixTerminal implements TerminalInterface
     private $isTTY;
 
     /**
+     * @var bool
+     */
+    private $isCanonical = false;
+
+    /**
      * @var int
      */
     private $width;
@@ -43,18 +48,6 @@ class UnixTerminal implements TerminalInterface
     }
 
     /**
-     * Kill the application
-     *
-     * @return void
-     */
-    public function killProcess()
-    {
-        $this->setRawMode(false);
-
-//        posix_kill(posix_getpid(), SIGKILL);
-    }
-
-    /**
      * Get the available width of the terminal
      *
      * @return int
@@ -81,6 +74,7 @@ class UnixTerminal implements TerminalInterface
      */
     public function getDetails()
     {
+        //TODO
         return 'some fucking shell init bro';
 //        return $this->details ?: $this->details = posix_ttyname(STDOUT);
     }
@@ -92,27 +86,34 @@ class UnixTerminal implements TerminalInterface
      */
     private function getOriginalConfiguration()
     {
-        return $this->originalConfiguration ?: $this->originalConfiguration = system('stty -g');
+        return $this->originalConfiguration ?: $this->originalConfiguration = exec('stty -g');
     }
 
     /**
-     * Toggle raw mode on TTY
+     * Toggle canonical mode on TTY
      *
      * @param bool $useCanonicalMode
      */
     public function setCanonicalMode($useCanonicalMode = true)
     {
-        $useCanonicalMode ? system('stty -icanon') : system('stty ' . $this->getOriginalConfiguration());
+        if ($useCanonicalMode) {
+            exec('stty -icanon');
+            $this->isCanonical = true;
+        } else {
+            exec('stty ' . $this->getOriginalConfiguration());
+            $this->isCanonical = false;
+        }
     }
 
     /**
      * Check if TTY is in canonical mode
+     * Assumes the terminal was never in canonical mode
      *
      * @return bool
      */
     public function isCanonical()
     {
-        // TODO: Implement isRaw() method.
+        return $this->isCanonical;
     }
 
     /**
@@ -122,6 +123,7 @@ class UnixTerminal implements TerminalInterface
      */
     public function isTTY()
     {
+        //TODO
         return true;
 //        return $this->isTTY ?: $this->isTTY = posix_isatty(STDOUT);
     }
