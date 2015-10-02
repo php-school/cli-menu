@@ -73,10 +73,8 @@ interface TerminalInterface
 
     /**
      * Toggle cursor display
-     *
-     * @param bool $enableCursor
      */
-    public function enableCursor($enableCursor = true);
+    public function toggleCursor();
 
     /**
      * @return string

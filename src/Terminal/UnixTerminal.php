@@ -1,5 +1,5 @@
 <?php
-
+declare(ticks=1);
 namespace MikeyMike\CliMenu\Terminal;
 
 /**
@@ -92,7 +92,7 @@ class UnixTerminal implements TerminalInterface
      */
     public function setRawMode($useRaw = true)
     {
-        $useRaw ? system('stty raw') : system('stty ' . $this->getOriginalConfiguration());
+        $useRaw ? system('stty -icanon') : system('stty ' . $this->getOriginalConfiguration());
     }
 
     /**
@@ -126,14 +126,18 @@ class UnixTerminal implements TerminalInterface
 
     /**
      * Toggle cursor display
-     *
-     * @param bool $enableCursor
      */
-    public function enableCursor($enableCursor = true)
+    public function toggleCursor()
     {
-        echo $enableCursor
-            ? exec('tput cnorm')
-            : exec('tput civis');
+        echo "\e[?25l";
+    }
+
+    /**
+     * Toggle cursor display
+     */
+    public function disableCursor()
+    {
+        echo "\e[?25l";
     }
 
     /**
@@ -147,10 +151,14 @@ class UnixTerminal implements TerminalInterface
             "\033[A" => 'up',
             "\033[B" => 'down',
             "\n"     => 'enter',
+            "\r"     => 'enter',
             " "      => 'enter',
         ];
 
         $input = fread(STDIN, 4);
+        echo "\r      ";
+
+        pcntl_signal_dispatch();
 
         return array_key_exists($input, $map)
             ? $map[$input]

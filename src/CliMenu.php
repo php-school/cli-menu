@@ -112,7 +112,7 @@ class CliMenu
         }
 
         $this->terminal->setRawMode();
-        $this->terminal->enableCursor(false);
+        $this->terminal->toggleCursor();
         $this->terminal->clear();
     }
 
@@ -130,7 +130,7 @@ class CliMenu
         }
 
         $this->terminal->setRawMode(false);
-        $this->terminal->enableCursor();
+        $this->terminal->toggleCursor();
     }
 
     /**
