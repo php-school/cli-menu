@@ -79,7 +79,7 @@ class CliMenu
         $this->title      = $title;
         $this->itemAction = $itemAction;
         $this->terminal   = $terminal ?: TerminalFactory::fromSystem();
-        $this->style      = $style ?: new MenuStyle($this->terminal);
+        $this->style      = $style ?: new MenuStyle();
         $this->items      = $items ?: [new StaticItem('An empty menu is never fun...')];
         $this->actions    = array_merge(
             [new LineBreakItem('-')],
@@ -246,7 +246,7 @@ class CliMenu
      */
     protected function drawMenuItem(MenuItemInterface $item, $selected = false)
     {
-        $rows = $item->getRows($this->style->getContentWidth());
+        $rows = $item->getRows($this->style);
 
         $setColour = $selected
             ? $this->style->getSelectedSetCode()

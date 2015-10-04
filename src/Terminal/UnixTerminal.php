@@ -74,9 +74,13 @@ class UnixTerminal implements TerminalInterface
      */
     public function getDetails()
     {
-        //TODO
-        return 'some fucking shell init bro';
-//        return $this->details ?: $this->details = posix_ttyname(STDOUT);
+        if (!$this->details) {
+            $this->details = function_exists('posix_ttyname')
+                ? @posix_ttyname(STDOUT)
+                : "Can't retrieve terminal details";
+        }
+
+        return $this->details;
     }
 
     /**
@@ -123,9 +127,46 @@ class UnixTerminal implements TerminalInterface
      */
     public function isTTY()
     {
-        //TODO
-        return true;
-//        return $this->isTTY ?: $this->isTTY = posix_isatty(STDOUT);
+        return $this->isTTY ?: $this->isTTY = function_exists('posix_isatty') && @posix_isatty(STDOUT);
+    }
+
+    /**
+     * Test whether terminal supports colour output
+     *
+     * @return bool
+     *
+     * @link https://github.com/symfony/Console/blob/master/Output/StreamOutput.php#L95-L102
+     */
+    public function supportsColour()
+    {
+        if (DIRECTORY_SEPARATOR === '\\') {
+            return false !== getenv('ANSICON') || 'ON' === getenv('ConEmuANSI') || 'xterm' === getenv('TERM');
+        }
+
+        return $this->isTTY();
+    }
+
+    /**
+     * @return string
+     */
+    public function getKeyedInput()
+    {
+        // TODO: Move to class var?
+        // TODO: up, down, enter etc in Abstract CONSTs
+        $map = [
+            "\033[A" => 'up',
+            "\033[B" => 'down',
+            "\n"     => 'enter',
+            "\r"     => 'enter',
+            " "      => 'enter',
+        ];
+
+        $input = fread(STDIN, 4);
+        $this->clearLine();
+
+        return array_key_exists($input, $map)
+            ? $map[$input]
+            : $input;
     }
 
     /**
@@ -150,29 +191,6 @@ class UnixTerminal implements TerminalInterface
     public function disableCursor()
     {
         echo "\033[?25l";
-    }
-
-    /**
-     * @return string
-     */
-    public function getKeyedInput()
-    {
-        // TODO: Move to class var?
-        // TODO: up, down, enter etc in Abstract CONSTs
-        $map = [
-            "\033[A" => 'up',
-            "\033[B" => 'down',
-            "\n"     => 'enter',
-            "\r"     => 'enter',
-            " "      => 'enter',
-        ];
-
-        $input = fread(STDIN, 4);
-        $this->clearLine();
-
-        return array_key_exists($input, $map)
-            ? $map[$input]
-            : $input;
     }
 
     /**

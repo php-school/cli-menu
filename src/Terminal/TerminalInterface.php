@@ -51,6 +51,13 @@ interface TerminalInterface
     public function isTTY();
 
     /**
+     * Test whether terminal supports colour output
+     *
+     * @return bool
+     */
+    public function supportsColour();
+
+    /**
      * Clear the terminal window
      *
      * @return void

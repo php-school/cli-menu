@@ -2,6 +2,8 @@
 
 namespace MikeyMike\CliMenu\MenuItem;
 
+use MikeyMike\CliMenu\MenuStyle;
+
 /**
  * Class MenuItem
  *
@@ -25,18 +27,30 @@ class MenuItem implements MenuItemInterface
     /**
      * The output text for the item
      *
-     * @param int $menuWidth
+     * @param MenuStyle $style
      * @return array
      */
-    public function getRows($menuWidth)
+    public function getRows(MenuStyle $style)
     {
-        return explode(
+        $rows = explode(
             "\n",
             wordwrap(
-                sprintf('>> %s', $this->text),
-                $menuWidth - 3
+                sprintf('%s%s', $style->getItemCarat(), $this->text),
+                $style->getContentWidth() - strlen($style->getItemCarat())
             )
         );
+
+        return array_map(function ($row, $key) use ($style) {
+            if ($key === 0) {
+                return $row;
+            }
+
+            return sprintf(
+                '%s%s',
+                str_repeat(' ', strlen($style->getItemCarat())),
+                $row
+            );
+        }, $rows, array_keys($rows));
     }
 
     /**

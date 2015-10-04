@@ -2,6 +2,8 @@
 
 namespace MikeyMike\CliMenu\MenuItem;
 
+use MikeyMike\CliMenu\MenuStyle;
+
 /**
  * Class LineBreakItem
  * @author Michael Woodward <michael@wearejh.com>
@@ -33,14 +35,17 @@ class LineBreakItem implements MenuItemInterface
     /**
      * The output text for the item
      *
-     * @param int $menuWidth
+     * @param MenuStyle $style
      * @return array
      */
-    public function getRows($menuWidth)
+    public function getRows(MenuStyle $style)
     {
         return explode(
             "\n",
-            rtrim(str_repeat(sprintf("%s\n", str_repeat($this->breakChar, $menuWidth)), $this->lines))
+            rtrim(str_repeat(sprintf(
+                "%s\n",
+                str_repeat($this->breakChar, $style->getContentWidth())
+            ), $this->lines))
         );
     }
 

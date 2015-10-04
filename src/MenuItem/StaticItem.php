@@ -2,6 +2,8 @@
 
 namespace MikeyMike\CliMenu\MenuItem;
 
+use MikeyMike\CliMenu\MenuStyle;
+
 /**
  * Class StaticItem
  *
@@ -25,12 +27,12 @@ class StaticItem implements MenuItemInterface
     /**
      * The output text for the item
      *
-     * @param int $menuWidth
+     * @param MenuStyle $style
      * @return array
      */
-    public function getRows($menuWidth)
+    public function getRows(MenuStyle $style)
     {
-        return explode("\n", wordwrap($this->text, $menuWidth));
+        return explode("\n", wordwrap($this->text, $style->getContentWidth()));
     }
 
     /**

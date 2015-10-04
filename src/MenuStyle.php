@@ -2,8 +2,10 @@
 
 namespace MikeyMike\CliMenu;
 
+use MikeyMike\CliMenu\Terminal\TerminalFactory;
 use MikeyMike\CliMenu\Terminal\TerminalInterface;
-use MikeyMike\CliMenu\Terminal\UnixTerminal;
+
+//TODO: B/W fallback
 
 /**
  * Class MenuStyle
@@ -47,17 +49,22 @@ class MenuStyle
     protected $contentWidth;
 
     /**
+     * @var string
+     */
+    private $itemCarat;
+
+    /**
      * @var array
      */
     private $availableForegroundColors = array(
-        'black' => array('set' => 30, 'unset' => 39),
-        'red' => array('set' => 31, 'unset' => 39),
-        'green' => array('set' => 32, 'unset' => 39),
-        'yellow' => array('set' => 33, 'unset' => 39),
-        'blue' => array('set' => 34, 'unset' => 39),
+        'black'   => array('set' => 30, 'unset' => 39),
+        'red'     => array('set' => 31, 'unset' => 39),
+        'green'   => array('set' => 32, 'unset' => 39),
+        'yellow'  => array('set' => 33, 'unset' => 39),
+        'blue'    => array('set' => 34, 'unset' => 39),
         'magenta' => array('set' => 35, 'unset' => 39),
-        'cyan' => array('set' => 36, 'unset' => 39),
-        'white' => array('set' => 37, 'unset' => 39),
+        'cyan'    => array('set' => 36, 'unset' => 39),
+        'white'   => array('set' => 37, 'unset' => 39),
         'default' => array('set' => 39, 'unset' => 39),
     );
 
@@ -65,14 +72,14 @@ class MenuStyle
      * @var array
      */
     private $availableBackgroundColors = array(
-        'black' => array('set' => 40, 'unset' => 49),
-        'red' => array('set' => 41, 'unset' => 49),
-        'green' => array('set' => 42, 'unset' => 49),
-        'yellow' => array('set' => 43, 'unset' => 49),
-        'blue' => array('set' => 44, 'unset' => 49),
+        'black'   => array('set' => 40, 'unset' => 49),
+        'red'     => array('set' => 41, 'unset' => 49),
+        'green'   => array('set' => 42, 'unset' => 49),
+        'yellow'  => array('set' => 43, 'unset' => 49),
+        'blue'    => array('set' => 44, 'unset' => 49),
         'magenta' => array('set' => 45, 'unset' => 49),
-        'cyan' => array('set' => 46, 'unset' => 49),
-        'white' => array('set' => 47, 'unset' => 49),
+        'cyan'    => array('set' => 46, 'unset' => 49),
+        'white'   => array('set' => 47, 'unset' => 49),
         'default' => array('set' => 49, 'unset' => 49),
     );
 
@@ -80,30 +87,32 @@ class MenuStyle
      * @var array
      */
     private $availableOptions = array(
-        'bold' => array('set' => 1, 'unset' => 22),
+        'bold'       => array('set' => 1, 'unset' => 22),
         'underscore' => array('set' => 4, 'unset' => 24),
-        'blink' => array('set' => 5, 'unset' => 25),
-        'reverse' => array('set' => 7, 'unset' => 27),
-        'conceal' => array('set' => 8, 'unset' => 28),
+        'blink'      => array('set' => 5, 'unset' => 25),
+        'reverse'    => array('set' => 7, 'unset' => 27),
+        'conceal'    => array('set' => 8, 'unset' => 28),
     );
 
     /**
      * Initialise style
      *
-     * @param TerminalInterface $terminal
      * @param string $bg
      * @param string $fg
      * @param int $width
      * @param int $padding
      * @param int $margin
+     * @param string $itemCarat
+     * @param TerminalInterface $terminal
      */
     public function __construct(
-        TerminalInterface $terminal = null,
         $bg = 'blue',
         $fg = 'white',
         $width = 100,
         $padding = 2,
-        $margin = 2
+        $margin = 2,
+        $itemCarat = '>> ',
+        TerminalInterface $terminal = null
     ) {
         if (!array_key_exists($bg, $this->availableBackgroundColors)) {
             throw new \InvalidArgumentException(sprintf('Invalid foreground colour "%s"', $fg));
@@ -113,11 +122,12 @@ class MenuStyle
             throw new \InvalidArgumentException(sprintf('Invalid foreground colour "%s"', $fg));
         }
 
-        $this->terminal     = $terminal ?: new UnixTerminal();
-        $this->bg           = $bg;
-        $this->fg           = $fg;
-        $this->padding      = $padding;
-        $this->margin       = $margin;
+        $this->terminal  = $terminal ?: TerminalFactory::fromSystem();
+        $this->bg        = $bg;
+        $this->fg        = $fg;
+        $this->padding   = $padding;
+        $this->margin    = $margin;
+        $this->itemCarat = $itemCarat;
 
         $this->setWidth($width);
         $this->calculateContentWidth();
@@ -318,5 +328,13 @@ class MenuStyle
     public function getRightHandPadding($contentLength)
     {
         return $this->getContentWidth() - $contentLength + $this->getPadding();
+    }
+
+    /**
+     * @return string
+     */
+    public function getItemCarat()
+    {
+        return $this->itemCarat;
     }
 }
