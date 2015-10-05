@@ -1,5 +1,5 @@
 <?php
-declare(ticks=1);
+
 namespace MikeyMike\CliMenu\Terminal;
 
 /**
