@@ -286,6 +286,7 @@ class CliMenu
      */
     protected function draw()
     {
+        $this->terminal->clean();
         $this->terminal->moveCursorToTop();
 
         echo "\n\n";
