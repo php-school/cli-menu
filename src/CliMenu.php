@@ -224,13 +224,12 @@ class CliMenu
                 case 'up':
                 case 'down':
                     $this->moveSelection($input);
+                    $this->draw();
                     break;
                 case 'enter':
                     $this->executeCurrentItem();
                     break;
             }
-
-            $this->draw();
         }
     }
 
