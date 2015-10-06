@@ -1,6 +1,7 @@
 <?php
 
 namespace MikeyMike\CliMenu;
+
 use MikeyMike\CliMenu\MenuItem\MenuItemInterface;
 use MikeyMike\CliMenu\MenuItem\MenuMenuItem;
 use MikeyMike\CliMenu\Terminal\TerminalInterface;
@@ -58,7 +59,7 @@ class CliMenuBuilder
     public function addSubMenuAsItem($text, CliMenu $menu)
     {
         $this->menu->addItem(
-            new MenuMenuItem($text, $this->menu, $menu)
+            new MenuMenuItem($text, $menu)
         );
 
         return $this;
@@ -72,7 +73,7 @@ class CliMenuBuilder
     public function addSubMenuAsAction($text, CliMenu $menu)
     {
         $this->menu->addAction(
-            new MenuMenuItem($text, $this->menu, $menu)
+            new MenuMenuItem($text, $menu)
         );
 
         return $this;

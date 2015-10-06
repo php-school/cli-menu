@@ -24,14 +24,12 @@ class MenuMenuItem implements MenuItemInterface
 
     /**
      * @param string $text
-     * @param CliMenu $parentMenu
      * @param CliMenu $subMenu
      */
-    public function __construct($text, CliMenu $parentMenu, CliMenu $subMenu)
+    public function __construct($text, CliMenu $subMenu)
     {
-        $this->text       = $text;
-        $this->parentMenu = $parentMenu;
-        $this->subMenu    = $subMenu;
+        $this->text    = $text;
+        $this->subMenu = $subMenu;
 
         $this->subMenu->addAction(
             new SelectableItem('Go Back', [$this, 'showParentMenu'])
@@ -60,9 +58,11 @@ class MenuMenuItem implements MenuItemInterface
 
     /**
      * Display the sub menu
+     * @param CliMenu $parentMenu
      */
-    public function showSubMenu()
+    public function showSubMenu(CliMenu $parentMenu)
     {
+        $this->parentMenu = $parentMenu;
         $this->subMenu->display();
     }
 
