@@ -7,7 +7,7 @@ use MikeyMike\CliMenu\MenuItem\MenuItem;
 require_once(__DIR__ . '/../vendor/autoload.php');
 
 $menu = (new CliMenuBuilder('Basic CLI Menu'))
-    ->addItem(new MenuItem('First Item'))
+    ->addItem(new MenuItem('a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a b b b b '))
     ->addItem(new MenuItem('Second Item'))
     ->addItem(new MenuItem('Third Item'))
     ->setItemCallback(function (CliMenu $menu) {

@@ -60,12 +60,12 @@ class CliMenu
     /**
      * Initiate the Menu
      *
-     * @param $title
+     * @param bool|string $title
      * @param TerminalInterface $terminal
      * @param MenuStyle $style
      * @throws InvalidTerminalException
      */
-    public function __construct($title, TerminalInterface $terminal = null, MenuStyle $style = null) {
+    public function __construct($title = false, TerminalInterface $terminal = null, MenuStyle $style = null) {
         $this->title      = $title;
         $this->terminal   = $terminal ?: TerminalFactory::fromSystem();
         $this->style      = $style ?: new MenuStyle();
@@ -290,9 +290,11 @@ class CliMenu
 
         echo "\n\n";
 
-        $this->drawMenuItem(new LineBreakItem());
-        $this->drawMenuItem(new StaticItem($this->title));
-        $this->drawMenuItem(new LineBreakItem('='));
+        if (is_string($this->title)) {
+            $this->drawMenuItem(new LineBreakItem());
+            $this->drawMenuItem(new StaticItem($this->title));
+            $this->drawMenuItem(new LineBreakItem('='));
+        }
 
         array_map(function ($item, $index) {
             $this->drawMenuItem($item, $index === $this->selectedItem);
@@ -311,7 +313,7 @@ class CliMenu
      */
     protected function drawMenuItem(MenuItemInterface $item, $selected = false)
     {
-        $rows = $item->getRows($this->style);
+        $rows = $item->getRows($this->style, $selected);
 
         $setColour = $selected
             ? $this->style->getSelectedSetCode()

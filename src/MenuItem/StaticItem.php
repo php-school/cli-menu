@@ -28,9 +28,10 @@ class StaticItem implements MenuItemInterface
      * The output text for the item
      *
      * @param MenuStyle $style
+     * @param bool $selected
      * @return array
      */
-    public function getRows(MenuStyle $style)
+    public function getRows(MenuStyle $style, $selected = false)
     {
         return explode("\n", wordwrap($this->text, $style->getContentWidth()));
     }

@@ -22,9 +22,9 @@ class CliMenuBuilder
 
     /**
      * Initilize an empty CliMenu
-     * @param string $title
+     * @param bool|string $title
      */
-    public function __construct($title)
+    public function __construct($title = false)
     {
         $this->menu = new CliMenu($title);
     }

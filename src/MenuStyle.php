@@ -51,7 +51,12 @@ class MenuStyle
     /**
      * @var string
      */
-    private $itemCarat;
+    private $selectedMarker;
+
+    /**
+     * @var string
+     */
+    private $unselectedMarker;
 
     /**
      * @var array
@@ -102,7 +107,8 @@ class MenuStyle
      * @param int $width
      * @param int $padding
      * @param int $margin
-     * @param string $itemCarat
+     * @param string $unselectedMarker
+     * @param string $selectedMarker
      * @param TerminalInterface $terminal
      */
     public function __construct(
@@ -111,7 +117,8 @@ class MenuStyle
         $width = 100,
         $padding = 2,
         $margin = 2,
-        $itemCarat = '>> ',
+        $unselectedMarker = '○',
+        $selectedMarker = '●',
         TerminalInterface $terminal = null
     ) {
         if (!array_key_exists($bg, $this->availableBackgroundColors)) {
@@ -122,13 +129,14 @@ class MenuStyle
             throw new \InvalidArgumentException(sprintf('Invalid foreground colour "%s"', $fg));
         }
 
-        $this->terminal  = $terminal ?: TerminalFactory::fromSystem();
-        $this->bg        = $bg;
-        $this->fg        = $fg;
-        $this->padding   = $padding;
-        $this->margin    = $margin;
-        $this->itemCarat = $itemCarat;
+        $this->terminal = $terminal ?: TerminalFactory::fromSystem();
+        $this->bg       = $bg;
+        $this->fg       = $fg;
+        $this->padding  = $padding;
+        $this->margin   = $margin;
 
+        $this->setUnselectedMarker($unselectedMarker);
+        $this->setSelectedMarker($selectedMarker);
         $this->setWidth($width);
         $this->calculateContentWidth();
     }
@@ -333,8 +341,49 @@ class MenuStyle
     /**
      * @return string
      */
-    public function getItemCarat()
+    public function getSelectedMarker()
     {
-        return $this->itemCarat;
+        return $this->selectedMarker;
+    }
+
+    /**
+     * @param $marker
+     * @return $this
+     */
+    public function setSelectedMarker($marker)
+    {
+        $this->selectedMarker = mb_substr($marker, 0, 1);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUnselectedMarker()
+    {
+        return $this->unselectedMarker;
+    }
+
+    /**
+     * @param $marker
+     * @return $this
+     */
+    public function setUnselectedMarker($marker)
+    {
+        $this->unselectedMarker = mb_substr($marker, 0, 1);
+
+        return $this;
+    }
+
+    /**
+     * Get the correct marker for the item
+     *
+     * @param $selected
+     * @return string
+     */
+    public function getMarker($selected)
+    {
+        return $selected ? $this->selectedMarker : $this->unselectedMarker;
     }
 }
