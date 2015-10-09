@@ -3,6 +3,7 @@
 namespace MikeyMike\CliMenu\MenuItem;
 
 use MikeyMike\CliMenu\MenuStyle;
+use MikeyMike\CliMenu\Util\StringUtil;
 
 /**
  * Class StaticItem
@@ -33,7 +34,7 @@ class StaticItem implements MenuItemInterface
      */
     public function getRows(MenuStyle $style, $selected = false)
     {
-        return explode("\n", wordwrap($this->text, $style->getContentWidth()));
+        return explode("\n", StringUtil::wordwrap($this->text, $style->getContentWidth()));
     }
 
     /**
