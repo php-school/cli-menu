@@ -79,4 +79,14 @@ class LineBreakItem implements MenuItemInterface
     {
         return $this->breakChar;
     }
+
+    /**
+     * Whether or not the menu item is showing the menustyle extra value
+     *
+     * @return bool
+     */
+    public function showsItemExtra()
+    {
+        return false;
+    }
 }

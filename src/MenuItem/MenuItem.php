@@ -13,10 +13,12 @@ class MenuItem implements MenuItemInterface
 
     /**
      * @param string $text
+     * @param bool $showItemExtra
      */
-    public function __construct($text)
+    public function __construct($text, $showItemExtra = false)
     {
-        $this->text = $text;
+        $this->text          = $text;
+        $this->showItemExtra = $showItemExtra;
     }
 
     /**

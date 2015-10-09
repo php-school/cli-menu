@@ -59,6 +59,16 @@ class MenuStyle
     private $unselectedMarker;
 
     /**
+     * @var string
+     */
+    private $itemExtra;
+
+    /**
+     * @var bool
+     */
+    private $displaysExtra;
+
+    /**
      * @var array
      */
     private $availableForegroundColors = array(
@@ -109,6 +119,8 @@ class MenuStyle
      * @param int $margin
      * @param string $unselectedMarker
      * @param string $selectedMarker
+     * @param string $itemExtra
+     * @param bool $displaysExtra
      * @param TerminalInterface $terminal
      */
     public function __construct(
@@ -119,6 +131,8 @@ class MenuStyle
         $margin = 2,
         $unselectedMarker = '○',
         $selectedMarker = '●',
+        $itemExtra = '✔',
+        $displaysExtra = false,
         TerminalInterface $terminal = null
     ) {
         if (!array_key_exists($bg, $this->availableBackgroundColors)) {
@@ -129,11 +143,13 @@ class MenuStyle
             throw new \InvalidArgumentException(sprintf('Invalid foreground colour "%s"', $fg));
         }
 
-        $this->terminal = $terminal ?: TerminalFactory::fromSystem();
-        $this->bg       = $bg;
-        $this->fg       = $fg;
-        $this->padding  = $padding;
-        $this->margin   = $margin;
+        $this->terminal      = $terminal ?: TerminalFactory::fromSystem();
+        $this->bg            = $bg;
+        $this->fg            = $fg;
+        $this->padding       = $padding;
+        $this->margin        = $margin;
+        $this->itemExtra     = $itemExtra;
+        $this->displaysExtra = $displaysExtra;
 
         $this->setUnselectedMarker($unselectedMarker);
         $this->setSelectedMarker($selectedMarker);
@@ -385,5 +401,32 @@ class MenuStyle
     public function getMarker($selected)
     {
         return $selected ? $this->selectedMarker : $this->unselectedMarker;
+    }
+
+    /**
+     * @return string
+     */
+    public function getItemExtra()
+    {
+        return $this->itemExtra;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDisplaysExtra()
+    {
+        return $this->displaysExtra;
+    }
+
+    /**
+     * @param $displaysExtra
+     * @return $this
+     */
+    public function setDisplaysExtra($displaysExtra)
+    {
+        $this->displaysExtra = $displaysExtra;
+
+        return $this;
     }
 }

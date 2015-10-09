@@ -39,4 +39,11 @@ interface MenuItemInterface
      * @return callable|void
      */
     public function getSelectAction();
+
+    /**
+     * Whether or not the menu item is showing the menustyle extra value
+     *
+     * @return bool
+     */
+    public function showsItemExtra();
 }

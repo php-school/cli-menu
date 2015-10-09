@@ -72,7 +72,7 @@ class AsciiArtItem implements MenuItemInterface
                     $padding = $padding - ($this->artLength - mb_strlen($row));
                     $left = ceil($padding/2);
                     $right = $padding - $left;
-                    $row = sprintf('%s%s%s', str_repeat(' ', $left), $row,str_repeat(' ', $right));
+                    $row = sprintf('%s%s%s', str_repeat(' ', $left), $row, str_repeat(' ', $right));
                     break;
             }
 
@@ -108,5 +108,15 @@ class AsciiArtItem implements MenuItemInterface
     public function getText()
     {
         return $this->text;
+    }
+
+    /**
+     * Whether or not the menu item is showing the menustyle extra value
+     *
+     * @return bool
+     */
+    public function showsItemExtra()
+    {
+        return false;
     }
 }

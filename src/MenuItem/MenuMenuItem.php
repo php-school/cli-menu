@@ -53,7 +53,7 @@ class MenuMenuItem implements MenuItemInterface
      */
     public function getText()
     {
-       return $this->text;
+        return $this->text;
     }
 
     /**

@@ -108,6 +108,7 @@ class CliMenuBuilder
     public function setMenuStyle(MenuStyle $style)
     {
         $this->menu->setMenuStyle($style);
+        $this->menu->updateStyle();
 
         return $this;
     }

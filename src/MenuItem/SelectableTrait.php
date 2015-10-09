@@ -3,6 +3,7 @@
 namespace MikeyMike\CliMenu\MenuItem;
 
 use MikeyMike\CliMenu\MenuStyle;
+use MikeyMike\CliMenu\Util\StringUtil;
 
 /**
  * Class SelectableTrait
@@ -16,6 +17,11 @@ trait SelectableTrait
     private $text;
 
     /**
+     * @var bool
+     */
+    private $showItemExtra;
+
+    /**
      * The output text for the item
      *
      * @param MenuStyle $style
@@ -24,26 +30,29 @@ trait SelectableTrait
      */
     public function getRows(MenuStyle $style, $selected = false)
     {
-        $marker = sprintf("%s%s", $style->getMarker($selected), ' ');
+        $marker = sprintf("%s ", $style->getMarker($selected));
+
+        $length = $style->getDisplaysExtra()
+            ? $style->getContentWidth() - (mb_strlen($style->getItemExtra()) + 2)
+            : $style->getContentWidth();
 
         $rows = explode(
             "\n",
-            wordwrap(
+            StringUtil::wordwrap(
                 sprintf('%s%s', $marker, $this->text),
-                $style->getContentWidth()
+                $length,
+                sprintf("\n%s", str_repeat(' ', mb_strlen($marker)))
             )
         );
 
-        return array_map(function ($row, $key) use ($style, $marker) {
+        return array_map(function ($row, $key) use ($style, $marker, $length) {
             if ($key === 0) {
-                return $row;
+                return $this->showItemExtra
+                    ? sprintf('%s%s  %s', $row, str_repeat(' ', $length - mb_strlen($row)), $style->getItemExtra())
+                    : $row;
             }
 
-            return sprintf(
-                '%s%s',
-                str_repeat(' ', mb_strlen($marker)),
-                $row
-            );
+            return $row;
         }, $rows, array_keys($rows));
     }
 
@@ -55,5 +64,13 @@ trait SelectableTrait
     public function canSelect()
     {
         return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function showsItemExtra()
+    {
+        return $this->showItemExtra;
     }
 }

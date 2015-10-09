@@ -65,7 +65,8 @@ class CliMenu
      * @param MenuStyle $style
      * @throws InvalidTerminalException
      */
-    public function __construct($title = false, TerminalInterface $terminal = null, MenuStyle $style = null) {
+    public function __construct($title = false, TerminalInterface $terminal = null, MenuStyle $style = null)
+    {
         $this->title      = $title;
         $this->terminal   = $terminal ?: TerminalFactory::fromSystem();
         $this->style      = $style ?: new MenuStyle();
@@ -129,6 +130,16 @@ class CliMenu
     }
 
     /**
+     * Update style confuration based on menu
+     */
+    public function updateStyle()
+    {
+        $this->style->setDisplaysExtra(!empty(array_filter($this->items, function (MenuItemInterface $item) {
+            return $item->showsItemExtra();
+        })));
+    }
+
+    /**
      * Add a new Item to the listing
      *
      * @param MenuItemInterface $item
@@ -137,6 +148,7 @@ class CliMenu
     {
         $this->items[] = $item;
         $this->buildAllItems();
+        $this->updateStyle();
     }
 
     /**

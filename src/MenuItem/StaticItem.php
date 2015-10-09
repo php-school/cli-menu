@@ -65,4 +65,14 @@ class StaticItem implements MenuItemInterface
     {
         return $this->text;
     }
+
+    /**
+     * Whether or not the menu item is showing the menustyle extra value
+     *
+     * @return bool
+     */
+    public function showsItemExtra()
+    {
+        return false;
+    }
 }
