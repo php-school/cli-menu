@@ -1,5 +1,5 @@
 <?php
-declare(ticks=1);
+
 namespace MikeyMike\CliMenu\Terminal;
 
 /**
@@ -204,6 +204,16 @@ class UnixTerminal implements TerminalInterface
     }
 
     /**
+     * Move the cursor to the start of a specific row
+     *
+     * @param int $rowNumber
+     */
+    public function moveCursorToRow($rowNumber)
+    {
+        echo sprintf("\033[%d;0H", $rowNumber);
+    }
+
+    /**
      * Clear the current cursors line
      *
      * @return void
@@ -211,5 +221,16 @@ class UnixTerminal implements TerminalInterface
     public function clearLine()
     {
         echo sprintf("\033[%dD\033[K", $this->getWidth());
+    }
+
+    /**
+     * Clean the whole console without jumping the window
+     */
+    public function clean()
+    {
+        foreach (range(0, $this->getHeight()) as $rowNum) {
+            $this->moveCursorToRow($rowNum);
+            $this->clearLine();
+        }
     }
 }

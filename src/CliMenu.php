@@ -60,41 +60,23 @@ class CliMenu
     /**
      * Initiate the Menu
      *
-     * @param $title
-     * @param array $items
-     * @param callable $itemAction
+     * @param bool|string $title
      * @param TerminalInterface $terminal
      * @param MenuStyle $style
-     * @param array $actions
      * @throws InvalidTerminalException
      */
-    public function __construct(
-        $title,
-        array $items,
-        callable $itemAction,
-        array $actions = [],
-        TerminalInterface $terminal = null,
-        MenuStyle $style = null
-    ) {
+    public function __construct($title = false, TerminalInterface $terminal = null, MenuStyle $style = null)
+    {
         $this->title      = $title;
-        $this->itemAction = $itemAction;
         $this->terminal   = $terminal ?: TerminalFactory::fromSystem();
         $this->style      = $style ?: new MenuStyle();
-        $this->items      = $items ?: [new StaticItem('An empty menu is never fun...')];
+
         $this->actions    = array_merge(
             [new LineBreakItem('-')],
-            $actions,
             $this->getDefaultActions()
         );
-        $this->allItems   = array_merge($this->items, $this->actions);
 
-        foreach ($this->allItems as $key => $item) {
-            if ($item->canSelect()) {
-                $this->selectedItem = $key;
-                break;
-            }
-        }
-
+        $this->buildAllItems();
         $this->configureTerminal();
     }
 
@@ -148,6 +130,101 @@ class CliMenu
     }
 
     /**
+     * Update style confuration based on menu
+     */
+    public function updateStyle()
+    {
+        $this->style->setDisplaysExtra(!empty(array_filter($this->items, function (MenuItemInterface $item) {
+            return $item->showsItemExtra();
+        })));
+    }
+
+    /**
+     * Add a new Item to the listing
+     *
+     * @param MenuItemInterface $item
+     */
+    public function addItem(MenuItemInterface $item)
+    {
+        $this->items[] = $item;
+        $this->buildAllItems();
+        $this->updateStyle();
+    }
+
+    /**
+     * Add a new Action before the default actions
+     *
+     * @param MenuItemInterface $action
+     */
+    public function addAction(MenuItemInterface $action)
+    {
+        array_splice($this->actions, -1, 0, [$action]);
+        $this->buildAllItems();
+    }
+
+    /**
+     * Build allItems array from items and actions
+     */
+    private function buildAllItems()
+    {
+        $this->allItems = array_merge($this->items, $this->actions);
+        $this->selectFirstItem();
+    }
+
+    /**
+     * Set the selected pointer to the first selectable item
+     */
+    private function selectFirstItem()
+    {
+        foreach ($this->allItems as $key => $item) {
+            if ($item->canSelect()) {
+                $this->selectedItem = $key;
+                break;
+            }
+        }
+    }
+
+    /**
+     * Add item action callback
+     *
+     * @param callable $callback
+     */
+    public function setItemCallback(callable $callback)
+    {
+        $this->itemAction = $callback;
+    }
+
+    /**
+     * Set the terminal to use
+     *
+     * @param TerminalInterface $terminal
+     */
+    public function setTerminal(TerminalInterface $terminal)
+    {
+        $this->terminal = $terminal;
+    }
+
+    /**
+     * Set the menu style
+     *
+     * @param MenuStyle $style
+     */
+    public function setMenuStyle(MenuStyle $style)
+    {
+        $this->style = $style;
+    }
+
+    /**
+     * Get the menus style
+     *
+     * @return MenuStyle
+     */
+    public function getMenuStyle()
+    {
+        return $this->style;
+    }
+
+    /**
      * Display menu and capture input
      */
     public function display()
@@ -159,13 +236,12 @@ class CliMenu
                 case 'up':
                 case 'down':
                     $this->moveSelection($input);
+                    $this->draw();
                     break;
                 case 'enter':
                     $this->executeCurrentItem();
                     break;
             }
-
-            $this->draw();
         }
     }
 
@@ -221,13 +297,16 @@ class CliMenu
      */
     protected function draw()
     {
+        $this->terminal->clean();
         $this->terminal->moveCursorToTop();
 
         echo "\n\n";
 
-        $this->drawMenuItem(new LineBreakItem());
-        $this->drawMenuItem(new StaticItem($this->title));
-        $this->drawMenuItem(new LineBreakItem('='));
+        if (is_string($this->title)) {
+            $this->drawMenuItem(new LineBreakItem());
+            $this->drawMenuItem(new StaticItem($this->title));
+            $this->drawMenuItem(new LineBreakItem('='));
+        }
 
         array_map(function ($item, $index) {
             $this->drawMenuItem($item, $index === $this->selectedItem);
@@ -246,7 +325,7 @@ class CliMenu
      */
     protected function drawMenuItem(MenuItemInterface $item, $selected = false)
     {
-        $rows = $item->getRows($this->style);
+        $rows = $item->getRows($this->style, $selected);
 
         $setColour = $selected
             ? $this->style->getSelectedSetCode()
@@ -270,14 +349,6 @@ class CliMenu
 
             echo "\n\r";
         }
-    }
-
-    /**
-     * @return MenuStyle
-     */
-    public function getStyle()
-    {
-        return $this->style;
     }
 
     /**

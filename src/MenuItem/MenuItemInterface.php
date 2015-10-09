@@ -14,9 +14,10 @@ interface MenuItemInterface
      * The output text for the item
      *
      * @param MenuStyle $style
+     * @param bool $selected
      * @return array
      */
-    public function getRows(MenuStyle $style);
+    public function getRows(MenuStyle $style, $selected = false);
 
     /**
      * Return the raw string of text
@@ -38,4 +39,11 @@ interface MenuItemInterface
      * @return callable|void
      */
     public function getSelectAction();
+
+    /**
+     * Whether or not the menu item is showing the menustyle extra value
+     *
+     * @return bool
+     */
+    public function showsItemExtra();
 }

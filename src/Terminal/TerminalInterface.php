@@ -79,6 +79,20 @@ interface TerminalInterface
     public function moveCursorToTop();
 
     /**
+     * Move the cursor to the start of a specific row
+     *
+     * @param int $rowNumber
+     */
+    public function moveCursorToRow($rowNumber);
+
+    /**
+     * Clean the whole console without jumping the window
+     *
+     * @return void
+     */
+    public function clean();
+
+    /**
      * Enable cursor display
      */
     public function enableCursor();

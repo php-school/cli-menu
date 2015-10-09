@@ -36,15 +36,16 @@ class LineBreakItem implements MenuItemInterface
      * The output text for the item
      *
      * @param MenuStyle $style
+     * @param bool $selected
      * @return array
      */
-    public function getRows(MenuStyle $style)
+    public function getRows(MenuStyle $style, $selected = false)
     {
         return explode(
             "\n",
             rtrim(str_repeat(sprintf(
                 "%s\n",
-                str_repeat($this->breakChar, $style->getContentWidth())
+                substr(str_repeat($this->breakChar, $style->getContentWidth()), 0, $style->getContentWidth())
             ), $this->lines))
         );
     }
@@ -77,5 +78,15 @@ class LineBreakItem implements MenuItemInterface
     public function getText()
     {
         return $this->breakChar;
+    }
+
+    /**
+     * Whether or not the menu item is showing the menustyle extra value
+     *
+     * @return bool
+     */
+    public function showsItemExtra()
+    {
+        return false;
     }
 }
