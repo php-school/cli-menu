@@ -12,6 +12,7 @@ use MikeyMike\CliMenu\MenuItem\StaticItem;
 use MikeyMike\CliMenu\Terminal\TerminalFactory;
 use MikeyMike\CliMenu\Terminal\TerminalInterface;
 use MikeyMike\CliMenu\MenuStyle;
+use RuntimeException;
 
 /**
  * Class CliMenuBuilder
@@ -22,13 +23,11 @@ use MikeyMike\CliMenu\MenuStyle;
  */
 class CliMenuBuilder
 {
-    private $itemCallable = [];
+    private $itemCallable;
 
     private $menuItems = [];
 
     private $menuActions = [];
-
-    private $isSubMenu = false;
 
     private $style = [];
 
@@ -36,12 +35,115 @@ class CliMenuBuilder
 
     private $menuTitle;
 
-    public function __construct(callable $itemAction)
+    /**
+     * @var null|self
+     */
+    private $parent;
+
+    /**
+     * @var self[]
+     */
+    private $subMenus = [];
+
+    /**
+     * @var bool
+     */
+    private $addGoBackButton = false;
+
+    /**
+     * @var bool
+     */
+    private $isBuilt = false;
+
+    /**
+     * @param CliMenuBuilder|null $parent
+     */
+    public function __construct(CliMenuBuilder $parent = null)
     {
-        $this->itemCallable      = $itemAction;
+        $this->parent            = $parent;
         $this->terminal          = TerminalFactory::fromSystem();
         $this->style             = $this->getStyleClassDefaults();
         $this->style['terminal'] = $this->terminal;
+    }
+
+    /**
+     * @param callable $callable
+     * @return self
+     */
+    public function addItemCallable(callable $callable)
+    {
+        $this->itemCallable = $callable;
+        return $this;
+    }
+
+    /**
+     * @param string $id ID to reference and retrieve sub-menu
+     *
+     * @return CliMenuBuilder
+     */
+    public function addSubMenuAsAction($id)
+    {
+        $this->menuActions[] = $id;
+        $this->subMenus[$id] = new self($this);
+        return $this->subMenus[$id];
+    }
+
+    /**
+     * @param string $id ID to reference and retrieve sub-menu
+     *
+     * @return CliMenuBuilder
+     */
+    public function addSubMenuAsItem($id)
+    {
+        $this->menuItems[] = $id;
+        $this->subMenus[$id] = new self($this);
+        return $this->subMenus[$id];
+    }
+
+    /**
+     * Add go back button to navigate to the parent menu
+     */
+    public function addGoBackAction()
+    {
+        $this->addGoBackButton = true;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasGoBackButton()
+    {
+        return $this->addGoBackButton;
+    }
+
+    /**
+     * Return to parent builder
+     *
+     * @return CliMenuBuilder
+     * @throws RuntimeException
+     */
+    public function end()
+    {
+        if (null === $this->parent) {
+            throw new RuntimeException("No parent menu to return to");
+        }
+
+        return $this->parent;
+    }
+
+    /**
+     * @param string $id
+     * @return CliMenuBuilder
+     * @throws RuntimeException
+     */
+    public function getSubMenu($id)
+    {
+        if (false === $this->isBuilt) {
+            throw new RuntimeException(sprintf('Menu: "%s" cannot be retrieve until menu has been built', $id));
+        }
+
+        return $this->subMenus[$id];
     }
 
     private function getStyleClassDefaults()
@@ -189,20 +291,49 @@ class CliMenuBuilder
         return $this;
     }
 
-    private function getActionItems()
+    /**
+     * @param array $items
+     * @return array
+     */
+    private function buildSubMenus(array $items)
     {
-        
+        return array_map(function ($item) {
+            if (!is_string($item)) {
+                return $item;
+            }
+            $menuBuilder = $this->subMenus[$item];
+            $this->subMenus[$item] = $menuBuilder->build();
+            return new MenuMenuItem($item, $this->subMenus[$item]);
+        }, $items);
     }
 
     public function build()
     {
-        return new CliMenu(
+        $this->isBuilt = true;
+
+        $goBackButtons = [];
+        foreach ($this->subMenus as $id => $menuBuilder) {
+            $goBackButtons[$id] = $menuBuilder->hasGoBackButton();
+        }
+
+        $menuItems      = $this->buildSubMenus($this->menuItems);
+        $menuActions    = $this->buildSubMenus($this->menuActions);
+
+        $menu =  new CliMenu(
             $this->menuTitle ?: false,
-            $this->menuItems,
+            $menuItems,
             $this->itemCallable,
-            $this->menuActions,
+            $menuActions,
             $this->terminal,
             new MenuStyle(...array_values($this->style))
         );
+
+        foreach (array_filter($goBackButtons) as $subMenu => $goBackButtons) {
+            $this->subMenus[$subMenu]->addAction(new SelectableItem('Go Back', function (CliMenu $subMenu) use ($menu) {
+                $menu->display();
+            }));
+        }
+
+        return $menu;
     }
 }
