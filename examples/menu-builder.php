@@ -19,19 +19,20 @@ $itemCallable = function (CliMenu $menu) {
     echo $menu->getSelectedItem()->getText();
 };
 
-$subMenu = (new CliMenuBuilder($itemCallable))
-    ->addAsciiArt($art)
-    ->addLineBreak("=")
-    ->addItem('Some shit')
-    ->setAsSubMenu()
-    ->build();
-
-$menu = (new CliMenuBuilder($itemCallable))
+$menu = (new CliMenuBuilder)
     ->addAsciiArt($art)
     ->addLineBreak("=")
     ->addItem('First Item')
-    ->addSubMenu('Sub Menu', $subMenu)
+    ->addItemCallable(function () {echo "LOL!";})
+    ->addSubMenuAsAction('Sub Menu')
+        ->addAsciiArt($art)
+        ->addLineBreak("=")
+        ->addItem('Some shit')
+        ->addItemCallable(function () {echo "SUB LOL!";})
+        ->addGoBackAction()
+        ->end()
     ->setBackgroundColour('red')
+    ->addGoBackAction()
     ->build();
 
 $menu->display();

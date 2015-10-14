@@ -61,13 +61,4 @@ class MenuMenuItem implements MenuItemInterface
         $this->parentMenu = $parentMenu;
         $this->subMenu->display();
     }
-
-    /**
-     * Display the parent menu
-     * @param CliMenu $menu
-     */
-    public static function showParentMenu(CliMenu $menu)
-    {
-        // TODO: FIGURE OUT HOW TO GET INSTANCE OF MENUMENUITEM ?, IS IT EVEN POSSIBLE ?
-    }
 }
