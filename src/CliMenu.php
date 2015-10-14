@@ -58,20 +58,29 @@ class CliMenu
     protected $selectedItem;
 
     /**
-     * Initiate the Menu
-     *
-     * @param bool|string $title
-     * @param TerminalInterface $terminal
-     * @param MenuStyle $style
+     * @param $title
+     * @param array $items
+     * @param callable $itemAction
+     * @param array $actions
+     * @param TerminalInterface|null $terminal
+     * @param MenuStyle|null $style
      * @throws InvalidTerminalException
      */
-    public function __construct($title = false, TerminalInterface $terminal = null, MenuStyle $style = null)
-    {
+    public function __construct(
+        $title,
+        array $items,
+        callable $itemAction,
+        array $actions = [],
+        TerminalInterface $terminal = null,
+        MenuStyle $style = null
+    ) {
         $this->title      = $title;
+        $this->items      = $items;
         $this->terminal   = $terminal ?: TerminalFactory::fromSystem();
         $this->style      = $style ?: new MenuStyle();
 
         $this->actions    = array_merge(
+            $actions,
             [new LineBreakItem('-')],
             $this->getDefaultActions()
         );

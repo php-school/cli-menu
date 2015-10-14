@@ -30,10 +30,6 @@ class MenuMenuItem implements MenuItemInterface
     {
         $this->text    = $text;
         $this->subMenu = $subMenu;
-
-        $this->subMenu->addAction(
-            new SelectableItem('Go Back', [$this, 'showParentMenu'])
-        );
     }
 
     /**
@@ -68,9 +64,10 @@ class MenuMenuItem implements MenuItemInterface
 
     /**
      * Display the parent menu
+     * @param CliMenu $menu
      */
-    public function showParentMenu()
+    public static function showParentMenu(CliMenu $menu)
     {
-        $this->parentMenu->display();
+        // TODO: FIGURE OUT HOW TO GET INSTANCE OF MENUMENUITEM ?, IS IT EVEN POSSIBLE ?
     }
 }
