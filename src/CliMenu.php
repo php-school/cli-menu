@@ -57,6 +57,11 @@ class CliMenu
     protected $selectedItem;
 
     /**
+     * @var bool
+     */
+    protected $open = true;
+
+    /**
      * @param $title
      * @param array $items
      * @param callable $itemCallable
@@ -128,6 +133,14 @@ class CliMenu
     }
 
     /**
+     * @return bool
+     */
+    public function isOpen()
+    {
+        return $this->open;
+    }
+
+    /**
      * Add a new Item to the listing
      *
      * @param MenuItemInterface $item
@@ -182,7 +195,7 @@ class CliMenu
     {
         $this->draw();
 
-        while ($input = $this->terminal->getKeyedInput()) {
+        while ($this->isOpen() && $input = $this->terminal->getKeyedInput()) {
             switch ($input) {
                 case 'up':
                 case 'down':
@@ -303,6 +316,20 @@ class CliMenu
     }
 
     /**
+     * @throws InvalidTerminalException
+     */
+    public function open()
+    {
+        if ($this->isOpen()) {
+            return;
+        }
+
+        $this->configureTerminal();
+        $this->open = true;
+        $this->display();
+    }
+
+    /**
      * Close the menu
      *
      * @throws InvalidTerminalException
@@ -310,6 +337,8 @@ class CliMenu
     public function close()
     {
         $this->tearDownTerminal();
-        exit();
+        $this->terminal->clean();
+        $this->terminal->moveCursorToTop();
+        $this->open = false;
     }
 }
