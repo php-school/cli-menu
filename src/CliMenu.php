@@ -2,6 +2,8 @@
 
 namespace MikeyMike\CliMenu;
 
+use Assert\Assertion;
+use MikeyMike\CliMenu\Exception\InvalidInstantiationException;
 use MikeyMike\CliMenu\Exception\InvalidTerminalException;
 use MikeyMike\CliMenu\MenuItem\LineBreakItem;
 use MikeyMike\CliMenu\MenuItem\MenuItem;
@@ -61,6 +63,8 @@ class CliMenu
      */
     protected $open = true;
 
+    private $allowedConsumer = 'MikeyMike\CliMenu\CliMenuBuilder';
+
     /**
      * @param $title
      * @param array $items
@@ -68,6 +72,7 @@ class CliMenu
      * @param array $actions
      * @param TerminalInterface|null $terminal
      * @param MenuStyle|null $style
+     * @throws InvalidInstantiationException
      * @throws InvalidTerminalException
      */
     public function __construct(
@@ -78,6 +83,13 @@ class CliMenu
         TerminalInterface $terminal = null,
         MenuStyle $style = null
     ) {
+        $builder = debug_backtrace();
+        if (count($builder) < 2 || !isset($builder[1]['class']) || $builder[1]['class'] !== $this->allowedConsumer) {
+            throw new InvalidInstantiationException(
+                sprintf('The CliMenu must be instantiated by "%s"', $this->allowedConsumer)
+            );
+        }
+
         $this->title      = $title;
         $this->items      = $items;
         $this->itemCallable = $itemCallable;
