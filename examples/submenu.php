@@ -15,7 +15,9 @@ $menu = (new CliMenuBuilder)
     ->addItemCallable($itemCallable)
     ->addSubMenuAsAction('Options')
         ->setTitle('CLI Menu > Options')
-        ->addItem('First option')
+        ->addSelectableItem('First option', function (CliMenu $menu) {
+            echo sprintf('Executing option: %s', $menu->getSelectedItem()->getText());
+        })
         ->addItemCallable($itemCallable)
         ->setWidth(70)
         ->setBackgroundColour('green')

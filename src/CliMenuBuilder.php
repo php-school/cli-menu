@@ -168,6 +168,20 @@ class CliMenuBuilder
 
     /**
      * @param $text
+     * @param callable $callable
+     * @return $this
+     */
+    public function addSelectableItem($text, callable $callable)
+    {
+        Assertion::string($text);
+
+        $this->addMenuItem(new SelectableItem($text, $callable));
+
+        return $this;
+    }
+
+    /**
+     * @param $text
      * @return $this
      */
     public function addStaticItem($text)
