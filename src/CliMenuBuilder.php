@@ -11,8 +11,7 @@ use MikeyMike\CliMenu\MenuItem\SelectableItem;
 use MikeyMike\CliMenu\MenuItem\StaticItem;
 use MikeyMike\CliMenu\Terminal\TerminalFactory;
 use MikeyMike\CliMenu\Terminal\TerminalInterface;
-use MikeyMike\CliMenu\MenuStyle;
-use RuntimeException;
+use Assert\Assertion;
 
 /**
  * Class CliMenuBuilder
@@ -23,37 +22,58 @@ use RuntimeException;
  */
 class CliMenuBuilder
 {
-    private $itemCallable;
-
-    private $menuItems = [];
-
-    private $menuActions = [];
-
-    private $style = [];
-
-    private $terminal;
-
-    private $menuTitle;
+    /**
+     * @var bool
+     */
+    private $isBuilt = false;
 
     /**
      * @var null|self
      */
     private $parent;
-
     /**
      * @var self[]
      */
     private $subMenus = [];
+    /**
+     * @var bool
+     */
+    private $addGoBackButton = true;
+
+    /**
+     * @var callable
+     */
+    private $itemCallable;
+
+    /**
+     * @var array
+     */
+    private $menuItems = [];
+
+    /**
+     * @var array
+     */
+    private $menuActions = [];
+
+    /**
+     * @var array
+     */
+    private $style = [];
+
+    /**
+     * @var TerminalInterface
+     */
+    private $terminal;
+
+    /**
+     * @var string
+     */
+    private $menuTitle;
 
     /**
      * @var bool
      */
-    private $addGoBackButton = false;
-
-    /**
-     * @var bool
-     */
-    private $isBuilt = false;
+    private $disableDefaultActions = false;
 
     /**
      * @param CliMenuBuilder|null $parent
@@ -67,12 +87,125 @@ class CliMenuBuilder
     }
 
     /**
+     * Pull the contructer params into an array with default values
+     *
+     * @return array
+     */
+    private function getStyleClassDefaults()
+    {
+        $styleClassParameters = (new \ReflectionClass(MenuStyle::class))->getConstructor()->getParameters();
+
+        $defaults = [];
+        foreach ($styleClassParameters as $parameter) {
+            $defaults[$parameter->getName()] = $parameter->getDefaultValue();
+        }
+
+        return $defaults;
+    }
+
+    /**
+     * @param $title
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        Assertion::string($title);
+
+        $this->menuTitle = $title;
+
+        return $this;
+    }
+
+    /**
      * @param callable $callable
      * @return self
      */
     public function addItemCallable(callable $callable)
     {
         $this->itemCallable = $callable;
+
+        return $this;
+    }
+
+    /**
+     * @param MenuItemInterface $item
+     * @return $this
+     */
+    private function addMenuItem(MenuItemInterface $item)
+    {
+        $this->menuItems[] = $item;
+
+        return $this;
+    }
+
+    /**
+     * @param $text
+     * @param callable $action
+     * @return $this
+     */
+    public function addAction($text, callable $action)
+    {
+        Assertion::string($text);
+
+        $this->menuActions[] = new SelectableItem($text, $action);
+
+        return $this;
+    }
+
+    /**
+     * @param $text
+     * @param bool|false $showItemExtra
+     * @return $this
+     */
+    public function addItem($text, $showItemExtra = false)
+    {
+        Assertion::string($text);
+
+        $this->addMenuItem(new MenuItem($text, $showItemExtra));
+
+        return $this;
+    }
+
+    /**
+     * @param $text
+     * @return $this
+     */
+    public function addStaticItem($text)
+    {
+        Assertion::string($text);
+
+        $this->addMenuItem(new StaticItem($text));
+
+        return $this;
+    }
+
+    /**
+     * @param string $breakChar
+     * @param int $lines
+     * @return $this
+     */
+    public function addLineBreak($breakChar = ' ', $lines = 1)
+    {
+        Assertion::string($breakChar);
+        Assertion::integer($lines);
+
+        $this->addMenuItem(new LineBreakItem($breakChar, $lines));
+
+        return $this;
+    }
+
+    /**
+     * @param $art
+     * @param string $position
+     * @return $this
+     */
+    public function addAsciiArt($art, $position = AsciiArtItem::POSITION_CENTER)
+    {
+        Assertion::string($art);
+        Assertion::string($position);
+
+        $this->addMenuItem(new AsciiArtItem($art, $position));
+
         return $this;
     }
 
@@ -83,8 +216,11 @@ class CliMenuBuilder
      */
     public function addSubMenuAsAction($id)
     {
+        Assertion::string($id);
+
         $this->menuActions[] = $id;
         $this->subMenus[$id] = new self($this);
+
         return $this->subMenus[$id];
     }
 
@@ -95,17 +231,21 @@ class CliMenuBuilder
      */
     public function addSubMenuAsItem($id)
     {
-        $this->menuItems[] = $id;
+        Assertion::string($id);
+
+        $this->menuItems[]   = $id;
         $this->subMenus[$id] = new self($this);
+
         return $this->subMenus[$id];
     }
 
     /**
      * Add go back button to navigate to the parent menu
      */
-    public function addGoBackAction()
+    public function disableGoBackButton()
     {
-        $this->addGoBackButton = true;
+        $this->addGoBackButton = false;
+
         return $this;
     }
 
@@ -115,6 +255,166 @@ class CliMenuBuilder
     public function hasGoBackButton()
     {
         return $this->addGoBackButton;
+    }
+
+    /**
+     * @param string $colour
+     * @return $this
+     */
+    public function setBackgroundColour($colour)
+    {
+        Assertion::inArray($colour, MenuStyle::getAvailableColours());
+
+        $this->style['bg'] = $colour;
+
+        return $this;
+    }
+
+    /**
+     * @param string $colour
+     * @return $this
+     */
+    public function setForegroundColour($colour)
+    {
+        Assertion::inArray($colour, MenuStyle::getAvailableColours());
+
+        $this->style['fg'] = $colour;
+
+        return $this;
+    }
+
+    /**
+     * @param int $width
+     * @return $this
+     */
+    public function setWidth($width)
+    {
+        Assertion::integer($width);
+
+        $this->style['width'] = $width;
+
+        return $this;
+    }
+
+    /**
+     * @param int $padding
+     * @return $this
+     */
+    public function setPadding($padding)
+    {
+        Assertion::integer($padding);
+
+        $this->style['padding'] = $padding;
+
+        return $this;
+    }
+
+    /**
+     * @param int $margin
+     * @return $this
+     */
+    public function setMargin($margin)
+    {
+        Assertion::integer($margin);
+
+        $this->style['margin'] = $margin;
+
+        return $this;
+    }
+
+    /**
+     * @param srting $marker
+     * @return $this
+     */
+    public function setUnselectedMarker($marker)
+    {
+        Assertion::string($marker);
+
+        $this->style['unselectedMarker'] = $marker;
+
+        return $this;
+    }
+
+    /**
+     * @param string $marker
+     * @return $this
+     */
+    public function setSelectedMarker($marker)
+    {
+        Assertion::string($marker);
+
+        $this->style['selectedMarker'] = $marker;
+
+        return $this;
+    }
+
+    /**
+     * @param string $extra
+     * @return $this
+     */
+    public function setItemExtra($extra)
+    {
+        Assertion::string($extra);
+
+        $this->style['itemExtra'] = $extra;
+
+        return $this;
+    }
+
+    /**
+     * @param $displayExtra
+     * @return $this
+     */
+    public function displayItemExtra($displayExtra)
+    {
+        Assertion::boolean($displayExtra);
+
+        $this->style['displayExtra'] = $displayExtra;
+
+        return $this;
+    }
+
+    /**
+     * @param TerminalInterface $terminal
+     * @return $this
+     */
+    public function setTerminal(TerminalInterface $terminal)
+    {
+        $this->terminal = $terminal;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    private function getDefaultActions()
+    {
+        return [
+            new SelectableItem('Exit', function (CliMenu $menu) {
+                $menu->close();
+            })
+        ];
+    }
+
+    /**
+     * @return $this
+     */
+    public function disableDefaultActions()
+    {
+        $this->disableDefaultActions = true;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    private function itemsHaveExtra()
+    {
+        return !empty(array_filter($this->menuItems, function (MenuItemInterface $item) {
+            return $item->showsItemExtra();
+        }));
     }
 
     /**
@@ -146,151 +446,6 @@ class CliMenuBuilder
         return $this->subMenus[$id];
     }
 
-    private function getStyleClassDefaults()
-    {
-        $styleClassParameters = (new \ReflectionClass(MenuStyle::class))->getConstructor()->getParameters();
-
-        $defaults = [];
-        foreach ($styleClassParameters as $parameter) {
-            $defaults[$parameter->getName()] = $parameter->getDefaultValue();
-        }
-
-        return $defaults;
-    }
-
-    public function setTitle($title)
-    {
-        $this->menuTitle = $title;
-    }
-
-    public function addMenuItem(MenuItemInterface $item)
-    {
-        $this->menuItems[] = $item;
-
-        return $this;
-    }
-
-    public function addAction($text, callable $action)
-    {
-        $this->menuActions[] = new SelectableItem($text, $action);
-
-        return $this;
-    }
-
-    public function addItem($text, $showItemExtra = false)
-    {
-        $this->addMenuItem(new MenuItem($text, $showItemExtra));
-
-        return $this;
-    }
-
-    public function addStaticItem($text)
-    {
-        $this->addMenuItem(new StaticItem($text));
-
-        return $this;
-    }
-
-    public function addLineBreak($breakChar = ' ', $lines = 1)
-    {
-        $this->addMenuItem(new LineBreakItem($breakChar, $lines));
-
-        return $this;
-    }
-
-    public function addAsciiArt($art, $position = AsciiArtItem::POSITION_CENTER)
-    {
-        $this->addMenuItem(new AsciiArtItem($art, $position));
-
-        return $this;
-    }
-
-    public function addSubMenu($text, CliMenu $subMenu)
-    {
-        $this->addMenuItem(new MenuMenuItem($text, $subMenu));
-
-        return $this;
-    }
-
-    public function setAsSubMenu($backActionText = 'Go Back')
-    {
-        $this->addAction($backActionText, [MenuMenuItem::class, 'showParentMenu']);
-
-        return $this;
-    }
-
-    public function setBackgroundColour($colour)
-    {
-        // TODO: Colour validation
-        $this->style['bg'] = $colour;
-
-        return $this;
-    }
-
-    public function setForegroundColour($colour)
-    {
-        // TODO: Colour validation
-        $this->style['fg'] = $colour;
-
-        return $this;
-    }
-
-    public function setWidth($width)
-    {
-        $this->style['width'] = $width;
-
-        return $this;
-    }
-
-    public function setPadding($padding)
-    {
-        $this->style['padding'] = $padding;
-
-        return $this;
-    }
-
-    public function setMargin($margin)
-    {
-        $this->style['margin'] = $margin;
-
-        return $this;
-    }
-
-    public function setUnselectedMarker($marker)
-    {
-        $this->style['unselectedMarker'] = $marker;
-
-        return $this;
-    }
-
-    public function setSelectedMarker($marker)
-    {
-        $this->style['selectedMarker'] = $marker;
-
-        return $this;
-    }
-
-    public function setItemExtra($extra)
-    {
-        $this->style['itemExtra'] = $extra;
-
-        return $this;
-    }
-
-    public function displayItemExtra($displayExtra)
-    {
-        $this->style['displayExtra'] = $displayExtra;
-
-        return $this;
-    }
-
-    public function setTerminal(TerminalInterface $terminal)
-    {
-        $this->terminal = $terminal;
-
-        return $this;
-    }
-
     /**
      * @param array $items
      * @return array
@@ -301,12 +456,17 @@ class CliMenuBuilder
             if (!is_string($item)) {
                 return $item;
             }
-            $menuBuilder = $this->subMenus[$item];
+
+            $menuBuilder           = $this->subMenus[$item];
             $this->subMenus[$item] = $menuBuilder->build();
+
             return new MenuMenuItem($item, $this->subMenus[$item]);
         }, $items);
     }
 
+    /**
+     * @return CliMenu
+     */
     public function build()
     {
         $this->isBuilt = true;
@@ -316,10 +476,18 @@ class CliMenuBuilder
             $goBackButtons[$id] = $menuBuilder->hasGoBackButton();
         }
 
-        $menuItems      = $this->buildSubMenus($this->menuItems);
-        $menuActions    = $this->buildSubMenus($this->menuActions);
+        $mergedActions = $this->disableDefaultActions
+            ? $this->menuActions
+            : array_merge($this->menuActions, $this->getDefaultActions());
 
-        $menu =  new CliMenu(
+        $menuActions = $this->buildSubMenus($mergedActions);
+        $menuItems   = $this->buildSubMenus($this->menuItems);
+
+        if ($this->itemsHaveExtra()) {
+            $this->style['displaysExtra'] = true;
+        }
+
+        $menu = new CliMenu(
             $this->menuTitle ?: false,
             $menuItems,
             $this->itemCallable,
@@ -328,8 +496,8 @@ class CliMenuBuilder
             new MenuStyle(...array_values($this->style))
         );
 
-        foreach (array_filter($goBackButtons) as $subMenu => $goBackButtons) {
-            $this->subMenus[$subMenu]->addAction(new SelectableItem('Go Back', function (CliMenu $subMenu) use ($menu) {
+        foreach (array_filter($goBackButtons) as $subMenu => $goBackButton) {
+            $this->subMenus[$subMenu]->addAction(new SelectableItem('Go Back', function () use ($menu) {
                 $menu->display();
             }));
         }

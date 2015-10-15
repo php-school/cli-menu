@@ -2,28 +2,26 @@
 
 use MikeyMike\CliMenu\CliMenu;
 use MikeyMike\CliMenu\CliMenuBuilder;
-use MikeyMike\CliMenu\MenuItem\MenuItem;
-use MikeyMike\CliMenu\MenuStyle;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-$subMenu = (new CliMenuBuilder('CLI Menu with Submenu > Options'))
-    ->addItem(new MenuItem('Option 1'))
-    ->addItem(new MenuItem('Option 2'))
-    ->setItemCallback(function (CliMenu $menu) {
-        echo sprintf('You selected "%s"', $menu->getSelectedItem()->getText());
-    })
-    ->setMenuStyle(new MenuStyle('red'))
-    ->build();
+$itemCallable = function (CliMenu $menu) {
+    echo $menu->getSelectedItem()->getText();
+};
 
-$menu = (new CliMenuBuilder('CLI Menu with Submenu'))
-    ->addItem(new MenuItem('First Item'))
-    ->addItem(new MenuItem('Second Item'))
-    ->addItem(new MenuItem('Third Item'))
-    ->setItemCallback(function (CliMenu $menu) {
-        echo sprintf('You selected "%s"', $menu->getSelectedItem()->getText());
-    })
-    ->addSubMenuAsAction('Options', $subMenu)
+$menu = (new CliMenuBuilder)
+    ->setTitle('CLI Menu')
+    ->addItem('First Item')
+    ->addItemCallable($itemCallable)
+    ->addSubMenuAsAction('Options')
+        ->setTitle('CLI Menu > Options')
+        ->addItem('First option')
+        ->addItemCallable($itemCallable)
+        ->setWidth(70)
+        ->setBackgroundColour('green')
+        ->end()
+    ->setWidth(70)
+    ->setBackgroundColour('yellow')
     ->build();
 
 $menu->display();

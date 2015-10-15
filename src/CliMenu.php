@@ -6,7 +6,6 @@ use MikeyMike\CliMenu\Exception\InvalidTerminalException;
 use MikeyMike\CliMenu\MenuItem\LineBreakItem;
 use MikeyMike\CliMenu\MenuItem\MenuItem;
 use MikeyMike\CliMenu\MenuItem\MenuItemInterface;
-use MikeyMike\CliMenu\MenuItem\SelectableItem;
 use MikeyMike\CliMenu\MenuItem\StaticItem;
 use MikeyMike\CliMenu\Terminal\TerminalFactory;
 use \MikeyMike\CliMenu\Terminal\TerminalInterface;
@@ -50,7 +49,7 @@ class CliMenu
     /**
      * @var callable
      */
-    protected $itemAction;
+    protected $itemCallable;
 
     /**
      * @var int
@@ -60,7 +59,7 @@ class CliMenu
     /**
      * @param $title
      * @param array $items
-     * @param callable $itemAction
+     * @param callable $itemCallable
      * @param array $actions
      * @param TerminalInterface|null $terminal
      * @param MenuStyle|null $style
@@ -69,21 +68,17 @@ class CliMenu
     public function __construct(
         $title,
         array $items,
-        callable $itemAction,
+        callable $itemCallable,
         array $actions = [],
         TerminalInterface $terminal = null,
         MenuStyle $style = null
     ) {
         $this->title      = $title;
         $this->items      = $items;
+        $this->itemCallable = $itemCallable;
+        $this->actions    = $actions;
         $this->terminal   = $terminal ?: TerminalFactory::fromSystem();
         $this->style      = $style ?: new MenuStyle();
-
-        $this->actions    = array_merge(
-            $actions,
-            [new LineBreakItem('-')],
-            $this->getDefaultActions()
-        );
 
         $this->buildAllItems();
         $this->configureTerminal();
@@ -125,27 +120,11 @@ class CliMenu
     }
 
     /**
-     * Default Menu Actions
-     *
-     * @return array
+     * @return TerminalInterface
      */
-    protected function getDefaultActions()
+    public function getTerminal()
     {
-        return [
-            new SelectableItem('Exit', function (CliMenu $menu) {
-                $menu->close();
-            })
-        ];
-    }
-
-    /**
-     * Update style confuration based on menu
-     */
-    public function updateStyle()
-    {
-        $this->style->setDisplaysExtra(!empty(array_filter($this->items, function (MenuItemInterface $item) {
-            return $item->showsItemExtra();
-        })));
+        return $this->terminal;
     }
 
     /**
@@ -157,7 +136,6 @@ class CliMenu
     {
         $this->items[] = $item;
         $this->buildAllItems();
-        $this->updateStyle();
     }
 
     /**
@@ -176,7 +154,11 @@ class CliMenu
      */
     private function buildAllItems()
     {
-        $this->allItems = array_merge($this->items, $this->actions);
+        $this->allItems = array_merge(
+            $this->items,
+            [new LineBreakItem($this->style->getActionSeparator())],
+            $this->actions
+        );
         $this->selectFirstItem();
     }
 
@@ -191,46 +173,6 @@ class CliMenu
                 break;
             }
         }
-    }
-
-    /**
-     * Add item action callback
-     *
-     * @param callable $callback
-     */
-    public function setItemCallback(callable $callback)
-    {
-        $this->itemAction = $callback;
-    }
-
-    /**
-     * Set the terminal to use
-     *
-     * @param TerminalInterface $terminal
-     */
-    public function setTerminal(TerminalInterface $terminal)
-    {
-        $this->terminal = $terminal;
-    }
-
-    /**
-     * Set the menu style
-     *
-     * @param MenuStyle $style
-     */
-    public function setMenuStyle(MenuStyle $style)
-    {
-        $this->style = $style;
-    }
-
-    /**
-     * Get the menus style
-     *
-     * @return MenuStyle
-     */
-    public function getMenuStyle()
-    {
-        return $this->style;
     }
 
     /**
@@ -293,7 +235,7 @@ class CliMenu
     protected function executeCurrentItem()
     {
         $action = $this->getSelectedItem() instanceof MenuItem
-            ? $this->itemAction
+            ? $this->itemCallable
             : $this->getSelectedItem()->getSelectAction();
 
         if (is_callable($action)) {

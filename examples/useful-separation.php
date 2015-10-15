@@ -8,29 +8,32 @@ use MikeyMike\CliMenu\MenuItem\StaticItem;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-$menu = (new CliMenuBuilder('Basic CLI Menu with Separation'))
-    ->addItem(new LineBreakItem())
-    ->addItem(new StaticItem('Section 1'))
-    ->addItem(new StaticItem('---------'))
-    ->addItem(new MenuItem('First Item'))
-    ->addItem(new MenuItem('Second Item'))
-    ->addItem(new MenuItem('Third Item'))
-    ->addItem(new LineBreakItem())
-    ->addItem(new StaticItem('Section 2'))
-    ->addItem(new StaticItem('---------'))
-    ->addItem(new MenuItem('Fourth Item'))
-    ->addItem(new MenuItem('Fifth Item'))
-    ->addItem(new MenuItem('Sixth Item'))
-    ->addItem(new LineBreakItem())
-    ->addItem(new StaticItem('Section 3'))
-    ->addItem(new StaticItem('---------'))
-    ->addItem(new MenuItem('Seventh Item'))
-    ->addItem(new MenuItem('Eighth Item'))
-    ->addItem(new MenuItem('Ninth Item'))
-    ->addItem(new LineBreakItem())
-    ->setItemCallback(function (CliMenu $menu) {
-        echo sprintf('You selected "%s"', $menu->getSelectedItem()->getText());
-    })
+$itemCallable = function (CliMenu $menu) {
+    echo $menu->getSelectedItem()->getText();
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Useful CLI Menu Separation')
+    ->addLineBreak()
+    ->addStaticItem('Section 1')
+    ->addStaticItem('---------')
+    ->addItem('First Item')
+    ->addItem('Second Item')
+    ->addItem('Third Item')
+    ->addLineBreak()
+    ->addStaticItem('Section 2')
+    ->addStaticItem('---------')
+    ->addItem('Fourth Item')
+    ->addItem('Fifth Item')
+    ->addItem('Sixth Item')
+    ->addLineBreak()
+    ->addStaticItem('Section 3')
+    ->addStaticItem('---------')
+    ->addItem('Seventh Item')
+    ->addItem('Eighth Item')
+    ->addItem('Ninth Item')
+    ->addLineBreak()
+    ->addItemCallable($itemCallable)
     ->build();
 
 $menu->display();

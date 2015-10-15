@@ -2,26 +2,27 @@
 
 use MikeyMike\CliMenu\CliMenu;
 use MikeyMike\CliMenu\CliMenuBuilder;
-use MikeyMike\CliMenu\MenuItem\LineBreakItem;
-use MikeyMike\CliMenu\MenuItem\MenuItem;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-$menu = (new CliMenuBuilder('Basic CLI Menu with Separation'))
-    ->addItem(new MenuItem('First Item'))
-    ->addItem(new MenuItem('Second Item'))
-    ->addItem(new MenuItem('Third Item'))
-    ->addItem(new LineBreakItem())
-    ->addItem(new LineBreakItem('/\\'))
-    ->addItem(new LineBreakItem('-=-', 2))
-    ->addItem(new LineBreakItem('\\/'))
-    ->addItem(new LineBreakItem())
-    ->addItem(new MenuItem('Fourth Item'))
-    ->addItem(new MenuItem('Fifth Item'))
-    ->addItem(new MenuItem('Sixth Item'))
-    ->setItemCallback(function (CliMenu $menu) {
-        echo sprintf('You selected "%s"', $menu->getSelectedItem()->getText());
-    })
+$itemCallable = function (CliMenu $menu) {
+    echo $menu->getSelectedItem()->getText();
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Fancy Pointless CLI Menu Separation')
+    ->addItem('First Item')
+    ->addItem('Second Item')
+    ->addItem('Third Item')
+    ->addLineBreak()
+    ->addLineBreak('/\\')
+    ->addLineBreak('-=-', 2)
+    ->addLineBreak('\\/')
+    ->addLineBreak()
+    ->addItem('Fourth Item')
+    ->addItem('Fifth Item')
+    ->addItem('Sixth Item')
+    ->addItemCallable($itemCallable)
     ->build();
 
 $menu->display();

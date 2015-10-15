@@ -69,9 +69,14 @@ class MenuStyle
     private $displaysExtra;
 
     /**
+     * @var string
+     */
+    private $actionSeparator;
+
+    /**
      * @var array
      */
-    private $availableForegroundColors = array(
+    private static $availableForegroundColors = array(
         'black'   => array('set' => 30, 'unset' => 39),
         'red'     => array('set' => 31, 'unset' => 39),
         'green'   => array('set' => 32, 'unset' => 39),
@@ -86,7 +91,7 @@ class MenuStyle
     /**
      * @var array
      */
-    private $availableBackgroundColors = array(
+    private static $availableBackgroundColors = array(
         'black'   => array('set' => 40, 'unset' => 49),
         'red'     => array('set' => 41, 'unset' => 49),
         'green'   => array('set' => 42, 'unset' => 49),
@@ -101,7 +106,7 @@ class MenuStyle
     /**
      * @var array
      */
-    private $availableOptions = array(
+    private static $availableOptions = array(
         'bold'       => array('set' => 1, 'unset' => 22),
         'underscore' => array('set' => 4, 'unset' => 24),
         'blink'      => array('set' => 5, 'unset' => 25),
@@ -121,6 +126,7 @@ class MenuStyle
      * @param string $selectedMarker
      * @param string $itemExtra
      * @param bool $displaysExtra
+     * @param string $actionSeparator
      * @param TerminalInterface $terminal
      */
     public function __construct(
@@ -133,23 +139,25 @@ class MenuStyle
         $selectedMarker = '●',
         $itemExtra = '✔',
         $displaysExtra = false,
+        $actionSeparator = '-',
         TerminalInterface $terminal = null
     ) {
-        if (!array_key_exists($bg, $this->availableBackgroundColors)) {
+        if (!array_key_exists($bg, self::$availableForegroundColors)) {
             throw new \InvalidArgumentException(sprintf('Invalid foreground colour "%s"', $fg));
         }
 
-        if (!array_key_exists($fg, $this->availableForegroundColors)) {
+        if (!array_key_exists($fg, self::$availableForegroundColors)) {
             throw new \InvalidArgumentException(sprintf('Invalid foreground colour "%s"', $fg));
         }
 
-        $this->terminal      = $terminal ?: TerminalFactory::fromSystem();
-        $this->bg            = $bg;
-        $this->fg            = $fg;
-        $this->padding       = $padding;
-        $this->margin        = $margin;
-        $this->itemExtra     = $itemExtra;
-        $this->displaysExtra = $displaysExtra;
+        $this->terminal        = $terminal ?: TerminalFactory::fromSystem();
+        $this->bg              = $bg;
+        $this->fg              = $fg;
+        $this->padding         = $padding;
+        $this->margin          = $margin;
+        $this->itemExtra       = $itemExtra;
+        $this->displaysExtra   = $displaysExtra;
+        $this->actionSeparator = $actionSeparator;
 
         $this->setUnselectedMarker($unselectedMarker);
         $this->setSelectedMarker($selectedMarker);
@@ -157,6 +165,14 @@ class MenuStyle
         $this->calculateContentWidth();
     }
 
+    /**
+     * @return array
+     */
+    public static function getAvailableColours()
+    {
+        return array_keys(self::$availableBackgroundColors);
+    }
+    
     /**
      * Get the colour code set for Bg and Fg
      *
@@ -167,8 +183,8 @@ class MenuStyle
         return sprintf(
             "\033[%sm",
             implode(';', [
-                $this->availableBackgroundColors[$this->getFg()]['set'],
-                $this->availableForegroundColors[$this->getBg()]['set'],
+                self::$availableBackgroundColors[$this->getFg()]['set'],
+                self::$availableForegroundColors[$this->getBg()]['set'],
             ])
         );
     }
@@ -183,8 +199,8 @@ class MenuStyle
         return sprintf(
             "\033[%sm",
             implode(';', [
-                $this->availableBackgroundColors[$this->getFg()]['unset'],
-                $this->availableForegroundColors[$this->getBg()]['unset'],
+                self::$availableBackgroundColors[$this->getBg()]['unset'],
+                self::$availableForegroundColors[$this->getFg()]['unset'],
             ])
         );
     }
@@ -199,8 +215,8 @@ class MenuStyle
         return sprintf(
             "\033[%sm",
             implode(';', [
-                $this->availableBackgroundColors[$this->getBg()]['set'],
-                $this->availableForegroundColors[$this->getFg()]['set'],
+                self::$availableBackgroundColors[$this->getBg()]['set'],
+                self::$availableForegroundColors[$this->getFg()]['set'],
             ])
         );
     }
@@ -215,8 +231,8 @@ class MenuStyle
         return sprintf(
             "\033[%sm",
             implode(';', [
-                $this->availableBackgroundColors[$this->getBg()]['unset'],
-                $this->availableForegroundColors[$this->getFg()]['unset'],
+                self::$availableBackgroundColors[$this->getBg()]['unset'],
+                self::$availableForegroundColors[$this->getFg()]['unset'],
             ])
         );
     }
@@ -284,7 +300,7 @@ class MenuStyle
         $availableWidth = $this->terminal->getWidth() - ($this->margin * 2) - ($this->padding * 2);
 
         if ($width >= $availableWidth) {
-            $width = $availableWidth-1;
+            $width = $availableWidth;
         }
 
         $this->width = $width;
@@ -426,6 +442,25 @@ class MenuStyle
     public function setDisplaysExtra($displaysExtra)
     {
         $this->displaysExtra = $displaysExtra;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getActionSeparator()
+    {
+        return $this->actionSeparator;
+    }
+
+    /**
+     * @param string $actionSeparator
+     * @return $this
+     */
+    public function setActionSeparator($actionSeparator)
+    {
+        $this->actionSeparator = $actionSeparator;
 
         return $this;
     }

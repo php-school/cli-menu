@@ -2,18 +2,26 @@
 
 use MikeyMike\CliMenu\CliMenu;
 use MikeyMike\CliMenu\CliMenuBuilder;
-use MikeyMike\CliMenu\MenuItem\MenuItem;use MikeyMike\CliMenu\MenuStyle;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-$menu = (new CliMenuBuilder('Custom Styled CLI Menu'))
-    ->addItem(new MenuItem('First Item'))
-    ->addItem(new MenuItem('Second Item, but we have a really long menu item that could cause some problems here?'))
-    ->addItem(new MenuItem('Third Item, this could be long too, maybe just not as long :)'))
-    ->setItemCallback(function (CliMenu $menu) {
-        echo sprintf('You selected "%s"', $menu->getSelectedItem()->getText());
-    })
-    ->setMenuStyle(new MenuStyle('black', 'green', 50, 4, 4, '=> '))
+$itemCallable = function (CliMenu $menu) {
+    echo $menu->getSelectedItem()->getText();
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu Styling')
+    ->addItem('First Item')
+    ->addItem('Second Item')
+    ->addItem('Third Item')
+    ->addItemCallable($itemCallable)
+    ->setWidth(70)
+    ->setBackgroundColour('yellow')
+    ->setForegroundColour('black')
+    ->setPadding(4)
+    ->setMargin(4)
+    ->setUnselectedMarker(' ')
+    ->setSelectedMarker('>')
     ->build();
 
 $menu->display();
