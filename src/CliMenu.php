@@ -66,6 +66,11 @@ class CliMenu
     private $allowedConsumer = 'MikeyMike\CliMenu\CliMenuBuilder';
 
     /**
+     * @var CliMenu|null
+     */
+    protected $parent;
+
+    /**
      * @param $title
      * @param array $items
      * @param callable $itemCallable
@@ -99,6 +104,22 @@ class CliMenu
 
         $this->buildAllItems();
         $this->configureTerminal();
+    }
+
+    /**
+     * @param CliMenu $parent
+     */
+    public function setParent(CliMenu $parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return CliMenu|null
+     */
+    public function getParent()
+    {
+        return $this->parent;
     }
 
     /**
@@ -347,6 +368,18 @@ class CliMenu
      * @throws InvalidTerminalException
      */
     public function close()
+    {
+        $menu = $this;
+        do {
+            $menu->closeThis();
+            $menu = $menu->getParent();
+        } while (null !== $menu);
+    }
+
+    /**
+     * @throws InvalidTerminalException
+     */
+    public function closeThis()
     {
         $this->tearDownTerminal();
         $this->terminal->clean();

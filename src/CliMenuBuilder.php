@@ -12,6 +12,7 @@ use MikeyMike\CliMenu\MenuItem\StaticItem;
 use MikeyMike\CliMenu\Terminal\TerminalFactory;
 use MikeyMike\CliMenu\Terminal\TerminalInterface;
 use Assert\Assertion;
+use RuntimeException;
 
 /**
  * Class CliMenuBuilder
@@ -35,10 +36,17 @@ class CliMenuBuilder
      * @var self[]
      */
     private $subMenus = [];
+
     /**
-     * @var bool
+     * @var string
      */
-    private $addGoBackButton = true;
+    private $goBackButtonText = 'Go Back';
+    
+
+    /**
+     * @var string
+     */
+    private $exitButtonText = 'Exit';
 
     /**
      * @var callable
@@ -254,21 +262,25 @@ class CliMenuBuilder
     }
 
     /**
-     * Add go back button to navigate to the parent menu
+     * @param string $goBackButtonTest
+     * @return self
      */
-    public function disableGoBackButton()
+    public function setGoBackButtonText($goBackButtonTest)
     {
-        $this->addGoBackButton = false;
-
+        $this->goBackButtonText = $goBackButtonTest;
+        
         return $this;
     }
 
     /**
-     * @return bool
+     * @param string $exitButtonText
+     * @return self
      */
-    public function hasGoBackButton()
+    public function setExitButtonText($exitButtonText)
     {
-        return $this->addGoBackButton;
+        $this->exitButtonText = $exitButtonText;
+        
+        return $this;
     }
 
     /**
@@ -404,11 +416,20 @@ class CliMenuBuilder
      */
     private function getDefaultActions()
     {
-        return [
-            new SelectableItem('Exit', function (CliMenu $menu) {
-                $menu->close();
-            })
-        ];
+        $actions = [];
+        if ($this->parent) {
+            $actions[] = new SelectableItem($this->goBackButtonText, function (CliMenu $child) {
+                if ($parent = $child->getParent()) {
+                    $parent->display();
+                    $child->closeThis();
+                }
+            });
+        }
+        
+        $actions[] = new SelectableItem($this->exitButtonText, function (CliMenu $menu) {
+            $menu->close();
+        });
+        return $actions;
     }
 
     /**
@@ -484,19 +505,14 @@ class CliMenuBuilder
     public function build()
     {
         $this->isBuilt = true;
-
-        $goBackButtons = [];
-        foreach ($this->subMenus as $id => $menuBuilder) {
-            $goBackButtons[$id] = $menuBuilder->hasGoBackButton();
-        }
-
+        
         $mergedActions = $this->disableDefaultActions
             ? $this->menuActions
             : array_merge($this->menuActions, $this->getDefaultActions());
 
         $menuActions = $this->buildSubMenus($mergedActions);
         $menuItems   = $this->buildSubMenus($this->menuItems);
-
+        
         if ($this->itemsHaveExtra()) {
             $this->style['displaysExtra'] = true;
         }
@@ -509,11 +525,9 @@ class CliMenuBuilder
             $this->terminal,
             new MenuStyle(...array_values($this->style))
         );
-
-        foreach (array_filter($goBackButtons) as $subMenu => $goBackButton) {
-            $this->subMenus[$subMenu]->addAction(new SelectableItem('Go Back', function () use ($menu) {
-                $menu->display();
-            }));
+        
+        foreach ($this->subMenus as $subMenu) {
+            $subMenu->setParent($menu);
         }
 
         return $menu;
