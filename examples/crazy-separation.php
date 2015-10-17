@@ -10,19 +10,19 @@ $itemCallable = function (CliMenu $menu) {
 };
 
 $menu = (new CliMenuBuilder)
-    ->setTitle('Fancy Pointless CLI Menu Separation')
-    ->addItem('First Item')
-    ->addItem('Second Item')
-    ->addItem('Third Item')
+    ->setTitle('Crazy LineBreaks, Just because...')
+    ->addItem('First Item', $itemCallable)
+    ->addItem('Second Item', $itemCallable)
+    ->addItem('Third Item', $itemCallable)
     ->addLineBreak()
     ->addLineBreak('/\\')
     ->addLineBreak('-=-', 2)
     ->addLineBreak('\\/')
     ->addLineBreak()
-    ->addItem('Fourth Item')
-    ->addItem('Fifth Item')
-    ->addItem('Sixth Item')
-    ->addItemCallable($itemCallable)
+    ->addItem('Fourth Item', $itemCallable)
+    ->addItem('Fifth Item', $itemCallable)
+    ->addItem('Sixth Item', $itemCallable)
+    ->addLineBreak('= ')
     ->build();
 
 $menu->display();

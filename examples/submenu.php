@@ -11,14 +11,15 @@ $itemCallable = function (CliMenu $menu) {
 
 $menu = (new CliMenuBuilder)
     ->setTitle('CLI Menu')
-    ->addItem('First Item')
-    ->addItemCallable($itemCallable)
-    ->addSubMenuAsAction('Options')
+    ->addItem('First Item', $itemCallable)
+    ->addItem('Second Item', $itemCallable)
+    ->addLineBreak('-')
+    ->addSubMenu('Options')
         ->setTitle('CLI Menu > Options')
-        ->addSelectableItem('First option', function (CliMenu $menu) {
+        ->addItem('First option', function (CliMenu $menu) {
             echo sprintf('Executing option: %s', $menu->getSelectedItem()->getText());
         })
-        ->addItemCallable($itemCallable)
+        ->addLineBreak('-')
         ->setWidth(70)
         ->setBackgroundColour('green')
         ->end()

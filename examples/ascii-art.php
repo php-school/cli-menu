@@ -22,8 +22,9 @@ $itemCallable = function (CliMenu $menu) {
 $menu = (new CliMenuBuilder)
     ->addAsciiArt($art)
     ->addLineBreak("=")
-    ->addItem('First Item')
-    ->addItemCallable($itemCallable)
+    ->addItem('First Item', $itemCallable)
+    ->addItem('Second Item', $itemCallable)
+    ->addLineBreak('-')
     ->setWidth(70)
     ->setBackgroundColour('green')
     ->build();

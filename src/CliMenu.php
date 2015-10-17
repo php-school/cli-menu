@@ -34,19 +34,9 @@ class CliMenu
     protected $title;
 
     /**
-     * @var array
+     * @var MenuItemInterface[]
      */
     protected $items = [];
-
-    /**
-     * @var array
-     */
-    protected $actions = [];
-
-    /**
-     * @var array
-     */
-    protected $allItems = [];
 
     /**
      * @var callable
@@ -63,6 +53,9 @@ class CliMenu
      */
     protected $open = true;
 
+    /**
+     * @var string
+     */
     private $allowedConsumer = 'MikeyMike\CliMenu\CliMenuBuilder';
 
     /**
@@ -73,8 +66,6 @@ class CliMenu
     /**
      * @param $title
      * @param array $items
-     * @param callable $itemCallable
-     * @param array $actions
      * @param TerminalInterface|null $terminal
      * @param MenuStyle|null $style
      * @throws InvalidInstantiationException
@@ -83,8 +74,6 @@ class CliMenu
     public function __construct(
         $title,
         array $items,
-        callable $itemCallable,
-        array $actions = [],
         TerminalInterface $terminal = null,
         MenuStyle $style = null
     ) {
@@ -97,29 +86,11 @@ class CliMenu
 
         $this->title      = $title;
         $this->items      = $items;
-        $this->itemCallable = $itemCallable;
-        $this->actions    = $actions;
         $this->terminal   = $terminal ?: TerminalFactory::fromSystem();
         $this->style      = $style ?: new MenuStyle();
 
-        $this->buildAllItems();
         $this->configureTerminal();
-    }
-
-    /**
-     * @param CliMenu $parent
-     */
-    public function setParent(CliMenu $parent)
-    {
-        $this->parent = $parent;
-    }
-
-    /**
-     * @return CliMenu|null
-     */
-    public function getParent()
-    {
-        return $this->parent;
+        $this->selectFirstItem();
     }
 
     /**
@@ -158,6 +129,22 @@ class CliMenu
     }
 
     /**
+     * @param CliMenu $parent
+     */
+    public function setParent(CliMenu $parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return CliMenu|null
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
      * @return TerminalInterface
      */
     public function getTerminal()
@@ -181,31 +168,6 @@ class CliMenu
     public function addItem(MenuItemInterface $item)
     {
         $this->items[] = $item;
-        $this->buildAllItems();
-    }
-
-    /**
-     * Add a new Action before the default actions
-     *
-     * @param MenuItemInterface $action
-     */
-    public function addAction(MenuItemInterface $action)
-    {
-        array_splice($this->actions, -1, 0, [$action]);
-        $this->buildAllItems();
-    }
-
-    /**
-     * Build allItems array from items and actions
-     */
-    private function buildAllItems()
-    {
-        $this->allItems = array_merge(
-            $this->items,
-            [new LineBreakItem($this->style->getActionSeparator())],
-            $this->actions
-        );
-        $this->selectFirstItem();
     }
 
     /**
@@ -213,7 +175,7 @@ class CliMenu
      */
     private function selectFirstItem()
     {
-        foreach ($this->allItems as $key => $item) {
+        foreach ($this->items as $key => $item) {
             if ($item->canSelect()) {
                 $this->selectedItem = $key;
                 break;
@@ -250,13 +212,13 @@ class CliMenu
     protected function moveSelection($direction)
     {
         do {
-            $itemKeys = array_keys($this->allItems);
+            $itemKeys = array_keys($this->items);
 
             $direction === 'up'
                 ? $this->selectedItem--
                 : $this->selectedItem++;
 
-            if (!array_key_exists($this->selectedItem, $this->allItems)) {
+            if (!array_key_exists($this->selectedItem, $this->items)) {
                 $this->selectedItem  = $direction === 'up'
                     ? end($itemKeys)
                     : reset($itemKeys);
@@ -272,7 +234,7 @@ class CliMenu
      */
     public function getSelectedItem()
     {
-        return $this->allItems[$this->selectedItem];
+        return $this->items[$this->selectedItem];
     }
 
     /**
@@ -280,12 +242,11 @@ class CliMenu
      */
     protected function executeCurrentItem()
     {
-        $action = $this->getSelectedItem() instanceof MenuItem
-            ? $this->itemCallable
-            : $this->getSelectedItem()->getSelectAction();
+        $item = $this->getSelectedItem();
 
-        if (is_callable($action)) {
-            $action($this);
+        if ($item->canSelect()) {
+            $callable = $item->getSelectAction();
+            $callable($this);
         }
     }
 
@@ -302,12 +263,12 @@ class CliMenu
         if (is_string($this->title)) {
             $this->drawMenuItem(new LineBreakItem());
             $this->drawMenuItem(new StaticItem($this->title));
-            $this->drawMenuItem(new LineBreakItem('='));
+            $this->drawMenuItem(new LineBreakItem($this->style->getTitleSeparator()));
         }
 
         array_map(function ($item, $index) {
             $this->drawMenuItem($item, $index === $this->selectedItem);
-        }, $this->allItems, array_keys($this->allItems));
+        }, $this->items, array_keys($this->items));
 
         $this->drawMenuItem(new LineBreakItem());
 

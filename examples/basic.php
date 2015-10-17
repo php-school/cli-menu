@@ -11,10 +11,10 @@ $itemCallable = function (CliMenu $menu) {
 
 $menu = (new CliMenuBuilder)
     ->setTitle('Basic CLI Menu')
-    ->addItem('First Item')
-    ->addItem('Second Item')
-    ->addItem('Third Item')
-    ->addItemCallable($itemCallable)
+    ->addItem('First Item', $itemCallable)
+    ->addItem('Second Item', $itemCallable)
+    ->addItem('Third Item', $itemCallable)
+    ->addLineBreak('-')
     ->build();
 
 $menu->display();

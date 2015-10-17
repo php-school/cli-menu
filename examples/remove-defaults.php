@@ -10,13 +10,12 @@ $itemCallable = function (CliMenu $menu) {
 };
 
 $menu = (new CliMenuBuilder)
-    ->setTitle('Basic CLI Menu')
-    ->addItem('First Item')
-    ->addItem('Second Item')
-    ->addItem('Third Item')
-    ->addItemCallable($itemCallable)
-    ->disableDefaultActions()
-    ->addAction('CLOSE', function (CliMenu $menu) {
+    ->setTitle('Basic CLI Menu Remove Defaults')
+    ->addItem('First Item', $itemCallable)
+    ->addItem('Second Item', $itemCallable)
+    ->addItem('Third Item', $itemCallable)
+    ->disableDefaultItems()
+    ->addItem('CUSTOM CLOSE', function (CliMenu $menu) {
         $menu->close();
     })
     ->build();

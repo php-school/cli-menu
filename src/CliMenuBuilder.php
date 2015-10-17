@@ -4,7 +4,6 @@ namespace MikeyMike\CliMenu;
 
 use MikeyMike\CliMenu\MenuItem\AsciiArtItem;
 use MikeyMike\CliMenu\MenuItem\LineBreakItem;
-use MikeyMike\CliMenu\MenuItem\MenuItem;
 use MikeyMike\CliMenu\MenuItem\MenuItemInterface;
 use MikeyMike\CliMenu\MenuItem\MenuMenuItem;
 use MikeyMike\CliMenu\MenuItem\SelectableItem;
@@ -33,7 +32,7 @@ class CliMenuBuilder
      */
     private $parent;
     /**
-     * @var self[]
+     * @var self[]|CliMenu[]
      */
     private $subMenus = [];
 
@@ -49,19 +48,9 @@ class CliMenuBuilder
     private $exitButtonText = 'Exit';
 
     /**
-     * @var callable
-     */
-    private $itemCallable;
-
-    /**
      * @var array
      */
     private $menuItems = [];
-
-    /**
-     * @var array
-     */
-    private $menuActions = [];
 
     /**
      * @var array
@@ -81,7 +70,7 @@ class CliMenuBuilder
     /**
      * @var bool
      */
-    private $disableDefaultActions = false;
+    private $disableDefaultItems = false;
 
     /**
      * @param CliMenuBuilder|null $parent
@@ -125,17 +114,6 @@ class CliMenuBuilder
     }
 
     /**
-     * @param callable $callable
-     * @return self
-     */
-    public function addItemCallable(callable $callable)
-    {
-        $this->itemCallable = $callable;
-
-        return $this;
-    }
-
-    /**
      * @param MenuItemInterface $item
      * @return $this
      */
@@ -148,42 +126,15 @@ class CliMenuBuilder
 
     /**
      * @param $text
-     * @param callable $action
-     * @return $this
-     */
-    public function addAction($text, callable $action)
-    {
-        Assertion::string($text);
-
-        $this->menuActions[] = new SelectableItem($text, $action);
-
-        return $this;
-    }
-
-    /**
-     * @param $text
+     * @param callable $itemCallable
      * @param bool|false $showItemExtra
      * @return $this
      */
-    public function addItem($text, $showItemExtra = false)
+    public function addItem($text, callable $itemCallable, $showItemExtra = false)
     {
         Assertion::string($text);
 
-        $this->addMenuItem(new MenuItem($text, $showItemExtra));
-
-        return $this;
-    }
-
-    /**
-     * @param $text
-     * @param callable $callable
-     * @return $this
-     */
-    public function addSelectableItem($text, callable $callable)
-    {
-        Assertion::string($text);
-
-        $this->addMenuItem(new SelectableItem($text, $callable));
+        $this->addMenuItem(new SelectableItem($text, $itemCallable, $showItemExtra));
 
         return $this;
     }
@@ -236,22 +187,7 @@ class CliMenuBuilder
      *
      * @return CliMenuBuilder
      */
-    public function addSubMenuAsAction($id)
-    {
-        Assertion::string($id);
-
-        $this->menuActions[] = $id;
-        $this->subMenus[$id] = new self($this);
-
-        return $this->subMenus[$id];
-    }
-
-    /**
-     * @param string $id ID to reference and retrieve sub-menu
-     *
-     * @return CliMenuBuilder
-     */
-    public function addSubMenuAsItem($id)
+    public function addSubMenu($id)
     {
         Assertion::string($id);
 
@@ -349,7 +285,7 @@ class CliMenuBuilder
     }
 
     /**
-     * @param srting $marker
+     * @param string $marker
      * @return $this
      */
     public function setUnselectedMarker($marker)
@@ -388,14 +324,14 @@ class CliMenuBuilder
     }
 
     /**
-     * @param $displayExtra
+     * @param string $separator
      * @return $this
      */
-    public function displayItemExtra($displayExtra)
+    public function setTitleSeparator($separator)
     {
-        Assertion::boolean($displayExtra);
+        Assertion::string($separator);
 
-        $this->style['displayExtra'] = $displayExtra;
+        $this->style['titleSeparator'] = $separator;
 
         return $this;
     }
@@ -414,7 +350,7 @@ class CliMenuBuilder
     /**
      * @return array
      */
-    private function getDefaultActions()
+    private function getDefaultItems()
     {
         $actions = [];
         if ($this->parent) {
@@ -435,19 +371,20 @@ class CliMenuBuilder
     /**
      * @return $this
      */
-    public function disableDefaultActions()
+    public function disableDefaultItems()
     {
-        $this->disableDefaultActions = true;
+        $this->disableDefaultItems = true;
 
         return $this;
     }
 
     /**
+     * @param array $items
      * @return bool
      */
-    private function itemsHaveExtra()
+    private function itemsHaveExtra(array $items)
     {
-        return !empty(array_filter($this->menuItems, function (MenuItemInterface $item) {
+        return !empty(array_filter($items, function (MenuItemInterface $item) {
             return $item->showsItemExtra();
         }));
     }
@@ -505,23 +442,18 @@ class CliMenuBuilder
     public function build()
     {
         $this->isBuilt = true;
-        
-        $mergedActions = $this->disableDefaultActions
-            ? $this->menuActions
-            : array_merge($this->menuActions, $this->getDefaultActions());
 
-        $menuActions = $this->buildSubMenus($mergedActions);
-        $menuItems   = $this->buildSubMenus($this->menuItems);
-        
-        if ($this->itemsHaveExtra()) {
-            $this->style['displaysExtra'] = true;
-        }
+        $mergedItems = $this->disableDefaultItems
+            ? $this->menuItems
+            : array_merge($this->menuItems, $this->getDefaultItems());
+
+        $menuItems = $this->buildSubMenus($mergedItems);
+
+        $this->style['displaysExtra'] = $this->itemsHaveExtra($menuItems);
 
         $menu = new CliMenu(
             $this->menuTitle ?: false,
             $menuItems,
-            $this->itemCallable,
-            $menuActions,
             $this->terminal,
             new MenuStyle(...array_values($this->style))
         );

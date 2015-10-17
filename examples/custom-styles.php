@@ -11,10 +11,9 @@ $itemCallable = function (CliMenu $menu) {
 
 $menu = (new CliMenuBuilder)
     ->setTitle('Basic CLI Menu Styling')
-    ->addItem('First Item')
-    ->addItem('Second Item')
-    ->addItem('Third Item')
-    ->addItemCallable($itemCallable)
+    ->addItem('First Item', $itemCallable)
+    ->addItem('Second Item', $itemCallable)
+    ->addItem('Third Item', $itemCallable)
     ->setWidth(70)
     ->setBackgroundColour('yellow')
     ->setForegroundColour('black')
@@ -22,6 +21,7 @@ $menu = (new CliMenuBuilder)
     ->setMargin(4)
     ->setUnselectedMarker(' ')
     ->setSelectedMarker('>')
+    ->setTitleSeparator('- ')
     ->build();
 
 $menu->display();

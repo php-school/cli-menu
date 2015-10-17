@@ -2,6 +2,7 @@
 
 namespace MikeyMike\CliMenu;
 
+use MikeyMike\CliMenu\Exception\InvalidInstantiationException;
 use MikeyMike\CliMenu\Terminal\TerminalFactory;
 use MikeyMike\CliMenu\Terminal\TerminalInterface;
 
@@ -71,7 +72,12 @@ class MenuStyle
     /**
      * @var string
      */
-    private $actionSeparator;
+    private $titleSeparator;
+
+    /**
+     * @var string
+     */
+    private $allowedConsumer = 'MikeyMike\CliMenu\CliMenuBuilder';
 
     /**
      * @var array
@@ -126,8 +132,9 @@ class MenuStyle
      * @param string $selectedMarker
      * @param string $itemExtra
      * @param bool $displaysExtra
-     * @param string $actionSeparator
+     * @param string $titleSeparator
      * @param TerminalInterface $terminal
+     * @throws InvalidInstantiationException
      */
     public function __construct(
         $bg = 'blue',
@@ -139,15 +146,14 @@ class MenuStyle
         $selectedMarker = '●',
         $itemExtra = '✔',
         $displaysExtra = false,
-        $actionSeparator = '-',
+        $titleSeparator = '=',
         TerminalInterface $terminal = null
     ) {
-        if (!array_key_exists($bg, self::$availableForegroundColors)) {
-            throw new \InvalidArgumentException(sprintf('Invalid foreground colour "%s"', $fg));
-        }
-
-        if (!array_key_exists($fg, self::$availableForegroundColors)) {
-            throw new \InvalidArgumentException(sprintf('Invalid foreground colour "%s"', $fg));
+        $builder = debug_backtrace();
+        if (count($builder) < 2 || !isset($builder[1]['class']) || $builder[1]['class'] !== $this->allowedConsumer) {
+            throw new InvalidInstantiationException(
+                sprintf('The CliMenu must be instantiated by "%s"', $this->allowedConsumer)
+            );
         }
 
         $this->terminal        = $terminal ?: TerminalFactory::fromSystem();
@@ -157,7 +163,7 @@ class MenuStyle
         $this->margin          = $margin;
         $this->itemExtra       = $itemExtra;
         $this->displaysExtra   = $displaysExtra;
-        $this->actionSeparator = $actionSeparator;
+        $this->titleSeparator = $titleSeparator;
 
         $this->setUnselectedMarker($unselectedMarker);
         $this->setSelectedMarker($selectedMarker);
@@ -449,18 +455,18 @@ class MenuStyle
     /**
      * @return string
      */
-    public function getActionSeparator()
+    public function getTitleSeparator()
     {
-        return $this->actionSeparator;
+        return $this->titleSeparator;
     }
 
     /**
      * @param string $actionSeparator
      * @return $this
      */
-    public function setActionSeparator($actionSeparator)
+    public function setTitleSeparator($actionSeparator)
     {
-        $this->actionSeparator = $actionSeparator;
+        $this->titleSeparator = $actionSeparator;
 
         return $this;
     }
