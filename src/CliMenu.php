@@ -2,11 +2,12 @@
 
 namespace MikeyMike\CliMenu;
 
+use Assert\Assertion;
+use MikeyMike\CliMenu\Exception\InvalidInstantiationException;
 use MikeyMike\CliMenu\Exception\InvalidTerminalException;
 use MikeyMike\CliMenu\MenuItem\LineBreakItem;
 use MikeyMike\CliMenu\MenuItem\MenuItem;
 use MikeyMike\CliMenu\MenuItem\MenuItemInterface;
-use MikeyMike\CliMenu\MenuItem\SelectableItem;
 use MikeyMike\CliMenu\MenuItem\StaticItem;
 use MikeyMike\CliMenu\Terminal\TerminalFactory;
 use \MikeyMike\CliMenu\Terminal\TerminalInterface;
@@ -33,24 +34,9 @@ class CliMenu
     protected $title;
 
     /**
-     * @var array
+     * @var MenuItemInterface[]
      */
     protected $items = [];
-
-    /**
-     * @var array
-     */
-    protected $actions = [];
-
-    /**
-     * @var array
-     */
-    protected $allItems = [];
-
-    /**
-     * @var callable
-     */
-    protected $itemAction;
 
     /**
      * @var int
@@ -58,26 +44,48 @@ class CliMenu
     protected $selectedItem;
 
     /**
-     * Initiate the Menu
-     *
-     * @param bool|string $title
-     * @param TerminalInterface $terminal
-     * @param MenuStyle $style
+     * @var bool
+     */
+    protected $open = true;
+
+    /**
+     * @var string
+     */
+    private $allowedConsumer = 'MikeyMike\CliMenu\CliMenuBuilder';
+
+    /**
+     * @var CliMenu|null
+     */
+    protected $parent;
+
+    /**
+     * @param $title
+     * @param array $items
+     * @param TerminalInterface|null $terminal
+     * @param MenuStyle|null $style
+     * @throws InvalidInstantiationException
      * @throws InvalidTerminalException
      */
-    public function __construct($title = false, TerminalInterface $terminal = null, MenuStyle $style = null)
-    {
+    public function __construct(
+        $title,
+        array $items,
+        TerminalInterface $terminal = null,
+        MenuStyle $style = null
+    ) {
+        $builder = debug_backtrace();
+        if (count($builder) < 2 || !isset($builder[1]['class']) || $builder[1]['class'] !== $this->allowedConsumer) {
+            throw new InvalidInstantiationException(
+                sprintf('The CliMenu must be instantiated by "%s"', $this->allowedConsumer)
+            );
+        }
+
         $this->title      = $title;
+        $this->items      = $items;
         $this->terminal   = $terminal ?: TerminalFactory::fromSystem();
         $this->style      = $style ?: new MenuStyle();
 
-        $this->actions    = array_merge(
-            [new LineBreakItem('-')],
-            $this->getDefaultActions()
-        );
-
-        $this->buildAllItems();
         $this->configureTerminal();
+        $this->selectFirstItem();
     }
 
     /**
@@ -116,27 +124,35 @@ class CliMenu
     }
 
     /**
-     * Default Menu Actions
-     *
-     * @return array
+     * @param CliMenu $parent
      */
-    protected function getDefaultActions()
+    public function setParent(CliMenu $parent)
     {
-        return [
-            new SelectableItem('Exit', function (CliMenu $menu) {
-                $menu->close();
-            })
-        ];
+        $this->parent = $parent;
     }
 
     /**
-     * Update style confuration based on menu
+     * @return CliMenu|null
      */
-    public function updateStyle()
+    public function getParent()
     {
-        $this->style->setDisplaysExtra(!empty(array_filter($this->items, function (MenuItemInterface $item) {
-            return $item->showsItemExtra();
-        })));
+        return $this->parent;
+    }
+
+    /**
+     * @return TerminalInterface
+     */
+    public function getTerminal()
+    {
+        return $this->terminal;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOpen()
+    {
+        return $this->open;
     }
 
     /**
@@ -147,28 +163,6 @@ class CliMenu
     public function addItem(MenuItemInterface $item)
     {
         $this->items[] = $item;
-        $this->buildAllItems();
-        $this->updateStyle();
-    }
-
-    /**
-     * Add a new Action before the default actions
-     *
-     * @param MenuItemInterface $action
-     */
-    public function addAction(MenuItemInterface $action)
-    {
-        array_splice($this->actions, -1, 0, [$action]);
-        $this->buildAllItems();
-    }
-
-    /**
-     * Build allItems array from items and actions
-     */
-    private function buildAllItems()
-    {
-        $this->allItems = array_merge($this->items, $this->actions);
-        $this->selectFirstItem();
     }
 
     /**
@@ -176,52 +170,12 @@ class CliMenu
      */
     private function selectFirstItem()
     {
-        foreach ($this->allItems as $key => $item) {
+        foreach ($this->items as $key => $item) {
             if ($item->canSelect()) {
                 $this->selectedItem = $key;
                 break;
             }
         }
-    }
-
-    /**
-     * Add item action callback
-     *
-     * @param callable $callback
-     */
-    public function setItemCallback(callable $callback)
-    {
-        $this->itemAction = $callback;
-    }
-
-    /**
-     * Set the terminal to use
-     *
-     * @param TerminalInterface $terminal
-     */
-    public function setTerminal(TerminalInterface $terminal)
-    {
-        $this->terminal = $terminal;
-    }
-
-    /**
-     * Set the menu style
-     *
-     * @param MenuStyle $style
-     */
-    public function setMenuStyle(MenuStyle $style)
-    {
-        $this->style = $style;
-    }
-
-    /**
-     * Get the menus style
-     *
-     * @return MenuStyle
-     */
-    public function getMenuStyle()
-    {
-        return $this->style;
     }
 
     /**
@@ -231,7 +185,7 @@ class CliMenu
     {
         $this->draw();
 
-        while ($input = $this->terminal->getKeyedInput()) {
+        while ($this->isOpen() && $input = $this->terminal->getKeyedInput()) {
             switch ($input) {
                 case 'up':
                 case 'down':
@@ -253,13 +207,13 @@ class CliMenu
     protected function moveSelection($direction)
     {
         do {
-            $itemKeys = array_keys($this->allItems);
+            $itemKeys = array_keys($this->items);
 
             $direction === 'up'
                 ? $this->selectedItem--
                 : $this->selectedItem++;
 
-            if (!array_key_exists($this->selectedItem, $this->allItems)) {
+            if (!array_key_exists($this->selectedItem, $this->items)) {
                 $this->selectedItem  = $direction === 'up'
                     ? end($itemKeys)
                     : reset($itemKeys);
@@ -275,7 +229,7 @@ class CliMenu
      */
     public function getSelectedItem()
     {
-        return $this->allItems[$this->selectedItem];
+        return $this->items[$this->selectedItem];
     }
 
     /**
@@ -283,12 +237,11 @@ class CliMenu
      */
     protected function executeCurrentItem()
     {
-        $action = $this->getSelectedItem() instanceof MenuItem
-            ? $this->itemAction
-            : $this->getSelectedItem()->getSelectAction();
+        $item = $this->getSelectedItem();
 
-        if (is_callable($action)) {
-            $action($this);
+        if ($item->canSelect()) {
+            $callable = $item->getSelectAction();
+            $callable($this);
         }
     }
 
@@ -305,12 +258,12 @@ class CliMenu
         if (is_string($this->title)) {
             $this->drawMenuItem(new LineBreakItem());
             $this->drawMenuItem(new StaticItem($this->title));
-            $this->drawMenuItem(new LineBreakItem('='));
+            $this->drawMenuItem(new LineBreakItem($this->style->getTitleSeparator()));
         }
 
         array_map(function ($item, $index) {
             $this->drawMenuItem($item, $index === $this->selectedItem);
-        }, $this->allItems, array_keys($this->allItems));
+        }, $this->items, array_keys($this->items));
 
         $this->drawMenuItem(new LineBreakItem());
 
@@ -352,13 +305,41 @@ class CliMenu
     }
 
     /**
+     * @throws InvalidTerminalException
+     */
+    public function open()
+    {
+        if ($this->isOpen()) {
+            return;
+        }
+
+        $this->configureTerminal();
+        $this->open = true;
+        $this->display();
+    }
+
+    /**
      * Close the menu
      *
      * @throws InvalidTerminalException
      */
     public function close()
     {
+        $menu = $this;
+        do {
+            $menu->closeThis();
+            $menu = $menu->getParent();
+        } while (null !== $menu);
+    }
+
+    /**
+     * @throws InvalidTerminalException
+     */
+    public function closeThis()
+    {
         $this->tearDownTerminal();
-        exit();
+        $this->terminal->clean();
+        $this->terminal->moveCursorToTop();
+        $this->open = false;
     }
 }

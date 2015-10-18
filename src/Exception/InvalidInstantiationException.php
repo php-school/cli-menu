@@ -3,10 +3,10 @@
 namespace MikeyMike\CliMenu\Exception;
 
 /**
- * Class InvalidTerminalException
+ * Class InvalidInstantiationException
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
-class InvalidTerminalException extends \Exception
+class InvalidInstantiationException extends \Exception
 {
 
 }

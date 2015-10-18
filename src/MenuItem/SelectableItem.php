@@ -19,11 +19,13 @@ class SelectableItem implements MenuItemInterface
     /**
      * @param string $text
      * @param callable $selectAction
+     * @param bool $showItemExtra
      */
-    public function __construct($text, callable $selectAction)
+    public function __construct($text, callable $selectAction, $showItemExtra = false)
     {
-        $this->text         = $text;
-        $this->selectAction = $selectAction;
+        $this->text          = $text;
+        $this->selectAction  = $selectAction;
+        $this->showItemExtra = $showItemExtra;
     }
 
     /**

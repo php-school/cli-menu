@@ -10,11 +10,24 @@ $itemCallable = function (CliMenu $menu) {
 };
 
 $menu = (new CliMenuBuilder)
-    ->setTitle('Basic CLI Menu')
+    ->setTitle('Basic CLI Menu Remove Defaults')
     ->addItem('First Item', $itemCallable)
     ->addItem('Second Item', $itemCallable)
     ->addItem('Third Item', $itemCallable)
-    ->addLineBreak('-')
+    ->disableDefaultItems()
+    ->addItem('CUSTOM CLOSE', function (CliMenu $menu) {
+        $menu->close();
+    })
     ->build();
 
 $menu->display();
+
+echo 'Execution will just continue after calling $menu->close()';
+
+sleep(2);
+
+echo "\n\nYou can pretty much do anything you want then, maybe even re-open it?";
+
+sleep(2);
+
+$menu->open();

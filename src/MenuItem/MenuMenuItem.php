@@ -30,10 +30,6 @@ class MenuMenuItem implements MenuItemInterface
     {
         $this->text    = $text;
         $this->subMenu = $subMenu;
-
-        $this->subMenu->addAction(
-            new SelectableItem('Go Back', [$this, 'showParentMenu'])
-        );
     }
 
     /**
@@ -64,13 +60,5 @@ class MenuMenuItem implements MenuItemInterface
     {
         $this->parentMenu = $parentMenu;
         $this->subMenu->display();
-    }
-
-    /**
-     * Display the parent menu
-     */
-    public function showParentMenu()
-    {
-        $this->parentMenu->display();
     }
 }

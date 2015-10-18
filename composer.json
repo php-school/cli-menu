@@ -13,7 +13,7 @@
         "squizlabs/php_codesniffer": "1.4.*"
     },
     "require": {
-
+        "beberlei/assert": "^2.4"
     },
     "autoload" : {
         "psr-4" : {

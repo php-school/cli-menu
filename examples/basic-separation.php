@@ -2,22 +2,23 @@
 
 use MikeyMike\CliMenu\CliMenu;
 use MikeyMike\CliMenu\CliMenuBuilder;
-use MikeyMike\CliMenu\MenuItem\LineBreakItem;
-use MikeyMike\CliMenu\MenuItem\MenuItem;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-$menu = (new CliMenuBuilder('Basic CLI Menu with Separation'))
-    ->addItem(new MenuItem('First Item'))
-    ->addItem(new MenuItem('Second Item'))
-    ->addItem(new MenuItem('Third Item'))
-    ->addItem(new LineBreakItem())
-    ->addItem(new MenuItem('Fourth Item'))
-    ->addItem(new MenuItem('Fifth Item'))
-    ->addItem(new MenuItem('Sixth Item'))
-    ->setItemCallback(function (CliMenu $menu) {
-        echo sprintf('You selected "%s"', $menu->getSelectedItem()->getText());
-    })
+$itemCallable = function (CliMenu $menu) {
+    echo $menu->getSelectedItem()->getText();
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu Separation')
+    ->addItem('First Item', $itemCallable)
+    ->addItem('Second Item', $itemCallable)
+    ->addItem('Third Item', $itemCallable)
+    ->addLineBreak()
+    ->addItem('Fourth Item', $itemCallable)
+    ->addItem('Fifth Item', $itemCallable)
+    ->addItem('Sixth Item', $itemCallable)
+    ->addLineBreak('-')
     ->build();
 
 $menu->display();
