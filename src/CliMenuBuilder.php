@@ -140,6 +140,19 @@ class CliMenuBuilder
     }
 
     /**
+     * @param array $items
+     * @return $this
+     */
+    public function addItems(array $items)
+    {
+        foreach ($items as $item) {
+            $this->addItem(...$item);
+        }
+        
+        return $this;
+    }
+
+    /**
      * @param $text
      * @return $this
      */
