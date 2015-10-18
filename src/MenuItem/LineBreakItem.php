@@ -1,12 +1,12 @@
 <?php
 
-namespace MikeyMike\CliMenu\MenuItem;
+namespace PhpSchool\CliMenu\MenuItem;
 
-use MikeyMike\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\MenuStyle;
 
 /**
  * Class LineBreakItem
- * @author Michael Woodward <michael@wearejh.com>
+ * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class LineBreakItem implements MenuItemInterface
 {

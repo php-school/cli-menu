@@ -1,12 +1,12 @@
 <?php
 
-namespace MikeyMike\CliMenu\MenuItem;
+namespace PhpSchool\CliMenu\MenuItem;
 
-use MikeyMike\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenu;
 
 /**
  * Class MenuItem
- * @author Michael Woodward <michael@wearejh.com>
+ * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class MenuMenuItem implements MenuItemInterface
 {

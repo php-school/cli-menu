@@ -1,11 +1,11 @@
 <?php
 
-namespace MikeyMike\CliMenu\Terminal;
+namespace PhpSchool\CliMenu\Terminal;
 
 /**
  * Class WindowsTerminal
  *
- * @author Michael Woodward <michael@wearejh.com>
+ * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class WindowsTerminal implements TerminalInterface
 {

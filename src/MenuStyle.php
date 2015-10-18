@@ -1,16 +1,16 @@
 <?php
 
-namespace MikeyMike\CliMenu;
+namespace PhpSchool\CliMenu;
 
-use MikeyMike\CliMenu\Exception\InvalidInstantiationException;
-use MikeyMike\CliMenu\Terminal\TerminalFactory;
-use MikeyMike\CliMenu\Terminal\TerminalInterface;
+use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
+use PhpSchool\CliMenu\Terminal\TerminalFactory;
+use PhpSchool\CliMenu\Terminal\TerminalInterface;
 
 //TODO: B/W fallback
 
 /**
  * Class MenuStyle
- * @author Michael Woodward <michael@wearejh.com>
+ * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class MenuStyle
 {
@@ -77,7 +77,7 @@ class MenuStyle
     /**
      * @var string
      */
-    private $allowedConsumer = 'MikeyMike\CliMenu\CliMenuBuilder';
+    private $allowedConsumer = 'PhpSchool\CliMenu\CliMenuBuilder';
 
     /**
      * @var array

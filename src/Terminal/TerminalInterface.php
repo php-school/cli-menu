@@ -1,6 +1,6 @@
 <?php
 
-namespace MikeyMike\CliMenu\Terminal;
+namespace PhpSchool\CliMenu\Terminal;
 
 /**
  * Class TerminalInterface

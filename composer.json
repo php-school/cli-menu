@@ -1,11 +1,15 @@
 {
-    "name": "mikeymike/cli-menu",
+    "name": "phpschool/cli-menu",
     "description": "A command line menu helper in PHP",
     "license": "MIT",
     "authors": [
         {
             "name": "Michael Woodward",
             "email": "mikeymike.mw@gmail.com"
+        },
+        {
+            "name": "Aydin Hassan",
+            "email": "aydin@hotmail.com"
         }
     ],
     "require-dev": {
@@ -17,10 +21,10 @@
     },
     "autoload" : {
         "psr-4" : {
-            "MikeyMike\\CliMenu\\": "src"
+            "PhpSchool\\CliMenu\\": "src"
         }
     },
     "autoload-dev": {
-        "psr-4": { "MikeyMike\\CliMenu\\": "test/" }
+        "psr-4": { "PhpSchool\\CliMenu\\": "test/" }
     }
 }

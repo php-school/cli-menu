@@ -1,7 +1,7 @@
 <?php
 
-use MikeyMike\CliMenu\CliMenu;
-use MikeyMike\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 

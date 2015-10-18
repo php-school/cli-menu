@@ -1,11 +1,11 @@
 <?php
 
-namespace MikeyMike\CliMenu\Terminal;
+namespace PhpSchool\CliMenu\Terminal;
 
 /**
  * Class TerminalFactory
  *
- * @author Michael Woodward <michael@wearejh.com>
+ * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class TerminalFactory
 {

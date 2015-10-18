@@ -1,6 +1,6 @@
 <?php
 
-namespace MikeyMike\CliMenu\Exception;
+namespace PhpSchool\CliMenu\Exception;
 
 /**
  * Class InvalidInstantiationException

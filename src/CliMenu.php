@@ -1,16 +1,16 @@
 <?php
 
-namespace MikeyMike\CliMenu;
+namespace PhpSchool\CliMenu;
 
 use Assert\Assertion;
-use MikeyMike\CliMenu\Exception\InvalidInstantiationException;
-use MikeyMike\CliMenu\Exception\InvalidTerminalException;
-use MikeyMike\CliMenu\MenuItem\LineBreakItem;
-use MikeyMike\CliMenu\MenuItem\MenuItem;
-use MikeyMike\CliMenu\MenuItem\MenuItemInterface;
-use MikeyMike\CliMenu\MenuItem\StaticItem;
-use MikeyMike\CliMenu\Terminal\TerminalFactory;
-use \MikeyMike\CliMenu\Terminal\TerminalInterface;
+use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
+use PhpSchool\CliMenu\Exception\InvalidTerminalException;
+use PhpSchool\CliMenu\MenuItem\LineBreakItem;
+use PhpSchool\CliMenu\MenuItem\MenuItem;
+use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
+use PhpSchool\CliMenu\MenuItem\StaticItem;
+use PhpSchool\CliMenu\Terminal\TerminalFactory;
+use \PhpSchool\CliMenu\Terminal\TerminalInterface;
 
 /**
  * Class CliMenu
@@ -51,7 +51,7 @@ class CliMenu
     /**
      * @var string
      */
-    private $allowedConsumer = 'MikeyMike\CliMenu\CliMenuBuilder';
+    private $allowedConsumer = 'PhpSchool\CliMenu\CliMenuBuilder';
 
     /**
      * @var CliMenu|null

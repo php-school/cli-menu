@@ -1,14 +1,14 @@
 <?php
 
-namespace MikeyMike\CliMenu\MenuItem;
+namespace PhpSchool\CliMenu\MenuItem;
 
-use MikeyMike\CliMenu\MenuStyle;
-use MikeyMike\CliMenu\Util\StringUtil;
+use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Util\StringUtil;
 
 /**
  * Class StaticItem
  *
- * @author Michael Woodward <michael@wearejh.com>
+ * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class StaticItem implements MenuItemInterface
 {

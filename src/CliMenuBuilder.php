@@ -1,15 +1,15 @@
 <?php
 
-namespace MikeyMike\CliMenu;
+namespace PhpSchool\CliMenu;
 
-use MikeyMike\CliMenu\MenuItem\AsciiArtItem;
-use MikeyMike\CliMenu\MenuItem\LineBreakItem;
-use MikeyMike\CliMenu\MenuItem\MenuItemInterface;
-use MikeyMike\CliMenu\MenuItem\MenuMenuItem;
-use MikeyMike\CliMenu\MenuItem\SelectableItem;
-use MikeyMike\CliMenu\MenuItem\StaticItem;
-use MikeyMike\CliMenu\Terminal\TerminalFactory;
-use MikeyMike\CliMenu\Terminal\TerminalInterface;
+use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
+use PhpSchool\CliMenu\MenuItem\LineBreakItem;
+use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
+use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
+use PhpSchool\CliMenu\MenuItem\SelectableItem;
+use PhpSchool\CliMenu\MenuItem\StaticItem;
+use PhpSchool\CliMenu\Terminal\TerminalFactory;
+use PhpSchool\CliMenu\Terminal\TerminalInterface;
 use Assert\Assertion;
 use RuntimeException;
 

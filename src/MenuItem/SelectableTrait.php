@@ -1,9 +1,9 @@
 <?php
 
-namespace MikeyMike\CliMenu\MenuItem;
+namespace PhpSchool\CliMenu\MenuItem;
 
-use MikeyMike\CliMenu\MenuStyle;
-use MikeyMike\CliMenu\Util\StringUtil;
+use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Util\StringUtil;
 
 /**
  * Class SelectableTrait

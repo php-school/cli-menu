@@ -1,10 +1,8 @@
 <?php
 
-use MikeyMike\CliMenu\CliMenu;
-use MikeyMike\CliMenu\CliMenuBuilder;
-use MikeyMike\CliMenu\MenuItem\LineBreakItem;
-use MikeyMike\CliMenu\MenuItem\MenuItem;
-use MikeyMike\CliMenu\MenuItem\StaticItem;
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\MenuItem\MenuItem;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 

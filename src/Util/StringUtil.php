@@ -1,6 +1,6 @@
 <?php
 
-namespace MikeyMike\CliMenu\Util;
+namespace PhpSchool\CliMenu\Util;
 
 /**
  * Class StringUtil
