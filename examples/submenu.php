@@ -20,8 +20,6 @@ $menu = (new CliMenuBuilder)
             echo sprintf('Executing option: %s', $menu->getSelectedItem()->getText());
         })
         ->addLineBreak('-')
-        ->setWidth(70)
-        ->setBackgroundColour('green')
         ->end()
     ->setWidth(70)
     ->setBackgroundColour('yellow')

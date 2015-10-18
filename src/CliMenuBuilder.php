@@ -403,6 +403,29 @@ class CliMenuBuilder
     }
 
     /**
+     * Recursively drop back to the parents menu style
+     * when the current menu has a parent and has no changes
+     *
+     * @return MenuStyle
+     */
+    private function getMenuStyle()
+    {
+        $diff = array_udiff_assoc($this->style, $this->getStyleClassDefaults(), function ($current, $default) {
+            if ($current instanceof TerminalInterface) {
+                return 0;
+            }
+
+            return $current === $default ? 0 : 1;
+        });
+
+        if (!$diff && null !== $this->parent) {
+            return $this->parent->getMenuStyle();
+        }
+
+        return new MenuStyle(...array_values($this->style));
+    }
+
+    /**
      * Return to parent builder
      *
      * @return CliMenuBuilder
@@ -468,7 +491,7 @@ class CliMenuBuilder
             $this->menuTitle ?: false,
             $menuItems,
             $this->terminal,
-            new MenuStyle(...array_values($this->style))
+            $this->getMenuStyle()
         );
         
         foreach ($this->subMenus as $subMenu) {
