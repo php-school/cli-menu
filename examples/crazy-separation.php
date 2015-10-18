@@ -22,7 +22,7 @@ $menu = (new CliMenuBuilder)
     ->addItem('Fourth Item', $itemCallable)
     ->addItem('Fifth Item', $itemCallable)
     ->addItem('Sixth Item', $itemCallable)
-    ->addLineBreak('= ')
+    ->addLineBreak('● ○ ')
     ->build();
 
 $menu->display();

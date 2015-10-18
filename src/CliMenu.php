@@ -39,11 +39,6 @@ class CliMenu
     protected $items = [];
 
     /**
-     * @var callable
-     */
-    protected $itemCallable;
-
-    /**
      * @var int
      */
     protected $selectedItem;

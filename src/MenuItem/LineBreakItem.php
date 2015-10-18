@@ -45,7 +45,7 @@ class LineBreakItem implements MenuItemInterface
             "\n",
             rtrim(str_repeat(sprintf(
                 "%s\n",
-                substr(str_repeat($this->breakChar, $style->getContentWidth()), 0, $style->getContentWidth())
+                mb_substr(str_repeat($this->breakChar, $style->getContentWidth()), 0, $style->getContentWidth())
             ), $this->lines))
         );
     }
