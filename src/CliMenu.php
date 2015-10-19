@@ -328,10 +328,13 @@ class CliMenu
     public function close()
     {
         $menu = $this;
+
         do {
             $menu->closeThis();
             $menu = $menu->getParent();
         } while (null !== $menu);
+        
+        $this->tearDownTerminal();
     }
 
     /**
@@ -339,7 +342,6 @@ class CliMenu
      */
     public function closeThis()
     {
-        $this->tearDownTerminal();
         $this->terminal->clean();
         $this->terminal->moveCursorToTop();
         $this->open = false;
