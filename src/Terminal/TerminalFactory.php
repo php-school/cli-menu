@@ -21,4 +21,3 @@ class TerminalFactory
         return new UnixTerminal();
     }
 }
-

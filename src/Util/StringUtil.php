@@ -12,8 +12,8 @@ class StringUtil
      * Minimal multibyte wordwrap implementation
      * which also takes break lenght into consideration
      *
-     * @param $str
-     * @param $width
+     * @param string $str
+     * @param int $width
      * @param string $break
      * @return string
      */
