@@ -10,6 +10,8 @@ use PhpSchool\CliMenu\Terminal\TerminalInterface;
 
 /**
  * Class MenuStyle
+ *
+ * @package PhpSchool\CliMenu
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class MenuStyle

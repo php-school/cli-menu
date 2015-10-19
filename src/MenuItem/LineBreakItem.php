@@ -6,6 +6,8 @@ use PhpSchool\CliMenu\MenuStyle;
 
 /**
  * Class LineBreakItem
+ *
+ * @package PhpSchool\CliMenu\MenuItem
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class LineBreakItem implements MenuItemInterface

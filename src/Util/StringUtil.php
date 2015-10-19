@@ -4,6 +4,8 @@ namespace PhpSchool\CliMenu\Util;
 
 /**
  * Class StringUtil
+ *
+ * @package PhpSchool\CliMenu\Util
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class StringUtil

@@ -7,6 +7,8 @@ use PhpSchool\CliMenu\Util\StringUtil;
 
 /**
  * Class SelectableTrait
+ *
+ * @package PhpSchool\CliMenu\MenuItem
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 trait SelectableTrait

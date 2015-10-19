@@ -5,6 +5,7 @@ namespace PhpSchool\CliMenu\MenuItem;
 /**
  * Class SelectableItem
  *
+ * @package PhpSchool\CliMenu\MenuItem
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class SelectableItem implements MenuItemInterface

@@ -8,6 +8,7 @@ use PhpSchool\CliMenu\Util\StringUtil;
 /**
  * Class StaticItem
  *
+ * @package PhpSchool\CliMenu\MenuItem
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class StaticItem implements MenuItemInterface

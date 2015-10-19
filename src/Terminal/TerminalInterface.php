@@ -3,7 +3,9 @@
 namespace PhpSchool\CliMenu\Terminal;
 
 /**
- * Class TerminalInterface
+ * Interface TerminalInterface
+ *
+ * @package PhpSchool\CliMenu\Terminal
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 interface TerminalInterface

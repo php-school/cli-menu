@@ -16,9 +16,9 @@ use RuntimeException;
 /**
  * Class CliMenuBuilder
  *
- * Provides a simple and fluent API for building a CliMenu
- *
+ * @package PhpSchool\CliMenu
  * @author Michael Woodward <mikeymike.mw@gmail.com>
+ * @author Aydin Hassan     <aydin@hotmail.com>
  */
 class CliMenuBuilder
 {

@@ -4,6 +4,8 @@ namespace PhpSchool\CliMenu\Terminal;
 
 /**
  * Class UnixTerminal
+ *
+ * @package PhpSchool\CliMenu\Terminal
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class UnixTerminal implements TerminalInterface

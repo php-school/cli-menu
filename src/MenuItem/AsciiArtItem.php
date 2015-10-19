@@ -5,8 +5,9 @@ namespace PhpSchool\CliMenu\MenuItem;
 use PhpSchool\CliMenu\MenuStyle;
 
 /**
- * Class StaticItem
+ * Class AsciiArtItem
  *
+ * @package PhpSchool\CliMenu\MenuItem
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class AsciiArtItem implements MenuItemInterface
