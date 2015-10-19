@@ -1,5 +1,5 @@
 {
-    "name": "phpschool/cli-menu",
+    "name": "php-school/cli-menu",
     "description": "A command line menu helper in PHP",
     "license": "MIT",
     "authors": [
