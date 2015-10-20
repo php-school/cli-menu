@@ -1,0 +1,28 @@
+language: php
+
+php:
+  - 5.6
+  - 7.0
+  - hhvm
+
+install:
+  - composer self-update
+  - composer install --dev --prefer-source
+
+before_script:
+  - mkdir -p build/logs
+
+script:
+  - ./vendor/bin/phpunit --coverage-clover ./build/logs/clover.xml
+  - ./vendor/bin/phpcs --standard=PSR2 ./src/
+  - ./vendor/bin/phpcs --standard=PSR2 ./test/
+
+after_script:
+  - bash <(curl -s https://codecov.io/bash)
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml
+
+matrix:
+  allow_failures:
+    - php: 7.0
+    - php: hhvm
