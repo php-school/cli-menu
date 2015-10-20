@@ -61,6 +61,7 @@ class MenuMenuItem implements MenuItemInterface
     public function showSubMenu(CliMenu $parentMenu)
     {
         $this->parentMenu = $parentMenu;
-        $this->subMenu->display();
+        $this->parentMenu->closeThis();
+        $this->subMenu->open();
     }
 }

@@ -25,4 +25,4 @@ $menu = (new CliMenuBuilder)
     ->addLineBreak('● ○ ')
     ->build();
 
-$menu->display();
+$menu->open();

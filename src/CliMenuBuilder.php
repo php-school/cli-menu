@@ -370,7 +370,7 @@ class CliMenuBuilder
             $actions[] = new SelectableItem($this->goBackButtonText, function (CliMenu $child) {
                 if ($parent = $child->getParent()) {
                     $child->closeThis();
-                    $parent->display();
+                    $parent->open();
                 }
             });
         }

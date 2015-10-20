@@ -25,4 +25,4 @@ $menu = (new CliMenuBuilder)
     ->setBackgroundColour('yellow')
     ->build();
 
-$menu->display();
+$menu->open();

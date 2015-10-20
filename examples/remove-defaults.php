@@ -20,7 +20,7 @@ $menu = (new CliMenuBuilder)
     })
     ->build();
 
-$menu->display();
+$menu->open();
 
 echo 'Execution will just continue after calling $menu->close()';
 

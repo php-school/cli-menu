@@ -24,4 +24,4 @@ $menu = (new CliMenuBuilder)
     ->setTitleSeparator('- ')
     ->build();
 
-$menu->display();
+$menu->open();

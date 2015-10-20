@@ -48,7 +48,7 @@ class CliMenu
     /**
      * @var bool
      */
-    protected $open = true;
+    protected $open = false;
 
     /**
      * @var string
@@ -183,7 +183,7 @@ class CliMenu
     /**
      * Display menu and capture input
      */
-    public function display()
+    private function display()
     {
         $this->draw();
 
