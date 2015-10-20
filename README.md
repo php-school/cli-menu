@@ -1,7 +1,6 @@
 <p align="center">
-TODO LOGO HERE
+<img src="https://cloud.githubusercontent.com/assets/2174476/10601666/071e3e24-770b-11e5-9cba-8ae6402ff550.gif" width="300" />
 </p>
-
 ___
 
 <p align="center">
