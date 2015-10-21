@@ -30,7 +30,7 @@ composer require php-school/cli-menu
 The PhpSchool elephpants are working hard on delivering a top notch learning experience on the command line. 
 While we do that documentation is being neglected so please take a look at the examples to find out how to use this. 
 
-As a quick example here is a super basic menu.
+As a quick example here is a super basic menu which will echo out the text of the selected item.
 ```php
 <?php
 
@@ -53,6 +53,8 @@ $menu = (new CliMenuBuilder)
 
 $menu->open();
 ```
+
+![Basic CLI Menu](https://cloud.githubusercontent.com/assets/2174476/10631326/40f92a80-77d5-11e5-8fac-cf9dcf4582a3.png)
 
 ### Tests
 
