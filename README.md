@@ -3,16 +3,16 @@
 </p>
 
 <p align="center">
-    <a href="https://travis-ci.org/school/cli-menu" title="Build Status">
+    <a href="https://travis-ci.org/php-school/cli-menu" title="Build Status" target="_blank">
      <img src="https://img.shields.io/travis/php-school/cli-menu.svg?style=flat-square&label=Linux" />
     </a>
-    <a href="https://ci.appveyor.com/project/mikeymike/cli-menu" title="Windows Build Status">
+    <a href="https://ci.appveyor.com/project/mikeymike/cli-menu" title="Windows Build Status" target="_blank">
      <img src="https://img.shields.io/appveyor/ci/mikeymike/cli-menu/master.svg?style=flat-square&label=Windows" />
     </a>
-    <a href="https://codecov.io/github/php-school/cli-menu" title="Coverage Status">
+    <a href="https://codecov.io/github/php-school/cli-menu" title="Coverage Status" target="_blank">
      <img src="https://img.shields.io/codecov/c/github/php-school/cli-menu.svg?style=flat-square" />
     </a>
-    <a href="https://scrutinizer-ci.com/g/php-school/cli-menu/" title="Scrutinizer Code Quality">
+    <a href="https://scrutinizer-ci.com/g/php-school/cli-menu/" title="Scrutinizer Code Quality" target="_blank">
      <img src="https://img.shields.io/scrutinizer/g/php-school/cli-menu.svg?style=flat-square" />
     </a>
 </p>
