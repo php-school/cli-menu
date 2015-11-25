@@ -54,7 +54,9 @@ $menu = (new CliMenuBuilder)
 $menu->open();
 ```
 
-![Basic CLI Menu](https://cloud.githubusercontent.com/assets/2174476/10631326/40f92a80-77d5-11e5-8fac-cf9dcf4582a3.png)
+Once you get going you might just end up with something that looks a little like this... 
+
+![Learn You PHP CLI Menu](https://cloud.githubusercontent.com/assets/2174476/11409864/be082444-93ba-11e5-84ab-1b6cfa38aef8.png)
 
 ### Tests
 
