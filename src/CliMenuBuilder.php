@@ -18,7 +18,7 @@ use RuntimeException;
  *
  * @package PhpSchool\CliMenu
  * @author Michael Woodward <mikeymike.mw@gmail.com>
- * @author Aydin Hassan     <aydin@hotmail.com>
+ * @author Aydin Hassan <aydin@hotmail.com>
  */
 class CliMenuBuilder
 {
@@ -31,6 +31,7 @@ class CliMenuBuilder
      * @var null|self
      */
     private $parent;
+    
     /**
      * @var self[]|CliMenu[]
      */
@@ -41,7 +42,6 @@ class CliMenuBuilder
      */
     private $goBackButtonText = 'Go Back';
     
-
     /**
      * @var string
      */
@@ -84,7 +84,7 @@ class CliMenuBuilder
     }
 
     /**
-     * Pull the contructer params into an array with default values
+     * Pull the constructor params into an array with default values
      *
      * @return array
      */
@@ -101,7 +101,7 @@ class CliMenuBuilder
     }
 
     /**
-     * @param $title
+     * @param string $title
      * @return $this
      */
     public function setTitle($title)
@@ -125,9 +125,9 @@ class CliMenuBuilder
     }
 
     /**
-     * @param $text
+     * @param string $text
      * @param callable $itemCallable
-     * @param bool|false $showItemExtra
+     * @param bool $showItemExtra
      * @return $this
      */
     public function addItem($text, callable $itemCallable, $showItemExtra = false)
@@ -153,7 +153,7 @@ class CliMenuBuilder
     }
 
     /**
-     * @param $text
+     * @param string $text
      * @return $this
      */
     public function addStaticItem($text)
@@ -181,7 +181,7 @@ class CliMenuBuilder
     }
 
     /**
-     * @param $art
+     * @param string $art
      * @param string $position
      * @return $this
      */
@@ -197,7 +197,6 @@ class CliMenuBuilder
 
     /**
      * @param string $id ID to reference and retrieve sub-menu
-     *
      * @return CliMenuBuilder
      */
     public function addSubMenu($id)
@@ -212,7 +211,7 @@ class CliMenuBuilder
 
     /**
      * @param string $goBackButtonTest
-     * @return self
+     * @return $this
      */
     public function setGoBackButtonText($goBackButtonTest)
     {
@@ -223,7 +222,7 @@ class CliMenuBuilder
 
     /**
      * @param string $exitButtonText
-     * @return self
+     * @return $this
      */
     public function setExitButtonText($exitButtonText)
     {

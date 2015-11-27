@@ -165,7 +165,7 @@ class MenuStyle
         $this->margin          = $margin;
         $this->itemExtra       = $itemExtra;
         $this->displaysExtra   = $displaysExtra;
-        $this->titleSeparator = $titleSeparator;
+        $this->titleSeparator  = $titleSeparator;
 
         $this->setUnselectedMarker($unselectedMarker);
         $this->setSelectedMarker($selectedMarker);
@@ -387,7 +387,7 @@ class MenuStyle
     }
 
     /**
-     * @param $marker
+     * @param string $marker
      * @return $this
      */
     public function setSelectedMarker($marker)
@@ -406,7 +406,7 @@ class MenuStyle
     }
 
     /**
-     * @param $marker
+     * @param string $marker
      * @return $this
      */
     public function setUnselectedMarker($marker)
@@ -419,7 +419,7 @@ class MenuStyle
     /**
      * Get the correct marker for the item
      *
-     * @param $selected
+     * @param bool $selected
      * @return string
      */
     public function getMarker($selected)
@@ -444,7 +444,7 @@ class MenuStyle
     }
 
     /**
-     * @param $displaysExtra
+     * @param bool $displaysExtra
      * @return $this
      */
     public function setDisplaysExtra($displaysExtra)
