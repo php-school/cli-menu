@@ -27,10 +27,8 @@ composer require php-school/cli-menu
 
 ### Usage
 
-The PhpSchool elephpants are working hard on delivering a top notch learning experience on the command line. 
-While we do that documentation is being neglected so please take a look at the examples to find out how to use this. 
-
-As a quick example here is a super basic menu which will echo out the text of the selected item.
+#### Quick Setup
+Here is a super basic exmple menu which will echo out the text of the selected item to get you started.
 ```php
 <?php
 
@@ -52,6 +50,103 @@ $menu = (new CliMenuBuilder)
     ->build();
 
 $menu->open();
+```
+
+
+#### Examples
+
+Check out the [examples](examples) directory and run them to check out what is possible! 
+
+##### Basic Menu 
+<img width="600" alt="basic" src="https://cloud.githubusercontent.com/assets/2817002/11442386/cb0e41a2-950c-11e5-8dd6-913aeab1632a.png">
+
+##### Basic Menu with separation
+<img width="600" alt="basic-seperation" src="https://cloud.githubusercontent.com/assets/2817002/11442388/cdece950-950c-11e5-8128-4f849a1aea9f.png">
+
+##### Menu with crazy separation
+<img width="600" alt="crazy-seperation" src="https://cloud.githubusercontent.com/assets/2817002/11442389/d04627fc-950c-11e5-8c80-f82b8fe3f5da.png">
+
+##### Custom Styles
+<img width="600" alt="custom-styles" src="https://cloud.githubusercontent.com/assets/2817002/11442391/d3d72d1c-950c-11e5-9698-c2aeec002b24.png">
+
+##### Useful Separation
+<img width="600" alt="useful-seperation" src="https://cloud.githubusercontent.com/assets/2817002/11442393/d862c72e-950c-11e5-8cbc-d8c73899627a.png">
+
+##### Item Extra
+<img width="600" alt="item-extra" src="https://cloud.githubusercontent.com/assets/2817002/11442395/dfe460f2-950c-11e5-9aed-9bc9c91b7ea6.png">
+
+##### Remove Defaults
+<img width="600" alt="remove-defaults" src="https://cloud.githubusercontent.com/assets/2817002/11442399/e3e8b8a6-950c-11e5-8dad-fdd4db93b850.png">
+
+##### Submenu
+<img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/11442401/e6f03ef2-950c-11e5-897a-6d55496a4105.png">
+<img width="600" alt="submenu-options" src="https://cloud.githubusercontent.com/assets/2817002/11442403/eaf4782e-950c-11e5-82c5-ab57f84cd6bc.png">
+
+
+### API
+
+The `CliMenu` object is constructed via the Builder class
+
+```php
+$menu = (new CliMenuBuilder)
+    /**
+     *  Customise
+    **/
+    ->build();
+```
+
+Once you have a menu object, you can open and close it like so:
+
+```php
+$menu->open();
+$menu->close();
+```
+
+#### Appearance
+
+You can change the foreground and background colour of the menu to any of the following colors:
+
+* black
+* red
+* green
+* yellow
+* blue
+* magenta
+* cyan
+* white
+* 
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setForegroundColour('green')
+    ->setBackgroundColour('black')
+    ->build();
+```
+
+The width, padding and margin can also be customised:
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setWidth(200)
+    ->setPadding(10)
+    ->setMargin(5)
+    ->build();
+```
+
+The marker displayed by the side of the currently active item can be modified, UTF-8 characters are supported:
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setSelectedMarker('>')
+    ->build();
+```
+
+The un-selected marker can also be modified, for example, you may want to disable it:
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setUnselectedMarker(' ')
+    ->build();
 ```
 
 Once you get going you might just end up with something that looks a little like this... 
