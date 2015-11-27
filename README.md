@@ -62,4 +62,4 @@ Once you get going you might just end up with something that looks a little like
 
 We're amazing developers who don't need tests...
 
-Joking aside, we're big advocates of testing so these are in the pipeline, bare with us, we just did this a bit backwards :) 
+Joking aside, we're big advocates of testing so these are in the pipeline, bear with us, we just did this a bit backwards :) 
