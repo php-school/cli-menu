@@ -11,8 +11,8 @@ namespace PhpSchool\CliMenu\Util;
 class StringUtil
 {
     /**
-     * Minimal multibyte wordwrap implementation
-     * which also takes break lenght into consideration
+     * Minimal multi-byte wordwrap implementation
+     * which also takes break length into consideration
      *
      * @param string $str
      * @param int $width

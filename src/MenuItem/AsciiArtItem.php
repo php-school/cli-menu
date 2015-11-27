@@ -2,6 +2,7 @@
 
 namespace PhpSchool\CliMenu\MenuItem;
 
+use Assert\Assertion;
 use PhpSchool\CliMenu\MenuStyle;
 
 /**
@@ -18,6 +19,7 @@ class AsciiArtItem implements MenuItemInterface
     const POSITION_CENTER = 'center';
     const POSITION_LEFT   = 'left';
     const POSITION_RIGHT  = 'right';
+    
     /**
      * @var string
      */
@@ -41,6 +43,8 @@ class AsciiArtItem implements MenuItemInterface
     {
         $this->text      = $text;
         $this->position  = $position;
+        
+        Assertion::inArray($position, [self::POSITION_CENTER, self::POSITION_RIGHT, self::POSITION_LEFT]);
         $this->artLength = max(array_map('mb_strlen', explode("\n", $text)));
     }
 

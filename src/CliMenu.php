@@ -2,7 +2,6 @@
 
 namespace PhpSchool\CliMenu;
 
-use Assert\Assertion;
 use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\Exception\InvalidTerminalException;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
@@ -61,7 +60,7 @@ class CliMenu
     protected $parent;
 
     /**
-     * @param $title
+     * @param string $title
      * @param array $items
      * @param TerminalInterface|null $terminal
      * @param MenuStyle|null $style
@@ -201,7 +200,7 @@ class CliMenu
     }
 
     /**
-     * Move the selection ina  given direction, up / down
+     * Move the selection in a given direction, up / down
      *
      * @param $direction
      */
@@ -247,7 +246,7 @@ class CliMenu
     }
 
     /**
-     * Draw the menu to stdout
+     * Draw the menu to STDOUT
      */
     protected function draw()
     {
