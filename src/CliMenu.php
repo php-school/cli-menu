@@ -86,7 +86,6 @@ class CliMenu
         $this->terminal   = $terminal ?: TerminalFactory::fromSystem();
         $this->style      = $style ?: new MenuStyle();
 
-        $this->configureTerminal();
         $this->selectFirstItem();
     }
 
