@@ -92,7 +92,7 @@ class LineBreakItemTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(5));
         
         //ABC should be repeated but ABCABC is 6 and the allowed length is 5
-        //so ABCABC is trimmed to ABCAB 
+        //so ABCABC is trimmed to ABCAB
 
         $item = new LineBreakItem('ABC', 3);
         $this->assertEquals(['ABCAB', 'ABCAB', 'ABCAB'], $item->getRows($menuStyle));

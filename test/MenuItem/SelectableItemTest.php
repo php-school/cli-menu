@@ -17,12 +17,14 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfBreakCharNotString()
     {
         $this->setExpectedException(InvalidArgumentException::class);
-        new SelectableItem(new \stdClass, function() {});
+        new SelectableItem(new \stdClass, function () {
+        });
     }
 
     public function testCanSelectIsTrue()
     {
-        $item = new SelectableItem('Item', function() {});
+        $item = new SelectableItem('Item', function () {
+        });
         $this->assertTrue($item->canSelect());
     }
 
@@ -36,16 +38,19 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
 
     public function testShowsItemExtra()
     {
-        $item = new SelectableItem('Item', function() {});
+        $item = new SelectableItem('Item', function () {
+        });
         $this->assertFalse($item->showsItemExtra());
 
-        $item = new SelectableItem('Item', function() {}, true);
+        $item = new SelectableItem('Item', function () {
+        }, true);
         $this->assertTrue($item->showsItemExtra());
     }
 
     public function testGetText()
     {
-        $item = new SelectableItem('Item', function() {});
+        $item = new SelectableItem('Item', function () {
+        });
         $this->assertEquals('Item', $item->getText());
     }
 
@@ -60,7 +65,8 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
             ->method('getContentWidth')
             ->will($this->returnValue(10));
         
-        $item = new SelectableItem('Item', function() {});
+        $item = new SelectableItem('Item', function () {
+        });
         $this->assertEquals([' Item'], $item->getRows($menuStyle));
         $this->assertEquals([' Item'], $item->getRows($menuStyle, false));
         $this->assertEquals([' Item'], $item->getRows($menuStyle, true));
@@ -83,7 +89,8 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
             ->with(false)
             ->will($this->returnValue('*'));
 
-        $item = new SelectableItem('Item', function() {});
+        $item = new SelectableItem('Item', function () {
+        });
         $this->assertEquals(['* Item'], $item->getRows($menuStyle));
         $this->assertEquals(['* Item'], $item->getRows($menuStyle, false));
     }
@@ -105,7 +112,8 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
             ->with(true)
             ->will($this->returnValue('='));
 
-        $item = new SelectableItem('Item', function() {});
+        $item = new SelectableItem('Item', function () {
+        });
         $this->assertEquals(['= Item'], $item->getRows($menuStyle, true));
     }
 
@@ -125,7 +133,8 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
             ->method('getItemExtra')
             ->will($this->returnValue('[EXTRA]'));
 
-        $item = new SelectableItem('Item', function() {}, true);
+        $item = new SelectableItem('Item', function () {
+        }, true);
         $this->assertEquals([' Item       [EXTRA]'], $item->getRows($menuStyle));
     }
 
@@ -145,12 +154,13 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
             ->method('getItemExtra')
             ->will($this->returnValue('[EXTRA]'));
 
-        $item = new SelectableItem('LONG ITEM LINE', function() {}, true);
+        $item = new SelectableItem('LONG ITEM LINE', function () {
+        }, true);
         $this->assertEquals(
             [
-                " LONG       [EXTRA]", 
+                " LONG       [EXTRA]",
                 " ITEM LINE"
-            ], 
+            ],
             $item->getRows($menuStyle)
         );
     }

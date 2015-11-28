@@ -15,7 +15,7 @@ class StaticItemTest extends PHPUnit_Framework_TestCase
 {
     public function testExceptionIsThrownIfArgumentNotString()
     {
-        $this->setExpectedException(InvalidArgumentException::class);    
+        $this->setExpectedException(InvalidArgumentException::class);
         new StaticItem(new \stdClass);
     }
 

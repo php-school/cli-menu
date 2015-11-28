@@ -66,7 +66,7 @@ class AsciiArtItemTest extends PHPUnit_Framework_TestCase
             [
                 "//",
                 "//",
-            ], 
+            ],
             $item->getRows($menuStyle)
         );
     }
