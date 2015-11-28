@@ -2,6 +2,7 @@
 
 namespace PhpSchool\CliMenu\MenuItem;
 
+use Assert\Assertion;
 use PhpSchool\CliMenu\MenuStyle;
 
 /**
@@ -30,6 +31,9 @@ class LineBreakItem implements MenuItemInterface
      */
     public function __construct($breakChar = ' ', $lines = 1)
     {
+        Assertion::string($breakChar);
+        Assertion::integer($lines);
+        
         $this->breakChar = $breakChar;
         $this->lines     = $lines;
     }

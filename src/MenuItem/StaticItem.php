@@ -2,6 +2,7 @@
 
 namespace PhpSchool\CliMenu\MenuItem;
 
+use Assert\Assertion;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
 
@@ -23,6 +24,8 @@ class StaticItem implements MenuItemInterface
      */
     public function __construct($text)
     {
+        Assertion::string($text);
+        
         $this->text = $text;
     }
 

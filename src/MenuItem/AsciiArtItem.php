@@ -41,10 +41,11 @@ class AsciiArtItem implements MenuItemInterface
      */
     public function __construct($text, $position = self::POSITION_CENTER)
     {
+        Assertion::string($text);
+        Assertion::inArray($position, [self::POSITION_CENTER, self::POSITION_RIGHT, self::POSITION_LEFT]);
+        
         $this->text      = $text;
         $this->position  = $position;
-        
-        Assertion::inArray($position, [self::POSITION_CENTER, self::POSITION_RIGHT, self::POSITION_LEFT]);
         $this->artLength = max(array_map('mb_strlen', explode("\n", $text)));
     }
 

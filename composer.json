@@ -13,7 +13,7 @@
         }
     ],
     "require-dev": {
-        "phpunit/phpunit": "~4.1",
+        "phpunit/phpunit": "~5.0",
         "squizlabs/php_codesniffer": "~2.0"
     },
     "require": {
@@ -26,6 +26,6 @@
         }
     },
     "autoload-dev": {
-        "psr-4": { "PhpSchool\\CliMenu\\": "test/" }
+        "psr-4": { "PhpSchool\\CliMenuTest\\": "test/" }
     }
 }

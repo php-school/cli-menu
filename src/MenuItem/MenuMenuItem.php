@@ -2,6 +2,7 @@
 
 namespace PhpSchool\CliMenu\MenuItem;
 
+use Assert\Assertion;
 use PhpSchool\CliMenu\CliMenu;
 
 /**
@@ -13,12 +14,7 @@ use PhpSchool\CliMenu\CliMenu;
 class MenuMenuItem implements MenuItemInterface
 {
     use SelectableTrait;
-
-    /**
-     * @var CliMenu
-     */
-    private $parentMenu;
-
+    
     /**
      * @var CliMenu
      */
@@ -30,6 +26,8 @@ class MenuMenuItem implements MenuItemInterface
      */
     public function __construct($text, CliMenu $subMenu)
     {
+        Assertion::string($text);
+        
         $this->text    = $text;
         $this->subMenu = $subMenu;
     }
@@ -60,8 +58,7 @@ class MenuMenuItem implements MenuItemInterface
      */
     public function showSubMenu(CliMenu $parentMenu)
     {
-        $this->parentMenu = $parentMenu;
-        $this->parentMenu->closeThis();
+        $parentMenu->closeThis();
         $this->subMenu->open();
     }
 }

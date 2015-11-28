@@ -2,6 +2,8 @@
 
 namespace PhpSchool\CliMenu\MenuItem;
 
+use Assert\Assertion;
+
 /**
  * Class SelectableItem
  *
@@ -24,9 +26,11 @@ class SelectableItem implements MenuItemInterface
      */
     public function __construct($text, callable $selectAction, $showItemExtra = false)
     {
+        Assertion::string($text);
+     
         $this->text          = $text;
         $this->selectAction  = $selectAction;
-        $this->showItemExtra = $showItemExtra;
+        $this->showItemExtra = (bool) $showItemExtra;
     }
 
     /**

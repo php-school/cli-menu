@@ -21,7 +21,7 @@ trait SelectableTrait
     /**
      * @var bool
      */
-    private $showItemExtra;
+    private $showItemExtra = false;
 
     /**
      * The output text for the item
