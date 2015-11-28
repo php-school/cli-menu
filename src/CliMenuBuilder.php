@@ -2,6 +2,8 @@
 
 namespace PhpSchool\CliMenu;
 
+use PhpSchool\CliMenu\Action\ExitAction;
+use PhpSchool\CliMenu\Action\GoBackAction;
 use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
@@ -355,7 +357,7 @@ class CliMenuBuilder
     public function setTerminal(TerminalInterface $terminal)
     {
         $this->terminal = $terminal;
-
+        $this->style['terminal'] = $this->terminal;
         return $this;
     }
 
@@ -366,17 +368,10 @@ class CliMenuBuilder
     {
         $actions = [];
         if ($this->parent) {
-            $actions[] = new SelectableItem($this->goBackButtonText, function (CliMenu $child) {
-                if ($parent = $child->getParent()) {
-                    $child->closeThis();
-                    $parent->open();
-                }
-            });
+            $actions[] = new SelectableItem($this->goBackButtonText, new GoBackAction);
         }
         
-        $actions[] = new SelectableItem($this->exitButtonText, function (CliMenu $menu) {
-            $menu->close();
-        });
+        $actions[] = new SelectableItem($this->exitButtonText, new ExitAction);
         return $actions;
     }
 
@@ -420,7 +415,7 @@ class CliMenuBuilder
         if (!$diff && null !== $this->parent) {
             return $this->parent->getMenuStyle();
         }
-
+        
         return new MenuStyle(...array_values($this->style));
     }
 
@@ -433,7 +428,7 @@ class CliMenuBuilder
     public function end()
     {
         if (null === $this->parent) {
-            throw new RuntimeException("No parent menu to return to");
+            throw new RuntimeException('No parent builder to return to');
         }
 
         return $this->parent;
@@ -447,7 +442,7 @@ class CliMenuBuilder
     public function getSubMenu($id)
     {
         if (false === $this->isBuilt) {
-            throw new RuntimeException(sprintf('Menu: "%s" cannot be retrieve until menu has been built', $id));
+            throw new RuntimeException(sprintf('Menu: "%s" cannot be retrieved until menu has been built', $id));
         }
 
         return $this->subMenus[$id];
