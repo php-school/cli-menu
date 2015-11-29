@@ -4,7 +4,7 @@
 
 <p align="center">
     <a href="https://travis-ci.org/php-school/cli-menu" title="Build Status" target="_blank">
-     <img src="https://img.shields.io/travis/php-school/cli-menu.svg?style=flat-square&label=Linux" />
+     <img src="https://img.shields.io/travis/php-school/cli-menu/master.svg?style=flat-square&label=Linux" />
     </a>
     <a href="https://ci.appveyor.com/project/mikeymike/cli-menu" title="Windows Build Status" target="_blank">
      <img src="https://img.shields.io/appveyor/ci/mikeymike/cli-menu/master.svg?style=flat-square&label=Windows" />
