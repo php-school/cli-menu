@@ -334,9 +334,3 @@ Once you get going you might just end up with something that looks a little like
 
 You can see the construction code here for more clarity on how to perform advanced configuration:
 [PHP School](https://github.com/php-school/php-workshop/blob/3240d3217bbf62b1063613fc13eb5adff2299bbe/src/Factory/MenuFactory.php)
-
-### Tests
-
-We're amazing developers who don't need tests...
-
-Joking aside, we're big advocates of testing so these are in the pipeline, bear with us, we just did this a bit backwards :) 
