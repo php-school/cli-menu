@@ -95,11 +95,7 @@ class CliMenu
      */
     protected function configureTerminal()
     {
-        if (!$this->terminal->isTTY()) {
-            throw new InvalidTerminalException(
-                sprintf('Terminal "%s" is not a valid TTY', $this->terminal->getDetails())
-            );
-        }
+        $this->_assertTerminalIsValidTTY();
 
         $this->terminal->setCanonicalMode();
         $this->terminal->disableCursor();
@@ -113,14 +109,19 @@ class CliMenu
      */
     protected function tearDownTerminal()
     {
+        $this->_assertTerminalIsValidTTY();
+
+        $this->terminal->setCanonicalMode(false);
+        $this->terminal->enableCursor();
+    }
+
+    private function _assertTerminalIsValidTTY()
+    {
         if (!$this->terminal->isTTY()) {
             throw new InvalidTerminalException(
                 sprintf('Terminal "%s" is not a valid TTY', $this->terminal->getDetails())
             );
         }
-
-        $this->terminal->setCanonicalMode(false);
-        $this->terminal->enableCursor();
     }
 
     /**
