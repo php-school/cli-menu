@@ -58,31 +58,13 @@ class AsciiArtItem implements MenuItemInterface
      */
     public function getRows(MenuStyle $style, $selected = false)
     {
-        return array_map(function ($row) use ($style) {
-            $length = mb_strlen($row);
+        $justificationHelper = new Helper\AsciiArtItemJustificationHelper(
+            $this->position,
+            $style->getContentWidth(),
+            $this->artLength);
 
-            $padding = $style->getContentWidth() - $length;
-
-            switch ($this->position) {
-                case self::POSITION_LEFT:
-                    return $row;
-                    break;
-                case self::POSITION_RIGHT:
-                    $row = rtrim($row);
-                    $padding = $padding - ($this->artLength - mb_strlen($row));
-                    $row = sprintf('%s%s', str_repeat(' ', $padding), $row);
-                    break;
-                case self::POSITION_CENTER:
-                default:
-                    $row = rtrim($row);
-                    $padding = $padding - ($this->artLength - mb_strlen($row));
-                    $left = ceil($padding/2);
-                    $right = $padding - $left;
-                    $row = sprintf('%s%s%s', str_repeat(' ', $left), $row, str_repeat(' ', $right));
-                    break;
-            }
-
-            return $row;
+        return array_map(function ($row) use ($justificationHelper) {
+            return $justificationHelper->justifyRow($row);
         }, explode("\n", $this->text));
     }
 
