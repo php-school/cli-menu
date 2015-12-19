@@ -95,7 +95,7 @@ class CliMenu
      */
     protected function configureTerminal()
     {
-        $this->_assertTerminalIsValidTTY();
+        $this->assertTerminalIsValidTTY();
 
         $this->terminal->setCanonicalMode();
         $this->terminal->disableCursor();
@@ -109,13 +109,13 @@ class CliMenu
      */
     protected function tearDownTerminal()
     {
-        $this->_assertTerminalIsValidTTY();
+        $this->assertTerminalIsValidTTY();
 
         $this->terminal->setCanonicalMode(false);
         $this->terminal->enableCursor();
     }
 
-    private function _assertTerminalIsValidTTY()
+    private function assertTerminalIsValidTTY()
     {
         if (!$this->terminal->isTTY()) {
             throw new InvalidTerminalException(
