@@ -95,4 +95,92 @@ class WindowsTerminal implements TerminalInterface
     {
         // TODO: Implement getKeyedInput() method.
     }
+
+    /**
+     * Get the available height of the terminal
+     *
+     * @return int
+     */
+    public function getHeight()
+    {
+        // TODO: Implement getHeight() method.
+    }
+
+    /**
+     * Toggle canonical mode on TTY
+     *
+     * @param bool $useCanonicalMode
+     */
+    public function setCanonicalMode($useCanonicalMode = true)
+    {
+        // TODO: Implement setCanonicalMode() method.
+    }
+
+    /**
+     * Check if TTY is in canonical mode
+     *
+     * @return bool
+     */
+    public function isCanonical()
+    {
+        // TODO: Implement isCanonical() method.
+    }
+
+    /**
+     * Test whether terminal supports colour output
+     *
+     * @return bool
+     */
+    public function supportsColour()
+    {
+        // TODO: Implement supportsColour() method.
+    }
+
+    /**
+     * Clear the current cursors line
+     *
+     * @return void
+     */
+    public function clearLine()
+    {
+        // TODO: Implement clearLine() method.
+    }
+
+    /**
+     * Move the cursor to the top left of the window
+     *
+     * @return void
+     */
+    public function moveCursorToTop()
+    {
+        // TODO: Implement moveCursorToTop() method.
+    }
+
+    /**
+     * Move the cursor to the start of a specific row
+     *
+     * @param int $rowNumber
+     */
+    public function moveCursorToRow($rowNumber)
+    {
+        // TODO: Implement moveCursorToRow() method.
+    }
+
+    /**
+     * Clean the whole console without jumping the window
+     *
+     * @return void
+     */
+    public function clean()
+    {
+        // TODO: Implement clean() method.
+    }
+
+    /**
+     * Disable cursor display
+     */
+    public function disableCursor()
+    {
+        // TODO: Implement disableCursor() method.
+    }
 }
