@@ -15,6 +15,9 @@
     <a href="https://scrutinizer-ci.com/g/php-school/cli-menu/" title="Scrutinizer Code Quality" target="_blank">
      <img src="https://img.shields.io/scrutinizer/g/php-school/cli-menu.svg?style=flat-square" />
     </a>
+    <a href="https://phpschool-team.slack.com/messages">
+      <img src="https://phpschool.herokuapp.com/badge.svg">
+    </a>
 </p>
 
 ---
