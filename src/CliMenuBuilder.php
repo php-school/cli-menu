@@ -119,7 +119,7 @@ class CliMenuBuilder
      * @param MenuItemInterface $item
      * @return $this
      */
-    private function addMenuItem(MenuItemInterface $item)
+    public function addMenuItem(MenuItemInterface $item)
     {
         $this->menuItems[] = $item;
 
