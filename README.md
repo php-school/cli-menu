@@ -31,7 +31,7 @@ composer require php-school/cli-menu
 ### Usage
 
 #### Quick Setup
-Here is a super basic exmple menu which will echo out the text of the selected item to get you started.
+Here is a super basic example menu which will echo out the text of the selected item to get you started.
 ```php
 <?php
 
