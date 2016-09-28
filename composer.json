@@ -28,5 +28,11 @@
     },
     "autoload-dev": {
         "psr-4": { "PhpSchool\\CliMenuTest\\": "test/" }
+    },
+    "scripts" : {
+        "cs" : [
+            "phpcs src --standard=PSR2",
+            "phpcs test --standard=PSR2"
+        ]
     }
 }

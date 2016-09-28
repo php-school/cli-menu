@@ -221,7 +221,6 @@ class CliMenu
             } elseif ($this->getSelectedItem()->canSelect()) {
                 return;
             }
-
         } while (!$this->getSelectedItem()->canSelect());
     }
 
