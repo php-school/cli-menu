@@ -157,7 +157,9 @@ class UnixTerminal implements TerminalInterface
         // TODO: up, down, enter etc in Abstract CONSTs
         $map = [
             "\033[A" => 'up',
+            "k" => 'up',
             "\033[B" => 'down',
+            "j" => 'down',
             "\n"     => 'enter',
             "\r"     => 'enter',
             " "      => 'enter',
