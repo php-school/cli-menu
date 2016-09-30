@@ -63,8 +63,8 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $builder->setSelectedMarker('x');
         $builder->setItemExtra('*');
         $builder->setTitleSeparator('-');
-        
-        $terminal = $this->createMock(TerminalInterface::class);
+
+        $terminal = static::createMock(TerminalInterface::class);
         $terminal
             ->expects($this->once())
             ->method('getWidth')

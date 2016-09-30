@@ -154,7 +154,7 @@ class MenuStyle
         $builder = debug_backtrace();
         if (count($builder) < 2 || !isset($builder[1]['class']) || $builder[1]['class'] !== $this->allowedConsumer) {
             throw new InvalidInstantiationException(
-                sprintf('The CliMenu must be instantiated by "%s"', $this->allowedConsumer)
+                sprintf('The MenuStyle must be instantiated by "%s"', $this->allowedConsumer)
             );
         }
 
@@ -425,6 +425,14 @@ class MenuStyle
     public function getMarker($selected)
     {
         return $selected ? $this->selectedMarker : $this->unselectedMarker;
+    }
+
+    /**
+     * @param string $itemExtra
+     */
+    public function setItemExtra($itemExtra)
+    {
+        $this->itemExtra = $itemExtra;
     }
 
     /**
