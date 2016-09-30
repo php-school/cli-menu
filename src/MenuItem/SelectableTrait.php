@@ -16,7 +16,7 @@ trait SelectableTrait
     /**
      * @var string
      */
-    private $text;
+    private $text = '';
 
     /**
      * @var bool
@@ -26,7 +26,7 @@ trait SelectableTrait
     /**
      * @var bool
      */
-    private $disabled;
+    private $disabled = false;
 
     /**
      * The output text for the item

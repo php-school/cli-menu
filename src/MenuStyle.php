@@ -139,7 +139,6 @@ class MenuStyle
      * @param TerminalInterface $terminal
      * @throws InvalidInstantiationException
      */
-    // TODO: Disabled marker ideally without breaking change.
     public function __construct(
         $bg = 'blue',
         $fg = 'white',
@@ -440,7 +439,6 @@ class MenuStyle
      */
     public function getMarker($selected)
     {
-        // TODO: Incorperate disabled markers ?
         return $selected ? $this->selectedMarker : $this->unselectedMarker;
     }
 
