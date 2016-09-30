@@ -5,11 +5,11 @@ namespace PhpSchool\CliMenu;
 use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\Exception\InvalidTerminalException;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
-use PhpSchool\CliMenu\MenuItem\MenuItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
-use \PhpSchool\CliMenu\Terminal\TerminalInterface;
+use PhpSchool\CliMenu\Terminal\TerminalInterface;
+use PhpSchool\CliMenu\Util\StringUtil as s;
 
 /**
  * Class CliMenu
@@ -295,7 +295,7 @@ class CliMenu
                 $setColour,
                 str_repeat(' ', $this->style->getPadding()),
                 $row,
-                str_repeat(' ', $this->style->getRightHandPadding(mb_strlen($row))),
+                str_repeat(' ', $this->style->getRightHandPadding(mb_strlen(s::stripAnsiEscapeSequence($row)))),
                 $unsetColour,
                 str_repeat(' ', $this->style->getMargin())
             );

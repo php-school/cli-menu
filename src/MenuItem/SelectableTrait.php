@@ -24,6 +24,11 @@ trait SelectableTrait
     private $showItemExtra = false;
 
     /**
+     * @var bool
+     */
+    private $disabled;
+
+    /**
      * The output text for the item
      *
      * @param MenuStyle $style
@@ -48,13 +53,15 @@ trait SelectableTrait
         );
 
         return array_map(function ($row, $key) use ($style, $marker, $length) {
+            $text = $this->disabled ? $style->getDisabledItemText($row) : $row;
+
             if ($key === 0) {
                 return $this->showItemExtra
-                    ? sprintf('%s%s  %s', $row, str_repeat(' ', $length - mb_strlen($row)), $style->getItemExtra())
-                    : $row;
+                    ? sprintf('%s%s  %s', $text, str_repeat(' ', $length - mb_strlen($row)), $style->getItemExtra())
+                    : $text;
             }
 
-            return $row;
+            return $text;
         }, $rows, array_keys($rows));
     }
 
@@ -65,7 +72,7 @@ trait SelectableTrait
      */
     public function canSelect()
     {
-        return true;
+        return !$this->disabled;
     }
 
     /**
