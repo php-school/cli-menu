@@ -371,6 +371,14 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
 
         $this->checkVariable($subMenu, 'items', []);
     }
+
+    public function testThrowsExceptionWhenDisablingRootMenu()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('You can\'t disable the root menu');
+
+        (new CliMenuBuilder)->disableMenu();
+    }
     
     /**
      * @param CliMenu $menu
