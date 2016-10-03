@@ -23,13 +23,15 @@ class MenuMenuItem implements MenuItemInterface
     /**
      * @param string $text
      * @param CliMenu $subMenu
+     * @param bool $disabled
      */
-    public function __construct($text, CliMenu $subMenu)
+    public function __construct($text, CliMenu $subMenu, $disabled = false)
     {
         Assertion::string($text);
         
-        $this->text    = $text;
-        $this->subMenu = $subMenu;
+        $this->text     = $text;
+        $this->subMenu  = $subMenu;
+        $this->disabled = $disabled;
     }
 
     /**

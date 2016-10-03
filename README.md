@@ -85,6 +85,8 @@ Check out the [examples](examples) directory and run them to check out what is p
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/11442401/e6f03ef2-950c-11e5-897a-6d55496a4105.png">
 <img width="600" alt="submenu-options" src="https://cloud.githubusercontent.com/assets/2817002/11442403/eaf4782e-950c-11e5-82c5-ab57f84cd6bc.png">
 
+##### Disabled Items & Submenus
+<img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2174476/19047849/868fa8c0-899b-11e6-9004-811c8da6d435.png">
 
 ### API
 
@@ -329,7 +331,38 @@ $subMenu = $mainMenuBuilder->getSubMenu('Super Sub Menu');
 
 You can only do this after the main menu has been built, this is because the main menu builder takes care of building all sub menus.
 
+#### Disabling Items & Sub Menus
 
+In this example we are disabling certain items and a submenu but still having them shown in the output. 
+
+```php
+$itemCallable = function (CliMenu $menu) {
+    echo $menu->getSelectedItem()->getText();
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu Disabled Items')
+    ->addItem('First Item', $itemCallable)
+    ->addItem('Second Item', $itemCallable, false, true)
+    ->addItem('Third Item', $itemCallable, false, true)
+    ->addSubMenu('Submenu')
+        ->setTitle('Basic CLI Menu Disabled Items > Submenu')
+        ->addItem('You can go in here!', $itemCallable)
+        ->end()
+    ->addSubMenu('Disabled Submenu')
+        ->setTitle('Basic CLI Menu Disabled Items > Disabled Submenu')
+        ->addItem('Nope can\'t see this!', $itemCallable)
+        ->disableMenu()
+        ->end()
+    ->addLineBreak('-')
+    ->build();
+```
+
+The third param on the `->addItem` call is what disables an item while the `->disableMenu()` call disables the relevent menu. 
+
+The outcome is a full menu with dimmed rows to denote them being disabled. When a user navigates these items are jumped over to the next available selectable item.
+
+---
 
 Once you get going you might just end up with something that looks a little like this... 
 

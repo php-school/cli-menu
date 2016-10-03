@@ -116,10 +116,11 @@ class MenuStyle
      */
     private static $availableOptions = array(
         'bold'       => array('set' => 1, 'unset' => 22),
+        'dim'        => array('set' => 2, 'unset' => 22),
         'underscore' => array('set' => 4, 'unset' => 24),
         'blink'      => array('set' => 5, 'unset' => 25),
         'reverse'    => array('set' => 7, 'unset' => 27),
-        'conceal'    => array('set' => 8, 'unset' => 28),
+        'conceal'    => array('set' => 8, 'unset' => 28)
     );
 
     /**
@@ -179,6 +180,20 @@ class MenuStyle
     public static function getAvailableColours()
     {
         return array_keys(self::$availableBackgroundColors);
+    }
+
+    /**
+     * @param string $text
+     * @return string
+     */
+    public function getDisabledItemText($text)
+    {
+        return sprintf(
+            "\033[%sm%s\033[%sm",
+            self::$availableOptions['dim']['set'],
+            $text,
+            self::$availableOptions['dim']['unset']
+        );
     }
     
     /**

@@ -33,4 +33,13 @@ class StringUtil
             return $word;
         }, explode(" ", $str)));
     }
+
+    /**
+     * @param string $str
+     * @return string
+     */
+    public static function stripAnsiEscapeSequence($str)
+    {
+        return preg_replace('/\x1b[^m]*m/', '', $str);
+    }
 }

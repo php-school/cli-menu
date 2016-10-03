@@ -75,6 +75,11 @@ class CliMenuBuilder
     private $disableDefaultItems = false;
 
     /**
+     * @var bool
+     */
+    private $disabled = false;
+
+    /**
      * @param CliMenuBuilder|null $parent
      */
     public function __construct(CliMenuBuilder $parent = null)
@@ -130,13 +135,14 @@ class CliMenuBuilder
      * @param string $text
      * @param callable $itemCallable
      * @param bool $showItemExtra
+     * @param bool $disabled
      * @return $this
      */
-    public function addItem($text, callable $itemCallable, $showItemExtra = false)
+    public function addItem($text, callable $itemCallable, $showItemExtra = false, $disabled = false)
     {
         Assertion::string($text);
 
-        $this->addMenuItem(new SelectableItem($text, $itemCallable, $showItemExtra));
+        $this->addMenuItem(new SelectableItem($text, $itemCallable, $showItemExtra, $disabled));
 
         return $this;
     }
@@ -209,6 +215,32 @@ class CliMenuBuilder
         $this->subMenus[$id] = new self($this);
 
         return $this->subMenus[$id];
+    }
+
+    /**
+     * Disable a submenu
+     * @throws \InvalidArgumentException
+     * @return $this
+     */
+    public function disableMenu()
+    {
+        if (!$this->parent) {
+            throw new \InvalidArgumentException(
+                'You can\'t disable the root menu'
+            );
+        }
+
+        $this->disabled = true;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMenuDisabled()
+    {
+        return $this->disabled;
     }
 
     /**
@@ -462,7 +494,7 @@ class CliMenuBuilder
             $menuBuilder           = $this->subMenus[$item];
             $this->subMenus[$item] = $menuBuilder->build();
 
-            return new MenuMenuItem($item, $this->subMenus[$item]);
+            return new MenuMenuItem($item, $this->subMenus[$item], $menuBuilder->isMenuDisabled());
         }, $items);
     }
 
