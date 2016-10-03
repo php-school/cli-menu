@@ -77,7 +77,7 @@ class CliMenuBuilder
     /**
      * @var bool
      */
-    private $disabled;
+    private $disabled = false;
 
     /**
      * @param CliMenuBuilder|null $parent
