@@ -283,7 +283,8 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $builder = new CliMenuBuilder;
         $menu = $builder->setBackgroundColour('green')
             ->addSubMenu('sub-menu')
-                ->addItem('Some Item', function () {})
+                ->addItem('Some Item', function () {
+                })
                 ->end()
             ->build();
 
@@ -295,7 +296,8 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $builder = new CliMenuBuilder;
         $menu = $builder->setBackgroundColour('green')
             ->addSubMenu('sub-menu')
-                ->addItem('Some Item', function () {})
+                ->addItem('Some Item', function () {
+                })
                 ->setBackgroundColour('red')
                 ->end()
             ->build();
