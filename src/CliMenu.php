@@ -333,4 +333,12 @@ class CliMenu
         $this->terminal->moveCursorToTop();
         $this->open = false;
     }
+
+    /**
+     * @return MenuStyle
+     */
+    public function getStyle()
+    {
+        return $this->style;
+    }
 }
