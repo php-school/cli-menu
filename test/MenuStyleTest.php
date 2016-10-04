@@ -55,16 +55,6 @@ class MenuStyleTest extends PHPUnit_Framework_TestCase
         return $terminal;
     }
 
-    public function testMenuStyleCannotBeInstantiatedByDisallowedConsumers()
-    {
-        $this->setExpectedException(
-            InvalidInstantiationException::class,
-            'The MenuStyle must be instantiated by "PhpSchool\CliMenu\CliMenuBuilder"'
-        );
-
-        new MenuStyle();
-    }
-
     public function testMenuStyleCanBeInstantiatedByCliMenuBuilder()
     {
         $builder = new CliMenuBuilder();
