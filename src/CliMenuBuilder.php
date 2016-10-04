@@ -468,7 +468,7 @@ class CliMenuBuilder
 
     /**
      * @param string $id
-     * @return CliMenuBuilder
+     * @return CliMenu
      * @throws RuntimeException
      */
     public function getSubMenu($id)

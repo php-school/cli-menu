@@ -278,6 +278,34 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertSame($builder, $subMenuBuilder->end());
     }
 
+    public function testSubMenuInheritsParentsStyle()
+    {
+        $builder = new CliMenuBuilder;
+        $menu = $builder->setBackgroundColour('green')
+            ->addSubMenu('sub-menu')
+                ->addItem('Some Item', function () {
+                })
+                ->end()
+            ->build();
+
+        $this->assertSame('green', $builder->getSubMenu('sub-menu')->getStyle()->getBg());
+    }
+
+    public function testSubMenuDoesNotInheritsParentsStyleWhenSubMenuStyleHasAlterations()
+    {
+        $builder = new CliMenuBuilder;
+        $menu = $builder->setBackgroundColour('green')
+            ->addSubMenu('sub-menu')
+                ->addItem('Some Item', function () {
+                })
+                ->setBackgroundColour('red')
+                ->end()
+            ->build();
+
+        $this->assertSame('red', $builder->getSubMenu('sub-menu')->getStyle()->getBg());
+        $this->assertSame('green', $menu->getStyle()->getBg());
+    }
+
     public function testGetSubMenuThrowsExceptionIfNotBuiltYet()
     {
         $builder = (new CliMenuBuilder)
