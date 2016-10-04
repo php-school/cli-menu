@@ -77,6 +77,32 @@ class MenuStyle
     private $titleSeparator;
 
     /**
+     * Default Values
+     *
+     * @var array
+     */
+    private static $defaultStyleValues = [
+        'fg' => 'white',
+        'bg' => 'blue',
+        'width' => 100,
+        'padding' => 2,
+        'margin' => 2,
+        'selectedMarker' => '●',
+        'unselectedMarker' => '○',
+        'itemExtra' => '✔',
+        'displaysExtra' => false,
+        'titleSeparator' => '=',
+    ];
+
+    /**
+     * @return array
+     */
+    public static function getDefaultStyleValues()
+    {
+        return static::$defaultStyleValues;
+    }
+
+    /**
      * @var array
      */
     private static $availableForegroundColors = array(
@@ -121,45 +147,22 @@ class MenuStyle
     /**
      * Initialise style
      *
-     * @param string $bg
-     * @param string $fg
-     * @param int $width
-     * @param int $padding
-     * @param int $margin
-     * @param string $unselectedMarker
-     * @param string $selectedMarker
-     * @param string $itemExtra
-     * @param bool $displaysExtra
-     * @param string $titleSeparator
      * @param TerminalInterface $terminal
-     * @throws InvalidInstantiationException
      */
-    public function __construct(
-        $bg = 'blue',
-        $fg = 'white',
-        $width = 100,
-        $padding = 2,
-        $margin = 2,
-        $unselectedMarker = '○',
-        $selectedMarker = '●',
-        $itemExtra = '✔',
-        $displaysExtra = false,
-        $titleSeparator = '=',
-        TerminalInterface $terminal = null
-    ) {
-        $this->terminal        = $terminal ?: TerminalFactory::fromSystem();
-        $this->bg              = $bg;
-        $this->fg              = $fg;
-        $this->padding         = $padding;
-        $this->margin          = $margin;
-        $this->itemExtra       = $itemExtra;
-        $this->displaysExtra   = $displaysExtra;
-        $this->titleSeparator  = $titleSeparator;
+    public function __construct(TerminalInterface $terminal = null)
+    {
+        $this->terminal = $terminal ?: TerminalFactory::fromSystem();
 
-        $this->setUnselectedMarker($unselectedMarker);
-        $this->setSelectedMarker($selectedMarker);
-        $this->setWidth($width);
-        $this->calculateContentWidth();
+        $this->setFg(static::$defaultStyleValues['fg']);
+        $this->setBg(static::$defaultStyleValues['bg']);
+        $this->setWidth(static::$defaultStyleValues['width']);
+        $this->setPadding(static::$defaultStyleValues['padding']);
+        $this->setMargin(static::$defaultStyleValues['margin']);
+        $this->setSelectedMarker(static::$defaultStyleValues['selectedMarker']);
+        $this->setUnselectedMarker(static::$defaultStyleValues['unselectedMarker']);
+        $this->setItemExtra(static::$defaultStyleValues['itemExtra']);
+        $this->setDisplaysExtra(static::$defaultStyleValues['displaysExtra']);
+        $this->setTitleSeparator(static::$defaultStyleValues['titleSeparator']);
     }
 
     /**
@@ -432,10 +435,13 @@ class MenuStyle
 
     /**
      * @param string $itemExtra
+     * @return $this
      */
     public function setItemExtra($itemExtra)
     {
         $this->itemExtra = $itemExtra;
+
+        return $this;
     }
 
     /**

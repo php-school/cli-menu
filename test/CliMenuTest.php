@@ -105,18 +105,6 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
      */
     private function getStyle(TerminalInterface $terminal)
     {
-        return new MenuStyle(
-            'blue',
-            'white',
-            100,
-            2,
-            2,
-            '○',
-            '●',
-            '✔',
-            false,
-            '=',
-            $terminal
-        );
+        return new MenuStyle($terminal);
     }
 }
