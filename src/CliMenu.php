@@ -50,11 +50,6 @@ class CliMenu
     protected $open = false;
 
     /**
-     * @var string
-     */
-    private $allowedConsumer = 'PhpSchool\CliMenu\CliMenuBuilder';
-
-    /**
      * @var CliMenu|null
      */
     protected $parent;
@@ -73,12 +68,6 @@ class CliMenu
         TerminalInterface $terminal = null,
         MenuStyle $style = null
     ) {
-        $builder = debug_backtrace();
-        if (count($builder) < 2 || !isset($builder[1]['class']) || $builder[1]['class'] !== $this->allowedConsumer) {
-            throw new InvalidInstantiationException(
-                sprintf('The CliMenu must be instantiated by "%s"', $this->allowedConsumer)
-            );
-        }
 
         $this->title      = $title;
         $this->items      = $items;

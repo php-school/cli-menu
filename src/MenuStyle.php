@@ -77,11 +77,6 @@ class MenuStyle
     private $titleSeparator;
 
     /**
-     * @var string
-     */
-    private $allowedConsumer = 'PhpSchool\CliMenu\CliMenuBuilder';
-
-    /**
      * @var array
      */
     private static $availableForegroundColors = array(
@@ -152,13 +147,6 @@ class MenuStyle
         $titleSeparator = '=',
         TerminalInterface $terminal = null
     ) {
-        $builder = debug_backtrace();
-        if (count($builder) < 2 || !isset($builder[1]['class']) || $builder[1]['class'] !== $this->allowedConsumer) {
-            throw new InvalidInstantiationException(
-                sprintf('The MenuStyle must be instantiated by "%s"', $this->allowedConsumer)
-            );
-        }
-
         $this->terminal        = $terminal ?: TerminalFactory::fromSystem();
         $this->bg              = $bg;
         $this->fg              = $fg;
