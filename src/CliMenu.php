@@ -4,6 +4,7 @@ namespace PhpSchool\CliMenu;
 
 use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\Exception\InvalidTerminalException;
+use PhpSchool\CliMenu\Exception\MenuNotOpenException;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
@@ -59,7 +60,7 @@ class CliMenu
      * @param array $items
      * @param TerminalInterface|null $terminal
      * @param MenuStyle|null $style
-     * @throws InvalidInstantiationException
+     *
      * @throws InvalidTerminalException
      */
     public function __construct(
@@ -68,7 +69,6 @@ class CliMenu
         TerminalInterface $terminal = null,
         MenuStyle $style = null
     ) {
-
         $this->title      = $title;
         $this->items      = $items;
         $this->terminal   = $terminal ?: TerminalFactory::fromSystem();
@@ -232,6 +232,18 @@ class CliMenu
             $callable = $item->getSelectAction();
             $callable($this);
         }
+    }
+
+    /**
+     * Redraw the menu
+     */
+    public function reDraw()
+    {
+        if (!$this->isOpen()) {
+            throw new MenuNotOpenException;
+        }
+
+        $this->draw();
     }
 
     /**
