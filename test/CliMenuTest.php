@@ -52,7 +52,7 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
         $style = $this->getStyle($terminal);
 
         $item = new SelectableItem('Item 1', function (CliMenu $menu) {
-           $menu->close();
+            $menu->close();
         });
 
         $this->expectOutputString(file_get_contents($this->getTestFile()));
@@ -81,7 +81,7 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
 
         $item = new SelectableItem('Item 1', function (CliMenu $menu) {
             $menu->getStyle()->setBg('red');
-            $menu->reDraw();
+            $menu->redraw();
             $menu->close();
         });
 

@@ -237,7 +237,7 @@ class CliMenu
     /**
      * Redraw the menu
      */
-    public function reDraw()
+    public function redraw()
     {
         if (!$this->isOpen()) {
             throw new MenuNotOpenException;
