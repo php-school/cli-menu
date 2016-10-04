@@ -55,7 +55,7 @@ class CliMenuBuilder
     private $menuItems = [];
 
     /**
-     * @var MenuStyle
+     * @var array
      */
     private $style;
 
