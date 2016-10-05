@@ -72,7 +72,7 @@ class CliMenu
         $this->title      = $title;
         $this->items      = $items;
         $this->terminal   = $terminal ?: TerminalFactory::fromSystem();
-        $this->style      = $style ?: new MenuStyle();
+        $this->style      = $style ?: new MenuStyle($this->terminal);
 
         $this->selectFirstItem();
     }
@@ -344,6 +344,14 @@ class CliMenu
         $this->terminal->clean();
         $this->terminal->moveCursorToTop();
         $this->open = false;
+    }
+
+    /**
+     * @return MenuItemInterface[]
+     */
+    public function getItems()
+    {
+        return $this->items;
     }
 
     /**
