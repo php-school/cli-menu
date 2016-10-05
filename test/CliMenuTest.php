@@ -114,6 +114,32 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
         static::assertSame([$item1, $item2], $menu->getItems());
     }
 
+    public function testRemoveItem()
+    {
+        $item1 = new LineBreakItem();
+        $item2 = new LineBreakItem();
+
+        $terminal = $this->createMock(TerminalInterface::class);
+        $style = $this->getStyle($terminal);
+
+        $menu = new CliMenu(
+            'PHP School FTW',
+            [
+                $item1,
+                $item2
+            ],
+            $terminal,
+            $style
+        );
+
+        static::assertEquals([$item1, $item2], $menu->getItems());
+
+        $menu->removeItem($item1);
+
+        static::assertCount(1, $menu->getItems());
+        static::assertContains($item2, $menu->getItems());
+    }
+
     /**
      * @return string
      */
