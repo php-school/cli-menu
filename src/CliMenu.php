@@ -153,6 +153,10 @@ class CliMenu
     public function addItem(MenuItemInterface $item)
     {
         $this->items[] = $item;
+        
+        if (count($this->items) === 1) {
+            $this->selectFirstItem();
+        }
     }
 
     /**
@@ -352,6 +356,20 @@ class CliMenu
     public function getItems()
     {
         return $this->items;
+    }
+
+    /**
+     * @param MenuItemInterface $item
+     */
+    public function removeItem(MenuItemInterface $item)
+    {
+        $key = array_search($item, $this->items);
+
+        if (false === $key) {
+            throw new \InvalidArgumentException('Item does not exist in menu');
+        }
+
+        unset($this->items[$key]);
     }
 
     /**
