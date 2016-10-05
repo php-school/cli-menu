@@ -125,4 +125,22 @@ class AsciiArtItem implements MenuItemInterface
     {
         return false;
     }
+
+    /**
+     * Enable showing item extra
+     *
+     */
+    public function showItemExtra()
+    {
+        //noop
+    }
+
+    /**
+     * Disable showing item extra
+     *
+     */
+    public function hideItemExtra()
+    {
+        //noop
+    }
 }

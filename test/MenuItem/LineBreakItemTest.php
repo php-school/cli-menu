@@ -16,13 +16,13 @@ class LineBreakItemTest extends PHPUnit_Framework_TestCase
 {
     public function testExceptionIsThrownIfBreakCharNotString()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new LineBreakItem(new \stdClass);
     }
 
     public function testExceptionIsThrownIfNumLinesNotInt()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new LineBreakItem('*', new \stdClass);
     }
 
@@ -52,9 +52,7 @@ class LineBreakItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetRowsRepeatsCharForMenuWidth()
     {
-        $menuStyle = $this->getMockBuilder(MenuStyle::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $menuStyle = $this->createMock(MenuStyle::class);
 
         $menuStyle
             ->expects($this->any())
@@ -67,9 +65,7 @@ class LineBreakItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetRowsRepeatsCharForMenuWidthMultiLines()
     {
-        $menuStyle = $this->getMockBuilder(MenuStyle::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $menuStyle = $this->createMock(MenuStyle::class);
 
         $menuStyle
             ->expects($this->any())
@@ -82,9 +78,7 @@ class LineBreakItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetRowsWithPhraseThatDoesNotFitInWidthEvenlyIsTrimmed()
     {
-        $menuStyle = $this->getMockBuilder(MenuStyle::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $menuStyle = $this->createMock(MenuStyle::class);
 
         $menuStyle
             ->expects($this->any())
@@ -100,9 +94,7 @@ class LineBreakItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetRowsWithMultiByteChars()
     {
-        $menuStyle = $this->getMockBuilder(MenuStyle::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $menuStyle = $this->createMock(MenuStyle::class);
 
         $menuStyle
             ->expects($this->any())
@@ -111,5 +103,16 @@ class LineBreakItemTest extends PHPUnit_Framework_TestCase
 
         $item = new LineBreakItem('❅', 2);
         $this->assertEquals(['❅❅❅❅❅', '❅❅❅❅❅'], $item->getRows($menuStyle));
+    }
+
+    public function testHideAndShowItemExtraHasNoEffect()
+    {
+        $item = new LineBreakItem('*');
+
+        $this->assertFalse($item->showsItemExtra());
+        $item->showItemExtra();
+        $this->assertFalse($item->showsItemExtra());
+        $item->hideItemExtra();
+        $this->assertFalse($item->showsItemExtra());
     }
 }

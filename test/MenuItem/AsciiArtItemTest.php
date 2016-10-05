@@ -16,13 +16,13 @@ class AsciiArtItemTest extends PHPUnit_Framework_TestCase
 {
     public function testExceptionIsThrownIfBreakCharNotString()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new AsciiArtItem(new \stdClass);
     }
 
     public function testExceptionIsThrownIfPositionNotValid()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new AsciiArtItem('////\\\\', new \stdClass);
     }
 
@@ -52,9 +52,7 @@ class AsciiArtItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetRowsLeftAligned()
     {
-        $menuStyle = $this->getMockBuilder(MenuStyle::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $menuStyle = $this->createMock(MenuStyle::class);
 
         $menuStyle
             ->expects($this->any())
@@ -73,9 +71,7 @@ class AsciiArtItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetRowsRightAligned()
     {
-        $menuStyle = $this->getMockBuilder(MenuStyle::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $menuStyle = $this->createMock(MenuStyle::class);
 
         $menuStyle
             ->expects($this->any())
@@ -94,9 +90,7 @@ class AsciiArtItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetRowsCenterAligned()
     {
-        $menuStyle = $this->getMockBuilder(MenuStyle::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $menuStyle = $this->createMock(MenuStyle::class);
 
         $menuStyle
             ->expects($this->any())
@@ -115,9 +109,7 @@ class AsciiArtItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetRowsCenterAlignedWithOddWidth()
     {
-        $menuStyle = $this->getMockBuilder(MenuStyle::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $menuStyle = $this->createMock(MenuStyle::class);
 
         $menuStyle
             ->expects($this->any())
@@ -132,5 +124,16 @@ class AsciiArtItemTest extends PHPUnit_Framework_TestCase
             ],
             $item->getRows($menuStyle)
         );
+    }
+
+    public function testHideAndShowItemExtraHasNoEffect()
+    {
+        $item = new AsciiArtItem("//\n//", AsciiArtItem::POSITION_CENTER);
+
+        $this->assertFalse($item->showsItemExtra());
+        $item->showItemExtra();
+        $this->assertFalse($item->showsItemExtra());
+        $item->hideItemExtra();
+        $this->assertFalse($item->showsItemExtra());
     }
 }

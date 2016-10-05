@@ -15,7 +15,7 @@ class StaticItemTest extends PHPUnit_Framework_TestCase
 {
     public function testExceptionIsThrownIfArgumentNotString()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new StaticItem(new \stdClass);
     }
 
@@ -45,9 +45,7 @@ class StaticItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetRowsWithContentWhichFitsOnOneLine()
     {
-        $menuStyle = $this->getMockBuilder(MenuStyle::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $menuStyle = $this->createMock(MenuStyle::class);
         
         $menuStyle
             ->expects($this->once())
@@ -64,9 +62,7 @@ class StaticItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetRowsWithContentWhichDoesNotFitOnOneLineIsWrapped()
     {
-        $menuStyle = $this->getMockBuilder(MenuStyle::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $menuStyle = $this->createMock(MenuStyle::class);
 
         $menuStyle
             ->expects($this->once())
@@ -79,5 +75,16 @@ class StaticItemTest extends PHPUnit_Framework_TestCase
             ['CONTENT 1 ', 'LINE'],
             $item->getRows($menuStyle)
         );
+    }
+
+    public function testHideAndShowItemExtraHasNoEffect()
+    {
+        $item = new StaticItem('CONTENT 1 LINE');
+
+        $this->assertFalse($item->showsItemExtra());
+        $item->showItemExtra();
+        $this->assertFalse($item->showsItemExtra());
+        $item->hideItemExtra();
+        $this->assertFalse($item->showsItemExtra());
     }
 }

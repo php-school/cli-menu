@@ -16,7 +16,7 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
 {
     public function testExceptionIsThrownIfBreakCharNotString()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new SelectableItem(new \stdClass, function () {
         });
     }
@@ -56,9 +56,7 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetRows()
     {
-        $menuStyle = $this->getMockBuilder(MenuStyle::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $menuStyle = $this->createMock(MenuStyle::class);
 
         $menuStyle
             ->expects($this->any())
@@ -74,9 +72,7 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetRowsWithUnSelectedMarker()
     {
-        $menuStyle = $this->getMockBuilder(MenuStyle::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $menuStyle = $this->createMock(MenuStyle::class);
 
         $menuStyle
             ->expects($this->any())
@@ -97,9 +93,7 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetRowsWithSelectedMarker()
     {
-        $menuStyle = $this->getMockBuilder(MenuStyle::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $menuStyle = $this->createMock(MenuStyle::class);
 
         $menuStyle
             ->expects($this->any())
@@ -119,9 +113,7 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetRowsWithItemExtra()
     {
-        $menuStyle = $this->getMockBuilder(MenuStyle::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $menuStyle = $this->createMock(MenuStyle::class);
 
         $menuStyle
             ->expects($this->any())
@@ -140,9 +132,7 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetRowsWithMultipleLinesWithItemExtra()
     {
-        $menuStyle = $this->getMockBuilder(MenuStyle::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $menuStyle = $this->createMock(MenuStyle::class);
 
         $menuStyle
             ->expects($this->any())
@@ -163,5 +153,17 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
             ],
             $item->getRows($menuStyle)
         );
+    }
+
+    public function testHideAndShowItemExtra()
+    {
+        $item = new SelectableItem('Item', function () {
+        });
+
+        $this->assertFalse($item->showsItemExtra());
+        $item->showItemExtra();
+        $this->assertTrue($item->showsItemExtra());
+        $item->hideItemExtra();
+        $this->assertFalse($item->showsItemExtra());
     }
 }
