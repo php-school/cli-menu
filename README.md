@@ -362,6 +362,56 @@ The third param on the `->addItem` call is what disables an item while the `->di
 
 The outcome is a full menu with dimmed rows to denote them being disabled. When a user navigates these items are jumped over to the next available selectable item.
 
+#### Redrawing the menu
+
+You can modify the menu and its style when executing an action and then you can redraw it! In this example we will toggle the background
+colour in an action.
+
+```php
+$itemCallable = function (CliMenu $menu) {
+    $menu->getStyle()->setBg($menu->getStyle()->getBg() === 'red' ? 'blue' : 'red');
+    $menu->redraw();
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('First Item', $itemCallable)
+    ->addItem('Second Item', $itemCallable)
+    ->addItem('Third Item', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+```
+
+#### Getting, Removing and Adding items
+
+You can also interact with the menu items in an action:
+
+```php
+use PhpSchool\CliMenu\MenuItem\LineBreakItem;
+
+$itemCallable = function (CliMenu $menu) {
+    foreach ($menu->getItems() as $item) {
+        $menu->removeItem($item);
+    }
+    
+    $menu->addItem(new LineBreakItem('-'));
+
+    $menu->redraw();
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('First Item', $itemCallable)
+    ->addItem('Second Item', $itemCallable)
+    ->addItem('Third Item', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+```
+
 ---
 
 Once you get going you might just end up with something that looks a little like this... 
