@@ -57,7 +57,7 @@ class CliMenuBuilder
     /**
      * @var array
      */
-    private $style = [];
+    private $style;
 
     /**
      * @var TerminalInterface
@@ -84,27 +84,9 @@ class CliMenuBuilder
      */
     public function __construct(CliMenuBuilder $parent = null)
     {
-        $this->parent            = $parent;
-        $this->terminal          = TerminalFactory::fromSystem();
-        $this->style             = $this->getStyleClassDefaults();
-        $this->style['terminal'] = $this->terminal;
-    }
-
-    /**
-     * Pull the constructor params into an array with default values
-     *
-     * @return array
-     */
-    private function getStyleClassDefaults()
-    {
-        $styleClassParameters = (new \ReflectionClass(MenuStyle::class))->getConstructor()->getParameters();
-
-        $defaults = [];
-        foreach ($styleClassParameters as $parameter) {
-            $defaults[$parameter->getName()] = $parameter->getDefaultValue();
-        }
-
-        return $defaults;
+        $this->parent   = $parent;
+        $this->terminal = TerminalFactory::fromSystem();
+        $this->style    = MenuStyle::getDefaultStyleValues();
     }
 
     /**
@@ -389,7 +371,6 @@ class CliMenuBuilder
     public function setTerminal(TerminalInterface $terminal)
     {
         $this->terminal = $terminal;
-        $this->style['terminal'] = $this->terminal;
         return $this;
     }
 
@@ -436,19 +417,33 @@ class CliMenuBuilder
      */
     private function getMenuStyle()
     {
-        $diff = array_udiff_assoc($this->style, $this->getStyleClassDefaults(), function ($current, $default) {
-            if ($current instanceof TerminalInterface) {
-                return 0;
-            }
-
-            return $current === $default ? 0 : 1;
-        });
-
-        if (!$diff && null !== $this->parent) {
-            return $this->parent->getMenuStyle();
+        if (null === $this->parent) {
+            return $this->buildStyle();
         }
-        
-        return new MenuStyle(...array_values($this->style));
+
+        if ($this->style !== MenuStyle::getDefaultStyleValues()) {
+            return $this->buildStyle();
+        }
+
+        return $this->parent->getMenuStyle();
+    }
+
+    /**
+     * @return MenuStyle
+     */
+    private function buildStyle()
+    {
+        return (new MenuStyle($this->terminal))
+            ->setFg($this->style['fg'])
+            ->setBg($this->style['bg'])
+            ->setWidth($this->style['width'])
+            ->setPadding($this->style['padding'])
+            ->setMargin($this->style['margin'])
+            ->setSelectedMarker($this->style['selectedMarker'])
+            ->setUnselectedMarker($this->style['unselectedMarker'])
+            ->setItemExtra($this->style['itemExtra'])
+            ->setDisplaysExtra($this->style['displaysExtra'])
+            ->setTitleSeparator($this->style['titleSeparator']);
     }
 
     /**

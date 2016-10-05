@@ -66,7 +66,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
 
         $terminal = static::createMock(TerminalInterface::class);
         $terminal
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getWidth')
             ->will($this->returnValue(200));
         
