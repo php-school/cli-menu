@@ -4,6 +4,7 @@ namespace PhpSchool\CliMenuTest;
 
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Exception\MenuNotOpenException;
+use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Terminal\TerminalInterface;
@@ -30,7 +31,7 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
 
         $this->expectException(MenuNotOpenException::class);
 
-        $menu->reDraw();
+        $menu->redraw();
     }
 
     public function testSimpleOpenClose()
@@ -89,6 +90,54 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
 
         $menu = new CliMenu('PHP School FTW', [$item], $terminal, $style);
         $menu->open();
+    }
+
+    public function testGetItems()
+    {
+        $item1 = new LineBreakItem();
+        $item2 = new LineBreakItem();
+
+
+        $terminal = $this->createMock(TerminalInterface::class);
+        $style = $this->getStyle($terminal);
+
+        $menu = new CliMenu(
+            'PHP School FTW',
+            [
+                $item1,
+                $item2
+            ],
+            $terminal,
+            $style
+        );
+
+        static::assertSame([$item1, $item2], $menu->getItems());
+    }
+
+    public function testRemoveItem()
+    {
+        $item1 = new LineBreakItem();
+        $item2 = new LineBreakItem();
+
+        $terminal = $this->createMock(TerminalInterface::class);
+        $style = $this->getStyle($terminal);
+
+        $menu = new CliMenu(
+            'PHP School FTW',
+            [
+                $item1,
+                $item2
+            ],
+            $terminal,
+            $style
+        );
+
+        static::assertEquals([$item1, $item2], $menu->getItems());
+
+        $menu->removeItem($item1);
+
+        static::assertCount(1, $menu->getItems());
+        static::assertContains($item2, $menu->getItems());
     }
 
     /**

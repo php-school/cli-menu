@@ -48,4 +48,16 @@ interface MenuItemInterface
      * @return bool
      */
     public function showsItemExtra();
+
+    /**
+     * Enable showing item extra
+     *
+     */
+    public function showItemExtra();
+
+    /**
+     * Disable showing item extra
+     *
+     */
+    public function hideItemExtra();
 }

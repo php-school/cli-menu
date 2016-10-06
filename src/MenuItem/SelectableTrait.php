@@ -82,4 +82,22 @@ trait SelectableTrait
     {
         return $this->showItemExtra;
     }
+
+    /**
+     * Enable showing item extra
+     *
+     */
+    public function showItemExtra()
+    {
+        $this->showItemExtra = true;
+    }
+
+    /**
+     * Disable showing item extra
+     *
+     */
+    public function hideItemExtra()
+    {
+        $this->showItemExtra = false;
+    }
 }

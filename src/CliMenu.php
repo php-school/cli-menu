@@ -72,7 +72,7 @@ class CliMenu
         $this->title      = $title;
         $this->items      = $items;
         $this->terminal   = $terminal ?: TerminalFactory::fromSystem();
-        $this->style      = $style ?: new MenuStyle();
+        $this->style      = $style ?: new MenuStyle($this->terminal);
 
         $this->selectFirstItem();
     }
@@ -153,6 +153,10 @@ class CliMenu
     public function addItem(MenuItemInterface $item)
     {
         $this->items[] = $item;
+        
+        if (count($this->items) === 1) {
+            $this->selectFirstItem();
+        }
     }
 
     /**
@@ -344,6 +348,28 @@ class CliMenu
         $this->terminal->clean();
         $this->terminal->moveCursorToTop();
         $this->open = false;
+    }
+
+    /**
+     * @return MenuItemInterface[]
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param MenuItemInterface $item
+     */
+    public function removeItem(MenuItemInterface $item)
+    {
+        $key = array_search($item, $this->items);
+
+        if (false === $key) {
+            throw new \InvalidArgumentException('Item does not exist in menu');
+        }
+
+        unset($this->items[$key]);
     }
 
     /**
