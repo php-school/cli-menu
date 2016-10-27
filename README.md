@@ -89,10 +89,10 @@ Check out the [examples](examples) directory and run them to check out what is p
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2174476/19047849/868fa8c0-899b-11e6-9004-811c8da6d435.png">
 
 ##### Flash Dialogue
-<img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/19781788/f271c09c-9c82-11e6-87c3-167fd191c705.png">
+<img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/19786090/1f07dad6-9c94-11e6-91b0-c20ab2e6e27d.png">
 
 ##### Confirm Dialogue
-<img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/19781794/fb8b58c8-9c82-11e6-97ac-8e2eb21e9f7c.png">
+<img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/19786092/215d2dc2-9c94-11e6-910d-191b7b74f4d2.png">
 
 ### API
 
