@@ -73,9 +73,15 @@ abstract class Dialogue
      */
     protected function calculateCoordinates()
     {
-        $textLines = count(explode("\n", $this->text)) + 2;
-        $this->y = ceil(($this->parentMenu->getCurrentFrame()->count() / 2)) - ceil($textLines / 2) + 1;
-        $this->x = ($this->style->getWidth() / 2) - (mb_strlen($this->text) / 2);
+        //y
+        $textLines          = count(explode("\n", $this->text)) + 2;
+        $this->y            = ceil($this->parentMenu->getCurrentFrame()->count() / 2) - ceil($textLines / 2) + 1;
+
+        //x
+        $parentStyle        = $this->parentMenu->getStyle();
+        $dialogueHalfLength = (mb_strlen($this->text) + ($this->style->getPadding() * 2)) / 2;
+        $widthHalfLength    = ceil($parentStyle->getWidth() / 2);
+        $this->x            = $widthHalfLength - $dialogueHalfLength;
     }
 
     /**
@@ -85,9 +91,11 @@ abstract class Dialogue
     {
         $this->write(
             sprintf(
-                "%s  %s  %s\n",
+                "%s%s%s%s%s\n",
                 $this->style->getUnselectedSetCode(),
+                str_repeat(' ', $this->style->getPadding()),
                 str_repeat(' ', mb_strlen($this->text)),
+                str_repeat(' ', $this->style->getPadding()),
                 $this->style->getUnselectedUnsetCode()
             )
         );

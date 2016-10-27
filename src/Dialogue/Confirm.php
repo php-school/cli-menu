@@ -24,9 +24,11 @@ class Confirm extends Dialogue
         $this->emptyRow();
 
         $this->write(sprintf(
-            "%s  %s  %s\n",
+            "%s%s%s%s%s\n",
             $this->style->getUnselectedSetCode(),
+            str_repeat(' ', $this->style->getPadding()),
             $this->text,
+            str_repeat(' ', $this->style->getPadding()),
             $this->style->getUnselectedUnsetCode()
         ));
 
@@ -63,9 +65,11 @@ class Confirm extends Dialogue
         );
 
         $this->write(sprintf(
-            "%s  %s  %s\n",
+            "%s%s%s%s%s\n",
             $this->style->getUnselectedSetCode(),
+            str_repeat(' ', $this->style->getPadding()),
             str_repeat(' ', mb_strlen($this->text)),
+            str_repeat(' ', $this->style->getPadding()),
             $this->style->getUnselectedUnsetCode()
         ));
 
