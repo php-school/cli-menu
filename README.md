@@ -88,6 +88,12 @@ Check out the [examples](examples) directory and run them to check out what is p
 ##### Disabled Items & Submenus
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2174476/19047849/868fa8c0-899b-11e6-9004-811c8da6d435.png">
 
+##### Flash Dialogue
+<img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/19781788/f271c09c-9c82-11e6-87c3-167fd191c705.png">
+
+##### Confirm Dialogue
+<img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/19781794/fb8b58c8-9c82-11e6-97ac-8e2eb21e9f7c.png">
+
 ### API
 
 The `CliMenu` object is constructed via the Builder class
@@ -399,6 +405,62 @@ $itemCallable = function (CliMenu $menu) {
     $menu->addItem(new LineBreakItem('-'));
 
     $menu->redraw();
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('First Item', $itemCallable)
+    ->addItem('Second Item', $itemCallable)
+    ->addItem('Third Item', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+```
+
+#### Dialogues
+
+##### Flash
+
+Show a one line message over the top of the menu. It has a separate style object which is colored by default different
+to the menu. It can be modified to suit your own style. The dialogue is dismissed with any key press. In the example
+below we change the background color on the flash to green.
+
+```php
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+
+$itemCallable = function (CliMenu $menu) {
+    $flash = $menu->flash("PHP School FTW!!");
+    $flash->getStyle()->setBg('green');
+    $flash->display();
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('First Item', $itemCallable)
+    ->addItem('Second Item', $itemCallable)
+    ->addItem('Third Item', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+```
+
+##### Confirm
+
+Prompts are very similar to flashes except that a button is shown which has to be selected to dismiss them. The button
+text can be customised.
+
+```php
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$itemCallable = function (CliMenu $menu) {
+    $menu->confirm('PHP School FTW!')
+        ->display('OK!');
 };
 
 $menu = (new CliMenuBuilder)

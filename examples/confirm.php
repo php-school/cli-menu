@@ -15,9 +15,6 @@ $menu = (new CliMenuBuilder)
     ->addItem('First Item', $itemCallable)
     ->addItem('Second Item', $itemCallable)
     ->addItem('Third Item', $itemCallable)
-    ->addItem('Third Item', $itemCallable)
-    ->addItem('Third Item', $itemCallable)
-    ->addItem('Third Item', $itemCallable)
     ->addLineBreak('-')
     ->build();
 
