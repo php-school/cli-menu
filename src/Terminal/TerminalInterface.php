@@ -88,6 +88,13 @@ interface TerminalInterface
     public function moveCursorToRow($rowNumber);
 
     /**
+     * Move the cursor to a specific column
+     *
+     * @param int $columnNumber
+     */
+    public function moveCursorToColumn($columnNumber);
+
+    /**
      * Clean the whole console without jumping the window
      *
      * @return void

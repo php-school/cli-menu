@@ -8,6 +8,8 @@ use PhpSchool\CliMenu\Exception\MenuNotOpenException;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
+use PhpSchool\CliMenu\Dialogue\Confirm;
+use PhpSchool\CliMenu\Dialogue\Flash;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\CliMenu\Terminal\TerminalInterface;
 use PhpSchool\CliMenu\Util\StringUtil as s;
@@ -54,6 +56,11 @@ class CliMenu
      * @var CliMenu|null
      */
     protected $parent;
+
+    /**
+     * @var Frame|null
+     */
+    private $currentFrame;
 
     /**
      * @param string $title
@@ -258,21 +265,29 @@ class CliMenu
         $this->terminal->clean();
         $this->terminal->moveCursorToTop();
 
-        echo "\n\n";
+        $frame = new Frame;
+
+        $frame->newLine(2);
 
         if (is_string($this->title)) {
-            $this->drawMenuItem(new LineBreakItem());
-            $this->drawMenuItem(new StaticItem($this->title));
-            $this->drawMenuItem(new LineBreakItem($this->style->getTitleSeparator()));
+            $frame->addRows($this->drawMenuItem(new LineBreakItem()));
+            $frame->addRows($this->drawMenuItem(new StaticItem($this->title)));
+            $frame->addRows($this->drawMenuItem(new LineBreakItem($this->style->getTitleSeparator())));
         }
 
-        array_map(function ($item, $index) {
-            $this->drawMenuItem($item, $index === $this->selectedItem);
+        array_map(function ($item, $index) use ($frame) {
+            $frame->addRows($this->drawMenuItem($item, $index === $this->selectedItem));
         }, $this->items, array_keys($this->items));
 
-        $this->drawMenuItem(new LineBreakItem());
+        $frame->addRows($this->drawMenuItem(new LineBreakItem()));
 
-        echo "\n\n";
+        $frame->newLine(2);
+
+        foreach ($frame->getRows() as $row) {
+            echo $row;
+        }
+
+        $this->currentFrame = $frame;
     }
 
     /**
@@ -280,6 +295,7 @@ class CliMenu
      *
      * @param MenuItemInterface $item
      * @param bool|false $selected
+     * @return array
      */
     protected function drawMenuItem(MenuItemInterface $item, $selected = false)
     {
@@ -293,9 +309,9 @@ class CliMenu
             ? $this->style->getSelectedUnsetCode()
             : $this->style->getUnselectedUnsetCode();
 
-        foreach ($rows as $row) {
-            echo sprintf(
-                "%s%s%s%s%s%s%s",
+        return array_map(function ($row) use ($setColour, $unsetColour) {
+            return sprintf(
+                "%s%s%s%s%s%s%s\n\r",
                 str_repeat(' ', $this->style->getMargin()),
                 $setColour,
                 str_repeat(' ', $this->style->getPadding()),
@@ -304,9 +320,7 @@ class CliMenu
                 $unsetColour,
                 str_repeat(' ', $this->style->getMargin())
             );
-
-            echo "\n\r";
-        }
+        }, $rows);
     }
 
     /**
@@ -378,5 +392,44 @@ class CliMenu
     public function getStyle()
     {
         return $this->style;
+    }
+
+    public function getCurrentFrame()
+    {
+        return $this->currentFrame;
+    }
+
+    /**
+     * @param string $text
+     * @return Flash
+     */
+    public function flash($text)
+    {
+        if (strpos($text, "\n") !== false) {
+            throw new \InvalidArgumentException;
+        }
+
+        $style = (new MenuStyle($this->terminal))
+            ->setBg('yellow')
+            ->setFg('red');
+
+        return new Flash($this, $style, $this->terminal, $text);
+    }
+
+    /**
+     * @param string $text
+     * @return Confirm
+     */
+    public function confirm($text)
+    {
+        if (strpos($text, "\n") !== false) {
+            throw new \InvalidArgumentException;
+        }
+
+        $style = (new MenuStyle($this->terminal))
+            ->setBg('yellow')
+            ->setFg('red');
+
+        return new Confirm($this, $style, $this->terminal, $text);
     }
 }
