@@ -15,10 +15,6 @@ class TerminalFactory
      */
     public static function fromSystem()
     {
-        if (DIRECTORY_SEPARATOR == '\\') {
-            return new WindowsTerminal();
-        }
-
         return new UnixTerminal();
     }
 }

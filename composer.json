@@ -19,7 +19,8 @@
     },
     "require": {
         "php" : ">=5.6",
-        "beberlei/assert": "^2.4"
+        "beberlei/assert": "^2.4",
+        "ext-posix": "*"
     },
     "autoload" : {
         "psr-4" : {
