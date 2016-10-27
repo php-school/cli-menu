@@ -217,6 +217,11 @@ class UnixTerminal implements TerminalInterface
         echo sprintf("\033[%d;0H", $rowNumber);
     }
 
+    public function moveCursorToColumn($column)
+    {
+        echo sprintf("\033[%dC", $column);
+    }
+
     /**
      * Clear the current cursors line
      *
