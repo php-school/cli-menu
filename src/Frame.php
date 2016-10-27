@@ -36,7 +36,7 @@ class Frame implements \Countable
     }
 
     /**
-     * @param $row
+     * @param string $row
      */
     public function addRow($row)
     {

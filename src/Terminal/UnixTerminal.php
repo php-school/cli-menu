@@ -217,6 +217,11 @@ class UnixTerminal implements TerminalInterface
         echo sprintf("\033[%d;0H", $rowNumber);
     }
 
+    /**
+     * Move the cursor to the start of a specific column
+     *
+     * @param int $column
+     */
     public function moveCursorToColumn($column)
     {
         echo sprintf("\033[%dC", $column);
