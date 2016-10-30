@@ -30,7 +30,7 @@ composer require php-school/cli-menu
 
 ### Modo de Usar
 
-#### Instalação rápidao
+#### Instalação rápida
 Um exemplo básico bem simples de menu onde será apenas exibido o text do item selecionado, apenas para você iniciar.
 ```php
 <?php
