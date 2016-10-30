@@ -22,16 +22,16 @@
 
 ---
 
-### Installation
+### Instalação
 
 ```bash
 composer require php-school/cli-menu
 ```
 
-### Usage
+### Modo de Usar
 
-#### Quick Setup
-Here is a super basic example menu which will echo out the text of the selected item to get you started.
+#### Instalação rápida
+Um exemplo básico bem simples de menu onde será apenas exibido o text do item selecionado, apenas para você iniciar.
 ```php
 <?php
 
@@ -58,45 +58,45 @@ $menu->open();
 
 #### Examples
 
-Check out the [examples](examples) directory and run them to check out what is possible! 
+Veja mais [exemplos](examples) na pasta de exemplos e execute-os para ver todas as possibilidades. 
 
-##### Basic Menu 
+##### Menu Básico
 <img width="600" alt="basic" src="https://cloud.githubusercontent.com/assets/2817002/11442386/cb0e41a2-950c-11e5-8dd6-913aeab1632a.png">
 
-##### Basic Menu with separation
+##### Menu Básico com Separação
 <img width="600" alt="basic-seperation" src="https://cloud.githubusercontent.com/assets/2817002/11442388/cdece950-950c-11e5-8128-4f849a1aea9f.png">
 
-##### Menu with crazy separation
+##### Menu Básico com Separação bem louca
 <img width="600" alt="crazy-seperation" src="https://cloud.githubusercontent.com/assets/2817002/11442389/d04627fc-950c-11e5-8c80-f82b8fe3f5da.png">
 
-##### Custom Styles
+##### Estilos Personalizados
 <img width="600" alt="custom-styles" src="https://cloud.githubusercontent.com/assets/2817002/11442391/d3d72d1c-950c-11e5-9698-c2aeec002b24.png">
 
-##### Useful Separation
+##### Separação Útil
 <img width="600" alt="useful-seperation" src="https://cloud.githubusercontent.com/assets/2817002/11442393/d862c72e-950c-11e5-8cbc-d8c73899627a.png">
 
-##### Item Extra
+##### Itens adicionais
 <img width="600" alt="item-extra" src="https://cloud.githubusercontent.com/assets/2817002/11442395/dfe460f2-950c-11e5-9aed-9bc9c91b7ea6.png">
 
-##### Remove Defaults
+##### Remover padrão
 <img width="600" alt="remove-defaults" src="https://cloud.githubusercontent.com/assets/2817002/11442399/e3e8b8a6-950c-11e5-8dad-fdd4db93b850.png">
 
-##### Submenu
+##### Sub-menu
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/11442401/e6f03ef2-950c-11e5-897a-6d55496a4105.png">
 <img width="600" alt="submenu-options" src="https://cloud.githubusercontent.com/assets/2817002/11442403/eaf4782e-950c-11e5-82c5-ab57f84cd6bc.png">
 
-##### Disabled Items & Submenus
+##### Desabilitar Itens & Sub-menus
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2174476/19047849/868fa8c0-899b-11e6-9004-811c8da6d435.png">
 
-##### Flash Dialogue
+##### Mensagem instantânea
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/19786090/1f07dad6-9c94-11e6-91b0-c20ab2e6e27d.png">
 
-##### Confirm Dialogue
+##### Caixa de confirmação
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/19786092/215d2dc2-9c94-11e6-910d-191b7b74f4d2.png">
 
 ### API
 
-The `CliMenu` object is constructed via the Builder class
+O objeto `CliMenu` construído pela classe Builder
 
 ```php
 $menu = (new CliMenuBuilder)
@@ -106,25 +106,25 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-Once you have a menu object, you can open and close it like so:
+Assim que você tem o objeto de menu, você pode abri-lo e fecha-lo da seguinte forma:
 
 ```php
 $menu->open();
 $menu->close();
 ```
 
-#### Appearance
+#### Aparência
 
-You can change the foreground and background colour of the menu to any of the following colours:
+Você pode trocar a cor do primeiro plano e do plano de fundo do menu para qualquer uma das seguintes cores
 
-* black
-* red
-* green
-* yellow
-* blue
-* magenta
-* cyan
-* white
+* black (Preto)
+* red (Vermelho)
+* green (Verde)
+* yellow (Amarelo)
+* blue (Azul)
+* magenta (Mangenta)
+* cyan (Ciano)
+* white (Branco)
 
 ```php
 $menu = (new CliMenuBuilder)
@@ -133,7 +133,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-The width, padding and margin can also be customised:
+A largura (width), o espaçamento (padding) e a margem (margin) também podem ser personalizadas:
 
 ```php
 $menu = (new CliMenuBuilder)
@@ -143,7 +143,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-Modify the exit button text:
+Modificar o texto do botão de sair:
 
 ```php
 $menu = (new CliMenuBuilder)
@@ -151,7 +151,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-You can remove the exit button altogether:
+Você pode remover o botão de sair, caso assim deseje:
 
 ```php
 $menu = (new CliMenuBuilder)
@@ -159,10 +159,10 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-Note: This will also disable the Go Back button for sub menus.
+Observação: Isto também irá disabilitar o botão Voltar (Go Back) para os sub-menus.
 
-The marker displayed by the side of the currently active item can be modified, UTF-8 characters are supported.
-The marker for un-selected items can also be modified. If you want to disable it, just set it to a space character.
+O marcador exibido ao lado do do item ativo pode ser modificado, caracteres UTF-8 são suportados.
+O marcador for itens não selecionados também pode ser modificado. Se você quiser desabilita-lo, apenas defina-o como um caracter de espaço.
 
 ```php
 $menu = (new CliMenuBuilder)
@@ -174,8 +174,8 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-You can give your menu a title and you can customise the separator, a line which displays under the title.
-Whatever string you pass to `setTitleSeparator` will be repeated for the width of the Menu.
+Você pode definir um título para o seu menu e definir um separar personalizado, uma linha que será exibida abaixo do título.
+Qualquer texto que você passar para `setTitleSeparator` será repetido pelo tamanho da largura do Menu.
 
 ```php
 $menu = (new CliMenuBuilder)
@@ -186,11 +186,11 @@ $menu = (new CliMenuBuilder)
 
 #### Item Extra
 
-You can optionally display some arbitrary text on the right hand side of an item. You can customise this text and
-you indicate which items to display it on. We use it to display `[COMPLETED]` on completed exercises, where the menu lists
-exercises for a workshop application. 
+Você pode, opcionalmente, exibir algum texto arbitrário do lado dirieto de item. Você pode personalizar este texto e
+você pode indicar em quais itens ele será exibido. Nós usamos esta função para exibir o texto `[COMPLETED]` nos exercícios
+que foram completados, onde o menu exibe a lista de exercícios para uma aplicação de workshop.
 
-The third parameter to `addItem` is a boolean whether to show the item extra or not. It defaults to false.
+O terceiro parâmetro do método `addItem` é um boolean que define se será exibido o item extra ou não. O padrão é false. 
 
 ```php
 $menu = (new CliMenuBuilder)
@@ -199,17 +199,17 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-#### Items
+#### Itens
 
-There a few different types of items you can add to your menu
+Existem alguns tipos de itens que você pode adicionar ao seu menu
 
-* Selectable Item - This is the type of item you need for something to be selectable (you can hit enter and it will call your invokable) 
-* Line Break Item - This is used to break up areas, it can span multiple lines and will be the width of Menu. Whatever string is passed will be repeated.
-* Static Item - This will print whatever text is passed, useful for headings.
-* Ascii Art Item - Special item which allows usage of Ascii art. It takes care of padding and alignment.
-* Sub Menu Item - Special item to allow an item to open another menu. Useful for an options menu.
+* Item Selecionável - Este é o tipo de item que você precisa para qualquer coisa que for selecionável (você pode apertar enter e isso irá invocar o método invocável) 
+* Item de Quebra de Linha - Este item é usado para separar áreas, ele pode abranger várias linhas e será da largura do Menu. Qualquer string passada será repetida.
+* Item Estático - Este item irá exibir qualquer texto que for fornecido, muito útil para cabeçalhos.
+* Item Ascii Art - Este item é um tipo especial e permite o use de Ascii art. Ele automaticamente cuida do espaçamento e do alinhamento.
+* Item de Sub Menu - Item especial para permitir um item abrir outro menu. Muito útil para quando for criar um menu de opções.
 
-#### Selectable Item
+#### Item Selecionável
 
 ```php
 $menu = (new CliMenuBuilder)
@@ -219,7 +219,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-You can add multiple items at once like so:
+Você pode adicionar múltiplos items de uma única vez, como no exemplo:
 
 ```php
 $callable = function (CliMenu $menu) {
@@ -235,10 +235,11 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-Note: You can add as many items as you want and they can all have a different action. The action is the separate parameter
-and must be a valid PHP `callable`. Try using an `Invokable` class to keep your actions easily testable.
+Observação: Você pode adicionar quantos itens você quiser e todos eles podem ter diferentes ações. A ação a ser executada
+é o que for definido como segundo parâmetro e ele deve ser um tipo válido PHP de `callable`. Preferencialmente, utilize classes
+do tipo `Invokable` para manter suas ações isoladas e para que possam ser facilmente testadas.
 
-#### Line Break Item
+#### Item de Quebra de Linha
 
 ```php
 $menu = (new CliMenuBuilder)
@@ -246,12 +247,12 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-The above would repeat the character sequence `<3` across the Menu for 2 lines
+O código acima irá repetir uma sequência de caracteres `<3` sobre o Menu por 2 linhas. 
 
-#### Static Item
+#### Item Estático
 
-Static items are similar to Line Breaks, however, they don't repeat and fill. It is output as is.
-If the text is longer than the width of the Menu, it will be continued on the next line.
+Itens estáticos são similares aos de QUebra de linha, no entanto, eles não repetem e não são preenchidos. É exibido como ele é.
+Se o texto for mais longo que a largura do menu, ele será exibido na linha subsequente.
 
 ```php
 $menu = (new CliMenuBuilder)
@@ -266,8 +267,7 @@ $menu = (new CliMenuBuilder)
 
 #### Ascii Art Item
 
-The following will place the Ascii art in the centre of your menu. Use these constants to alter the 
-alignment:
+O código abaixo irá colocar a arte Ascii no centro do seu menu. Use uma das constantes abaixo para alterar o alinhamento:
 
 * AsciiArtItem::POSITION_CENTER
 * AsciiArtItem::POSITION_LEFT
@@ -289,11 +289,11 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```    
 
-#### Sub Menu Item
+#### Item de Sub Menu
 
-Sub Menus are really powerful! You can add Menus to Menus, whattttt?? You can have your main menu and then an options menu.
-The options item will look like a normal item except when you hit it, you will enter to another menu, which
-can have different styles and colours!
+Sub-menus são muito poderosos. Você pode adicionar Menus aos Menus, MASOQUÊ?? Você pode ter um seu menu principal e também opções para o seu menu.
+As itens de opções serão iguais itens normais de menu, excepto que quando você pressiona-lo, irá entrar em outro menu, no qual
+qual pode ter estilos e cores diferenciados.
 
 ```php
 
@@ -310,8 +310,8 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-In this example a single sub menu will be created. Upon entering the sub menu, you will be able to return to the main menu
-or exit completely. A Go Back button will be automatically added, you can customise this text like so:
+Neste exemplo, um único sub-menu será criado. Assim que entrar-mos no sub-menu, você será capaz de retornar ao menu principal.
+ou então sair completamente do menu. Um botão Go Back (Voltar) será automaticamente adicionado, e você pode personalizar o texto deles dessa forma:
 
 ```php
 ->addSubMenu('Super Sub Menu')
@@ -319,13 +319,13 @@ or exit completely. A Go Back button will be automatically added, you can custom
     ->setGoBackButtonText('Descend to chaos')
 ```    
 
-There are a few things to note about the syntax and builder process here
+Existem algumas coisas para se prestar atenção na sintáxe e no processo de criação aqui
 
-1. `addSubMenu` returns an instance of `CliMenuBuilder` so you can can customise exactly the same way you would the parent.
-2. If you do not modify the styles of the sub menu (eg, colours) it will inherit styles from the parent!
-3. You can call `end()` on the sub menu `CliMenuBuilder` instance to get the parent `CliMenuBuilder` back again. This is useful for chaining.
+1. `addSubMenu` retorna uma instância de `CliMenuBuilder` assim você pode personalizar do jeito que precisar no objeto pai
+2. Se você não modificar os estilos do sub-menu (ex, cores) ele irá herdar os estilos do menu pai
+3. Você pode chamar o método `end()` na instância do sub-menu `CliMenuBuilder` para recuperar a instância pai `CliMenuBuilder` novamente. Isto é bem útil quando for fazer encadeamentos.
 
-If you need the `CliMenu` instance of the Sub Menu you can grab it after the main menu has been built.
+Se você precisar da instância `CliMenu` do Sub Menu você pode recupera-lo após o menu principal ser construído.
 
 ```php
 $mainMenuBuilder = new CliMenuBuilder;
@@ -335,11 +335,11 @@ $menu = $mainMenuBuilder->build();
 $subMenu = $mainMenuBuilder->getSubMenu('Super Sub Menu');
 ```
 
-You can only do this after the main menu has been built, this is because the main menu builder takes care of building all sub menus.
+Você apenas pode fazer isso após o menu principal ter sido construído. Isto acontece porque o builder do menu principal toma conta de criar todos os sub menus.
 
-#### Disabling Items & Sub Menus
+#### Desabilitando Itens & Sub Menus
 
-In this example we are disabling certain items and a submenu but still having them shown in the output. 
+Neste exemplo nós estamos desabilitando alguns itens e um sub-menu, porém ainda iremos exibi-los na saída.
 
 ```php
 $itemCallable = function (CliMenu $menu) {
@@ -364,14 +364,16 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-The third param on the `->addItem` call is what disables an item while the `->disableMenu()` call disables the relevent menu. 
+O terceiro parâmetro do método `->addItem` é o que realmente desabilita o item enquanto o `->disableMenu()` desabilita o menu relevante. 
 
-The outcome is a full menu with dimmed rows to denote them being disabled. When a user navigates these items are jumped over to the next available selectable item.
+O resultado é um menu completo com algumas linhas escurecidas para denotar que elas estão desabilitadas. Quando um usuário navega,
+estes itens são "pulados" e o menu o joga para o próximo menu selecionável.
 
-#### Redrawing the menu
+#### Redesenhando o menu
 
-You can modify the menu and its style when executing an action and then you can redraw it! In this example we will toggle the background
-colour in an action.
+Você pode modificar o menu e os seus estilos quando estiver executando uma ação e então você pode redesenha-los. Neste exemplo nós trocaremos
+a cor de fundo dentro de uma ação.
+
 
 ```php
 $itemCallable = function (CliMenu $menu) {
@@ -390,9 +392,9 @@ $menu = (new CliMenuBuilder)
 $menu->open();
 ```
 
-#### Getting, Removing and Adding items
+#### Recuperando, Removendo e Adicionado Itens
 
-You can also interact with the menu items in an action:
+Você também pode interagir com os itens do menu dentro de uma ação:
 
 ```php
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
@@ -418,13 +420,14 @@ $menu = (new CliMenuBuilder)
 $menu->open();
 ```
 
-#### Dialogues
+#### Diálogos (Caixas de Mensagem)
 
-##### Flash
+##### Instântaneo (Flash)
 
-Show a one line message over the top of the menu. It has a separate style object which is colored by default different
-to the menu. It can be modified to suit your own style. The dialogue is dismissed with any key press. In the example
-below we change the background color on the flash to green.
+Exibe uma mensagem de uma linha sobre o menu. Ele possui um objeto de estilização separado e que possui uma cor
+diferenciada do menu principal por padrão. Pode ser modificado para se encaixar no seu próprio estilo. A caixa de mensagem
+é fechada assim que qualquer tecla for pressionada. No exemplo abaixo nós trocamos a cor de fundo para verde.
+
 
 ```php
 use PhpSchool\CliMenu\CliMenu;
@@ -447,10 +450,10 @@ $menu = (new CliMenuBuilder)
 $menu->open();
 ```
 
-##### Confirm
+##### Confirmação
 
-Prompts are very similar to flashes except that a button is shown which has to be selected to dismiss them. The button
-text can be customised.
+Caixas de seleção são muito similares do do tipo flash, excepto que neste tipo é mostrado um botão que deve ser selecionado
+para que a caixa desapareça. O texto do botão também pode ser customizado.
 
 ```php
 use PhpSchool\CliMenu\CliMenu;
@@ -476,13 +479,9 @@ $menu->open();
 
 ---
 
-Once you get going you might just end up with something that looks a little like this... 
+Conforme você for brincando com nossa aplicação você irá fazer coisas semelhantes a isto...
 
 ![Learn You PHP CLI Menu](https://cloud.githubusercontent.com/assets/2174476/11409864/be082444-93ba-11e5-84ab-1b6cfa38aef8.png)
 
-You can see the construction code here for more clarity on how to perform advanced configuration:
+Você pode ver o código de construção neste link para mais clareza e em como fazer configurações mais avançadas:
 [PHP School](https://github.com/php-school/php-workshop/blob/3240d3217bbf62b1063613fc13eb5adff2299bbe/src/Factory/MenuFactory.php)
-
-### Docs Translations 
-_(This might not be kept up-to-date since it's a community translation)_
-See this doc in [Brazilian Portuguese (pt_BR)](docs/pt_BR/README.md) 
