@@ -484,5 +484,5 @@ You can see the construction code here for more clarity on how to perform advanc
 [PHP School](https://github.com/php-school/php-workshop/blob/3240d3217bbf62b1063613fc13eb5adff2299bbe/src/Factory/MenuFactory.php)
 
 ### Docs Translations 
-_(This might not kept up-to-date since it's a community translation)_
+_(This might not be kept up-to-date since it's a community translation)_
 See this doc in [Brazilian Portuguese (pt_BR)](docs/pt_BR/README.md) 
