@@ -397,6 +397,8 @@ You can also interact with the menu items in an action:
 ```php
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 
+require_once(__DIR__ . '/../vendor/autoload.php');
+
 $itemCallable = function (CliMenu $menu) {
     foreach ($menu->getItems() as $item) {
         $menu->removeItem($item);
@@ -430,6 +432,8 @@ below we change the background color on the flash to green.
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\CliMenuBuilder;
 
+require_once(__DIR__ . '/../vendor/autoload.php');
+    
 $itemCallable = function (CliMenu $menu) {
     $flash = $menu->flash("PHP School FTW!!");
     $flash->getStyle()->setBg('green');
