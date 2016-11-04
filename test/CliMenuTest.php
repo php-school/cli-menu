@@ -8,6 +8,7 @@ use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Terminal\TerminalInterface;
+use PhpSchool\CliMenu\Terminal\UnixTerminal;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -140,6 +141,17 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
         static::assertContains($item2, $menu->getItems());
     }
 
+    public function testRemoveItemThrowsExceptionWhenItemDoesntExistInMenu()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $item1 = new LineBreakItem();
+
+        $menu = new CliMenu('PHP School FTW', []);
+
+        $menu->removeItem($item1);
+    }
+
     public function testFlashThrowsExceptionIfParameterContainsNewline()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -152,6 +164,41 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
         $this->expectException(\InvalidArgumentException::class);
         $menu = new CliMenu('PHP School FTW', []);
         $menu->confirm("Foo\nBar");
+    }
+
+    public function testThrowsExceptionIfTerminalIsNotValidTTY()
+    {
+        $this->expectException(\PhpSchool\CliMenu\Exception\InvalidTerminalException::class);
+
+        $terminal = $this->createMock(TerminalInterface::class);
+        $terminal->expects($this->once())
+            ->method('isTTY')
+            ->willReturn(false);
+
+        $menu = new CliMenu('PHP School FTW', [], $terminal);
+
+        $menu->open();
+    }
+
+    public function testGetTerminal()
+    {
+        $menu = new CliMenu('PHP School FTW', []);
+        static::assertInstanceOf(UnixTerminal::class, $menu->getTerminal());
+    }
+
+    public function testAddItem()
+    {
+        $menu = new CliMenu('PHP School FTW', []);
+
+        $this->assertCount(0, $menu->getItems());
+
+        $item = new SelectableItem('Item 1', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $menu->addItem($item);
+
+        $this->assertCount(1, $menu->getItems());
     }
 
     /**
