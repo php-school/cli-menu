@@ -140,6 +140,20 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
         static::assertContains($item2, $menu->getItems());
     }
 
+    public function testFlashThrowsExceptionIfParameterContainsNewline()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $menu = new CliMenu('PHP School FTW', []);
+        $menu->flash("Foo\nBar");
+    }
+
+    public function testConfirmThrowsExceptionIfParameterContainsNewline()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $menu = new CliMenu('PHP School FTW', []);
+        $menu->confirm("Foo\nBar");
+    }
+
     /**
      * @return string
      */
