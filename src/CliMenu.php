@@ -384,6 +384,7 @@ class CliMenu
         }
 
         unset($this->items[$key]);
+	    $this->items =array_values($this->items);
     }
 
     /**
