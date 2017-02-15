@@ -11,6 +11,10 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ### Removed
 
+## [2.0.1]
+### Fixed
+ - Reset array keys after removing an item from the menu (#61)
+
 ## [2.0.0]
 ### Fixed
  - PHPUnit deprecations - updated to createMock()
