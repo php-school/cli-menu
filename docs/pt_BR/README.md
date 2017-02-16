@@ -399,6 +399,8 @@ Você também pode interagir com os itens do menu dentro de uma ação:
 ```php
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 
+require_once(__DIR__ . '/../vendor/autoload.php');
+
 $itemCallable = function (CliMenu $menu) {
     foreach ($menu->getItems() as $item) {
         $menu->removeItem($item);
@@ -432,6 +434,8 @@ diferenciada do menu principal por padrão. Pode ser modificado para se encaixar
 ```php
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\CliMenuBuilder;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
 
 $itemCallable = function (CliMenu $menu) {
     $flash = $menu->flash("PHP School FTW!!");
