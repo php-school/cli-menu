@@ -180,7 +180,11 @@ class CliMenuBuilder
         Assertion::string($art);
         Assertion::string($position);
 
-        $this->addMenuItem(new AsciiArtItem($art, $position));
+        $asciiArtItem = new AsciiArtItem($art, $position);
+
+        if ($asciiArtItem->getArtLength() <= $this->getMenuStyle()->getContentWidth()) {
+            $this->addMenuItem($asciiArtItem);
+        }
 
         return $this;
     }

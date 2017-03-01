@@ -117,6 +117,16 @@ class AsciiArtItem implements MenuItemInterface
     }
 
     /**
+     * Return the length of the art
+     *
+     * @return int
+     */
+    public function getArtLength()
+    {
+        return $this->artLength;
+    }
+
+    /**
      * Whether or not the menu item is showing the menustyle extra value
      *
      * @return bool

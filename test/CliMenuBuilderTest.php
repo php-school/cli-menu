@@ -247,6 +247,18 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->checkItems($menu, $expected);
     }
 
+    public function testAddAsciiArtDetectsArtThatDoesNotFitAndSkipsIt()
+    {
+        $builder = new CliMenuBuilder;
+        $builder->setWidth(1);
+        $builder->addAsciiArt("//\n//", AsciiArtItem::POSITION_LEFT);
+        $menu = $builder->build();
+
+        foreach ($menu->getItems() as $menuItem) {
+            $this->assertNotInstanceOf(AsciiArtItem::class, $menuItem);
+        }
+    }
+
     public function testEndThrowsExceptionIfNoParentBuilder()
     {
         $builder = new CliMenuBuilder;

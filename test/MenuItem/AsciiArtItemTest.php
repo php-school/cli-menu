@@ -50,6 +50,12 @@ class AsciiArtItemTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('////\\\\', $item->getText());
     }
 
+    public function testGetArtLength()
+    {
+        $item = new AsciiArtItem("//\n//\n///");
+        $this->assertEquals(3, $item->getArtLength());
+    }
+
     public function testGetRowsLeftAligned()
     {
         $menuStyle = $this->createMock(MenuStyle::class);
