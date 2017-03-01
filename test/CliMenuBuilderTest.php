@@ -247,6 +247,18 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->checkItems($menu, $expected);
     }
 
+    /**
+     * @expectedException Assert\InvalidArgumentException
+     * @expectedExceptionMessage The provided Ascii art does not fit in the menu
+     */
+    public function testAddAsciiArtDetectsArtThatDoesNotFit()
+    {
+        $builder = new CliMenuBuilder;
+        $builder->setWidth(1);
+        $builder->addAsciiArt("//\n//", AsciiArtItem::POSITION_LEFT);
+        $menu = $builder->build();
+    }
+
     public function testEndThrowsExceptionIfNoParentBuilder()
     {
         $builder = new CliMenuBuilder;

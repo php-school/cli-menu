@@ -180,7 +180,15 @@ class CliMenuBuilder
         Assertion::string($art);
         Assertion::string($position);
 
-        $this->addMenuItem(new AsciiArtItem($art, $position));
+        $asciiArtItem = new AsciiArtItem($art, $position);
+
+        Assertion::lessOrEqualThan(
+            $asciiArtItem->getArtLength(),
+            $this->getMenuStyle()->getContentWidth(),
+            'The provided Ascii art does not fit in the menu'
+        );
+
+        $this->addMenuItem($asciiArtItem);
 
         return $this;
     }
