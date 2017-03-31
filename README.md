@@ -21,6 +21,16 @@
 </p>
 
 ---
+## Contents
+
+  * [Installation](#installation)
+  * [Usage](#usage)
+    * [Quick Setup](#quick-setup)
+    * [Examples](#examples)
+  * [API](#api)
+  * [Docs Translations](#docs-translations)
+  * [Integrations](#integrations)
+
 
 ### Installation
 
@@ -490,3 +500,8 @@ You can see the construction code here for more clarity on how to perform advanc
 ### Docs Translations 
 _(This might not be kept up-to-date since it's a community translation)_
 See this doc in [Brazilian Portuguese (pt_BR)](docs/pt_BR/README.md) 
+
+
+### Integrations
+
+ * [Symfony Console](https://github.com/RedAntNL/console) 
