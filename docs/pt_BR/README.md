@@ -21,6 +21,16 @@
 </p>
 
 ---
+## Contents
+
+  * [Instalação](#instalação)
+  * [Modo de Usar](#modo-de-usar)
+    * [Instalação Rápida](#instalação-rápida)
+    * [Exemplos](#exemplos)
+  * [API](#api)
+  * [Traduções](#traduções)
+  * [Integrações](#integrações)
+
 
 ### Instalação
 
@@ -56,7 +66,7 @@ $menu->open();
 ```
 
 
-#### Examples
+#### Exemplos
 
 Veja mais [exemplos](examples) na pasta de exemplos e execute-os para ver todas as possibilidades. 
 
@@ -489,3 +499,12 @@ Conforme você for brincando com nossa aplicação você irá fazer coisas semel
 
 Você pode ver o código de construção neste link para mais clareza e em como fazer configurações mais avançadas:
 [PHP School](https://github.com/php-school/php-workshop/blob/3240d3217bbf62b1063613fc13eb5adff2299bbe/src/Factory/MenuFactory.php)
+
+### Traduções 
+_(As traduções pode não estar atualizadas haja visto que são feitas pela comunidade)_
+Ver este documento em [Inglês (en_US)](README.md) 
+
+
+### Integrações
+
+ * [Symfony Console](https://github.com/RedAntNL/console) 
