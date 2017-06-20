@@ -163,6 +163,10 @@ class UnixTerminal implements TerminalInterface
             "\n"     => 'enter',
             "\r"     => 'enter',
             " "      => 'enter',
+            "\033[D" => 'left',
+            "h"      => 'left',
+            "\033[C" => 'right',
+            "l"      => 'right',
         ];
 
         $input = fread(STDIN, 4);
