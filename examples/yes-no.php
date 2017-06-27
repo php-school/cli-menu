@@ -6,17 +6,17 @@ use PhpSchool\CliMenu\CliMenuBuilder;
 require_once(__DIR__ . '/../vendor/autoload.php');
 
 $itemCallable = function (CliMenu $menu) {
-    $menu->confirm(sprintf('switch [%s]?!', 6789))
+    $menu->yesNo(sprintf('switch [%s]?!', 6789))
         ->setYesText('OK')
         ->setNoText('Cancel')
-        ->show(function ($res) {
+        ->display(function ($res) {
             var_dump($res);
         });
 };
 
 $menu = (new CliMenuBuilder)
     ->setTitle('Basic CLI Menu')
-    ->addItem('Confirm Show Item', $itemCallable)
+    ->addItem('YesNo Show Item', $itemCallable)
     ->addLineBreak('-')
     ->build();
 

@@ -2,6 +2,7 @@
 
 namespace PhpSchool\CliMenu;
 
+use PhpSchool\CliMenu\Dialogue\YesNo;
 use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\Exception\InvalidTerminalException;
 use PhpSchool\CliMenu\Exception\MenuNotOpenException;
@@ -432,5 +433,21 @@ class CliMenu
             ->setFg('red');
 
         return new Confirm($this, $style, $this->terminal, $text);
+    }
+    /**
+     * @param string $text
+     * @return YesNo
+     */
+    public function yesNo($text)
+    {
+        if (strpos($text, "\n") !== false) {
+            throw new \InvalidArgumentException;
+        }
+
+        $style = (new MenuStyle($this->terminal))
+            ->setBg('yellow')
+            ->setFg('red');
+
+        return new YesNo($this, $style, $this->terminal, $text);
     }
 }
