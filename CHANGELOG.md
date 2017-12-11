@@ -11,6 +11,17 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ### Removed
 
+## [2.1.0]
+### Changed
+ - Use new static for submenu to allow subclassing (#68)
+ 
+### Added
+ - Add emacs style up/down shortcuts ctrl+n and ctrl+p (#67)
+
+## [2.0.2]
+### Fixed
+ - Don't output ascii art if the terminal width is too small (#63)
+
 ## [2.0.1]
 ### Fixed
  - Reset array keys after removing an item from the menu (#61)
