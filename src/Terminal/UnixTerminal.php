@@ -158,8 +158,10 @@ class UnixTerminal implements TerminalInterface
         $map = [
             "\033[A" => 'up',
             "k"      => 'up',
+            ""      => 'up', // emacs ^P
             "\033[B" => 'down',
             "j"      => 'down',
+            ""      => 'down', //emacs ^N
             "\n"     => 'enter',
             "\r"     => 'enter',
             " "      => 'enter',
