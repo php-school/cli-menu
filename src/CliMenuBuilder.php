@@ -198,7 +198,7 @@ class CliMenuBuilder
         Assertion::string($id);
 
         $this->menuItems[]   = $id;
-        $this->subMenus[$id] = new self($this);
+        $this->subMenus[$id] = new static($this);
 
         return $this->subMenus[$id];
     }
