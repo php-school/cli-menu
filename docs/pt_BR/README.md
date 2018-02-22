@@ -132,7 +132,7 @@ Você pode trocar a cor do primeiro plano e do plano de fundo do menu para qualq
 * green (Verde)
 * yellow (Amarelo)
 * blue (Azul)
-* magenta (Mangenta)
+* magenta (Magenta)
 * cyan (Ciano)
 * white (Branco)
 
@@ -169,10 +169,10 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-Observação: Isto também irá disabilitar o botão Voltar (Go Back) para os sub-menus.
+Observação: Isto também irá desabilitar o botão Voltar (Go Back) para os sub-menus.
 
 O marcador exibido ao lado do do item ativo pode ser modificado, caracteres UTF-8 são suportados.
-O marcador for itens não selecionados também pode ser modificado. Se você quiser desabilita-lo, apenas defina-o como um caracter de espaço.
+O marcador for itens não selecionados também pode ser modificado. Se você quiser desabilita-lo, apenas defina-o como um caractere de espaço.
 
 ```php
 $menu = (new CliMenuBuilder)
@@ -196,7 +196,7 @@ $menu = (new CliMenuBuilder)
 
 #### Item Extra
 
-Você pode, opcionalmente, exibir algum texto arbitrário do lado dirieto de item. Você pode personalizar este texto e
+Você pode, opcionalmente, exibir algum texto arbitrário do lado direito de item. Você pode personalizar este texto e
 você pode indicar em quais itens ele será exibido. Nós usamos esta função para exibir o texto `[COMPLETED]` nos exercícios
 que foram completados, onde o menu exibe a lista de exercícios para uma aplicação de workshop.
 
@@ -216,7 +216,7 @@ Existem alguns tipos de itens que você pode adicionar ao seu menu
 * Item Selecionável - Este é o tipo de item que você precisa para qualquer coisa que for selecionável (você pode apertar enter e isso irá invocar o método invocável) 
 * Item de Quebra de Linha - Este item é usado para separar áreas, ele pode abranger várias linhas e será da largura do Menu. Qualquer string passada será repetida.
 * Item Estático - Este item irá exibir qualquer texto que for fornecido, muito útil para cabeçalhos.
-* Item Ascii Art - Este item é um tipo especial e permite o use de Ascii art. Ele automaticamente cuida do espaçamento e do alinhamento.
+* Item Ascii Art - Este item é um tipo especial e permite o uso de Ascii art. Ele automaticamente cuida do espaçamento e do alinhamento.
 * Item de Sub Menu - Item especial para permitir um item abrir outro menu. Muito útil para quando for criar um menu de opções.
 
 #### Item Selecionável
@@ -229,7 +229,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-Você pode adicionar múltiplos items de uma única vez, como no exemplo:
+Você pode adicionar múltiplos itens de uma única vez, como no exemplo:
 
 ```php
 $callable = function (CliMenu $menu) {
@@ -320,7 +320,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-Neste exemplo, um único sub-menu será criado. Assim que entrar-mos no sub-menu, você será capaz de retornar ao menu principal.
+Neste exemplo, um único sub-menu será criado. Assim que entrarmos no sub-menu, você será capaz de retornar ao menu principal.
 ou então sair completamente do menu. Um botão Go Back (Voltar) será automaticamente adicionado, e você pode personalizar o texto deles dessa forma:
 
 ```php
@@ -329,7 +329,7 @@ ou então sair completamente do menu. Um botão Go Back (Voltar) será automatic
     ->setGoBackButtonText('Descend to chaos')
 ```    
 
-Existem algumas coisas para se prestar atenção na sintáxe e no processo de criação aqui
+Existem algumas coisas para se prestar atenção na sintaxe e no processo de criação aqui
 
 1. `addSubMenu` retorna uma instância de `CliMenuBuilder` assim você pode personalizar do jeito que precisar no objeto pai
 2. Se você não modificar os estilos do sub-menu (ex, cores) ele irá herdar os estilos do menu pai
@@ -379,7 +379,7 @@ O terceiro parâmetro do método `->addItem` é o que realmente desabilita o ite
 O resultado é um menu completo com algumas linhas escurecidas para denotar que elas estão desabilitadas. Quando um usuário navega,
 estes itens são "pulados" e o menu o joga para o próximo menu selecionável.
 
-#### Redesenhando o menu
+#### Re-desenhando o menu
 
 Você pode modificar o menu e os seus estilos quando estiver executando uma ação e então você pode redesenha-los. Neste exemplo nós trocaremos
 a cor de fundo dentro de uma ação.
@@ -402,7 +402,7 @@ $menu = (new CliMenuBuilder)
 $menu->open();
 ```
 
-#### Recuperando, Removendo e Adicionado Itens
+#### Recuperando, Removendo e Adicionando Itens
 
 Você também pode interagir com os itens do menu dentro de uma ação:
 
@@ -466,7 +466,7 @@ $menu->open();
 
 ##### Confirmação
 
-Caixas de seleção são muito similares do do tipo flash, excepto que neste tipo é mostrado um botão que deve ser selecionado
+Caixas de seleção são muito similares do tipo flash, excepto que neste tipo é mostrado um botão que deve ser selecionado
 para que a caixa desapareça. O texto do botão também pode ser customizado.
 
 ```php
@@ -501,10 +501,10 @@ Você pode ver o código de construção neste link para mais clareza e em como 
 [PHP School](https://github.com/php-school/php-workshop/blob/3240d3217bbf62b1063613fc13eb5adff2299bbe/src/Factory/MenuFactory.php)
 
 ### Traduções 
-_(As traduções pode não estar atualizadas haja visto que são feitas pela comunidade)_
-Ver este documento em [Inglês (en_US)](README.md) 
+_(As traduções podem não estar atualizadas haja visto que são feitas pela comunidade)_
+Ver este documento em [Inglês (en_US)](https://github.com/php-school/cli-menu/blob/master/README.md) 
 
 
 ### Integrações
 
- * [Symfony Console](https://github.com/RedAntNL/console) 
+ * [Symfony Console](https://github.com/RedAntNL/console)
