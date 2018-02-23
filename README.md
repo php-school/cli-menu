@@ -504,4 +504,5 @@ See this doc in [Brazilian Portuguese (pt_BR)](docs/pt_BR/README.md)
 
 ### Integrations
 
- * [Symfony Console](https://github.com/RedAntNL/console) 
+ * [Symfony Console](https://github.com/RedAntNL/console)
+ * [Laravel](https://github.com/nunomaduro/laravel-console-menu)
