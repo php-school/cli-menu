@@ -200,12 +200,12 @@ You can optionally display some arbitrary text on the right hand side of an item
 you indicate which items to display it on. We use it to display `[COMPLETED]` on completed exercises, where the menu lists
 exercises for a workshop application. 
 
-The third parameter to `addItem` is a boolean whether to show the item extra or not. It defaults to false.
+The fourth parameter to `addItem` is a boolean whether to show the item extra or not. It defaults to false.
 
 ```php
 $menu = (new CliMenuBuilder)
     ->setItemExtra('✔')
-    ->addItem('Exercise 1', function (CliMenu $menu) { echo 'I am complete!'; }, true)
+    ->addItem('Exercise 1', function (CliMenu $menu) { echo 'I am complete!'; }, [] , true)
     ->build();
 ```
 
@@ -359,8 +359,8 @@ $itemCallable = function (CliMenu $menu) {
 $menu = (new CliMenuBuilder)
     ->setTitle('Basic CLI Menu Disabled Items')
     ->addItem('First Item', $itemCallable)
-    ->addItem('Second Item', $itemCallable, false, true)
-    ->addItem('Third Item', $itemCallable, false, true)
+    ->addItem('Second Item', $itemCallable, [], false, true)
+    ->addItem('Third Item', $itemCallable, [], false, true)
     ->addSubMenu('Submenu')
         ->setTitle('Basic CLI Menu Disabled Items > Submenu')
         ->addItem('You can go in here!', $itemCallable)
@@ -374,7 +374,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-The third param on the `->addItem` call is what disables an item while the `->disableMenu()` call disables the relevent menu. 
+The forth param on the `->addItem` call is what disables an item while the `->disableMenu()` call disables the relevent menu. 
 
 The outcome is a full menu with dimmed rows to denote them being disabled. When a user navigates these items are jumped over to the next available selectable item.
 
