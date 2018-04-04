@@ -248,6 +248,29 @@ $menu = (new CliMenuBuilder)
 Note: You can add as many items as you want and they can all have a different action. The action is the separate parameter
 and must be a valid PHP `callable`. Try using an `Invokable` class to keep your actions easily testable.
 
+You can also pass extra data to the `callable` function
+```php
+$itemCallable = function (CliMenu $menu, $data) {
+    print_r($data);
+    echo $menu->getSelectedItem()->getText();
+};
+
+$data1 = [1];
+$data2 = [2];
+$data3 = [3];
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('First Item', $itemCallable, $data1)
+    ->addItem('Second Item', $itemCallable, $data2)
+    ->addItem('Third Item', $itemCallable, $data3)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+```
+
+
 #### Line Break Item
 
 ```php
@@ -374,7 +397,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-The forth param on the `->addItem` call is what disables an item while the `->disableMenu()` call disables the relevent menu. 
+The fourth param on the `->addItem` call is what disables an item while the `->disableMenu()` call disables the relevant menu. 
 
 The outcome is a full menu with dimmed rows to denote them being disabled. When a user navigates these items are jumped over to the next available selectable item.
 
