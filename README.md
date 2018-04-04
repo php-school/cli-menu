@@ -200,12 +200,12 @@ You can optionally display some arbitrary text on the right hand side of an item
 you indicate which items to display it on. We use it to display `[COMPLETED]` on completed exercises, where the menu lists
 exercises for a workshop application. 
 
-The third parameter to `addItem` is a boolean whether to show the item extra or not. It defaults to false.
+The fourth parameter to `addItem` is a boolean whether to show the item extra or not. It defaults to false.
 
 ```php
 $menu = (new CliMenuBuilder)
     ->setItemExtra('✔')
-    ->addItem('Exercise 1', function (CliMenu $menu) { echo 'I am complete!'; }, true)
+    ->addItem('Exercise 1', function (CliMenu $menu) { echo 'I am complete!'; }, [] , true)
     ->build();
 ```
 
@@ -247,6 +247,29 @@ $menu = (new CliMenuBuilder)
 
 Note: You can add as many items as you want and they can all have a different action. The action is the separate parameter
 and must be a valid PHP `callable`. Try using an `Invokable` class to keep your actions easily testable.
+
+You can also pass extra data to the `callable` function
+```php
+$itemCallable = function (CliMenu $menu, $data) {
+    print_r($data);
+    echo $menu->getSelectedItem()->getText();
+};
+
+$data1 = [1];
+$data2 = [2];
+$data3 = [3];
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('First Item', $itemCallable, $data1)
+    ->addItem('Second Item', $itemCallable, $data2)
+    ->addItem('Third Item', $itemCallable, $data3)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+```
+
 
 #### Line Break Item
 
@@ -359,8 +382,8 @@ $itemCallable = function (CliMenu $menu) {
 $menu = (new CliMenuBuilder)
     ->setTitle('Basic CLI Menu Disabled Items')
     ->addItem('First Item', $itemCallable)
-    ->addItem('Second Item', $itemCallable, false, true)
-    ->addItem('Third Item', $itemCallable, false, true)
+    ->addItem('Second Item', $itemCallable, [], false, true)
+    ->addItem('Third Item', $itemCallable, [], false, true)
     ->addSubMenu('Submenu')
         ->setTitle('Basic CLI Menu Disabled Items > Submenu')
         ->addItem('You can go in here!', $itemCallable)
@@ -374,7 +397,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-The third param on the `->addItem` call is what disables an item while the `->disableMenu()` call disables the relevent menu. 
+The fourth param on the `->addItem` call is what disables an item while the `->disableMenu()` call disables the relevant menu. 
 
 The outcome is a full menu with dimmed rows to denote them being disabled. When a user navigates these items are jumped over to the next available selectable item.
 

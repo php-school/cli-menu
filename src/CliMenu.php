@@ -241,7 +241,8 @@ class CliMenu
 
         if ($item->canSelect()) {
             $callable = $item->getSelectAction();
-            $callable($this);
+            $data = $item->getData();
+            $callable($this,$data);
         }
     }
 

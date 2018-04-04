@@ -25,11 +25,12 @@ class SelectableItem implements MenuItemInterface
      * @param bool $showItemExtra
      * @param bool $disabled
      */
-    public function __construct($text, callable $selectAction, $showItemExtra = false, $disabled = false)
+    public function __construct($text, callable $selectAction, $data = [], $showItemExtra = false, $disabled = false)
     {
         Assertion::string($text);
      
         $this->text          = $text;
+        $this->data          = $data;
         $this->selectAction  = $selectAction;
         $this->showItemExtra = (bool) $showItemExtra;
         $this->disabled      = $disabled;
@@ -53,5 +54,15 @@ class SelectableItem implements MenuItemInterface
     public function getText()
     {
         return $this->text;
+    }
+    
+    /**
+     * Return the raw data
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 }
