@@ -4,14 +4,12 @@ namespace PhpSchool\CliMenuTest\Action;
 
 use PhpSchool\CliMenu\Action\ExitAction;
 use PhpSchool\CliMenu\CliMenu;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ExitActionTest
- * @package PhpSchool\CliMenuTest
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class ExitActionTest extends PHPUnit_Framework_TestCase
+class ExitActionTest extends TestCase
 {
     public function testExitActionClosesMenu()
     {

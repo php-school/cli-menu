@@ -10,15 +10,13 @@ use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Terminal\TerminalInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * Class CliMenuBuilderTest
- * @package PhpSchool\CliMenuTest
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
+class CliMenuBuilderTest extends TestCase
 {
     public function testDefaultItems()
     {
@@ -263,10 +261,8 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
     {
         $builder = new CliMenuBuilder;
 
-        $this->setExpectedException(
-            RuntimeException::class,
-            'No parent builder to return to'
-        );
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('No parent builder to return to');
         
         $builder->end();
     }
@@ -324,11 +320,9 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
             ->disableDefaultItems()
             ->addSubMenu('sub-menu')
                 ->end();
-        
-        $this->setExpectedException(
-            RuntimeException::class,
-            'Menu: "sub-menu" cannot be retrieved until menu has been built'
-        );
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Menu: "sub-menu" cannot be retrieved until menu has been built');
         
         $builder->getSubMenu('sub-menu');
     }

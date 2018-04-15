@@ -3,14 +3,12 @@
 namespace PhpSchool\CliMenuTest\Util;
 
 use PhpSchool\CliMenu\Util\StringUtil;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class StringUtilTest
- * @package PhpSchool\CliMenuTest\MenuItem
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class StringUtilTest extends PHPUnit_Framework_TestCase
+class StringUtilTest extends TestCase
 {
     protected $dummyText;
 

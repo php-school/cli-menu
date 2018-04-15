@@ -12,8 +12,14 @@ $itemCallable = function (CliMenu $menu) {
 $menu = (new CliMenuBuilder)
     ->setTitle('Basic CLI Menu')
     ->addItem('First Item', $itemCallable)
-    ->addItem('Second Item', $itemCallable)
-    ->addItem('Third Item', $itemCallable)
+    ->addItem('Second Item', function (CliMenu $menu) {
+        $menu->getStyle()->setBg('red');
+        $menu->redraw();
+    })
+    ->addItem('Third Item', function (CliMenu $menu) {
+        $menu->getStyle()->setBg('default');
+        $menu->redraw();
+    })
     ->addLineBreak('-')
     ->build();
 

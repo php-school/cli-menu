@@ -9,12 +9,12 @@ use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Terminal\TerminalInterface;
 use PhpSchool\CliMenu\Terminal\UnixTerminal;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class CliMenuTest extends PHPUnit_Framework_TestCase
+class CliMenuTest extends TestCase
 {
     public function testGetMenuStyle()
     {

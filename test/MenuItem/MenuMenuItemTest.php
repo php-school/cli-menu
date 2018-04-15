@@ -6,14 +6,12 @@ use Assert\InvalidArgumentException;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuStyle;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class MenuMenuItemTest
- * @package PhpSchool\CliMenuTest\MenuItem
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class MenuMenuItemTest extends PHPUnit_Framework_TestCase
+class MenuMenuItemTest extends TestCase
 {
     public function testExceptionIsThrownIfBreakCharNotString()
     {

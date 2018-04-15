@@ -149,23 +149,28 @@ class UnixTerminal implements TerminalInterface
     }
 
     /**
+     * @param array $map
      * @return string
      */
-    public function getKeyedInput()
+    public function getKeyedInput(array $map = [])
     {
         // TODO: Move to class var?
         // TODO: up, down, enter etc in Abstract CONSTs
-        $map = [
-            "\033[A" => 'up',
-            "k"      => 'up',
-            ""      => 'up', // emacs ^P
-            "\033[B" => 'down',
-            "j"      => 'down',
-            ""      => 'down', //emacs ^N
-            "\n"     => 'enter',
-            "\r"     => 'enter',
-            " "      => 'enter',
-        ];
+
+        if (empty($map)) {
+            $map = [
+                "\033[A" => 'up',
+                "k"      => 'up',
+                ""      => 'up', // emacs ^P
+                "\033[B" => 'down',
+                "j"      => 'down',
+                ""      => 'down', //emacs ^N
+                "\n"     => 'enter',
+                "\r"     => 'enter',
+                " "      => 'enter',
+                "\177"   => 'backspace'
+            ];
+        }
 
         $input = fread(STDIN, 4);
         $this->clearLine();

@@ -6,13 +6,12 @@ use PhpSchool\CliMenu\CliMenuBuilder;
 use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Terminal\UnixTerminal;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class MenuStyleTest
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
-class MenuStyleTest extends PHPUnit_Framework_TestCase
+class MenuStyleTest extends TestCase
 {
     /**
      * @return MenuStyle

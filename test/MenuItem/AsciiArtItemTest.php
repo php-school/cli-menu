@@ -5,14 +5,12 @@ namespace PhpSchool\CliMenuTest\MenuItem;
 use Assert\InvalidArgumentException;
 use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
 use PhpSchool\CliMenu\MenuStyle;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class AsciiArtItemTest
- * @package PhpSchool\CliMenuTest\MenuItem
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class AsciiArtItemTest extends PHPUnit_Framework_TestCase
+class AsciiArtItemTest extends TestCase
 {
     public function testExceptionIsThrownIfBreakCharNotString()
     {
