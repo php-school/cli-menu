@@ -2,9 +2,14 @@
 
 namespace PhpSchool\CliMenu;
 
+use PhpSchool\CliMenu\Dialogue\NumberInput;
 use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\Exception\InvalidTerminalException;
 use PhpSchool\CliMenu\Exception\MenuNotOpenException;
+use PhpSchool\CliMenu\Input\InputIO;
+use PhpSchool\CliMenu\Input\Number;
+use PhpSchool\CliMenu\Input\Password;
+use PhpSchool\CliMenu\Input\Text;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
@@ -359,9 +364,7 @@ class CliMenu
 
     public function flash(string $text) : Flash
     {
-        if (strpos($text, "\n") !== false) {
-            throw new \InvalidArgumentException;
-        }
+        $this->guardSingleLine($text);
 
         $style = (new MenuStyle($this->terminal))
             ->setBg('yellow')
@@ -372,14 +375,46 @@ class CliMenu
 
     public function confirm($text) : Confirm
     {
-        if (strpos($text, "\n") !== false) {
-            throw new \InvalidArgumentException;
-        }
+        $this->guardSingleLine($text);
 
         $style = (new MenuStyle($this->terminal))
             ->setBg('yellow')
             ->setFg('red');
 
         return new Confirm($this, $style, $this->terminal, $text);
+    }
+
+    public function askNumber() : Number
+    {
+        $style = (new MenuStyle($this->terminal))
+            ->setBg('yellow')
+            ->setFg('red');
+
+        return new Number(new InputIO($this, $style, $this->terminal));
+    }
+
+    public function askText() : Text
+    {
+        $style = (new MenuStyle($this->terminal))
+            ->setBg('yellow')
+            ->setFg('red');
+
+        return new Text(new InputIO($this, $style, $this->terminal));
+    }
+
+    public function askPassword() : Password
+    {
+        $style = (new MenuStyle($this->terminal))
+            ->setBg('yellow')
+            ->setFg('red');
+
+        return new Password(new InputIO($this, $style, $this->terminal));
+    }
+
+    private function guardSingleLine($text)
+    {
+        if (strpos($text, "\n") !== false) {
+            throw new \InvalidArgumentException;
+        }
     }
 }

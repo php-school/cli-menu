@@ -144,21 +144,28 @@ class UnixTerminal implements TerminalInterface
         return $this->isTTY();
     }
 
+    /**
+     * @param array $map Provide an alternative map
+     */
     public function getKeyedInput(array $map = []) : ?string
     {
         // TODO: Move to class var?
         // TODO: up, down, enter etc in Abstract CONSTs
-        $map = [
-            "\033[A" => 'up',
-            "k"      => 'up',
-            ""      => 'up', // emacs ^P
-            "\033[B" => 'down',
-            "j"      => 'down',
-            ""      => 'down', //emacs ^N
-            "\n"     => 'enter',
-            "\r"     => 'enter',
-            " "      => 'enter',
-        ];
+
+        if (empty($map)) {
+            $map = [
+                "\033[A" => 'up',
+                "k"      => 'up',
+                ""      => 'up', // emacs ^P
+                "\033[B" => 'down',
+                "j"      => 'down',
+                ""      => 'down', //emacs ^N
+                "\n"     => 'enter',
+                "\r"     => 'enter',
+                " "      => 'enter',
+                "\177"   => 'backspace'
+            ];
+        }
 
         $input = '';
         $this->input->read(4, function ($buffer) use (&$input) {
