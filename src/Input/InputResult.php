@@ -1,0 +1,24 @@
+<?php
+
+namespace PhpSchool\CliMenu\Input;
+
+/**
+ * @author Aydin Hassan <aydin@hotmail.co.uk>
+ */
+class InputResult
+{
+    /**
+     * @var string
+     */
+    private $input;
+
+    public function __construct(string $input)
+    {
+        $this->input = $input;
+    }
+
+    public function fetch() : string
+    {
+        return $this->input;
+    }
+}
