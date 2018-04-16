@@ -2,6 +2,9 @@
 
 namespace PhpSchool\CliMenu\Terminal;
 
+use PhpSchool\CliMenu\IO\InputStream;
+use PhpSchool\CliMenu\IO\OutputStream;
+
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
@@ -38,12 +41,24 @@ class UnixTerminal implements TerminalInterface
     private $originalConfiguration;
 
     /**
+     * @var InputStream
+     */
+    private $input;
+
+    /**
+     * @var OutputStream
+     */
+    private $output;
+
+    /**
      * Initialise the terminal from resource
      *
      */
-    public function __construct()
+    public function __construct(InputStream $input, OutputStream $output)
     {
         $this->getOriginalConfiguration();
+        $this->input = $input;
+        $this->output = $output;
     }
 
     /**
@@ -129,7 +144,7 @@ class UnixTerminal implements TerminalInterface
         return $this->isTTY();
     }
 
-    public function getKeyedInput() : string
+    public function getKeyedInput(array $map = []) : ?string
     {
         // TODO: Move to class var?
         // TODO: up, down, enter etc in Abstract CONSTs
@@ -145,7 +160,11 @@ class UnixTerminal implements TerminalInterface
             " "      => 'enter',
         ];
 
-        $input = fread(STDIN, 4);
+        $input = '';
+        $this->input->read(4, function ($buffer) use (&$input) {
+            $input .= $buffer;
+        });
+
         $this->clearLine();
 
         return array_key_exists($input, $map)
@@ -158,7 +177,7 @@ class UnixTerminal implements TerminalInterface
      */
     public function clear() : void
     {
-        echo "\033[2J";
+        $this->output->write("\033[2J");
     }
 
     /**
@@ -166,7 +185,7 @@ class UnixTerminal implements TerminalInterface
      */
     public function enableCursor() : void
     {
-        echo "\033[?25h";
+        $this->output->write("\033[?25h");
     }
 
     /**
@@ -174,7 +193,7 @@ class UnixTerminal implements TerminalInterface
      */
     public function disableCursor() : void
     {
-        echo "\033[?25l";
+        $this->output->write("\033[?25l");
     }
 
     /**
@@ -184,7 +203,7 @@ class UnixTerminal implements TerminalInterface
      */
     public function moveCursorToTop() : void
     {
-        echo "\033[H";
+        $this->output->write("\033[H");
     }
 
     /**
@@ -192,7 +211,7 @@ class UnixTerminal implements TerminalInterface
      */
     public function moveCursorToRow(int $rowNumber) : void
     {
-        echo sprintf("\033[%d;0H", $rowNumber);
+        $this->output->write(sprintf("\033[%d;0H", $rowNumber));
     }
 
     /**
@@ -200,7 +219,7 @@ class UnixTerminal implements TerminalInterface
      */
     public function moveCursorToColumn(int $column) : void
     {
-        echo sprintf("\033[%dC", $column);
+        $this->output->write(sprintf("\033[%dC", $column));
     }
 
     /**
@@ -208,7 +227,7 @@ class UnixTerminal implements TerminalInterface
      */
     public function clearLine() : void
     {
-        echo sprintf("\033[%dD\033[K", $this->getWidth());
+        $this->output->write(sprintf("\033[%dD\033[K", $this->getWidth()));
     }
 
     /**
@@ -220,5 +239,10 @@ class UnixTerminal implements TerminalInterface
             $this->moveCursorToRow($rowNum);
             $this->clearLine();
         }
+    }
+
+    public function getOutput() : OutputStream
+    {
+        return $this->output;
     }
 }
