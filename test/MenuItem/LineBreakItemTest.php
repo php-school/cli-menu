@@ -5,14 +5,14 @@ namespace PhpSchool\CliMenuTest\MenuItem;
 use Assert\InvalidArgumentException;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuStyle;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class LineBreakItemTest
  * @package PhpSchool\CliMenuTest\MenuItem
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class LineBreakItemTest extends PHPUnit_Framework_TestCase
+class LineBreakItemTest extends TestCase
 {
     public function testExceptionIsThrownIfBreakCharNotString()
     {

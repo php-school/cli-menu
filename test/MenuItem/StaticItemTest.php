@@ -5,13 +5,13 @@ namespace PhpSchool\CliMenuTest\MenuItem;
 use Assert\InvalidArgumentException;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class StaticItemTest
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class StaticItemTest extends PHPUnit_Framework_TestCase
+class StaticItemTest extends TestCase
 {
     public function testExceptionIsThrownIfArgumentNotString()
     {

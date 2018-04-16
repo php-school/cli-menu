@@ -4,14 +4,14 @@ namespace PhpSchool\CliMenuTest\Action;
 
 use PhpSchool\CliMenu\Action\GoBackAction;
 use PhpSchool\CliMenu\CliMenu;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class GoBackActionTest
  * @package PhpSchool\CliMenuTest
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class GoBackActionTest extends PHPUnit_Framework_TestCase
+class GoBackActionTest extends TestCase
 {
     public function testGoBackActionClosesMenuAndOpensParentIfMenuHasAParent()
     {

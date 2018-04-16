@@ -6,12 +6,12 @@ use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Terminal\TerminalInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class ConfirmTest extends PHPUnit_Framework_TestCase
+class ConfirmTest extends TestCase
 {
     public function testConfirmWithOddLengthConfirmAndButton()
     {

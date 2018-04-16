@@ -5,14 +5,14 @@ namespace PhpSchool\CliMenuTest\MenuItem;
 use Assert\InvalidArgumentException;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuStyle;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class SelectableItemTest
  * @package PhpSchool\CliMenuTest\MenuItem
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class SelectableItemTest extends PHPUnit_Framework_TestCase
+class SelectableItemTest extends TestCase
 {
     public function testExceptionIsThrownIfBreakCharNotString()
     {

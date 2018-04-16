@@ -3,12 +3,12 @@
 namespace PhpSchool\CliMenuTest;
 
 use PhpSchool\CliMenu\Frame;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class FrameTest extends PHPUnit_Framework_TestCase
+class FrameTest extends TestCase
 {
     public function testNewLine()
     {
