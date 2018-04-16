@@ -2,48 +2,40 @@
 
 namespace PhpSchool\CliMenuTest\MenuItem;
 
-use Assert\InvalidArgumentException;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class StaticItemTest
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class StaticItemTest extends PHPUnit_Framework_TestCase
+class StaticItemTest extends TestCase
 {
-    public function testExceptionIsThrownIfArgumentNotString()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new StaticItem(new \stdClass);
-    }
-
-    public function testCanSelectIsFalse()
+    public function testCanSelectIsFalse() : void
     {
         $item = new StaticItem('Item 1');
         $this->assertFalse($item->canSelect());
     }
 
-    public function testGetSelectActionReturnsNull()
+    public function testGetSelectActionReturnsNull() : void
     {
         $item = new StaticItem('Item 1');
         $this->assertNull($item->getSelectAction());
     }
 
-    public function testShowsItemExtraReturnsFalse()
+    public function testShowsItemExtraReturnsFalse() : void
     {
         $item = new StaticItem('Item 1');
         $this->assertFalse($item->showsItemExtra());
     }
 
-    public function testGetText()
+    public function testGetText() : void
     {
         $item = new StaticItem('Item 1');
         $this->assertEquals('Item 1', $item->getText());
     }
 
-    public function testGetRowsWithContentWhichFitsOnOneLine()
+    public function testGetRowsWithContentWhichFitsOnOneLine() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
         
@@ -60,7 +52,7 @@ class StaticItemTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetRowsWithContentWhichDoesNotFitOnOneLineIsWrapped()
+    public function testGetRowsWithContentWhichDoesNotFitOnOneLineIsWrapped() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -77,7 +69,7 @@ class StaticItemTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testHideAndShowItemExtraHasNoEffect()
+    public function testHideAndShowItemExtraHasNoEffect() : void
     {
         $item = new StaticItem('CONTENT 1 LINE');
 

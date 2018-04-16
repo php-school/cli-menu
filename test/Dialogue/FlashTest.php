@@ -6,14 +6,14 @@ use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Terminal\TerminalInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class FlashTest extends PHPUnit_Framework_TestCase
+class FlashTest extends TestCase
 {
-    public function testFlashWithOddLength()
+    public function testFlashWithOddLength() : void
     {
         $terminal = $this->createMock(TerminalInterface::class);
 
@@ -47,7 +47,7 @@ class FlashTest extends PHPUnit_Framework_TestCase
         $menu->open();
     }
 
-    public function testFlashWithEvenLength()
+    public function testFlashWithEvenLength() : void
     {
         $terminal = $this->createMock(TerminalInterface::class);
 
@@ -83,9 +83,8 @@ class FlashTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider keyProvider
-     * @param string $key
      */
-    public function testFlashCanBeClosedWithAnyKey($key)
+    public function testFlashCanBeClosedWithAnyKey(string $key) : void
     {
         $terminal = $this->createMock(TerminalInterface::class);
 
@@ -116,10 +115,7 @@ class FlashTest extends PHPUnit_Framework_TestCase
         $menu->open();
     }
 
-    /**
-     * @return array
-     */
-    public function keyProvider()
+    public function keyProvider() : array
     {
         return [
             ['enter'],
@@ -129,19 +125,12 @@ class FlashTest extends PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @return string
-     */
-    private function getTestFile()
+    private function getTestFile() : string
     {
         return sprintf('%s/../res/%s.txt', __DIR__, $this->getName(false));
     }
 
-    /**
-     * @param TerminalInterface $terminal
-     * @return MenuStyle
-     */
-    private function getStyle(TerminalInterface $terminal)
+    private function getStyle(TerminalInterface $terminal) : MenuStyle
     {
         return new MenuStyle($terminal);
     }

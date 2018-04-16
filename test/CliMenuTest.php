@@ -9,14 +9,14 @@ use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Terminal\TerminalInterface;
 use PhpSchool\CliMenu\Terminal\UnixTerminal;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class CliMenuTest extends PHPUnit_Framework_TestCase
+class CliMenuTest extends TestCase
 {
-    public function testGetMenuStyle()
+    public function testGetMenuStyle() : void
     {
         $menu = new CliMenu('PHP School FTW', []);
         static::assertInstanceOf(MenuStyle::class, $menu->getStyle());
@@ -26,7 +26,7 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
         static::assertSame($style, $menu->getStyle());
     }
 
-    public function testReDrawThrowsExceptionIfMenuNotOpen()
+    public function testReDrawThrowsExceptionIfMenuNotOpen() : void
     {
         $menu = new CliMenu('PHP School FTW', []);
 
@@ -35,7 +35,7 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
         $menu->redraw();
     }
 
-    public function testSimpleOpenClose()
+    public function testSimpleOpenClose() : void
     {
         $terminal = $this->createMock(TerminalInterface::class);
 
@@ -63,7 +63,7 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
         $menu->open();
     }
 
-    public function testReDrawReDrawsImmediately()
+    public function testReDrawReDrawsImmediately() : void
     {
         $terminal = $this->createMock(TerminalInterface::class);
 
@@ -93,7 +93,7 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
         $menu->open();
     }
 
-    public function testGetItems()
+    public function testGetItems() : void
     {
         $item1 = new LineBreakItem();
         $item2 = new LineBreakItem();
@@ -115,7 +115,7 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
         static::assertSame([$item1, $item2], $menu->getItems());
     }
 
-    public function testRemoveItem()
+    public function testRemoveItem() : void
     {
         $item1 = new LineBreakItem();
         $item2 = new LineBreakItem();
@@ -141,7 +141,7 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
         static::assertContains($item2, $menu->getItems());
     }
 
-    public function testRemoveItemThrowsExceptionWhenItemDoesntExistInMenu()
+    public function testRemoveItemThrowsExceptionWhenItemDoesntExistInMenu() : void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -152,21 +152,21 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
         $menu->removeItem($item1);
     }
 
-    public function testFlashThrowsExceptionIfParameterContainsNewline()
+    public function testFlashThrowsExceptionIfParameterContainsNewline() : void
     {
         $this->expectException(\InvalidArgumentException::class);
         $menu = new CliMenu('PHP School FTW', []);
         $menu->flash("Foo\nBar");
     }
 
-    public function testConfirmThrowsExceptionIfParameterContainsNewline()
+    public function testConfirmThrowsExceptionIfParameterContainsNewline() : void
     {
         $this->expectException(\InvalidArgumentException::class);
         $menu = new CliMenu('PHP School FTW', []);
         $menu->confirm("Foo\nBar");
     }
 
-    public function testThrowsExceptionIfTerminalIsNotValidTTY()
+    public function testThrowsExceptionIfTerminalIsNotValidTTY() : void
     {
         $this->expectException(\PhpSchool\CliMenu\Exception\InvalidTerminalException::class);
 
@@ -180,13 +180,13 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
         $menu->open();
     }
 
-    public function testGetTerminal()
+    public function testGetTerminal() : void
     {
         $menu = new CliMenu('PHP School FTW', []);
         static::assertInstanceOf(UnixTerminal::class, $menu->getTerminal());
     }
 
-    public function testAddItem()
+    public function testAddItem() : void
     {
         $menu = new CliMenu('PHP School FTW', []);
 
@@ -201,19 +201,12 @@ class CliMenuTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $menu->getItems());
     }
 
-    /**
-     * @return string
-     */
-    private function getTestFile()
+    private function getTestFile() : string
     {
         return sprintf('%s/res/%s.txt', __DIR__, $this->getName());
     }
 
-    /**
-     * @param TerminalInterface $terminal
-     * @return MenuStyle
-     */
-    private function getStyle(TerminalInterface $terminal)
+    private function getStyle(TerminalInterface $terminal) : MenuStyle
     {
         return new MenuStyle($terminal);
     }

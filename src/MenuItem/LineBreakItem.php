@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PhpSchool\CliMenu\MenuStyle;
 
 /**
- * Class LineBreakItem
- *
- * @package PhpSchool\CliMenu\MenuItem
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class LineBreakItem implements MenuItemInterface
@@ -23,29 +20,16 @@ class LineBreakItem implements MenuItemInterface
      */
     private $lines;
 
-    /**
-     * Initialise text item
-     *
-     * @param string $breakChar
-     * @param int    $lines
-     */
-    public function __construct($breakChar = ' ', $lines = 1)
+    public function __construct(string $breakChar = ' ', int $lines = 1)
     {
-        Assertion::string($breakChar);
-        Assertion::integer($lines);
-        
         $this->breakChar = $breakChar;
         $this->lines     = $lines;
     }
 
     /**
      * The output text for the item
-     *
-     * @param MenuStyle $style
-     * @param bool $selected
-     * @return array
      */
-    public function getRows(MenuStyle $style, $selected = false)
+    public function getRows(MenuStyle $style, bool $selected = false) : array
     {
         return explode(
             "\n",
@@ -58,58 +42,48 @@ class LineBreakItem implements MenuItemInterface
 
     /**
      * Can the item be selected
-     *
-     * @return bool
      */
-    public function canSelect()
+    public function canSelect() : bool
     {
         return false;
     }
 
     /**
      * Execute the items callable if required
-     *
-     * @return callable|void
      */
-    public function getSelectAction()
+    public function getSelectAction() : ?callable
     {
-        return;
+        return null;
     }
 
     /**
      * Return the raw string of text
-     *
-     * @return string
      */
-    public function getText()
+    public function getText() : string
     {
         return $this->breakChar;
     }
 
     /**
      * Whether or not the menu item is showing the menustyle extra value
-     *
-     * @return bool
      */
-    public function showsItemExtra()
+    public function showsItemExtra() : bool
     {
         return false;
     }
 
     /**
      * Enable showing item extra
-     *
      */
-    public function showItemExtra()
+    public function showItemExtra() : void
     {
         //noop
     }
 
     /**
      * Disable showing item extra
-     *
      */
-    public function hideItemExtra()
+    public function hideItemExtra() : void
     {
         //noop
     }

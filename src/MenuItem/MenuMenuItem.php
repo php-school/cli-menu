@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PhpSchool\CliMenu\CliMenu;
 
 /**
- * Class MenuMenuItem
- *
- * @package PhpSchool\CliMenu\MenuItem
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class MenuMenuItem implements MenuItemInterface
@@ -20,15 +17,8 @@ class MenuMenuItem implements MenuItemInterface
      */
     private $subMenu;
 
-    /**
-     * @param string $text
-     * @param CliMenu $subMenu
-     * @param bool $disabled
-     */
-    public function __construct($text, CliMenu $subMenu, $disabled = false)
+    public function __construct(string $text, CliMenu $subMenu, bool $disabled = false)
     {
-        Assertion::string($text);
-        
         $this->text     = $text;
         $this->subMenu  = $subMenu;
         $this->disabled = $disabled;
@@ -36,29 +26,24 @@ class MenuMenuItem implements MenuItemInterface
 
     /**
      * Execute the items callable if required
-     *
-     * @return callable
      */
-    public function getSelectAction()
+    public function getSelectAction() : ?callable
     {
         return [$this, 'showSubMenu'];
     }
 
     /**
      * Return the raw string of text
-     *
-     * @return string
      */
-    public function getText()
+    public function getText() : string
     {
         return $this->text;
     }
 
     /**
      * Display the sub menu
-     * @param CliMenu $parentMenu
      */
-    public function showSubMenu(CliMenu $parentMenu)
+    public function showSubMenu(CliMenu $parentMenu) : void
     {
         $parentMenu->closeThis();
         $this->subMenu->open();

@@ -10,10 +10,8 @@ class Confirm extends Dialogue
 
     /**
      * Display confirmation with a button with the given text
-     *
-     * @param string $confirmText
      */
-    public function display($confirmText = 'OK')
+    public function display(string $confirmText = 'OK') : void
     {
         $this->assertMenuOpen();
 

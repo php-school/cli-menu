@@ -5,19 +5,17 @@ namespace PhpSchool\CliMenuTest;
 use PhpSchool\CliMenu\CliMenuBuilder;
 use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Terminal\TerminalInterface;
 use PhpSchool\CliMenu\Terminal\UnixTerminal;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class MenuStyleTest
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
-class MenuStyleTest extends PHPUnit_Framework_TestCase
+class MenuStyleTest extends TestCase
 {
-    /**
-     * @return MenuStyle
-     */
-    private function getMenuStyle()
+    private function getMenuStyle() : MenuStyle
     {
         // Use the CliMenuBuilder & reflection to get the style Obj
         $builder = new CliMenuBuilder();
@@ -39,7 +37,7 @@ class MenuStyleTest extends PHPUnit_Framework_TestCase
         return $style;
     }
 
-    private function getMockTerminal()
+    private function getMockTerminal() : MockObject
     {
         $terminal = $this
             ->getMockBuilder(UnixTerminal::class)
@@ -55,7 +53,7 @@ class MenuStyleTest extends PHPUnit_Framework_TestCase
         return $terminal;
     }
 
-    public function testMenuStyleCanBeInstantiatedByCliMenuBuilder()
+    public function testMenuStyleCanBeInstantiatedByCliMenuBuilder() : void
     {
         $builder = new CliMenuBuilder();
         $menu    = $builder->build();
@@ -70,7 +68,7 @@ class MenuStyleTest extends PHPUnit_Framework_TestCase
         static::assertSame(MenuStyle::class, get_class($style));
     }
 
-    public function testAvailableColours()
+    public function testAvailableColours() : void
     {
         static::assertSame([
             'black',
@@ -85,27 +83,27 @@ class MenuStyleTest extends PHPUnit_Framework_TestCase
         ], MenuStyle::getAvailableColours());
     }
 
-    public function testGetSelectedSetCode()
+    public function testGetSelectedSetCode() : void
     {
         static::assertSame("\e[47;34m", $this->getMenuStyle()->getSelectedSetCode());
     }
 
-    public function testGetSelectedUnsetCode()
+    public function testGetSelectedUnsetCode() : void
     {
         static::assertSame("\e[49;39m", $this->getMenuStyle()->getSelectedUnsetCode());
     }
 
-    public function testGetUnselectedSetCode()
+    public function testGetUnselectedSetCode() : void
     {
         static::assertSame("\e[44;37m", $this->getMenuStyle()->getUnselectedSetCode());
     }
 
-    public function testGetUnselectedUnsetCode()
+    public function testGetUnselectedUnsetCode() : void
     {
         static::assertSame("\e[49;39m", $this->getMenuStyle()->getUnselectedUnsetCode());
     }
 
-    public function testGetterAndSetters()
+    public function testGetterAndSetters() : void
     {
         $style = $this->getMenuStyle();
 
@@ -143,7 +141,7 @@ class MenuStyleTest extends PHPUnit_Framework_TestCase
         static::assertSame(10, $style->getPadding());
     }
 
-    public function testGetMarkerReturnsTheCorrectMarkers()
+    public function testGetMarkerReturnsTheCorrectMarkers() : void
     {
         $style = $this->getMenuStyle();
 
@@ -154,7 +152,7 @@ class MenuStyleTest extends PHPUnit_Framework_TestCase
         static::assertSame('x', $style->getMarker(false));
     }
 
-    public function testWidthCalculation()
+    public function testWidthCalculation() : void
     {
         $style = $this->getMenuStyle();
 
@@ -165,7 +163,7 @@ class MenuStyleTest extends PHPUnit_Framework_TestCase
         static::assertSame(280, $style->getContentWidth());
     }
 
-    public function testRightHandPaddingCalculation()
+    public function testRightHandPaddingCalculation() : void
     {
         $style = $this->getMenuStyle();
 

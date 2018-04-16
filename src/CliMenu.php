@@ -15,9 +15,6 @@ use PhpSchool\CliMenu\Terminal\TerminalInterface;
 use PhpSchool\CliMenu\Util\StringUtil as s;
 
 /**
- * Class CliMenu
- *
- * @package PhpSchool\CliMenu
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class CliMenu
@@ -33,7 +30,7 @@ class CliMenu
     protected $style;
 
     /**
-     * @var string
+     * @var ?string
      */
     protected $title;
 
@@ -58,20 +55,12 @@ class CliMenu
     protected $parent;
 
     /**
-     * @var Frame|null
+     * @var Frame
      */
     private $currentFrame;
 
-    /**
-     * @param string $title
-     * @param array $items
-     * @param TerminalInterface|null $terminal
-     * @param MenuStyle|null $style
-     *
-     * @throws InvalidTerminalException
-     */
     public function __construct(
-        $title,
+        ?string $title,
         array $items,
         TerminalInterface $terminal = null,
         MenuStyle $style = null
@@ -89,7 +78,7 @@ class CliMenu
      *
      * @throws InvalidTerminalException
      */
-    protected function configureTerminal()
+    protected function configureTerminal() : void
     {
         $this->assertTerminalIsValidTTY();
 
@@ -103,7 +92,7 @@ class CliMenu
      *
      * @throws InvalidTerminalException
      */
-    protected function tearDownTerminal()
+    protected function tearDownTerminal() : void
     {
         $this->assertTerminalIsValidTTY();
 
@@ -111,7 +100,7 @@ class CliMenu
         $this->terminal->enableCursor();
     }
 
-    private function assertTerminalIsValidTTY()
+    private function assertTerminalIsValidTTY() : void
     {
         if (!$this->terminal->isTTY()) {
             throw new InvalidTerminalException(
@@ -120,44 +109,30 @@ class CliMenu
         }
     }
 
-    /**
-     * @param CliMenu $parent
-     */
-    public function setParent(CliMenu $parent)
+    public function setParent(CliMenu $parent) : void
     {
         $this->parent = $parent;
     }
 
-    /**
-     * @return CliMenu|null
-     */
-    public function getParent()
+    public function getParent() : ?CliMenu
     {
         return $this->parent;
     }
 
-    /**
-     * @return TerminalInterface
-     */
-    public function getTerminal()
+    public function getTerminal() : TerminalInterface
     {
         return $this->terminal;
     }
 
-    /**
-     * @return bool
-     */
-    public function isOpen()
+    public function isOpen() : bool
     {
         return $this->open;
     }
 
     /**
-     * Add a new Item to the listing
-     *
-     * @param MenuItemInterface $item
+     * Add a new Item to the menu
      */
-    public function addItem(MenuItemInterface $item)
+    public function addItem(MenuItemInterface $item) : void
     {
         $this->items[] = $item;
         
@@ -169,7 +144,7 @@ class CliMenu
     /**
      * Set the selected pointer to the first selectable item
      */
-    private function selectFirstItem()
+    private function selectFirstItem() : void
     {
         foreach ($this->items as $key => $item) {
             if ($item->canSelect()) {
@@ -182,7 +157,7 @@ class CliMenu
     /**
      * Display menu and capture input
      */
-    private function display()
+    private function display() : void
     {
         $this->draw();
 
@@ -202,10 +177,8 @@ class CliMenu
 
     /**
      * Move the selection in a given direction, up / down
-     *
-     * @param $direction
      */
-    protected function moveSelection($direction)
+    protected function moveSelection(string $direction) : void
     {
         do {
             $itemKeys = array_keys($this->items);
@@ -224,10 +197,7 @@ class CliMenu
         } while (!$this->getSelectedItem()->canSelect());
     }
 
-    /**
-     * @return MenuItemInterface
-     */
-    public function getSelectedItem()
+    public function getSelectedItem() : MenuItemInterface
     {
         return $this->items[$this->selectedItem];
     }
@@ -235,7 +205,7 @@ class CliMenu
     /**
      * Execute the current item
      */
-    protected function executeCurrentItem()
+    protected function executeCurrentItem() : void
     {
         $item = $this->getSelectedItem();
 
@@ -248,7 +218,7 @@ class CliMenu
     /**
      * Redraw the menu
      */
-    public function redraw()
+    public function redraw() : void
     {
         if (!$this->isOpen()) {
             throw new MenuNotOpenException;
@@ -260,7 +230,7 @@ class CliMenu
     /**
      * Draw the menu to STDOUT
      */
-    protected function draw()
+    protected function draw() : void
     {
         $this->terminal->clean();
         $this->terminal->moveCursorToTop();
@@ -269,7 +239,7 @@ class CliMenu
 
         $frame->newLine(2);
 
-        if (is_string($this->title)) {
+        if ($this->title) {
             $frame->addRows($this->drawMenuItem(new LineBreakItem()));
             $frame->addRows($this->drawMenuItem(new StaticItem($this->title)));
             $frame->addRows($this->drawMenuItem(new LineBreakItem($this->style->getTitleSeparator())));
@@ -292,12 +262,8 @@ class CliMenu
 
     /**
      * Draw a menu item
-     *
-     * @param MenuItemInterface $item
-     * @param bool|false $selected
-     * @return array
      */
-    protected function drawMenuItem(MenuItemInterface $item, $selected = false)
+    protected function drawMenuItem(MenuItemInterface $item, bool $selected = false) : array
     {
         $rows = $item->getRows($this->style, $selected);
 
@@ -326,7 +292,7 @@ class CliMenu
     /**
      * @throws InvalidTerminalException
      */
-    public function open()
+    public function open() : void
     {
         if ($this->isOpen()) {
             return;
@@ -342,7 +308,7 @@ class CliMenu
      *
      * @throws InvalidTerminalException
      */
-    public function close()
+    public function close() : void
     {
         $menu = $this;
 
@@ -354,10 +320,7 @@ class CliMenu
         $this->tearDownTerminal();
     }
 
-    /**
-     * @throws InvalidTerminalException
-     */
-    public function closeThis()
+    public function closeThis() : void
     {
         $this->terminal->clean();
         $this->terminal->moveCursorToTop();
@@ -367,17 +330,14 @@ class CliMenu
     /**
      * @return MenuItemInterface[]
      */
-    public function getItems()
+    public function getItems() : array
     {
         return $this->items;
     }
 
-    /**
-     * @param MenuItemInterface $item
-     */
-    public function removeItem(MenuItemInterface $item)
+    public function removeItem(MenuItemInterface $item) : void
     {
-        $key = array_search($item, $this->items);
+        $key = array_search($item, $this->items, true);
 
         if (false === $key) {
             throw new \InvalidArgumentException('Item does not exist in menu');
@@ -387,24 +347,17 @@ class CliMenu
         $this->items = array_values($this->items);
     }
 
-    /**
-     * @return MenuStyle
-     */
-    public function getStyle()
+    public function getStyle() : MenuStyle
     {
         return $this->style;
     }
 
-    public function getCurrentFrame()
+    public function getCurrentFrame() : Frame
     {
         return $this->currentFrame;
     }
 
-    /**
-     * @param string $text
-     * @return Flash
-     */
-    public function flash($text)
+    public function flash(string $text) : Flash
     {
         if (strpos($text, "\n") !== false) {
             throw new \InvalidArgumentException;
@@ -417,11 +370,7 @@ class CliMenu
         return new Flash($this, $style, $this->terminal, $text);
     }
 
-    /**
-     * @param string $text
-     * @return Confirm
-     */
-    public function confirm($text)
+    public function confirm($text) : Confirm
     {
         if (strpos($text, "\n") !== false) {
             throw new \InvalidArgumentException;

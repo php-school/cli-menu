@@ -3,16 +3,14 @@
 namespace PhpSchool\CliMenuTest\Exception;
 
 use PhpSchool\CliMenu\Exception\InvalidTerminalException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class InvalidTerminalExceptionTest
- * @package PhpSchool\CliMenuTest\Exception
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class InvalidTerminalExceptionTest extends PHPUnit_Framework_TestCase
+class InvalidTerminalExceptionTest extends TestCase
 {
-    public function testException()
+    public function testException() : void
     {
         $e = new InvalidTerminalException('error');
         $this->assertEquals('error', $e->getMessage());

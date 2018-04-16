@@ -10,17 +10,15 @@ use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Terminal\TerminalInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * Class CliMenuBuilderTest
- * @package PhpSchool\CliMenuTest
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
+class CliMenuBuilderTest extends TestCase
 {
-    public function testDefaultItems()
+    public function testDefaultItems() : void
     {
         $builder = new CliMenuBuilder;
         $menu = $builder->build();
@@ -35,7 +33,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->checkItems($menu, $expected);
     }
 
-    public function testModifyExitButtonText()
+    public function testModifyExitButtonText() : void
     {
         $builder = new CliMenuBuilder;
         $builder->setExitButtonText('RELEASE ME');
@@ -51,7 +49,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->checkItems($menu, $expected);
     }
 
-    public function testModifyStyles()
+    public function testModifyStyles() : void
     {
         $builder = new CliMenuBuilder;
         $builder->setBackgroundColour('red');
@@ -85,7 +83,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->checkStyleVariable($menu, 'titleSeparator', '-');
     }
 
-    public function testDisableDefaultItems()
+    public function testDisableDefaultItems() : void
     {
         $builder = new CliMenuBuilder;
         $builder->disableDefaultItems();
@@ -95,7 +93,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->checkVariable($menu, 'items', []);
     }
 
-    public function testSetTitle()
+    public function testSetTitle() : void
     {
         $builder = new CliMenuBuilder;
         $builder->setTitle('title');
@@ -105,7 +103,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->checkVariable($menu, 'title', 'title');
     }
 
-    public function testAddItem()
+    public function testAddItem() : void
     {
         $callable = function () {
         };
@@ -130,7 +128,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->checkItems($menu, $expected);
     }
 
-    public function testAddMultipleItems()
+    public function testAddMultipleItems() : void
     {
         $callable = function () {
         };
@@ -157,7 +155,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->checkItems($menu, $expected);
     }
 
-    public function testAddStaticItem()
+    public function testAddStaticItem() : void
     {
 
         $builder = new CliMenuBuilder;
@@ -175,7 +173,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->checkItems($menu, $expected);
     }
 
-    public function testAddLineBreakItem()
+    public function testAddLineBreakItem() : void
     {
         $builder = new CliMenuBuilder;
         $builder->disableDefaultItems();
@@ -193,7 +191,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->checkItems($menu, $expected);
     }
 
-    public function testAddLineBreakItemWithNumLines()
+    public function testAddLineBreakItemWithNumLines() : void
     {
         $builder = new CliMenuBuilder;
         $builder->disableDefaultItems();
@@ -211,7 +209,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->checkItems($menu, $expected);
     }
 
-    public function testAsciiArtWithDefaultPosition()
+    public function testAsciiArtWithDefaultPosition() : void
     {
         $builder = new CliMenuBuilder;
         $builder->disableDefaultItems();
@@ -229,7 +227,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->checkItems($menu, $expected);
     }
 
-    public function testAsciiArtWithSpecificPosition()
+    public function testAsciiArtWithSpecificPosition() : void
     {
         $builder = new CliMenuBuilder;
         $builder->disableDefaultItems();
@@ -247,7 +245,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->checkItems($menu, $expected);
     }
 
-    public function testAddAsciiArtDetectsArtThatDoesNotFitAndSkipsIt()
+    public function testAddAsciiArtDetectsArtThatDoesNotFitAndSkipsIt() : void
     {
         $builder = new CliMenuBuilder;
         $builder->setWidth(1);
@@ -259,19 +257,17 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testEndThrowsExceptionIfNoParentBuilder()
+    public function testEndThrowsExceptionIfNoParentBuilder() : void
     {
         $builder = new CliMenuBuilder;
 
-        $this->setExpectedException(
-            RuntimeException::class,
-            'No parent builder to return to'
-        );
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('No parent builder to return to');
         
         $builder->end();
     }
 
-    public function testAddSubMenu()
+    public function testAddSubMenu() : void
     {
         $builder = new CliMenuBuilder;
         $builder->disableDefaultItems();
@@ -290,7 +286,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertSame($builder, $subMenuBuilder->end());
     }
 
-    public function testSubMenuInheritsParentsStyle()
+    public function testSubMenuInheritsParentsStyle() : void
     {
         $builder = new CliMenuBuilder;
         $menu = $builder->setBackgroundColour('green')
@@ -303,7 +299,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertSame('green', $builder->getSubMenu('sub-menu')->getStyle()->getBg());
     }
 
-    public function testSubMenuDoesNotInheritsParentsStyleWhenSubMenuStyleHasAlterations()
+    public function testSubMenuDoesNotInheritsParentsStyleWhenSubMenuStyleHasAlterations() : void
     {
         $builder = new CliMenuBuilder;
         $menu = $builder->setBackgroundColour('green')
@@ -318,22 +314,20 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertSame('green', $menu->getStyle()->getBg());
     }
 
-    public function testGetSubMenuThrowsExceptionIfNotBuiltYet()
+    public function testGetSubMenuThrowsExceptionIfNotBuiltYet() : void
     {
         $builder = (new CliMenuBuilder)
             ->disableDefaultItems()
             ->addSubMenu('sub-menu')
                 ->end();
         
-        $this->setExpectedException(
-            RuntimeException::class,
-            'Menu: "sub-menu" cannot be retrieved until menu has been built'
-        );
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Menu: "sub-menu" cannot be retrieved until menu has been built');
         
         $builder->getSubMenu('sub-menu');
     }
 
-    public function testGetSubMenuReturnsInstanceOfBuiltSubMenu()
+    public function testGetSubMenuReturnsInstanceOfBuiltSubMenu() : void
     {
         $builder = (new CliMenuBuilder)
             ->disableDefaultItems()
@@ -348,7 +342,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertNotSame($subMenu, $menu);
     }
 
-    public function testSubMenuDefaultItems()
+    public function testSubMenuDefaultItems() : void
     {
         $builder = (new CliMenuBuilder)
             ->disableDefaultItems()
@@ -372,7 +366,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->checkItems($subMenu, $expected);
     }
 
-    public function testModifyExitAndGoBackTextOnSubMenu()
+    public function testModifyExitAndGoBackTextOnSubMenu() : void
     {
         $builder = (new CliMenuBuilder)
             ->disableDefaultItems()
@@ -398,7 +392,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->checkItems($subMenu, $expected);
     }
 
-    public function testDisableDefaultItemsDisablesExitAndGoBackOnSubMenu()
+    public function testDisableDefaultItemsDisablesExitAndGoBackOnSubMenu() : void
     {
         $builder = (new CliMenuBuilder)
             ->disableDefaultItems()
@@ -412,7 +406,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         $this->checkVariable($subMenu, 'items', []);
     }
 
-    public function testThrowsExceptionWhenDisablingRootMenu()
+    public function testThrowsExceptionWhenDisablingRootMenu() : void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('You can\'t disable the root menu');
@@ -420,11 +414,7 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         (new CliMenuBuilder)->disableMenu();
     }
     
-    /**
-     * @param CliMenu $menu
-     * @param array $expected
-     */
-    private function checkItems(CliMenu $menu, array $expected)
+    private function checkItems(CliMenu $menu, array $expected) : void
     {
         $actualItems = $this->readAttribute($menu, 'items');
         $this->assertCount(count($expected), $actualItems);
@@ -441,23 +431,13 @@ class CliMenuBuilderTest extends PHPUnit_Framework_TestCase
         }
     }
     
-    /**
-     * @param CliMenu $menu
-     * @param string $property
-     * @param mixed $expected
-     */
-    private function checkVariable(CliMenu $menu, $property, $expected)
+    private function checkVariable(CliMenu $menu, string $property, $expected) : void
     {
         $actual = $this->readAttribute($menu, $property);
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @param CliMenu $menu
-     * @param $property
-     * @param mixed $expected
-     */
-    private function checkStyleVariable(CliMenu $menu, $property, $expected)
+    private function checkStyleVariable(CliMenu $menu, string $property, $expected) : void
     {
         $style = $this->readAttribute($menu, 'style');
         $this->assertEquals($this->readAttribute($style, $property), $expected);

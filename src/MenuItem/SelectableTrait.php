@@ -6,9 +6,6 @@ use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
 
 /**
- * Class SelectableTrait
- *
- * @package PhpSchool\CliMenu\MenuItem
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 trait SelectableTrait
@@ -30,12 +27,8 @@ trait SelectableTrait
 
     /**
      * The output text for the item
-     *
-     * @param MenuStyle $style
-     * @param bool $selected
-     * @return array
      */
-    public function getRows(MenuStyle $style, $selected = false)
+    public function getRows(MenuStyle $style, bool $selected = false) : array
     {
         $marker = sprintf("%s ", $style->getMarker($selected));
 
@@ -52,7 +45,7 @@ trait SelectableTrait
             )
         );
 
-        return array_map(function ($row, $key) use ($style, $marker, $length) {
+        return array_map(function ($row, $key) use ($style, $length) {
             $text = $this->disabled ? $style->getDisabledItemText($row) : $row;
 
             if ($key === 0) {
@@ -67,36 +60,29 @@ trait SelectableTrait
 
     /**
      * Can the item be selected
-     *
-     * @return bool
      */
-    public function canSelect()
+    public function canSelect() : bool
     {
         return !$this->disabled;
     }
 
-    /**
-     * @return bool
-     */
-    public function showsItemExtra()
+    public function showsItemExtra() : bool
     {
         return $this->showItemExtra;
     }
 
     /**
      * Enable showing item extra
-     *
      */
-    public function showItemExtra()
+    public function showItemExtra() : void
     {
         $this->showItemExtra = true;
     }
 
     /**
      * Disable showing item extra
-     *
      */
-    public function hideItemExtra()
+    public function hideItemExtra() : void
     {
         $this->showItemExtra = false;
     }

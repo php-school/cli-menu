@@ -9,9 +9,6 @@ use PhpSchool\CliMenu\Terminal\TerminalInterface;
 //TODO: B/W fallback
 
 /**
- * Class MenuStyle
- *
- * @package PhpSchool\CliMenu
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class MenuStyle
@@ -94,10 +91,7 @@ class MenuStyle
         'titleSeparator' => '=',
     ];
 
-    /**
-     * @return array
-     */
-    public static function getDefaultStyleValues()
+    public static function getDefaultStyleValues() : array
     {
         return static::$defaultStyleValues;
     }
@@ -146,8 +140,6 @@ class MenuStyle
 
     /**
      * Initialise style
-     *
-     * @param TerminalInterface $terminal
      */
     public function __construct(TerminalInterface $terminal = null)
     {
@@ -165,19 +157,12 @@ class MenuStyle
         $this->setTitleSeparator(static::$defaultStyleValues['titleSeparator']);
     }
 
-    /**
-     * @return array
-     */
-    public static function getAvailableColours()
+    public static function getAvailableColours() : array
     {
         return array_keys(self::$availableBackgroundColors);
     }
 
-    /**
-     * @param string $text
-     * @return string
-     */
-    public function getDisabledItemText($text)
+    public function getDisabledItemText(string $text) : string
     {
         return sprintf(
             "\033[%sm%s\033[%sm",
@@ -189,10 +174,8 @@ class MenuStyle
     
     /**
      * Get the colour code set for Bg and Fg
-     *
-     * @return string
      */
-    public function getSelectedSetCode()
+    public function getSelectedSetCode() : string
     {
         return sprintf(
             "\033[%sm",
@@ -205,10 +188,8 @@ class MenuStyle
 
     /**
      * Get the colour unset code for Bg and Fg
-     *
-     * @return string
      */
-    public function getSelectedUnsetCode()
+    public function getSelectedUnsetCode() : string
     {
         return sprintf(
             "\033[%sm",
@@ -221,10 +202,8 @@ class MenuStyle
 
     /**
      * Get the inverted colour code
-     *
-     * @return string
      */
-    public function getUnselectedSetCode()
+    public function getUnselectedSetCode() : string
     {
         return sprintf(
             "\033[%sm",
@@ -237,10 +216,8 @@ class MenuStyle
 
     /**
      * Get the inverted colour unset code
-     *
-     * @return string
      */
-    public function getUnselectedUnsetCode()
+    public function getUnselectedUnsetCode() : string
     {
         return sprintf(
             "\033[%sm",
@@ -254,62 +231,41 @@ class MenuStyle
     /**
      * Calculate the contents width
      */
-    protected function calculateContentWidth()
+    protected function calculateContentWidth() : void
     {
         $this->contentWidth = $this->width - ($this->padding*2) - ($this->margin*2);
     }
 
-    /**
-     * @return string
-     */
-    public function getFg()
+    public function getFg() : string
     {
         return $this->fg;
     }
 
-    /**
-     * @param string $fg
-     * @return MenuStyle
-     */
-    public function setFg($fg)
+    public function setFg(string $fg) : self
     {
         $this->fg = $fg;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getBg()
+    public function getBg() : string
     {
         return $this->bg;
     }
 
-    /**
-     * @param string $bg
-     * @return MenuStyle
-     */
-    public function setBg($bg)
+    public function setBg(string $bg) : self
     {
         $this->bg = $bg;
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getWidth()
+    public function getWidth() : int
     {
         return $this->width;
     }
 
-    /**
-     * @param int $width
-     * @return MenuStyle
-     */
-    public function setWidth($width)
+    public function setWidth(int $width) : self
     {
         $availableWidth = $this->terminal->getWidth() - ($this->margin * 2) - ($this->padding * 2);
 
@@ -323,19 +279,12 @@ class MenuStyle
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getPadding()
+    public function getPadding() : int
     {
         return $this->padding;
     }
 
-    /**
-     * @param int $padding
-     * @return MenuStyle
-     */
-    public function setPadding($padding)
+    public function setPadding(int $padding) : self
     {
         $this->padding = $padding;
 
@@ -344,19 +293,12 @@ class MenuStyle
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getMargin()
+    public function getMargin() : int
     {
         return $this->margin;
     }
 
-    /**
-     * @param int $margin
-     * @return MenuStyle
-     */
-    public function setMargin($margin)
+    public function setMargin(int $margin) : self
     {
         $this->margin = $margin;
 
@@ -365,57 +307,37 @@ class MenuStyle
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getContentWidth()
+    public function getContentWidth() : int
     {
         return $this->contentWidth;
     }
 
     /**
      * Get padding for right had side of content
-     *
-     * @param $contentLength
-     * @return int
      */
-    public function getRightHandPadding($contentLength)
+    public function getRightHandPadding(int $contentLength) : int
     {
         return $this->getContentWidth() - $contentLength + $this->getPadding();
     }
 
-    /**
-     * @return string
-     */
-    public function getSelectedMarker()
+    public function getSelectedMarker() : string
     {
         return $this->selectedMarker;
     }
 
-    /**
-     * @param string $marker
-     * @return $this
-     */
-    public function setSelectedMarker($marker)
+    public function setSelectedMarker(string $marker) : self
     {
         $this->selectedMarker = mb_substr($marker, 0, 1);
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getUnselectedMarker()
+    public function getUnselectedMarker() : string
     {
         return $this->unselectedMarker;
     }
 
-    /**
-     * @param string $marker
-     * @return $this
-     */
-    public function setUnselectedMarker($marker)
+    public function setUnselectedMarker(string $marker) : self
     {
         $this->unselectedMarker = mb_substr($marker, 0, 1);
 
@@ -424,66 +346,42 @@ class MenuStyle
 
     /**
      * Get the correct marker for the item
-     *
-     * @param bool $selected
-     * @return string
      */
-    public function getMarker($selected)
+    public function getMarker(bool $selected) : string
     {
         return $selected ? $this->selectedMarker : $this->unselectedMarker;
     }
 
-    /**
-     * @param string $itemExtra
-     * @return $this
-     */
-    public function setItemExtra($itemExtra)
+    public function setItemExtra(string $itemExtra) : self
     {
         $this->itemExtra = $itemExtra;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getItemExtra()
+    public function getItemExtra() : string
     {
         return $this->itemExtra;
     }
 
-    /**
-     * @return bool
-     */
-    public function getDisplaysExtra()
+    public function getDisplaysExtra() : bool
     {
         return $this->displaysExtra;
     }
 
-    /**
-     * @param bool $displaysExtra
-     * @return $this
-     */
-    public function setDisplaysExtra($displaysExtra)
+    public function setDisplaysExtra(bool $displaysExtra) : self
     {
         $this->displaysExtra = $displaysExtra;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitleSeparator()
+    public function getTitleSeparator() : string
     {
         return $this->titleSeparator;
     }
 
-    /**
-     * @param string $actionSeparator
-     * @return $this
-     */
-    public function setTitleSeparator($actionSeparator)
+    public function setTitleSeparator(string $actionSeparator) : self
     {
         $this->titleSeparator = $actionSeparator;
 

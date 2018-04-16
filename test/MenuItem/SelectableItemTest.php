@@ -2,33 +2,23 @@
 
 namespace PhpSchool\CliMenuTest\MenuItem;
 
-use Assert\InvalidArgumentException;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuStyle;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class SelectableItemTest
- * @package PhpSchool\CliMenuTest\MenuItem
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class SelectableItemTest extends PHPUnit_Framework_TestCase
+class SelectableItemTest extends TestCase
 {
-    public function testExceptionIsThrownIfBreakCharNotString()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new SelectableItem(new \stdClass, function () {
-        });
-    }
-
-    public function testCanSelectIsTrue()
+    public function testCanSelectIsTrue() : void
     {
         $item = new SelectableItem('Item', function () {
         });
         $this->assertTrue($item->canSelect());
     }
 
-    public function testGetSelectAction()
+    public function testGetSelectAction() : void
     {
         $callable = function () {
         };
@@ -36,7 +26,7 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
         $this->assertSame($callable, $item->getSelectAction());
     }
 
-    public function testShowsItemExtra()
+    public function testShowsItemExtra() : void
     {
         $item = new SelectableItem('Item', function () {
         });
@@ -47,14 +37,14 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($item->showsItemExtra());
     }
 
-    public function testGetText()
+    public function testGetText() : void
     {
         $item = new SelectableItem('Item', function () {
         });
         $this->assertEquals('Item', $item->getText());
     }
 
-    public function testGetRows()
+    public function testGetRows() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -70,7 +60,7 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([' Item'], $item->getRows($menuStyle, true));
     }
 
-    public function testGetRowsWithUnSelectedMarker()
+    public function testGetRowsWithUnSelectedMarker() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -91,7 +81,7 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(['* Item'], $item->getRows($menuStyle, false));
     }
 
-    public function testGetRowsWithSelectedMarker()
+    public function testGetRowsWithSelectedMarker() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -111,7 +101,7 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(['= Item'], $item->getRows($menuStyle, true));
     }
 
-    public function testGetRowsWithItemExtra()
+    public function testGetRowsWithItemExtra() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -130,7 +120,7 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([' Item       [EXTRA]'], $item->getRows($menuStyle));
     }
 
-    public function testGetRowsWithMultipleLinesWithItemExtra()
+    public function testGetRowsWithMultipleLinesWithItemExtra() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -155,7 +145,7 @@ class SelectableItemTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testHideAndShowItemExtra()
+    public function testHideAndShowItemExtra() : void
     {
         $item = new SelectableItem('Item', function () {
         });
