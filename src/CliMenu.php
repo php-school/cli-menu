@@ -30,7 +30,7 @@ class CliMenu
     protected $style;
 
     /**
-     * @var string
+     * @var ?string
      */
     protected $title;
 
@@ -55,12 +55,12 @@ class CliMenu
     protected $parent;
 
     /**
-     * @var Frame|null
+     * @var Frame
      */
     private $currentFrame;
 
     public function __construct(
-        string $title,
+        ?string $title,
         array $items,
         TerminalInterface $terminal = null,
         MenuStyle $style = null
@@ -239,9 +239,11 @@ class CliMenu
 
         $frame->newLine(2);
 
-        $frame->addRows($this->drawMenuItem(new LineBreakItem()));
-        $frame->addRows($this->drawMenuItem(new StaticItem($this->title)));
-        $frame->addRows($this->drawMenuItem(new LineBreakItem($this->style->getTitleSeparator())));
+        if ($this->title) {
+            $frame->addRows($this->drawMenuItem(new LineBreakItem()));
+            $frame->addRows($this->drawMenuItem(new StaticItem($this->title)));
+            $frame->addRows($this->drawMenuItem(new LineBreakItem($this->style->getTitleSeparator())));
+        }
 
         array_map(function ($item, $index) use ($frame) {
             $frame->addRows($this->drawMenuItem($item, $index === $this->selectedItem));

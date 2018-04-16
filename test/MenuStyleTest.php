@@ -7,6 +7,7 @@ use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Terminal\TerminalInterface;
 use PhpSchool\CliMenu\Terminal\UnixTerminal;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,7 +37,7 @@ class MenuStyleTest extends TestCase
         return $style;
     }
 
-    private function getMockTerminal() : TerminalInterface
+    private function getMockTerminal() : MockObject
     {
         $terminal = $this
             ->getMockBuilder(UnixTerminal::class)

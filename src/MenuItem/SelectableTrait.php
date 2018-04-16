@@ -45,7 +45,7 @@ trait SelectableTrait
             )
         );
 
-        return array_map(function ($row, $key) use ($style, $marker, $length) {
+        return array_map(function ($row, $key) use ($style, $length) {
             $text = $this->disabled ? $style->getDisabledItemText($row) : $row;
 
             if ($key === 0) {

@@ -64,7 +64,7 @@ class CliMenuBuilder
     /**
      * @var string
      */
-    private $menuTitle;
+    private $menuTitle = null;
 
     /**
      * @var bool
@@ -373,7 +373,7 @@ class CliMenuBuilder
         $this->style['displaysExtra'] = $this->itemsHaveExtra($menuItems);
 
         $menu = new CliMenu(
-            $this->menuTitle ?: false,
+            $this->menuTitle,
             $menuItems,
             $this->terminal,
             $this->getMenuStyle()
