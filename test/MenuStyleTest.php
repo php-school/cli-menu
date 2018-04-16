@@ -9,7 +9,6 @@ use PhpSchool\CliMenu\Terminal\UnixTerminal;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class MenuStyleTest
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class MenuStyleTest extends TestCase

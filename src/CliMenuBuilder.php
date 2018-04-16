@@ -16,9 +16,6 @@ use Assert\Assertion;
 use RuntimeException;
 
 /**
- * Class CliMenuBuilder
- *
- * @package PhpSchool\CliMenu
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  * @author Aydin Hassan <aydin@hotmail.com>
  */

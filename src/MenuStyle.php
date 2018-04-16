@@ -9,9 +9,6 @@ use PhpSchool\CliMenu\Terminal\TerminalInterface;
 //TODO: B/W fallback
 
 /**
- * Class MenuStyle
- *
- * @package PhpSchool\CliMenu
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class MenuStyle

@@ -6,8 +6,6 @@ use PhpSchool\CliMenu\Exception\InvalidTerminalException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class InvalidTerminalExceptionTest
- * @package PhpSchool\CliMenuTest\Exception
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
 class InvalidTerminalExceptionTest extends TestCase

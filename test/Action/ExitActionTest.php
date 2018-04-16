@@ -7,8 +7,6 @@ use PhpSchool\CliMenu\CliMenu;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class ExitActionTest
- * @package PhpSchool\CliMenuTest
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
 class ExitActionTest extends TestCase

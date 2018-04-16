@@ -6,8 +6,6 @@ use PhpSchool\CliMenu\Util\StringUtil;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class StringUtilTest
- * @package PhpSchool\CliMenuTest\MenuItem
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
 class StringUtilTest extends TestCase

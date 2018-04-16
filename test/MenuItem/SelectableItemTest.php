@@ -8,8 +8,6 @@ use PhpSchool\CliMenu\MenuStyle;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class SelectableItemTest
- * @package PhpSchool\CliMenuTest\MenuItem
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
 class SelectableItemTest extends TestCase

@@ -8,8 +8,6 @@ use PhpSchool\CliMenu\MenuStyle;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class AsciiArtItemTest
- * @package PhpSchool\CliMenuTest\MenuItem
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
 class AsciiArtItemTest extends TestCase

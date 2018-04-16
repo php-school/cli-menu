@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PhpSchool\CliMenu\CliMenu;
 
 /**
- * Class MenuMenuItem
- *
- * @package PhpSchool\CliMenu\MenuItem
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class MenuMenuItem implements MenuItemInterface

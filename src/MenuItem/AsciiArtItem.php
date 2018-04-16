@@ -6,9 +6,6 @@ use Assert\Assertion;
 use PhpSchool\CliMenu\MenuStyle;
 
 /**
- * Class AsciiArtItem
- *
- * @package PhpSchool\CliMenu\MenuItem
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class AsciiArtItem implements MenuItemInterface

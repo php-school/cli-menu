@@ -8,7 +8,6 @@ use PhpSchool\CliMenu\MenuStyle;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class StaticItemTest
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
 class StaticItemTest extends TestCase

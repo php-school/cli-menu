@@ -14,8 +14,6 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * Class CliMenuBuilderTest
- * @package PhpSchool\CliMenuTest
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
 class CliMenuBuilderTest extends TestCase

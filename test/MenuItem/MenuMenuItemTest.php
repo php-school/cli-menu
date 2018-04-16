@@ -9,8 +9,6 @@ use PhpSchool\CliMenu\MenuStyle;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class MenuMenuItemTest
- * @package PhpSchool\CliMenuTest\MenuItem
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
 class MenuMenuItemTest extends TestCase

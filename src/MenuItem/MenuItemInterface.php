@@ -5,9 +5,6 @@ namespace PhpSchool\CliMenu\MenuItem;
 use PhpSchool\CliMenu\MenuStyle;
 
 /**
- * Interface MenuItemInterface
- *
- * @package PhpSchool\CliMenu\MenuItem
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 interface MenuItemInterface

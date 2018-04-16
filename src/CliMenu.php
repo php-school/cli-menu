@@ -15,9 +15,6 @@ use PhpSchool\CliMenu\Terminal\TerminalInterface;
 use PhpSchool\CliMenu\Util\StringUtil as s;
 
 /**
- * Class CliMenu
- *
- * @package PhpSchool\CliMenu
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class CliMenu
