@@ -11,7 +11,7 @@ class Flash extends Dialogue
      * Flash a message on top of the menu which
      * disappears on any keystroke.
      */
-    public function display()
+    public function display() : void
     {
         $this->assertMenuOpen();
 

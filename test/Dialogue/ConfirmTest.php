@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfirmTest extends TestCase
 {
-    public function testConfirmWithOddLengthConfirmAndButton()
+    public function testConfirmWithOddLengthConfirmAndButton() : void
     {
         $terminal = $this->createMock(TerminalInterface::class);
 
@@ -47,7 +47,7 @@ class ConfirmTest extends TestCase
         $menu->open();
     }
 
-    public function testConfirmWithEvenLengthConfirmAndButton()
+    public function testConfirmWithEvenLengthConfirmAndButton() : void
     {
         $terminal = $this->createMock(TerminalInterface::class);
 
@@ -81,7 +81,7 @@ class ConfirmTest extends TestCase
         $menu->open();
     }
 
-    public function testConfirmWithEvenLengthConfirmAndOddLengthButton()
+    public function testConfirmWithEvenLengthConfirmAndOddLengthButton() : void
     {
         $terminal = $this->createMock(TerminalInterface::class);
 
@@ -115,7 +115,7 @@ class ConfirmTest extends TestCase
         $menu->open();
     }
 
-    public function testConfirmWithOddLengthConfirmAndEvenLengthButton()
+    public function testConfirmWithOddLengthConfirmAndEvenLengthButton() : void
     {
         $terminal = $this->createMock(TerminalInterface::class);
 
@@ -149,7 +149,7 @@ class ConfirmTest extends TestCase
         $menu->open();
     }
 
-    public function testConfirmCanOnlyBeClosedWithEnter()
+    public function testConfirmCanOnlyBeClosedWithEnter() : void
     {
         $terminal = $this->createMock(TerminalInterface::class);
 
@@ -185,19 +185,12 @@ class ConfirmTest extends TestCase
         $menu->open();
     }
 
-    /**
-     * @return string
-     */
-    private function getTestFile()
+    private function getTestFile() : string
     {
         return sprintf('%s/../res/%s.txt', __DIR__, $this->getName());
     }
 
-    /**
-     * @param TerminalInterface $terminal
-     * @return MenuStyle
-     */
-    private function getStyle(TerminalInterface $terminal)
+    private function getStyle(TerminalInterface $terminal) : MenuStyle
     {
         return new MenuStyle($terminal);
     }

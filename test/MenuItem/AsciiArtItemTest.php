@@ -2,7 +2,6 @@
 
 namespace PhpSchool\CliMenuTest\MenuItem;
 
-use Assert\InvalidArgumentException;
 use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PHPUnit\Framework\TestCase;
@@ -12,49 +11,37 @@ use PHPUnit\Framework\TestCase;
  */
 class AsciiArtItemTest extends TestCase
 {
-    public function testExceptionIsThrownIfBreakCharNotString()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new AsciiArtItem(new \stdClass);
-    }
-
-    public function testExceptionIsThrownIfPositionNotValid()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new AsciiArtItem('////\\\\', new \stdClass);
-    }
-
-    public function testCanSelectIsFalse()
+    public function testCanSelectIsFalse() : void
     {
         $item = new AsciiArtItem('////\\\\');
         $this->assertFalse($item->canSelect());
     }
 
-    public function testGetSelectActionReturnsNull()
+    public function testGetSelectActionReturnsNull() : void
     {
         $item = new AsciiArtItem('////\\\\');
         $this->assertNull($item->getSelectAction());
     }
 
-    public function testShowsItemExtraReturnsFalse()
+    public function testShowsItemExtraReturnsFalse() : void
     {
         $item = new AsciiArtItem('////\\\\');
         $this->assertFalse($item->showsItemExtra());
     }
 
-    public function testGetText()
+    public function testGetText() : void
     {
         $item = new AsciiArtItem('////\\\\');
         $this->assertEquals('////\\\\', $item->getText());
     }
 
-    public function testGetArtLength()
+    public function testGetArtLength() : void
     {
         $item = new AsciiArtItem("//\n//\n///");
         $this->assertEquals(3, $item->getArtLength());
     }
 
-    public function testGetRowsLeftAligned()
+    public function testGetRowsLeftAligned() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -73,7 +60,7 @@ class AsciiArtItemTest extends TestCase
         );
     }
 
-    public function testGetRowsRightAligned()
+    public function testGetRowsRightAligned() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -92,7 +79,7 @@ class AsciiArtItemTest extends TestCase
         );
     }
 
-    public function testGetRowsCenterAligned()
+    public function testGetRowsCenterAligned() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -111,7 +98,7 @@ class AsciiArtItemTest extends TestCase
         );
     }
 
-    public function testGetRowsCenterAlignedWithOddWidth()
+    public function testGetRowsCenterAlignedWithOddWidth() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -130,7 +117,7 @@ class AsciiArtItemTest extends TestCase
         );
     }
 
-    public function testHideAndShowItemExtraHasNoEffect()
+    public function testHideAndShowItemExtraHasNoEffect() : void
     {
         $item = new AsciiArtItem("//\n//", AsciiArtItem::POSITION_CENTER);
 

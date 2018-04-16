@@ -2,7 +2,6 @@
 
 namespace PhpSchool\CliMenuTest\MenuItem;
 
-use Assert\InvalidArgumentException;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuStyle;
@@ -13,15 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 class MenuMenuItemTest extends TestCase
 {
-    public function testExceptionIsThrownIfBreakCharNotString()
-    {
-        $subMenu = $this->createMock(CliMenu::class);
-        
-        $this->expectException(InvalidArgumentException::class);
-        new MenuMenuItem(new \stdClass, $subMenu);
-    }
-
-    public function testCanSelectIsTrue()
+    public function testCanSelectIsTrue() : void
     {
         $subMenu = $this->createMock(CliMenu::class);
 
@@ -29,7 +20,7 @@ class MenuMenuItemTest extends TestCase
         $this->assertTrue($item->canSelect());
     }
 
-    public function testGetSelectAction()
+    public function testGetSelectAction() : void
     {
         $subMenu = $this->createMock(CliMenu::class);
 
@@ -42,7 +33,7 @@ class MenuMenuItemTest extends TestCase
         $this->assertSame('showSubMenu', $action[1]);
     }
 
-    public function testShowsItemExtra()
+    public function testShowsItemExtra() : void
     {
         $subMenu = $this->createMock(CliMenu::class);
 
@@ -50,7 +41,7 @@ class MenuMenuItemTest extends TestCase
         $this->assertFalse($item->showsItemExtra());
     }
 
-    public function testGetText()
+    public function testGetText() : void
     {
         $subMenu = $this->createMock(CliMenu::class);
 
@@ -58,7 +49,7 @@ class MenuMenuItemTest extends TestCase
         $this->assertEquals('Item', $item->getText());
     }
 
-    public function testGetRows()
+    public function testGetRows() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -73,7 +64,7 @@ class MenuMenuItemTest extends TestCase
         $this->assertEquals([' Item'], $item->getRows($menuStyle));
     }
 
-    public function testGetRowsWithUnSelectedMarker()
+    public function testGetRowsWithUnSelectedMarker() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -95,7 +86,7 @@ class MenuMenuItemTest extends TestCase
         $this->assertEquals(['* Item'], $item->getRows($menuStyle, false));
     }
 
-    public function testGetRowsWithSelectedMarker()
+    public function testGetRowsWithSelectedMarker() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -119,7 +110,7 @@ class MenuMenuItemTest extends TestCase
     }
 
 
-    public function testGetRowsWithMultipleLines()
+    public function testGetRowsWithMultipleLines() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -140,7 +131,7 @@ class MenuMenuItemTest extends TestCase
         );
     }
 
-    public function testShowSubMenu()
+    public function testShowSubMenu() : void
     {
         $mainMenu = $this->createMock(CliMenu::class);
         $subMenu = $this->createMock(CliMenu::class);
@@ -157,7 +148,7 @@ class MenuMenuItemTest extends TestCase
         $item->showSubMenu($mainMenu);
     }
 
-    public function testHideAndShowItemExtra()
+    public function testHideAndShowItemExtra() : void
     {
         $subMenu = $this->createMock(CliMenu::class);
         $item = new MenuMenuItem('Item', $subMenu);

@@ -42,13 +42,7 @@ abstract class Dialogue
      */
     protected $y;
 
-    /**
-     * @param CliMenu $parentMenu
-     * @param MenuStyle $menuStyle
-     * @param TerminalInterface $terminal
-     * @param string $text
-     */
-    public function __construct(CliMenu $parentMenu, MenuStyle $menuStyle, TerminalInterface $terminal, $text)
+    public function __construct(CliMenu $parentMenu, MenuStyle $menuStyle, TerminalInterface $terminal, string $text)
     {
         $this->style        = $menuStyle;
         $this->terminal     = $terminal;
@@ -61,7 +55,7 @@ abstract class Dialogue
     /**
      * @throws MenuNotOpenException
      */
-    protected function assertMenuOpen()
+    protected function assertMenuOpen() : void
     {
         if (!$this->parentMenu->isOpen()) {
             throw new MenuNotOpenException;
@@ -71,7 +65,7 @@ abstract class Dialogue
     /**
      * Calculate the co-ordinates to write the messages
      */
-    protected function calculateCoordinates()
+    protected function calculateCoordinates() : void
     {
         //y
         $textLines          = count(explode("\n", $this->text)) + 2;
@@ -87,7 +81,7 @@ abstract class Dialogue
     /**
      * Write an empty row
      */
-    protected function emptyRow()
+    protected function emptyRow() : void
     {
         $this->write(
             sprintf(
@@ -103,20 +97,14 @@ abstract class Dialogue
 
     /**
      * Write some text at a particular column
-     *
-     * @param int $column
-     * @param string $text
      */
-    protected function write($text, $column = null)
+    protected function write(string $text, int $column = null) : void
     {
         $this->terminal->moveCursorToColumn($column ?: $this->x);
         echo $text;
     }
 
-    /**
-     * @return MenuStyle
-     */
-    public function getStyle()
+    public function getStyle() : MenuStyle
     {
         return $this->style;
     }

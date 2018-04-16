@@ -12,7 +12,7 @@ class StringUtilTest extends TestCase
 {
     protected $dummyText;
 
-    public function testItWrapsAsExpectedTo80Length()
+    public function testItWrapsAsExpectedTo80Length() : void
     {
 
         $result = StringUtil::wordwrap($this->dummyText, 80);
@@ -26,7 +26,7 @@ class StringUtilTest extends TestCase
         $this->assertEquals($result, $expected);
     }
 
-    public function testItWrapsAsExpectedTo60Length()
+    public function testItWrapsAsExpectedTo60Length() : void
     {
 
         $result = StringUtil::wordwrap($this->dummyText, 60);
@@ -42,7 +42,7 @@ class StringUtilTest extends TestCase
         $this->assertEquals($result, $expected);
     }
 
-    public function testItCanUseACustomBreakCharacter()
+    public function testItCanUseACustomBreakCharacter() : void
     {
 
         $result = StringUtil::wordwrap($this->dummyText, 60, 'H');
@@ -58,7 +58,7 @@ class StringUtilTest extends TestCase
         $this->assertEquals($result, $expected);
     }
 
-    public function testItCanStripAnsiEscapeSequence()
+    public function testItCanStripAnsiEscapeSequence() : void
     {
         $result = StringUtil::stripAnsiEscapeSequence("\x1b[7mfoo\x1b[0m");
         $this->assertEquals('foo', $result);
@@ -70,9 +70,9 @@ class StringUtilTest extends TestCase
         $this->assertEquals('foobarbaz!!!', $result);
     }
 
-    protected function setup()
+    protected function setup() : void
     {
-        parent::setup();
+        parent::setUp();
 
         $this->dummyText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ' .
             'incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud ' .

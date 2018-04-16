@@ -32,13 +32,8 @@ class AsciiArtItem implements MenuItemInterface
      */
     private $artLength;
 
-    /**
-     * @param string $text
-     * @param string $position
-     */
-    public function __construct($text, $position = self::POSITION_CENTER)
+    public function __construct(string $text, string $position = self::POSITION_CENTER)
     {
-        Assertion::string($text);
         Assertion::inArray($position, [self::POSITION_CENTER, self::POSITION_RIGHT, self::POSITION_LEFT]);
         
         $this->text      = $text;
@@ -48,12 +43,8 @@ class AsciiArtItem implements MenuItemInterface
 
     /**
      * The output text for the item
-     *
-     * @param MenuStyle $style
-     * @param bool $selected
-     * @return array
      */
-    public function getRows(MenuStyle $style, $selected = false)
+    public function getRows(MenuStyle $style, bool $selected = false) : array
     {
         return array_map(function ($row) use ($style) {
             $length = mb_strlen($row);
@@ -85,68 +76,56 @@ class AsciiArtItem implements MenuItemInterface
 
     /**
      * Can the item be selected
-     *
-     * @return bool
      */
-    public function canSelect()
+    public function canSelect() : bool
     {
         return false;
     }
 
     /**
      * Execute the items callable if required
-     *
-     * @return void
      */
-    public function getSelectAction()
+    public function getSelectAction() : ?callable
     {
-        return;
+        return null;
     }
 
     /**
      * Return the raw string of text
-     *
-     * @return string
      */
-    public function getText()
+    public function getText() : string
     {
         return $this->text;
     }
 
     /**
      * Return the length of the art
-     *
-     * @return int
      */
-    public function getArtLength()
+    public function getArtLength() : int
     {
         return $this->artLength;
     }
 
     /**
      * Whether or not the menu item is showing the menustyle extra value
-     *
-     * @return bool
      */
-    public function showsItemExtra()
+    public function showsItemExtra() : bool
     {
         return false;
     }
 
     /**
      * Enable showing item extra
-     *
      */
-    public function showItemExtra()
+    public function showItemExtra() : void
     {
         //noop
     }
 
     /**
      * Disable showing item extra
-     *
      */
-    public function hideItemExtra()
+    public function hideItemExtra() : void
     {
         //noop
     }

@@ -9,10 +9,7 @@ use PhpSchool\CliMenu\CliMenu;
  */
 class GoBackAction
 {
-    /**
-     * @param CliMenu $menu
-     */
-    public function __invoke(CliMenu $menu)
+    public function __invoke(CliMenu $menu) : void
     {
         if ($parent = $menu->getParent()) {
             $menu->close();

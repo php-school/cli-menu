@@ -9,107 +9,81 @@ interface TerminalInterface
 {
     /**
      * Get terminal details
-     *
-     * @return string
      */
-    public function getDetails();
+    public function getDetails() : string ;
 
     /**
      * Get the available width of the terminal
-     *
-     * @return int
      */
-    public function getWidth();
+    public function getWidth() : int;
 
     /**
      * Get the available height of the terminal
-     *
-     * @return int
      */
-    public function getHeight();
+    public function getHeight() : int;
 
     /**
      * Toggle canonical mode on TTY
-     *
-     * @param bool $useCanonicalMode
      */
-    public function setCanonicalMode($useCanonicalMode = true);
+    public function setCanonicalMode(bool $useCanonicalMode = true) : void;
 
     /**
      * Check if TTY is in canonical mode
-     *
-     * @return bool
      */
-    public function isCanonical();
+    public function isCanonical() : bool;
 
     /**
      * Test whether terminal is valid TTY
-     *
-     * @return bool
      */
-    public function isTTY();
+    public function isTTY() : bool;
 
     /**
      * Test whether terminal supports colour output
-     *
-     * @return bool
      */
-    public function supportsColour();
+    public function supportsColour() : bool;
 
     /**
      * Clear the terminal window
-     *
-     * @return void
      */
-    public function clear();
+    public function clear() : void;
 
     /**
      * Clear the current cursors line
-     *
-     * @return void
      */
-    public function clearLine();
+    public function clearLine() : void;
 
     /**
      * Move the cursor to the top left of the window
-     *
-     * @return void
      */
-    public function moveCursorToTop();
+    public function moveCursorToTop() : void;
 
     /**
      * Move the cursor to the start of a specific row
-     *
-     * @param int $rowNumber
      */
-    public function moveCursorToRow($rowNumber);
+    public function moveCursorToRow(int $rowNumber) : void;
 
     /**
      * Move the cursor to a specific column
-     *
-     * @param int $columnNumber
      */
-    public function moveCursorToColumn($columnNumber);
+    public function moveCursorToColumn(int $columnNumber) : void;
 
     /**
      * Clean the whole console without jumping the window
-     *
-     * @return void
      */
-    public function clean();
+    public function clean() : void;
 
     /**
      * Enable cursor display
      */
-    public function enableCursor();
+    public function enableCursor() : void;
 
     /**
      * Disable cursor display
      */
-    public function disableCursor();
+    public function disableCursor() : void;
 
     /**
      * @return string
      */
-    public function getKeyedInput();
+    public function getKeyedInput() : string;
 }

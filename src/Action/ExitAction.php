@@ -9,10 +9,7 @@ use PhpSchool\CliMenu\CliMenu;
  */
 class ExitAction
 {
-    /**
-     * @param CliMenu $menu
-     */
-    public function __invoke(CliMenu $menu)
+    public function __invoke(CliMenu $menu) : void
     {
         $menu->close();
     }

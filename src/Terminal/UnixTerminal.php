@@ -3,9 +3,6 @@
 namespace PhpSchool\CliMenu\Terminal;
 
 /**
- * Class UnixTerminal
- *
- * @package PhpSchool\CliMenu\Terminal
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
 class UnixTerminal implements TerminalInterface
@@ -51,30 +48,24 @@ class UnixTerminal implements TerminalInterface
 
     /**
      * Get the available width of the terminal
-     *
-     * @return int
      */
-    public function getWidth()
+    public function getWidth() : int
     {
         return $this->width ?: $this->width = (int) exec('tput cols');
     }
 
     /**
      * Get the available height of the terminal
-     *
-     * @return int
      */
-    public function getHeight()
+    public function getHeight() : int
     {
         return $this->height ?: $this->height = (int) exec('tput lines');
     }
 
     /**
      * Get terminal details
-     *
-     * @return string
      */
-    public function getDetails()
+    public function getDetails() : string
     {
         if (!$this->details) {
             $this->details = function_exists('posix_ttyname')
@@ -87,20 +78,16 @@ class UnixTerminal implements TerminalInterface
 
     /**
      * Get the original terminal configuration / mode
-     *
-     * @return string
      */
-    private function getOriginalConfiguration()
+    private function getOriginalConfiguration() : string
     {
         return $this->originalConfiguration ?: $this->originalConfiguration = exec('stty -g');
     }
 
     /**
      * Toggle canonical mode on TTY
-     *
-     * @param bool $useCanonicalMode
      */
-    public function setCanonicalMode($useCanonicalMode = true)
+    public function setCanonicalMode(bool $useCanonicalMode = true) : void
     {
         if ($useCanonicalMode) {
             exec('stty -icanon');
@@ -114,20 +101,16 @@ class UnixTerminal implements TerminalInterface
     /**
      * Check if TTY is in canonical mode
      * Assumes the terminal was never in canonical mode
-     *
-     * @return bool
      */
-    public function isCanonical()
+    public function isCanonical() : bool
     {
         return $this->isCanonical;
     }
 
     /**
      * Test whether terminal is valid TTY
-     *
-     * @return bool
      */
-    public function isTTY()
+    public function isTTY() : bool
     {
         return $this->isTTY ?: $this->isTTY = function_exists('posix_isatty') && @posix_isatty(STDOUT);
     }
@@ -135,11 +118,9 @@ class UnixTerminal implements TerminalInterface
     /**
      * Test whether terminal supports colour output
      *
-     * @return bool
-     *
      * @link https://github.com/symfony/Console/blob/master/Output/StreamOutput.php#L95-L102
      */
-    public function supportsColour()
+    public function supportsColour() : bool
     {
         if (DIRECTORY_SEPARATOR === '\\') {
             return false !== getenv('ANSICON') || 'ON' === getenv('ConEmuANSI') || 'xterm' === getenv('TERM');
@@ -148,10 +129,7 @@ class UnixTerminal implements TerminalInterface
         return $this->isTTY();
     }
 
-    /**
-     * @return string
-     */
-    public function getKeyedInput()
+    public function getKeyedInput() : string
     {
         // TODO: Move to class var?
         // TODO: up, down, enter etc in Abstract CONSTs
@@ -178,7 +156,7 @@ class UnixTerminal implements TerminalInterface
     /**
      * Clear the terminal window
      */
-    public function clear()
+    public function clear() : void
     {
         echo "\033[2J";
     }
@@ -186,7 +164,7 @@ class UnixTerminal implements TerminalInterface
     /**
      * Enable cursor
      */
-    public function enableCursor()
+    public function enableCursor() : void
     {
         echo "\033[?25h";
     }
@@ -194,7 +172,7 @@ class UnixTerminal implements TerminalInterface
     /**
      * Disable cursor
      */
-    public function disableCursor()
+    public function disableCursor() : void
     {
         echo "\033[?25l";
     }
@@ -204,37 +182,31 @@ class UnixTerminal implements TerminalInterface
      *
      * @return void
      */
-    public function moveCursorToTop()
+    public function moveCursorToTop() : void
     {
         echo "\033[H";
     }
 
     /**
      * Move the cursor to the start of a specific row
-     *
-     * @param int $rowNumber
      */
-    public function moveCursorToRow($rowNumber)
+    public function moveCursorToRow(int $rowNumber) : void
     {
         echo sprintf("\033[%d;0H", $rowNumber);
     }
 
     /**
      * Move the cursor to the start of a specific column
-     *
-     * @param int $column
      */
-    public function moveCursorToColumn($column)
+    public function moveCursorToColumn(int $column) : void
     {
         echo sprintf("\033[%dC", $column);
     }
 
     /**
      * Clear the current cursors line
-     *
-     * @return void
      */
-    public function clearLine()
+    public function clearLine() : void
     {
         echo sprintf("\033[%dD\033[K", $this->getWidth());
     }
@@ -242,7 +214,7 @@ class UnixTerminal implements TerminalInterface
     /**
      * Clean the whole console without jumping the window
      */
-    public function clean()
+    public function clean() : void
     {
         foreach (range(0, $this->getHeight()) as $rowNum) {
             $this->moveCursorToRow($rowNum);

@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FrameTest extends TestCase
 {
-    public function testNewLine()
+    public function testNewLine() : void
     {
         $frame = new Frame;
         $frame->newLine();
@@ -28,7 +28,7 @@ class FrameTest extends TestCase
         $this->assertEquals(["\n", "\n"], $frame->getRows());
     }
 
-    public function testAddRows()
+    public function testAddRows() : void
     {
         $frame = new Frame;
         $frame->addRows(['one', 'two']);
@@ -37,7 +37,7 @@ class FrameTest extends TestCase
         $this->assertEquals(['one', 'two', 'three'], $frame->getRows());
     }
 
-    public function testAddRow()
+    public function testAddRow() : void
     {
         $frame = new Frame;
         $frame->addRow('one');
@@ -46,7 +46,7 @@ class FrameTest extends TestCase
         $this->assertEquals(['one', 'two'], $frame->getRows());
     }
 
-    public function testCount()
+    public function testCount() : void
     {
         $frame = new Frame;
         $frame->addRow('one');
@@ -57,7 +57,7 @@ class FrameTest extends TestCase
         $this->assertCount(2, $frame);
     }
 
-    public function testAll()
+    public function testAll() : void
     {
         $frame = new Frame;
         $frame->addRow('one');

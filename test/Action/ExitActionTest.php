@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ExitActionTest extends TestCase
 {
-    public function testExitActionClosesMenu()
+    public function testExitActionClosesMenu() : void
     {
         $menu = $this->getMockBuilder(CliMenu::class)
             ->disableOriginalConstructor()

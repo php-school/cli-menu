@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FlashTest extends TestCase
 {
-    public function testFlashWithOddLength()
+    public function testFlashWithOddLength() : void
     {
         $terminal = $this->createMock(TerminalInterface::class);
 
@@ -47,7 +47,7 @@ class FlashTest extends TestCase
         $menu->open();
     }
 
-    public function testFlashWithEvenLength()
+    public function testFlashWithEvenLength() : void
     {
         $terminal = $this->createMock(TerminalInterface::class);
 
@@ -83,9 +83,8 @@ class FlashTest extends TestCase
 
     /**
      * @dataProvider keyProvider
-     * @param string $key
      */
-    public function testFlashCanBeClosedWithAnyKey($key)
+    public function testFlashCanBeClosedWithAnyKey(string $key) : void
     {
         $terminal = $this->createMock(TerminalInterface::class);
 
@@ -116,10 +115,7 @@ class FlashTest extends TestCase
         $menu->open();
     }
 
-    /**
-     * @return array
-     */
-    public function keyProvider()
+    public function keyProvider() : array
     {
         return [
             ['enter'],
@@ -129,19 +125,12 @@ class FlashTest extends TestCase
         ];
     }
 
-    /**
-     * @return string
-     */
-    private function getTestFile()
+    private function getTestFile() : string
     {
         return sprintf('%s/../res/%s.txt', __DIR__, $this->getName(false));
     }
 
-    /**
-     * @param TerminalInterface $terminal
-     * @return MenuStyle
-     */
-    private function getStyle(TerminalInterface $terminal)
+    private function getStyle(TerminalInterface $terminal) : MenuStyle
     {
         return new MenuStyle($terminal);
     }

@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  */
 class MenuNotOpenExceptionTest extends TestCase
 {
-    public function testException()
+    public function testException() : void
     {
         $e = new MenuNotOpenException('error');
         $this->assertEquals('error', $e->getMessage());

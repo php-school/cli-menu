@@ -76,9 +76,6 @@ class CliMenuBuilder
      */
     private $disabled = false;
 
-    /**
-     * @param CliMenuBuilder|null $parent
-     */
     public function __construct(CliMenuBuilder $parent = null)
     {
         $this->parent   = $parent;
@@ -86,51 +83,32 @@ class CliMenuBuilder
         $this->style    = MenuStyle::getDefaultStyleValues();
     }
 
-    /**
-     * @param string $title
-     * @return $this
-     */
-    public function setTitle($title)
+    public function setTitle(string $title) : self
     {
-        Assertion::string($title);
-
         $this->menuTitle = $title;
 
         return $this;
     }
 
-    /**
-     * @param MenuItemInterface $item
-     * @return $this
-     */
-    public function addMenuItem(MenuItemInterface $item)
+    public function addMenuItem(MenuItemInterface $item) : self
     {
         $this->menuItems[] = $item;
 
         return $this;
     }
 
-    /**
-     * @param string $text
-     * @param callable $itemCallable
-     * @param bool $showItemExtra
-     * @param bool $disabled
-     * @return $this
-     */
-    public function addItem($text, callable $itemCallable, $showItemExtra = false, $disabled = false)
-    {
-        Assertion::string($text);
-
+    public function addItem(
+        string $text,
+        callable $itemCallable,
+        bool $showItemExtra = false,
+        bool $disabled = false
+    ) : self {
         $this->addMenuItem(new SelectableItem($text, $itemCallable, $showItemExtra, $disabled));
 
         return $this;
     }
 
-    /**
-     * @param array $items
-     * @return $this
-     */
-    public function addItems(array $items)
+    public function addItems(array $items) : self
     {
         foreach ($items as $item) {
             $this->addItem(...$item);
@@ -139,44 +117,22 @@ class CliMenuBuilder
         return $this;
     }
 
-    /**
-     * @param string $text
-     * @return $this
-     */
-    public function addStaticItem($text)
+    public function addStaticItem(string $text) : self
     {
-        Assertion::string($text);
-
         $this->addMenuItem(new StaticItem($text));
 
         return $this;
     }
 
-    /**
-     * @param string $breakChar
-     * @param int $lines
-     * @return $this
-     */
-    public function addLineBreak($breakChar = ' ', $lines = 1)
+    public function addLineBreak(string $breakChar = ' ', int $lines = 1) : self
     {
-        Assertion::string($breakChar);
-        Assertion::integer($lines);
-
         $this->addMenuItem(new LineBreakItem($breakChar, $lines));
 
         return $this;
     }
 
-    /**
-     * @param string $art
-     * @param string $position
-     * @return $this
-     */
-    public function addAsciiArt($art, $position = AsciiArtItem::POSITION_CENTER)
+    public function addAsciiArt(string $art, string $position = AsciiArtItem::POSITION_CENTER) : self
     {
-        Assertion::string($art);
-        Assertion::string($position);
-
         $asciiArtItem = new AsciiArtItem($art, $position);
 
         if ($asciiArtItem->getArtLength() <= $this->getMenuStyle()->getContentWidth()) {
@@ -187,13 +143,10 @@ class CliMenuBuilder
     }
 
     /**
-     * @param string $id ID to reference and retrieve sub-menu
-     * @return CliMenuBuilder
+     * Add a submenu with a string identifier
      */
-    public function addSubMenu($id)
+    public function addSubMenu(string $id) : CliMenuBuilder
     {
-        Assertion::string($id);
-
         $this->menuItems[]   = $id;
         $this->subMenus[$id] = new static($this);
 
@@ -202,10 +155,10 @@ class CliMenuBuilder
 
     /**
      * Disable a submenu
+     *
      * @throws \InvalidArgumentException
-     * @return $this
      */
-    public function disableMenu()
+    public function disableMenu() : self
     {
         if (!$this->parent) {
             throw new \InvalidArgumentException(
@@ -218,41 +171,26 @@ class CliMenuBuilder
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isMenuDisabled()
+    public function isMenuDisabled() : bool
     {
         return $this->disabled;
     }
 
-    /**
-     * @param string $goBackButtonTest
-     * @return $this
-     */
-    public function setGoBackButtonText($goBackButtonTest)
+    public function setGoBackButtonText(string $goBackButtonTest) : self
     {
         $this->goBackButtonText = $goBackButtonTest;
         
         return $this;
     }
 
-    /**
-     * @param string $exitButtonText
-     * @return $this
-     */
-    public function setExitButtonText($exitButtonText)
+    public function setExitButtonText(string $exitButtonText) : self
     {
         $this->exitButtonText = $exitButtonText;
         
         return $this;
     }
 
-    /**
-     * @param string $colour
-     * @return $this
-     */
-    public function setBackgroundColour($colour)
+    public function setBackgroundColour(string $colour) : self
     {
         Assertion::inArray($colour, MenuStyle::getAvailableColours());
 
@@ -261,11 +199,7 @@ class CliMenuBuilder
         return $this;
     }
 
-    /**
-     * @param string $colour
-     * @return $this
-     */
-    public function setForegroundColour($colour)
+    public function setForegroundColour(string $colour) : self
     {
         Assertion::inArray($colour, MenuStyle::getAvailableColours());
 
@@ -274,111 +208,62 @@ class CliMenuBuilder
         return $this;
     }
 
-    /**
-     * @param int $width
-     * @return $this
-     */
-    public function setWidth($width)
+    public function setWidth(int $width) : self
     {
-        Assertion::integer($width);
-
         $this->style['width'] = $width;
 
         return $this;
     }
 
-    /**
-     * @param int $padding
-     * @return $this
-     */
-    public function setPadding($padding)
+    public function setPadding(int $padding) : self
     {
-        Assertion::integer($padding);
-
         $this->style['padding'] = $padding;
 
         return $this;
     }
 
-    /**
-     * @param int $margin
-     * @return $this
-     */
-    public function setMargin($margin)
+    public function setMargin(int $margin) : self
     {
-        Assertion::integer($margin);
-
         $this->style['margin'] = $margin;
 
         return $this;
     }
 
-    /**
-     * @param string $marker
-     * @return $this
-     */
-    public function setUnselectedMarker($marker)
+    public function setUnselectedMarker(string $marker) : self
     {
-        Assertion::string($marker);
-
         $this->style['unselectedMarker'] = $marker;
 
         return $this;
     }
 
-    /**
-     * @param string $marker
-     * @return $this
-     */
-    public function setSelectedMarker($marker)
+    public function setSelectedMarker(string $marker) : self
     {
-        Assertion::string($marker);
-
         $this->style['selectedMarker'] = $marker;
 
         return $this;
     }
 
-    /**
-     * @param string $extra
-     * @return $this
-     */
-    public function setItemExtra($extra)
+    public function setItemExtra(string $extra) : self
     {
-        Assertion::string($extra);
-
         $this->style['itemExtra'] = $extra;
 
         return $this;
     }
 
-    /**
-     * @param string $separator
-     * @return $this
-     */
-    public function setTitleSeparator($separator)
+    public function setTitleSeparator(string $separator) : self
     {
-        Assertion::string($separator);
-
         $this->style['titleSeparator'] = $separator;
 
         return $this;
     }
 
-    /**
-     * @param TerminalInterface $terminal
-     * @return $this
-     */
-    public function setTerminal(TerminalInterface $terminal)
+    public function setTerminal(TerminalInterface $terminal) : self
     {
         $this->terminal = $terminal;
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    private function getDefaultItems()
+    private function getDefaultItems() : array
     {
         $actions = [];
         if ($this->parent) {
@@ -389,21 +274,14 @@ class CliMenuBuilder
         return $actions;
     }
 
-    /**
-     * @return $this
-     */
-    public function disableDefaultItems()
+    public function disableDefaultItems() : self
     {
         $this->disableDefaultItems = true;
 
         return $this;
     }
 
-    /**
-     * @param array $items
-     * @return bool
-     */
-    private function itemsHaveExtra(array $items)
+    private function itemsHaveExtra(array $items) : bool
     {
         return !empty(array_filter($items, function (MenuItemInterface $item) {
             return $item->showsItemExtra();
@@ -413,10 +291,8 @@ class CliMenuBuilder
     /**
      * Recursively drop back to the parents menu style
      * when the current menu has a parent and has no changes
-     *
-     * @return MenuStyle
      */
-    private function getMenuStyle()
+    private function getMenuStyle() : MenuStyle
     {
         if (null === $this->parent) {
             return $this->buildStyle();
@@ -429,10 +305,7 @@ class CliMenuBuilder
         return $this->parent->getMenuStyle();
     }
 
-    /**
-     * @return MenuStyle
-     */
-    private function buildStyle()
+    private function buildStyle() : MenuStyle
     {
         return (new MenuStyle($this->terminal))
             ->setFg($this->style['fg'])
@@ -450,10 +323,9 @@ class CliMenuBuilder
     /**
      * Return to parent builder
      *
-     * @return CliMenuBuilder
      * @throws RuntimeException
      */
-    public function end()
+    public function end() : CliMenuBuilder
     {
         if (null === $this->parent) {
             throw new RuntimeException('No parent builder to return to');
@@ -463,11 +335,9 @@ class CliMenuBuilder
     }
 
     /**
-     * @param string $id
-     * @return CliMenu
      * @throws RuntimeException
      */
-    public function getSubMenu($id)
+    public function getSubMenu(string $id) : CliMenu
     {
         if (false === $this->isBuilt) {
             throw new RuntimeException(sprintf('Menu: "%s" cannot be retrieved until menu has been built', $id));
@@ -476,11 +346,7 @@ class CliMenuBuilder
         return $this->subMenus[$id];
     }
 
-    /**
-     * @param array $items
-     * @return array
-     */
-    private function buildSubMenus(array $items)
+    private function buildSubMenus(array $items) : array
     {
         return array_map(function ($item) {
             if (!is_string($item)) {
@@ -494,10 +360,7 @@ class CliMenuBuilder
         }, $items);
     }
 
-    /**
-     * @return CliMenu
-     */
-    public function build()
+    public function build() : CliMenu
     {
         $this->isBuilt = true;
 

@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 class GoBackActionTest extends TestCase
 {
-    public function testGoBackActionClosesMenuAndOpensParentIfMenuHasAParent()
+    public function testGoBackActionClosesMenuAndOpensParentIfMenuHasAParent() : void
     {
         $parent = $this->getMockBuilder(CliMenu::class)
             ->disableOriginalConstructor()

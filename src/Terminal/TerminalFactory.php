@@ -7,10 +7,7 @@ namespace PhpSchool\CliMenu\Terminal;
  */
 class TerminalFactory
 {
-    /**
-     * @return TerminalInterface
-     */
-    public static function fromSystem()
+    public static function fromSystem() : TerminalInterface
     {
         return new UnixTerminal();
     }
