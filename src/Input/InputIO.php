@@ -76,7 +76,7 @@ class InputIO
 
             if (!empty($this->callbacks[$userInput])) {
                 foreach ($this->callbacks[$userInput] as $callback) {
-                    $inputValue = $callback($this, $inputValue);
+                    $inputValue = $callback($inputValue);
                     $this->drawInput($input, $inputValue);
                 }
                 continue;
@@ -87,13 +87,10 @@ class InputIO
         }
     }
 
-    public function registerInputMap(string $input, string $mapTo) : void
-    {
-        $this->inputMap[$input] = $mapTo;
-    }
-
     public function registerControlCallback(string $control, callable $callback) : void
     {
+        $this->inputMap[$control] = $control;
+
         if (!isset($this->callbacks[$control])) {
             $this->callbacks[$control] = [];
         }
@@ -208,7 +205,7 @@ class InputIO
         $this->drawEmptyLine($input, $userInput);
         $this->drawTitle($input, $userInput);
         $this->drawEmptyLine($input, $userInput);
-        $this->drawInputField($input, $input->format($userInput));
+        $this->drawInputField($input, $input->filter($userInput));
         $this->drawEmptyLine($input, $userInput);
     }
 
@@ -219,7 +216,7 @@ class InputIO
         $this->drawEmptyLine($input, $userInput);
         $this->drawTitle($input, $userInput);
         $this->drawEmptyLine($input, $userInput);
-        $this->drawInputField($input, $input->format($userInput));
+        $this->drawInputField($input, $input->filter($userInput));
         $this->drawEmptyLine($input, $userInput);
         $this->drawCenteredLine(
             $input,

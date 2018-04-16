@@ -23,5 +23,5 @@ interface Input
 
     public function getPlaceholderText() : string;
 
-    public function format(string $value) : string;
+    public function filter(string $value) : string;
 }

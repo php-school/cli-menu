@@ -70,14 +70,11 @@ class Number implements Input
 
     public function ask() : InputResult
     {
-        $this->inputIO->registerInputMap("\033[A", 'up');
-        $this->inputIO->registerInputMap("\033[B", 'down');
-
-        $this->inputIO->registerControlCallback('up', function (InputIO $inputIO, string $input) {
+        $this->inputIO->registerControlCallback("\033[A", function (string $input) {
             return $this->validate($input) ? $input + 1 : $input;
         });
 
-        $this->inputIO->registerControlCallback('down', function (InputIO $inputIO, string $input) {
+        $this->inputIO->registerControlCallback("\033[B", function (string $input) {
             return $this->validate($input) ? $input - 1 : $input;
         });
 
@@ -89,7 +86,7 @@ class Number implements Input
         return (bool) preg_match('/^\d+$/', $input);
     }
 
-    public function format(string $value) : string
+    public function filter(string $value) : string
     {
         return $value;
     }

@@ -78,7 +78,7 @@ class Text implements Input
         return !empty($input);
     }
 
-    public function format(string $value) : string
+    public function filter(string $value) : string
     {
         return $value;
     }

@@ -90,10 +90,10 @@ class Password implements Input
             return $validator($input);
         }
 
-        return mb_strlen($input) > 16;
+        return mb_strlen($input) >= 16;
     }
 
-    public function format(string $value) : string
+    public function filter(string $value) : string
     {
         return str_repeat('*', mb_strlen($value));
     }
