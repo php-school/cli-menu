@@ -1,6 +1,7 @@
 <?php
 
 namespace PhpSchool\CliMenu\Terminal;
+
 use PhpSchool\CliMenu\IO\InputStream;
 use PhpSchool\CliMenu\IO\OutputStream;
 

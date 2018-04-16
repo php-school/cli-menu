@@ -26,7 +26,7 @@ class ResourceInputStreamTest extends TestCase
 
     public function testRead() : void
     {
-        $stream = fopen('php://memory','r+');
+        $stream = fopen('php://memory', 'r+');
         fwrite($stream, '1234');
         rewind($stream);
 

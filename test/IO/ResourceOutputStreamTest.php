@@ -26,7 +26,7 @@ class ResourceOutputStreamTest extends TestCase
 
     public function testWrite() : void
     {
-        $stream = fopen('php://memory','r+');
+        $stream = fopen('php://memory', 'r+');
         $outputStream = new ResourceOutputStream($stream);
         $outputStream->write('123456789');
 
