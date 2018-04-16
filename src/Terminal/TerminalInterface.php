@@ -85,7 +85,7 @@ interface TerminalInterface
     public function disableCursor() : void;
 
     /**
-     * @return string
+     * Read input from the terminal
      */
     public function getKeyedInput(array $map = []) : ?string;
 

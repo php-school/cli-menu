@@ -174,6 +174,10 @@ class UnixTerminal implements TerminalInterface
 
         $this->clearLine();
 
+        if ($input === false) {
+            return null;
+        }
+
         return array_key_exists($input, $map)
             ? $map[$input]
             : $input;

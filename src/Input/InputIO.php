@@ -54,7 +54,7 @@ class InputIO
 
         $inputValue = $input->getPlaceholderText();
 
-        while (($userInput = $this->terminal->getKeyedInput($this->inputMap)) !== false) {
+        while (($userInput = $this->terminal->getKeyedInput($this->inputMap)) !== null) {
             $this->parentMenu->redraw();
             $this->drawInput($input, $inputValue);
 
@@ -113,7 +113,7 @@ class InputIO
         );
     }
 
-    private function calculateYPosition(Input $input) : int
+    private function calculateYPosition() : int
     {
         $lines = 5; //1. empty 2. prompt text 3. empty 4. input 5. empty
 
@@ -203,7 +203,7 @@ class InputIO
 
     private function drawInput(Input $input, string $userInput) : void
     {
-        $this->terminal->moveCursorToRow($this->calculateYPosition($input));
+        $this->terminal->moveCursorToRow($this->calculateYPosition());
 
         $this->drawEmptyLine($input, $userInput);
         $this->drawTitle($input, $userInput);
@@ -214,7 +214,7 @@ class InputIO
 
     private function drawInputWithError(Input $input, string $userInput) : void
     {
-        $this->terminal->moveCursorToRow($this->calculateYPositionWithError($input));
+        $this->terminal->moveCursorToRow($this->calculateYPositionWithError());
 
         $this->drawEmptyLine($input, $userInput);
         $this->drawTitle($input, $userInput);
