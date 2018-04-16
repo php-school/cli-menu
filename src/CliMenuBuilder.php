@@ -32,7 +32,12 @@ class CliMenuBuilder
     private $parent;
     
     /**
-     * @var self[]|CliMenu[]
+     * @var self[]
+     */
+    private $subMenuBuilders = [];
+
+    /**
+     * @var CliMenu[]
      */
     private $subMenus = [];
 
@@ -147,10 +152,10 @@ class CliMenuBuilder
      */
     public function addSubMenu(string $id) : CliMenuBuilder
     {
-        $this->menuItems[]   = $id;
-        $this->subMenus[$id] = new static($this);
+        $this->menuItems[]          = $id;
+        $this->subMenuBuilders[$id] = new static($this);
 
-        return $this->subMenus[$id];
+        return $this->subMenuBuilders[$id];
     }
 
     /**
@@ -353,7 +358,7 @@ class CliMenuBuilder
                 return $item;
             }
 
-            $menuBuilder           = $this->subMenus[$item];
+            $menuBuilder           = $this->subMenuBuilders[$item];
             $this->subMenus[$item] = $menuBuilder->build();
 
             return new MenuMenuItem($item, $this->subMenus[$item], $menuBuilder->isMenuDisabled());
