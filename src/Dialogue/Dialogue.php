@@ -101,7 +101,7 @@ abstract class Dialogue
     protected function write(string $text, int $column = null) : void
     {
         $this->terminal->moveCursorToColumn($column ?: $this->x);
-        echo $text;
+        $this->terminal->getOutput()->write($text);
     }
 
     public function getStyle() : MenuStyle

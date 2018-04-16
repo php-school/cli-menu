@@ -1,6 +1,7 @@
 <?php
 
 namespace PhpSchool\CliMenu\Terminal;
+use PhpSchool\CliMenu\IO\OutputStream;
 
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
@@ -85,5 +86,10 @@ interface TerminalInterface
     /**
      * @return string
      */
-    public function getKeyedInput() : string;
+    public function getKeyedInput(array $map = []) : ?string;
+
+    /**
+     * Get the output stream
+     */
+    public function getOutput() : OutputStream;
 }

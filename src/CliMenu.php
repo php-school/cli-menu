@@ -254,7 +254,7 @@ class CliMenu
         $frame->newLine(2);
 
         foreach ($frame->getRows() as $row) {
-            echo $row;
+            $this->terminal->getOutput()->write($row);
         }
 
         $this->currentFrame = $frame;

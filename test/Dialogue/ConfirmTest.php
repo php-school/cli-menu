@@ -3,6 +3,7 @@
 namespace PhpSchool\CliMenuTest\Dialogue;
 
 use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\IO\BufferedOutput;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Terminal\TerminalInterface;
@@ -13,26 +14,43 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfirmTest extends TestCase
 {
-    public function testConfirmWithOddLengthConfirmAndButton() : void
-    {
-        $terminal = $this->createMock(TerminalInterface::class);
+    /**
+     * @var TerminalInterface
+     */
+    private $terminal;
 
-        $terminal->expects($this->any())
+    /**
+     * @var BufferedOutput
+     */
+    private $output;
+
+    public function setUp()
+    {
+        $this->output = new BufferedOutput;
+        $this->terminal = $this->createMock(TerminalInterface::class);
+        $this->terminal->expects($this->any())
+            ->method('getOutput')
+            ->willReturn($this->output);
+
+        $this->terminal->expects($this->any())
             ->method('isTTY')
             ->willReturn(true);
 
-        $terminal
+        $this->terminal->expects($this->any())
+            ->method('getWidth')
+            ->willReturn(50);
+    }
+
+    public function testConfirmWithOddLengthConfirmAndButton() : void
+    {
+        $this->terminal
             ->method('getKeyedInput')
             ->will($this->onConsecutiveCalls(
                 'enter',
                 'enter'
             ));
 
-        $terminal->expects($this->any())
-            ->method('getWidth')
-            ->willReturn(50);
-
-        $style = $this->getStyle($terminal);
+        $style = $this->getStyle($this->terminal);
 
         $item = new SelectableItem('Item 1', function (CliMenu $menu) {
             $menu->confirm('PHP School FTW!')
@@ -41,32 +59,22 @@ class ConfirmTest extends TestCase
             $menu->close();
         });
 
-        $this->expectOutputString(file_get_contents($this->getTestFile()));
-
-        $menu = new CliMenu('PHP School FTW', [$item], $terminal, $style);
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
+
+        static::assertEquals($this->output->fetch(), file_get_contents($this->getTestFile()));
     }
 
     public function testConfirmWithEvenLengthConfirmAndButton() : void
     {
-        $terminal = $this->createMock(TerminalInterface::class);
-
-        $terminal->expects($this->any())
-            ->method('isTTY')
-            ->willReturn(true);
-
-        $terminal
+        $this->terminal
             ->method('getKeyedInput')
             ->will($this->onConsecutiveCalls(
                 'enter',
                 'enter'
             ));
 
-        $terminal->expects($this->any())
-            ->method('getWidth')
-            ->willReturn(50);
-
-        $style = $this->getStyle($terminal);
+        $style = $this->getStyle($this->terminal);
 
         $item = new SelectableItem('Item 1', function (CliMenu $menu) {
             $menu->confirm('PHP School FTW')
@@ -75,32 +83,22 @@ class ConfirmTest extends TestCase
             $menu->close();
         });
 
-        $this->expectOutputString(file_get_contents($this->getTestFile()));
-
-        $menu = new CliMenu('PHP School FTW', [$item], $terminal, $style);
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
+
+        static::assertEquals($this->output->fetch(), file_get_contents($this->getTestFile()));
     }
 
     public function testConfirmWithEvenLengthConfirmAndOddLengthButton() : void
     {
-        $terminal = $this->createMock(TerminalInterface::class);
-
-        $terminal->expects($this->any())
-            ->method('isTTY')
-            ->willReturn(true);
-
-        $terminal
+        $this->terminal
             ->method('getKeyedInput')
             ->will($this->onConsecutiveCalls(
                 'enter',
                 'enter'
             ));
 
-        $terminal->expects($this->any())
-            ->method('getWidth')
-            ->willReturn(50);
-
-        $style = $this->getStyle($terminal);
+        $style = $this->getStyle($this->terminal);
 
         $item = new SelectableItem('Item 1', function (CliMenu $menu) {
             $menu->confirm('PHP School FTW')
@@ -109,32 +107,22 @@ class ConfirmTest extends TestCase
             $menu->close();
         });
 
-        $this->expectOutputString(file_get_contents($this->getTestFile()));
-
-        $menu = new CliMenu('PHP School FTW', [$item], $terminal, $style);
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
+
+        static::assertEquals($this->output->fetch(), file_get_contents($this->getTestFile()));
     }
 
     public function testConfirmWithOddLengthConfirmAndEvenLengthButton() : void
     {
-        $terminal = $this->createMock(TerminalInterface::class);
-
-        $terminal->expects($this->any())
-            ->method('isTTY')
-            ->willReturn(true);
-
-        $terminal
+        $this->terminal
             ->method('getKeyedInput')
             ->will($this->onConsecutiveCalls(
                 'enter',
                 'enter'
             ));
 
-        $terminal->expects($this->any())
-            ->method('getWidth')
-            ->willReturn(50);
-
-        $style = $this->getStyle($terminal);
+        $style = $this->getStyle($this->terminal);
 
         $item = new SelectableItem('Item 1', function (CliMenu $menu) {
             $menu->confirm('PHP School FTW!')
@@ -143,21 +131,15 @@ class ConfirmTest extends TestCase
             $menu->close();
         });
 
-        $this->expectOutputString(file_get_contents($this->getTestFile()));
-
-        $menu = new CliMenu('PHP School FTW', [$item], $terminal, $style);
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
+
+        static::assertEquals($this->output->fetch(), file_get_contents($this->getTestFile()));
     }
 
     public function testConfirmCanOnlyBeClosedWithEnter() : void
     {
-        $terminal = $this->createMock(TerminalInterface::class);
-
-        $terminal->expects($this->any())
-            ->method('isTTY')
-            ->willReturn(true);
-
-        $terminal
+        $this->terminal
             ->method('getKeyedInput')
             ->will($this->onConsecutiveCalls(
                 'enter',
@@ -166,11 +148,7 @@ class ConfirmTest extends TestCase
                 'enter'
             ));
 
-        $terminal->expects($this->any())
-            ->method('getWidth')
-            ->willReturn(50);
-
-        $style = $this->getStyle($terminal);
+        $style = $this->getStyle($this->terminal);
 
         $item = new SelectableItem('Item 1', function (CliMenu $menu) {
             $menu->confirm('PHP School FTW!')
@@ -179,10 +157,10 @@ class ConfirmTest extends TestCase
             $menu->close();
         });
 
-        $this->expectOutputString(file_get_contents($this->getTestFile()));
-
-        $menu = new CliMenu('PHP School FTW', [$item], $terminal, $style);
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
+
+        static::assertEquals($this->output->fetch(), file_get_contents($this->getTestFile()));
     }
 
     private function getTestFile() : string
