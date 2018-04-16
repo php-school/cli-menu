@@ -35,6 +35,9 @@
         "cs" : [
             "phpcs src --standard=PSR2",
             "phpcs test --standard=PSR2"
+        ],
+        "static" : [
+            "phpstan analyse src --level=7"
         ]
     }
 }
