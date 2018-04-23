@@ -4,12 +4,12 @@ namespace PhpSchool\CliMenuTest;
 
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Exception\MenuNotOpenException;
-use PhpSchool\CliMenu\IO\BufferedOutput;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuStyle;
-use PhpSchool\CliMenu\Terminal\TerminalInterface;
-use PhpSchool\CliMenu\Terminal\UnixTerminal;
+use PhpSchool\Terminal\Terminal;
+use PhpSchool\Terminal\UnixTerminal;
+use PhpSchool\Terminal\IO\BufferedOutput;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 class CliMenuTest extends TestCase
 {
     /**
-     * @var TerminalInterface
+     * @var Terminal
      */
     private $terminal;
 
@@ -30,18 +30,21 @@ class CliMenuTest extends TestCase
     public function setUp()
     {
         $this->output = new BufferedOutput;
-        $this->terminal = $this->createMock(TerminalInterface::class);
-        $this->terminal->expects($this->any())
-            ->method('getOutput')
-            ->willReturn($this->output);
+        $this->terminal = $this->createMock(Terminal::class);
 
         $this->terminal->expects($this->any())
-            ->method('isTTY')
+            ->method('isInteractive')
             ->willReturn(true);
 
         $this->terminal->expects($this->any())
             ->method('getWidth')
             ->willReturn(50);
+
+        $this->terminal->expects($this->any())
+            ->method('write')
+            ->will($this->returnCallback(function ($buffer){
+                $this->output->write($buffer);
+            }));
     }
 
     public function testGetMenuStyle() : void
@@ -66,8 +69,8 @@ class CliMenuTest extends TestCase
     public function testSimpleOpenClose() : void
     {
         $this->terminal->expects($this->once())
-            ->method('getKeyedInput')
-            ->willReturn('enter');
+            ->method('read')
+            ->willReturn("\n");
 
         $style = $this->getStyle($this->terminal);
 
@@ -78,14 +81,14 @@ class CliMenuTest extends TestCase
         $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
 
-        static::assertEquals($this->output->fetch(), file_get_contents($this->getTestFile()));
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
     public function testReDrawReDrawsImmediately() : void
     {
         $this->terminal->expects($this->once())
-            ->method('getKeyedInput')
-            ->willReturn('enter');
+            ->method('read')
+            ->willReturn("\n");
 
         $style = $this->getStyle($this->terminal);
 
@@ -98,7 +101,7 @@ class CliMenuTest extends TestCase
         $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
 
-        static::assertEquals($this->output->fetch(), file_get_contents($this->getTestFile()));
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
     public function testGetItems() : void
@@ -107,7 +110,7 @@ class CliMenuTest extends TestCase
         $item2 = new LineBreakItem();
 
 
-        $terminal = $this->createMock(TerminalInterface::class);
+        $terminal = $this->createMock(Terminal::class);
         $style = $this->getStyle($terminal);
 
         $menu = new CliMenu(
@@ -128,7 +131,7 @@ class CliMenuTest extends TestCase
         $item1 = new LineBreakItem();
         $item2 = new LineBreakItem();
 
-        $terminal = $this->createMock(TerminalInterface::class);
+        $terminal = $this->createMock(Terminal::class);
         $style = $this->getStyle($terminal);
 
         $menu = new CliMenu(
@@ -178,9 +181,9 @@ class CliMenuTest extends TestCase
     {
         $this->expectException(\PhpSchool\CliMenu\Exception\InvalidTerminalException::class);
 
-        $terminal = $this->createMock(TerminalInterface::class);
+        $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->once())
-            ->method('isTTY')
+            ->method('isInteractive')
             ->willReturn(false);
 
         $menu = new CliMenu('PHP School FTW', [], $terminal);
@@ -209,12 +212,126 @@ class CliMenuTest extends TestCase
         $this->assertCount(1, $menu->getItems());
     }
 
+    public function testAskNumberThrowsExceptionIfMenuNotOpen() : void
+    {
+        $menu = new CliMenu('PHP School FTW', []);
+
+        static::expectException(MenuNotOpenException::class);
+
+        $menu->askNumber();
+    }
+
+    public function testAskNumberStyle() : void
+    {
+        $terminal = $this->createMock(Terminal::class);
+
+        $terminal->expects($this->any())
+            ->method('isInteractive')
+            ->willReturn(true);
+
+        $terminal->expects($this->any())
+            ->method('getWidth')
+            ->willReturn(100);
+
+        $terminal->expects($this->any())
+            ->method('read')
+            ->willReturn("\n");
+
+        $menu = new CliMenu('PHP School FTW', [], $terminal);
+
+        $number = null;
+        $menu->addItem(new SelectableItem('Ask Number', function (CliMenu $menu) use (&$number) {
+            $number = $menu->askNumber();
+            $menu->close();
+        }));
+        $menu->open();
+
+        static::assertEquals('yellow', $number->getStyle()->getBg());
+        static::assertEquals('red', $number->getStyle()->getFg());
+    }
+
+    public function testAskTextThrowsExceptionIfMenuNotOpen() : void
+    {
+        $menu = new CliMenu('PHP School FTW', []);
+
+        static::expectException(MenuNotOpenException::class);
+
+        $menu->askText();
+    }
+
+    public function testAskTextStyle() : void
+    {
+        $terminal = $this->createMock(Terminal::class);
+
+        $terminal->expects($this->any())
+            ->method('isInteractive')
+            ->willReturn(true);
+
+        $terminal->expects($this->any())
+            ->method('getWidth')
+            ->willReturn(100);
+
+        $terminal->expects($this->any())
+            ->method('read')
+            ->willReturn("\n");
+
+        $menu = new CliMenu('PHP School FTW', [], $terminal);
+
+        $text = null;
+        $menu->addItem(new SelectableItem('Ask Number', function (CliMenu $menu) use (&$text) {
+            $text = $menu->askText();
+            $menu->close();
+        }));
+        $menu->open();
+
+        static::assertEquals('yellow', $text->getStyle()->getBg());
+        static::assertEquals('red', $text->getStyle()->getFg());
+    }
+
+    public function testAskPasswordThrowsExceptionIfMenuNotOpen() : void
+    {
+        $menu = new CliMenu('PHP School FTW', []);
+
+        static::expectException(MenuNotOpenException::class);
+
+        $menu->askPassword();
+    }
+
+    public function testAskPasswordStyle() : void
+    {
+        $terminal = $this->createMock(Terminal::class);
+
+        $terminal->expects($this->any())
+            ->method('isInteractive')
+            ->willReturn(true);
+
+        $terminal->expects($this->any())
+            ->method('getWidth')
+            ->willReturn(100);
+
+        $terminal->expects($this->any())
+            ->method('read')
+            ->willReturn("\n");
+
+        $menu = new CliMenu('PHP School FTW', [], $terminal);
+
+        $password = null;
+        $menu->addItem(new SelectableItem('Ask Number', function (CliMenu $menu) use (&$password) {
+            $password = $menu->askPassword();
+            $menu->close();
+        }));
+        $menu->open();
+
+        static::assertEquals('yellow', $password->getStyle()->getBg());
+        static::assertEquals('red', $password->getStyle()->getFg());
+    }
+
     private function getTestFile() : string
     {
         return sprintf('%s/res/%s.txt', __DIR__, $this->getName());
     }
 
-    private function getStyle(TerminalInterface $terminal) : MenuStyle
+    private function getStyle(Terminal $terminal) : MenuStyle
     {
         return new MenuStyle($terminal);
     }

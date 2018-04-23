@@ -2,6 +2,8 @@
 
 namespace PhpSchool\CliMenu\Input;
 
+use PhpSchool\CliMenu\MenuStyle;
+
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
@@ -32,9 +34,15 @@ class Password implements Input
      */
     private $validator;
 
-    public function __construct(InputIO $inputIO)
+    /**
+     * @var MenuStyle
+     */
+    private $style;
+
+    public function __construct(InputIO $inputIO, MenuStyle $style)
     {
         $this->inputIO = $inputIO;
+        $this->style = $style;
     }
 
     public function setPromptText(string $promptText) : Input
@@ -96,5 +104,10 @@ class Password implements Input
     public function filter(string $value) : string
     {
         return str_repeat('*', mb_strlen($value));
+    }
+
+    public function getStyle() : MenuStyle
+    {
+        return $this->style;
     }
 }

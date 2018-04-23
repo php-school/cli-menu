@@ -6,7 +6,9 @@ use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Input\InputIO;
 use PhpSchool\CliMenu\Input\Text;
 use PhpSchool\CliMenu\MenuStyle;
-use PhpSchool\CliMenu\Terminal\TerminalInterface;
+use PhpSchool\Terminal\InputCharacter;
+use PhpSchool\Terminal\IO\BufferedOutput;
+use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,9 +17,14 @@ use PHPUnit\Framework\TestCase;
 class InputIOTest extends TestCase
 {
     /**
-     * @var TerminalInterface
+     * @var Terminal
      */
     private $terminal;
+
+    /**
+     * @var BufferedOutput
+     */
+    private $output;
 
     /**
      * @var CliMenu
@@ -36,37 +43,54 @@ class InputIOTest extends TestCase
 
     public function setUp()
     {
-        $this->terminal = $this->createMock(TerminalInterface::class);
+        $this->terminal = $this->createMock(Terminal::class);
+        $this->output   = new BufferedOutput;
         $this->menu     = $this->createMock(CliMenu::class);
-        $this->style    = $this->createMock(MenuStyle::class);
-        $this->inputIO  = new InputIO($this->menu, $this->style, $this->terminal);
+        $this->style    = new MenuStyle($this->terminal);
+        $this->inputIO  = new InputIO($this->menu, $this->terminal);
+
+        $this->style->setBg('yellow');
+        $this->style->setFg('red');
+
+        $this->terminal
+            ->method('getWidth')
+            ->willReturn(100);
+
+        $parentStyle = new MenuStyle($this->terminal);
+        $parentStyle->setBg('blue');
+
+        $this->menu
+            ->expects($this->any())
+            ->method('getStyle')
+            ->willReturn($parentStyle);
     }
 
     public function testEnterReturnsOutputIfValid() : void
     {
         $this->terminal
             ->expects($this->exactly(2))
-            ->method('getKeyedInput')
-            ->willReturn('1', 'enter');
+            ->method('read')
+            ->willReturn('1', "\n");
 
-        $result = $this->inputIO->collect(new Text($this->inputIO));
+        $result = $this->inputIO->collect(new Text($this->inputIO, $this->style));
 
         self::assertEquals('1', $result->fetch());
+
+        echo $this->output->fetch();
     }
 
     public function testCustomControlFunctions() : void
     {
-        $this->inputIO->registerControlCallback('u', function ($input) {
+        $this->inputIO->registerControlCallback(InputCharacter::UP, function ($input) {
             return ++$input;
         });
 
         $this->terminal
             ->expects($this->exactly(4))
-            ->method('getKeyedInput')
-            ->with(["\n" => 'enter', "\r" => 'enter', "\177" => 'backspace', 'u' => 'u'])
-            ->willReturn('1', '0', 'u', 'enter');
+            ->method('read')
+            ->willReturn('1', '0', "\033[A", "\n");
 
-        $result = $this->inputIO->collect(new Text($this->inputIO));
+        $result = $this->inputIO->collect(new Text($this->inputIO, $this->style));
 
         self::assertEquals('11', $result->fetch());
     }
@@ -75,17 +99,17 @@ class InputIOTest extends TestCase
     {
         $this->terminal
             ->expects($this->exactly(6))
-            ->method('getKeyedInput')
-            ->willReturn('1', '6', '7', 'backspace', 'backspace', 'enter');
+            ->method('read')
+            ->willReturn('1', '6', '7', "\177", "\177", "\n");
 
-        $result = $this->inputIO->collect(new Text($this->inputIO));
+        $result = $this->inputIO->collect(new Text($this->inputIO, $this->style));
 
         self::assertEquals('1', $result->fetch());
     }
 
     public function testValidationErrorCausesErrorMessageToBeDisplayed() : void
     {
-        $input = new class ($this->inputIO) extends Text {
+        $input = new class ($this->inputIO, $this->style) extends Text {
             public function validate(string $input) : bool
             {
                 return $input[-1] === 'p';
@@ -94,8 +118,8 @@ class InputIOTest extends TestCase
 
         $this->terminal
             ->expects($this->exactly(6))
-            ->method('getKeyedInput')
-            ->willReturn('1', 't', 'enter', 'backspace', 'p', 'enter');
+            ->method('read')
+            ->willReturn('1', 't', "\n", "\177", 'p', "\n");
 
         $result = $this->inputIO->collect($input);
 

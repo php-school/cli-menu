@@ -6,7 +6,7 @@ use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Input\InputIO;
 use PhpSchool\CliMenu\Input\Number;
 use PhpSchool\CliMenu\MenuStyle;
-use PhpSchool\CliMenu\Terminal\TerminalInterface;
+use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 class NumberTest extends TestCase
 {
     /**
-     * @var TerminalInterface
+     * @var Terminal
      */
     private $terminal;
 
@@ -31,12 +31,12 @@ class NumberTest extends TestCase
 
     public function setUp()
     {
-        $this->terminal = $this->createMock(TerminalInterface::class);
+        $this->terminal = $this->createMock(Terminal::class);
         $menu           = $this->createMock(CliMenu::class);
         $style          = $this->createMock(MenuStyle::class);
 
-        $this->inputIO  = new InputIO($menu, $style, $this->terminal);
-        $this->input    = new Number($this->inputIO);
+        $this->inputIO  = new InputIO($menu, $this->terminal);
+        $this->input    = new Number($this->inputIO, $style);
     }
 
     public function testGetSetPromptText() : void
@@ -92,8 +92,8 @@ class NumberTest extends TestCase
     {
         $this->terminal
             ->expects($this->exactly(4))
-            ->method('getKeyedInput')
-            ->willReturn('1', '0', "\033[A", 'enter');
+            ->method('read')
+            ->willReturn('1', '0', "\033[A", "\n");
 
         self::assertEquals(11, $this->input->ask()->fetch());
     }
@@ -102,8 +102,8 @@ class NumberTest extends TestCase
     {
         $this->terminal
             ->expects($this->exactly(4))
-            ->method('getKeyedInput')
-            ->willReturn('1', '0', "\033[B", 'enter');
+            ->method('read')
+            ->willReturn('1', '0', "\033[B", "\n");
 
         self::assertEquals(9, $this->input->ask()->fetch());
     }

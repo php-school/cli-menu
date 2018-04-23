@@ -6,7 +6,7 @@ use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Input\InputIO;
 use PhpSchool\CliMenu\Input\Password;
 use PhpSchool\CliMenu\MenuStyle;
-use PhpSchool\CliMenu\Terminal\TerminalInterface;
+use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 class PasswordTest extends TestCase
 {
     /**
-     * @var TerminalInterface
+     * @var Terminal
      */
     private $terminal;
 
@@ -31,12 +31,12 @@ class PasswordTest extends TestCase
 
     public function setUp()
     {
-        $this->terminal = $this->createMock(TerminalInterface::class);
+        $this->terminal = $this->createMock(Terminal::class);
         $menu           = $this->createMock(CliMenu::class);
         $style          = $this->createMock(MenuStyle::class);
 
-        $this->inputIO  = new InputIO($menu, $style, $this->terminal);
-        $this->input    = new Password($this->inputIO);
+        $this->inputIO  = new InputIO($menu, $this->terminal);
+        $this->input    = new Password($this->inputIO, $style);
     }
 
     public function testGetSetPromptText() : void
@@ -89,8 +89,8 @@ class PasswordTest extends TestCase
     {
         $this->terminal
             ->expects($this->exactly(17))
-            ->method('getKeyedInput')
-            ->willReturn('1', '2', '3', '4', '5', '6', '7', '8', '9', '1', '2', '3', '4', '5', '6', '7', 'enter');
+            ->method('read')
+            ->willReturn('1', '2', '3', '4', '5', '6', '7', '8', '9', '1', '2', '3', '4', '5', '6', '7', "\n");
 
         self::assertEquals('1234567891234567', $this->input->ask()->fetch());
     }

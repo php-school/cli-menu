@@ -6,7 +6,7 @@ use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Input\InputIO;
 use PhpSchool\CliMenu\Input\Text;
 use PhpSchool\CliMenu\MenuStyle;
-use PhpSchool\CliMenu\Terminal\TerminalInterface;
+use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 class TextTest extends TestCase
 {
     /**
-     * @var TerminalInterface
+     * @var Terminal
      */
     private $terminal;
 
@@ -31,12 +31,12 @@ class TextTest extends TestCase
 
     public function setUp()
     {
-        $this->terminal = $this->createMock(TerminalInterface::class);
+        $this->terminal = $this->createMock(Terminal::class);
         $menu           = $this->createMock(CliMenu::class);
         $style          = $this->createMock(MenuStyle::class);
 
-        $this->inputIO  = new InputIO($menu, $style, $this->terminal);
-        $this->input    = new Text($this->inputIO);
+        $this->inputIO  = new InputIO($menu, $this->terminal);
+        $this->input    = new Text($this->inputIO, $style);
     }
 
     public function testGetSetPromptText() : void
@@ -89,8 +89,8 @@ class TextTest extends TestCase
     {
         $this->terminal
             ->expects($this->exactly(10))
-            ->method('getKeyedInput')
-            ->willReturn('s', 'o', 'm', 'e', ' ', 't', 'e', 'x', 't', 'enter');
+            ->method('read')
+            ->willReturn('s', 'o', 'm', 'e', ' ', 't', 'e', 'x', 't', "\n");
 
         self::assertEquals('some text', $this->input->ask()->fetch());
     }

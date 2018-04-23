@@ -2,6 +2,9 @@
 
 namespace PhpSchool\CliMenu\Input;
 
+use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\Terminal\InputCharacter;
+
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
@@ -27,9 +30,15 @@ class Number implements Input
      */
     private $placeholderText = '';
 
-    public function __construct(InputIO $inputIO)
+    /**
+     * @var MenuStyle
+     */
+    private $style;
+
+    public function __construct(InputIO $inputIO, MenuStyle $style)
     {
         $this->inputIO = $inputIO;
+        $this->style = $style;
     }
 
     public function setPromptText(string $promptText) : Input
@@ -70,11 +79,11 @@ class Number implements Input
 
     public function ask() : InputResult
     {
-        $this->inputIO->registerControlCallback("\033[A", function (string $input) {
+        $this->inputIO->registerControlCallback(InputCharacter::UP, function (string $input) {
             return $this->validate($input) ? $input + 1 : $input;
         });
 
-        $this->inputIO->registerControlCallback("\033[B", function (string $input) {
+        $this->inputIO->registerControlCallback(InputCharacter::DOWN, function (string $input) {
             return $this->validate($input) ? $input - 1 : $input;
         });
 
@@ -89,5 +98,10 @@ class Number implements Input
     public function filter(string $value) : string
     {
         return $value;
+    }
+
+    public function getStyle() : MenuStyle
+    {
+        return $this->style;
     }
 }

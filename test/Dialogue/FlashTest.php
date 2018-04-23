@@ -3,10 +3,10 @@
 namespace PhpSchool\CliMenuTest\Dialogue;
 
 use PhpSchool\CliMenu\CliMenu;
-use PhpSchool\CliMenu\IO\BufferedOutput;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuStyle;
-use PhpSchool\CliMenu\Terminal\TerminalInterface;
+use PhpSchool\Terminal\IO\BufferedOutput;
+use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,27 +27,30 @@ class FlashTest extends TestCase
     public function setUp()
     {
         $this->output = new BufferedOutput;
-        $this->terminal = $this->createMock(TerminalInterface::class);
-        $this->terminal->expects($this->any())
-            ->method('getOutput')
-            ->willReturn($this->output);
+        $this->terminal = $this->createMock(Terminal::class);
 
         $this->terminal->expects($this->any())
-            ->method('isTTY')
+            ->method('isInteractive')
             ->willReturn(true);
 
         $this->terminal->expects($this->any())
             ->method('getWidth')
             ->willReturn(50);
+
+        $this->terminal->expects($this->any())
+            ->method('write')
+            ->will($this->returnCallback(function ($buffer){
+                $this->output->write($buffer);
+            }));
     }
 
     public function testFlashWithOddLength() : void
     {
         $this->terminal
-            ->method('getKeyedInput')
+            ->method('read')
             ->will($this->onConsecutiveCalls(
-                'enter',
-                'enter'
+                "\n",
+                "\n"
             ));
 
         $style = $this->getStyle($this->terminal);
@@ -62,16 +65,16 @@ class FlashTest extends TestCase
         $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
 
-        static::assertEquals($this->output->fetch(), file_get_contents($this->getTestFile()));
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
     public function testFlashWithEvenLength() : void
     {
         $this->terminal
-            ->method('getKeyedInput')
+            ->method('read')
             ->will($this->onConsecutiveCalls(
-                'enter',
-                'enter'
+                "\n",
+                "\n"
             ));
 
         $style = $this->getStyle($this->terminal);
@@ -86,7 +89,7 @@ class FlashTest extends TestCase
         $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
 
-        static::assertEquals($this->output->fetch(), file_get_contents($this->getTestFile()));
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
     /**
@@ -95,8 +98,8 @@ class FlashTest extends TestCase
     public function testFlashCanBeClosedWithAnyKey(string $key) : void
     {
         $this->terminal
-            ->method('getKeyedInput')
-            ->will($this->onConsecutiveCalls('enter', $key));
+            ->method('read')
+            ->will($this->onConsecutiveCalls("\n", $key));
 
         $style = $this->getStyle($this->terminal);
 
@@ -110,13 +113,13 @@ class FlashTest extends TestCase
         $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
 
-        static::assertEquals($this->output->fetch(), file_get_contents($this->getTestFile()));
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
     public function keyProvider() : array
     {
         return [
-            ['enter'],
+            ["\n"],
             ['right'],
             ['down'],
             ['up'],
@@ -128,7 +131,7 @@ class FlashTest extends TestCase
         return sprintf('%s/../res/%s.txt', __DIR__, $this->getName(false));
     }
 
-    private function getStyle(TerminalInterface $terminal) : MenuStyle
+    private function getStyle(Terminal $terminal) : MenuStyle
     {
         return new MenuStyle($terminal);
     }

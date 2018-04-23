@@ -3,9 +3,10 @@
 namespace PhpSchool\CliMenu\Input;
 
 use PhpSchool\CliMenu\CliMenu;
-use PhpSchool\CliMenu\MenuStyle;
-use PhpSchool\CliMenu\Terminal\TerminalInterface;
 use PhpSchool\CliMenu\Util\StringUtil;
+use PhpSchool\Terminal\InputCharacter;
+use PhpSchool\Terminal\NonCanonicalReader;
+use PhpSchool\Terminal\Terminal;
 
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
@@ -13,37 +14,22 @@ use PhpSchool\CliMenu\Util\StringUtil;
 class InputIO
 {
     /**
-     * @var MenuStyle
-     */
-    private $style;
-
-    /**
      * @var CliMenu
      */
     private $parentMenu;
 
     /**
-     * @var TerminalInterface
+     * @var Terminal
      */
     private $terminal;
-
-    /**
-     * @var array
-     */
-    private $inputMap = [
-        "\n"   => 'enter',
-        "\r"   => 'enter',
-        "\177" => 'backspace'
-    ];
 
     /**
      * @var callable[][]
      */
     private $callbacks = [];
 
-    public function __construct(CliMenu $parentMenu, MenuStyle $menuStyle, TerminalInterface $terminal)
+    public function __construct(CliMenu $parentMenu, Terminal $terminal)
     {
-        $this->style        = $menuStyle;
         $this->terminal     = $terminal;
         $this->parentMenu   = $parentMenu;
     }
@@ -53,44 +39,52 @@ class InputIO
         $this->drawInput($input, $input->getPlaceholderText());
 
         $inputValue = $input->getPlaceholderText();
+        $havePlaceHolderValue = !empty($inputValue);
 
-        while (($userInput = $this->terminal->getKeyedInput($this->inputMap)) !== null) {
-            $this->parentMenu->redraw();
-            $this->drawInput($input, $inputValue);
+        $reader = new NonCanonicalReader($this->terminal);
 
-            if ($userInput === 'enter') {
-                if ($input->validate($inputValue)) {
-                    $this->parentMenu->redraw();
-                    return new InputResult($inputValue);
+        while ($char = $reader->readCharacter()) {
+            if ($char->isNotControl()) {
+                if ($havePlaceHolderValue) {
+                    $inputValue = $char->get();
+                    $havePlaceHolderValue = false;
                 } else {
-                    $this->drawInputWithError($input, $inputValue);
-                    continue;
+                    $inputValue .= $char->get();
                 }
-            }
 
-            if ($userInput === 'backspace') {
-                $inputValue = substr($inputValue, 0, -1);
+                $this->parentMenu->redraw();
                 $this->drawInput($input, $inputValue);
                 continue;
             }
 
-            if (!empty($this->callbacks[$userInput])) {
-                foreach ($this->callbacks[$userInput] as $callback) {
+            switch ($char->getControl()) {
+                case InputCharacter::ENTER:
+                    if ($input->validate($inputValue)) {
+                        $this->parentMenu->redraw();
+                        return new InputResult($inputValue);
+                    } else {
+                        $this->drawInputWithError($input, $inputValue);
+                        continue 2;
+                    }
+
+                case InputCharacter::BACKSPACE:
+                    $inputValue = substr($inputValue, 0, -1);
+                    $this->parentMenu->redraw();
+                    $this->drawInput($input, $inputValue);
+                    continue 2;
+            }
+
+            if (!empty($this->callbacks[$char->getControl()])) {
+                foreach ($this->callbacks[$char->getControl()] as $callback) {
                     $inputValue = $callback($inputValue);
                     $this->drawInput($input, $inputValue);
                 }
-                continue;
             }
-
-            $inputValue .= $userInput;
-            $this->drawInput($input, $inputValue);
         }
     }
 
     public function registerControlCallback(string $control, callable $callback) : void
     {
-        $this->inputMap[$control] = $control;
-
         if (!isset($this->callbacks[$control])) {
             $this->callbacks[$control] = [];
         }
@@ -135,7 +129,7 @@ class InputIO
         );
 
         $parentStyle     = $this->parentMenu->getStyle();
-        $halfWidth       = ($width + ($this->style->getPadding() * 2)) / 2;
+        $halfWidth       = ($width + ($input->getStyle()->getPadding() * 2)) / 2;
         $parentHalfWidth = ceil($parentStyle->getWidth() / 2);
 
         return $parentHalfWidth - $halfWidth;
@@ -145,14 +139,16 @@ class InputIO
     {
         $this->terminal->moveCursorToColumn($this->calculateXPosition($input, $userInput));
 
-        printf(
+        $line = sprintf(
             "%s%s%s%s%s\n",
-            $this->style->getUnselectedSetCode(),
-            str_repeat(' ', $this->style->getPadding()),
+            $input->getStyle()->getUnselectedSetCode(),
+            str_repeat(' ', $input->getStyle()->getPadding()),
             $text,
-            str_repeat(' ', $this->style->getPadding()),
-            $this->style->getUnselectedUnsetCode()
+            str_repeat(' ', $input->getStyle()->getPadding()),
+            $input->getStyle()->getUnselectedUnsetCode()
         );
+
+        $this->terminal->write($line);
     }
 
     private function drawCenteredLine(Input $input, string $userInput, string $text) : void
@@ -246,11 +242,11 @@ class InputIO
             $userInput,
             sprintf(
                 '%s%s%s%s%s',
-                $this->style->getUnselectedUnsetCode(),
-                $this->style->getSelectedSetCode(),
+                $input->getStyle()->getUnselectedUnsetCode(),
+                $input->getStyle()->getSelectedSetCode(),
                 $userInput,
-                $this->style->getSelectedUnsetCode(),
-                $this->style->getUnselectedSetCode()
+                $input->getStyle()->getSelectedUnsetCode(),
+                $input->getStyle()->getUnselectedSetCode()
             )
         );
     }

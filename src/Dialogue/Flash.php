@@ -2,6 +2,8 @@
 
 namespace PhpSchool\CliMenu\Dialogue;
 
+use PhpSchool\Terminal\NonCanonicalReader;
+
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
@@ -29,8 +31,12 @@ class Flash extends Dialogue
         ));
 
         $this->emptyRow();
+
         $this->terminal->moveCursorToTop();
-        $this->terminal->getKeyedInput();
+
+        $reader = new NonCanonicalReader($this->terminal);
+        $reader->readCharacter();
+
         $this->parentMenu->redraw();
     }
 }

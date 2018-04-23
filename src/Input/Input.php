@@ -2,6 +2,8 @@
 
 namespace PhpSchool\CliMenu\Input;
 
+use PhpSchool\CliMenu\MenuStyle;
+
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
@@ -24,4 +26,6 @@ interface Input
     public function getPlaceholderText() : string;
 
     public function filter(string $value) : string;
+
+    public function getStyle() : MenuStyle;
 }
