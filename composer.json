@@ -21,6 +21,7 @@
     "require": {
         "php" : ">=7.1",
         "beberlei/assert": "^2.4",
+        "php-school/terminal": "dev-master",
         "ext-posix": "*"
     },
     "autoload" : {
