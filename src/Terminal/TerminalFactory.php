@@ -7,7 +7,6 @@ use PhpSchool\Terminal\IO\ResourceOutputStream;
 use PhpSchool\Terminal\Terminal;
 use PhpSchool\Terminal\UnixTerminal;
 
-
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */

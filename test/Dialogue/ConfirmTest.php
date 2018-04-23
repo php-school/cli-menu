@@ -39,10 +39,9 @@ class ConfirmTest extends TestCase
 
         $this->terminal->expects($this->any())
             ->method('write')
-            ->will($this->returnCallback(function ($buffer){
+            ->will($this->returnCallback(function ($buffer) {
                 $this->output->write($buffer);
             }));
-
     }
 
     public function testConfirmWithOddLengthConfirmAndButton() : void
