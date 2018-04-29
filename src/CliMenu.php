@@ -174,7 +174,7 @@ class CliMenu
         ]);
 
         while ($this->isOpen() && $char = $reader->readCharacter()) {
-            if ($char->isNotControl()) {
+            if (!$char->isHandledControl()) {
                 continue;
             }
 

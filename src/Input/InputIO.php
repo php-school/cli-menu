@@ -57,27 +57,29 @@ class InputIO
                 continue;
             }
 
-            switch ($char->getControl()) {
-                case InputCharacter::ENTER:
-                    if ($input->validate($inputValue)) {
+            if ($char->isHandledControl()) {
+                switch ($char->getControl()) {
+                    case InputCharacter::ENTER:
+                        if ($input->validate($inputValue)) {
+                            $this->parentMenu->redraw();
+                            return new InputResult($inputValue);
+                        } else {
+                            $this->drawInputWithError($input, $inputValue);
+                            continue 2;
+                        }
+
+                    case InputCharacter::BACKSPACE:
+                        $inputValue = substr($inputValue, 0, -1);
                         $this->parentMenu->redraw();
-                        return new InputResult($inputValue);
-                    } else {
-                        $this->drawInputWithError($input, $inputValue);
+                        $this->drawInput($input, $inputValue);
                         continue 2;
+                }
+
+                if (!empty($this->callbacks[$char->getControl()])) {
+                    foreach ($this->callbacks[$char->getControl()] as $callback) {
+                        $inputValue = $callback($inputValue);
+                        $this->drawInput($input, $inputValue);
                     }
-
-                case InputCharacter::BACKSPACE:
-                    $inputValue = substr($inputValue, 0, -1);
-                    $this->parentMenu->redraw();
-                    $this->drawInput($input, $inputValue);
-                    continue 2;
-            }
-
-            if (!empty($this->callbacks[$char->getControl()])) {
-                foreach ($this->callbacks[$char->getControl()] as $callback) {
-                    $inputValue = $callback($inputValue);
-                    $this->drawInput($input, $inputValue);
                 }
             }
         }
