@@ -119,4 +119,21 @@ class PasswordTest extends TestCase
             ['999ppp', true],
         ];
     }
+
+    public function testWithCustomValidatorAndCustomValidationMessage() : void
+    {
+        $customValidate = function ($input) {
+            if ($input === 'mypassword') {
+                $this->setValidationFailedText('Password too generic');
+                return false;
+            }
+            return true;
+        };
+
+        $this->input->setValidator($customValidate);
+        
+        self::assertTrue($this->input->validate('superstrongpassword'));
+        self::assertFalse($this->input->validate('mypassword'));
+        self::assertEquals('Password too generic', $this->input->getValidationFailedText());
+    }
 }

@@ -217,10 +217,7 @@ class InputIO
         $this->drawCenteredLine(
             $input,
             $userInput,
-            sprintf(
-                '%s',
-                $input->getValidationFailedText()
-            )
+            $input->getValidationFailedText()
         );
         $this->drawEmptyLine($input, $userInput);
     }
