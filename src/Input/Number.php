@@ -92,7 +92,7 @@ class Number implements Input
 
     public function validate(string $input) : bool
     {
-        return (bool) preg_match('/^\d+$/', $input);
+        return (bool) preg_match('/^-?\d+$/', $input);
     }
 
     public function filter(string $value) : string

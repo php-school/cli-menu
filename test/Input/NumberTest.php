@@ -80,6 +80,11 @@ class NumberTest extends TestCase
             ['0', true],
             ['0000000000', true],
             ['9999999999', true],
+            ['-9999999999', true],
+            ['-54', true],
+            ['-1', true],
+            ['-t10', false],
+            ['-t', false],
         ];
     }
 
