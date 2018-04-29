@@ -81,9 +81,11 @@ class Password implements Input
         return $this->placeholderText;
     }
 
-    public function setValidator(callable $validator) : void
+    public function setValidator(callable $validator) : Input
     {
         $this->validator = $validator;
+        
+        return $this;
     }
 
     public function ask() : InputResult
