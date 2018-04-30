@@ -25,9 +25,15 @@ class Frame implements \Countable
     public function addRows(array $params = []) : void
     {
         list($rows, $item) = $params;
-        if (!empty($item)) {
-            $item->setStartRowNumber(count($this->rows));
+
+        if (!is_array($rows)) {
+            $rows = $params;
+        } else {
+            if (!empty($item)) {
+                $item->setStartRowNumber(count($this->rows));
+            }
         }
+
         foreach ($rows as $row) {
             $this->rows[] = $row;
         }
