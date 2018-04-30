@@ -256,7 +256,6 @@ class CliMenu
         $frame->newLine(2);
 
         if ($previousItem && $newItem) {
-
             $rows = $frame->getRows();
 
             $this->terminal->moveCursorToTop();
@@ -266,16 +265,13 @@ class CliMenu
             $this->terminal->moveCursorToTop();
             $this->terminal->moveCursorDown($newItem->getStartRowNumber());
             echo rtrim($rows[$newItem->getStartRowNumber()], "\n\r");
-
         } else {
-
             $this->terminal->clean();
             $this->terminal->moveCursorToTop();
 
             foreach ($frame->getRows() as $row) {
                 echo $row;
             }
-
         }
 
         $this->currentFrame = $frame;
@@ -309,9 +305,9 @@ class CliMenu
             );
         }, $rows);
 
-        $item->setNumberOfRows( count( $rows ) );
+        $item->setNumberOfRows(count($rows));
 
-        return array( $rows, $item );
+        return array($rows, $item);
     }
 
     /**
