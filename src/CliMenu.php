@@ -168,9 +168,9 @@ class CliMenu
                     $previousItem = $this->getSelectedItem();
                     $this->moveSelection($input);
                     $newItem = $this->getSelectedItem();
-					if ($previousItem !== $newItem) {
-						$this->draw($previousItem, $newItem);
-					}
+                    if ($previousItem !== $newItem) {
+                        $this->draw($previousItem, $newItem);
+                    }
                     break;
                 case 'enter':
                     $this->executeCurrentItem();
@@ -253,30 +253,30 @@ class CliMenu
 
         $frame->addRows($this->drawMenuItem(new LineBreakItem()));
 
-		$frame->newLine(2);
+        $frame->newLine(2);
 
-		if ($previousItem && $newItem) {
+        if ($previousItem && $newItem) {
 
-			$rows = $frame->getRows();
+            $rows = $frame->getRows();
 
-			$this->terminal->moveCursorToTop();
-			$this->terminal->moveCursorDown($previousItem->getStartRowNumber());
-			echo rtrim($rows[$previousItem->getStartRowNumber()], "\n\r");
+            $this->terminal->moveCursorToTop();
+            $this->terminal->moveCursorDown($previousItem->getStartRowNumber());
+            echo rtrim($rows[$previousItem->getStartRowNumber()], "\n\r");
 
-			$this->terminal->moveCursorToTop();
-			$this->terminal->moveCursorDown($newItem->getStartRowNumber());
-			echo rtrim($rows[$newItem->getStartRowNumber()], "\n\r");
+            $this->terminal->moveCursorToTop();
+            $this->terminal->moveCursorDown($newItem->getStartRowNumber());
+            echo rtrim($rows[$newItem->getStartRowNumber()], "\n\r");
 
-		} else {
+        } else {
 
-	        $this->terminal->clean();
-    	    $this->terminal->moveCursorToTop();
+            $this->terminal->clean();
+            $this->terminal->moveCursorToTop();
 
-	        foreach ($frame->getRows() as $row) {
-    	        echo $row;
-			}
+            foreach ($frame->getRows() as $row) {
+                echo $row;
+            }
 
-		}
+        }
 
         $this->currentFrame = $frame;
     }
@@ -309,9 +309,9 @@ class CliMenu
             );
         }, $rows);
 
-		$item->setNumberOfRows( count( $rows ) );
+        $item->setNumberOfRows( count( $rows ) );
 
-		return array( $rows, $item );
+        return array( $rows, $item );
     }
 
     /**

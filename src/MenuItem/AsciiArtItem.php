@@ -32,15 +32,15 @@ class AsciiArtItem implements MenuItemInterface
      */
     private $artLength;
 
-	/**
-	 * @var int
-	 */
-	private $numberOfRows = 0;
+    /**
+     * @var int
+     */
+    private $numberOfRows = 0;
 
-	/**
-	 * @var int
-	 */
-	private $startRowNumber = 0;
+    /**
+     * @var int
+     */
+    private $startRowNumber = 0;
 
     public function __construct(string $text, string $position = self::POSITION_CENTER)
     {
@@ -51,26 +51,26 @@ class AsciiArtItem implements MenuItemInterface
         $this->artLength = max(array_map('mb_strlen', explode("\n", $text)));
     }
 
-	/**
-	 * Returns the number of terminal rows the item takes
-	 */
-	public function getNumberOfRows() {
-		return $this->numberOfRows;
-	}
+    /**
+     * Returns the number of terminal rows the item takes
+     */
+    public function getNumberOfRows() {
+        return $this->numberOfRows;
+    }
 
-	/**
-	 * Sets the row number the item starts at in the frame
-	 */
-	public function setStartRowNumber(int $rowNumber) {
-		$this->startRowNumber = $rowNumber;
-	}
+    /**
+     * Sets the row number the item starts at in the frame
+     */
+    public function setStartRowNumber(int $rowNumber) {
+        $this->startRowNumber = $rowNumber;
+    }
 
-	/**
-	 * Returns the row number the item starts at in the frame
-	 */
-	public function getStartRowNumber() {
-		return $this->startRowNumber;
-	}
+    /**
+     * Returns the row number the item starts at in the frame
+     */
+    public function getStartRowNumber() {
+        return $this->startRowNumber;
+    }
 
     /**
      * The output text for the item
@@ -102,11 +102,11 @@ class AsciiArtItem implements MenuItemInterface
             }
 
             return $row;
-		}, explode("\n", $this->text));
+        }, explode("\n", $this->text));
 
-		$this->numberOfRows = count($rows);
+        $this->numberOfRows = count($rows);
 
-		return $rows;
+        return $rows;
     }
 
     /**

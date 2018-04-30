@@ -23,9 +23,9 @@ class Frame implements \Countable
     }
 
     public function addRows(array $params = []) : void
-	{
-		list($rows, $item) = $params;
-		$item->setStartRowNumber(count($this->rows));
+    {
+        list($rows, $item) = $params;
+        $item->setStartRowNumber(count($this->rows));
         foreach ($rows as $row) {
             $this->rows[] = $row;
         }

@@ -16,52 +16,52 @@ class StaticItem implements MenuItemInterface
      */
     private $text;
 
-	/**
-	 * @var int
-	 */
-	private $numberOfRows = 0;
+    /**
+     * @var int
+     */
+    private $numberOfRows = 0;
 
-	/**
-	 * @var int
-	 */
-	private $startRowNumber = 0;
+    /**
+     * @var int
+     */
+    private $startRowNumber = 0;
 
     public function __construct(string $text)
     {
         $this->text = $text;
     }
 
-	/**
-	 * Returns the number of terminal rows the item takes
-	 */
-	public function getNumberOfRows() {
-		return $this->numberOfRows;
-	}
+    /**
+     * Returns the number of terminal rows the item takes
+     */
+    public function getNumberOfRows() {
+        return $this->numberOfRows;
+    }
 
-	/**
-	 * Sets the row number the item starts at in the frame
-	 */
-	public function setStartRowNumber(int $rowNumber) {
-		$this->startRowNumber = $rowNumber;
-	}
+    /**
+     * Sets the row number the item starts at in the frame
+     */
+    public function setStartRowNumber(int $rowNumber) {
+        $this->startRowNumber = $rowNumber;
+    }
 
-	/**
-	 * Returns the row number the item starts at in the frame
-	 */
-	public function getStartRowNumber() {
-		return $this->startRowNumber;
-	}
+    /**
+     * Returns the row number the item starts at in the frame
+     */
+    public function getStartRowNumber() {
+        return $this->startRowNumber;
+    }
 
     /**
      * The output text for the item
      */
     public function getRows(MenuStyle $style, bool $selected = false) : array
     {
-		$rows = explode("\n", StringUtil::wordwrap($this->text, $style->getContentWidth()));
+        $rows = explode("\n", StringUtil::wordwrap($this->text, $style->getContentWidth()));
 
-		$this->numberOfRows = count($rows);
+        $this->numberOfRows = count($rows);
 
-		return $rows;
+        return $rows;
     }
 
     /**
