@@ -272,9 +272,9 @@ class CliMenu
         
         $this->terminal->moveCursorToTop();
         foreach ($frame->getRows() as $row) {
-            $this->terminal->write("\033[1E" . rtrim($row, "\r\n"));
+            $this->terminal->write($row);
         }
-        $this->terminal->write("\033[1E\033[J");
+        $this->terminal->write("\033[J");
 
         $this->currentFrame = $frame;
     }
