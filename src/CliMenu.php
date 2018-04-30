@@ -305,8 +305,6 @@ class CliMenu
             );
         }, $rows);
 
-        $item->setNumberOfRows(count($rows));
-
         return array($rows, $item);
     }
 
