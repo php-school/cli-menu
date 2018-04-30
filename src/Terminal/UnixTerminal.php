@@ -188,6 +188,22 @@ class UnixTerminal implements TerminalInterface
     }
 
     /**
+     * Move the cursor up a specific number of rows
+     */
+    public function moveCursorUp(int $numberOfRows) : void
+    {
+        echo sprintf("\033[%dA", $numberOfRows);
+    }
+
+    /**
+     * Move the cursor down a specific number of rows
+     */
+    public function moveCursorDown(int $numberOfRows) : void
+    {
+        echo sprintf("\033[%dB", $numberOfRows);
+    }
+
+    /**
      * Move the cursor to the start of a specific row
      */
     public function moveCursorToRow(int $rowNumber) : void

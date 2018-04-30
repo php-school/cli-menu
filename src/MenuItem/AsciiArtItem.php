@@ -32,6 +32,16 @@ class AsciiArtItem implements MenuItemInterface
      */
     private $artLength;
 
+	/**
+	 * @var int
+	 */
+	private $numberOfRows = 0;
+
+	/**
+	 * @var int
+	 */
+	private $startRowNumber = 0;
+
     public function __construct(string $text, string $position = self::POSITION_CENTER)
     {
         Assertion::inArray($position, [self::POSITION_CENTER, self::POSITION_RIGHT, self::POSITION_LEFT]);
@@ -41,12 +51,33 @@ class AsciiArtItem implements MenuItemInterface
         $this->artLength = max(array_map('mb_strlen', explode("\n", $text)));
     }
 
+	/**
+	 * Returns the number of terminal rows the item takes
+	 */
+	public function getNumberOfRows() {
+		return $this->numberOfRows;
+	}
+
+	/**
+	 * Sets the row number the item starts at in the frame
+	 */
+	public function setStartRowNumber(int $rowNumber) {
+		$this->startRowNumber = $rowNumber;
+	}
+
+	/**
+	 * Returns the row number the item starts at in the frame
+	 */
+	public function getStartRowNumber() {
+		return $this->startRowNumber;
+	}
+
     /**
      * The output text for the item
      */
     public function getRows(MenuStyle $style, bool $selected = false) : array
     {
-        return array_map(function ($row) use ($style) {
+        $rows = array_map(function ($row) use ($style) {
             $length = mb_strlen($row);
 
             $padding = $style->getContentWidth() - $length;
@@ -71,7 +102,11 @@ class AsciiArtItem implements MenuItemInterface
             }
 
             return $row;
-        }, explode("\n", $this->text));
+		}, explode("\n", $this->text));
+
+		$this->numberOfRows = count($rows);
+
+		return $rows;
     }
 
     /**

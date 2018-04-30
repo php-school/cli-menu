@@ -168,7 +168,9 @@ class CliMenu
                     $previousItem = $this->getSelectedItem();
                     $this->moveSelection($input);
                     $newItem = $this->getSelectedItem();
-                    $this->draw($previousItem, $newItem);
+					if ($previousItem !== $newItem) {
+						$this->draw($previousItem, $newItem);
+					}
                     break;
                 case 'enter':
                     $this->executeCurrentItem();
@@ -232,10 +234,8 @@ class CliMenu
     /**
      * Draw the menu to STDOUT
      */
-    protected function draw() : void
+    protected function draw(MenuItemInterface $previousItem = null, MenuItemInterface $newItem = null) : void
     {
-        $this->terminal->clean();
-        $this->terminal->moveCursorToTop();
 
         $frame = new Frame;
 
@@ -253,11 +253,30 @@ class CliMenu
 
         $frame->addRows($this->drawMenuItem(new LineBreakItem()));
 
-        $frame->newLine(2);
+		$frame->newLine(2);
 
-        foreach ($frame->getRows() as $row) {
-            echo $row;
-        }
+		if ($previousItem && $newItem) {
+
+			$rows = $frame->getRows();
+
+			$this->terminal->moveCursorToTop();
+			$this->terminal->moveCursorDown($previousItem->getStartRowNumber());
+			echo rtrim($rows[$previousItem->getStartRowNumber()], "\n\r");
+
+			$this->terminal->moveCursorToTop();
+			$this->terminal->moveCursorDown($newItem->getStartRowNumber());
+			echo rtrim($rows[$newItem->getStartRowNumber()], "\n\r");
+
+		} else {
+
+	        $this->terminal->clean();
+    	    $this->terminal->moveCursorToTop();
+
+	        foreach ($frame->getRows() as $row) {
+    	        echo $row;
+			}
+
+		}
 
         $this->currentFrame = $frame;
     }
@@ -277,7 +296,7 @@ class CliMenu
             ? $this->style->getSelectedUnsetCode()
             : $this->style->getUnselectedUnsetCode();
 
-        return array_map(function ($row) use ($setColour, $unsetColour) {
+        $rows = array_map(function ($row) use ($setColour, $unsetColour) {
             return sprintf(
                 "%s%s%s%s%s%s%s\n\r",
                 str_repeat(' ', $this->style->getMargin()),
@@ -289,6 +308,10 @@ class CliMenu
                 str_repeat(' ', $this->style->getMargin())
             );
         }, $rows);
+
+		$item->setNumberOfRows( count( $rows ) );
+
+		return array( $rows, $item );
     }
 
     /**

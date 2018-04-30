@@ -9,6 +9,21 @@ use PhpSchool\CliMenu\MenuStyle;
  */
 interface MenuItemInterface
 {
+	/**
+	 * Returns the number of terminal rows the item takes
+	 */
+	public function getNumberOfRows() : int;
+
+	/**
+	 * Sets the row number the item starts at in the frame
+	 */
+	public function setStartRowNumber(int $rowNumber) : void;
+
+	/**
+	 * Returns the row number the item starts at in the frame
+	 */
+	public function getStartRowNumber() : int;
+
     /**
      * The output text for the item
      */
