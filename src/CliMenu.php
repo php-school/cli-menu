@@ -252,9 +252,6 @@ class CliMenu
      */
     protected function draw() : void
     {
-        $this->terminal->clean();
-        $this->terminal->moveCursorToTop();
-
         $frame = new Frame;
 
         $frame->newLine(2);
@@ -272,10 +269,12 @@ class CliMenu
         $frame->addRows($this->drawMenuItem(new LineBreakItem()));
 
         $frame->newLine(2);
-
+        
+        $this->terminal->moveCursorToTop();
         foreach ($frame->getRows() as $row) {
-            $this->terminal->write($row);
+            $this->terminal->write("\033[1E" . rtrim($row, "\r\n"));
         }
+        $this->terminal->write("\033[1E\033[J");
 
         $this->currentFrame = $frame;
     }
