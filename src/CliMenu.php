@@ -165,8 +165,10 @@ class CliMenu
             switch ($input) {
                 case 'up':
                 case 'down':
+                    $previousItem = $this->getSelectedItem();
                     $this->moveSelection($input);
-                    $this->draw();
+                    $newItem = $this->getSelectedItem();
+                    $this->draw($previousItem, $newItem);
                     break;
                 case 'enter':
                     $this->executeCurrentItem();
