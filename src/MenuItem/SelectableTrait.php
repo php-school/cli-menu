@@ -38,21 +38,24 @@ trait SelectableTrait
     /**
      * Returns the number of terminal rows the item takes
      */
-    public function getNumberOfRows() {
+    public function getNumberOfRows() : int
+    {
         return $this->numberOfRows;
     }
 
     /**
      * Sets the row number the item starts at in the frame
      */
-    public function setStartRowNumber(int $rowNumber) {
+    public function setStartRowNumber(int $rowNumber) : void
+    {
         $this->startRowNumber = $rowNumber;
     }
 
     /**
      * Returns the row number the item starts at in the frame
      */
-    public function getStartRowNumber() {
+    public function getStartRowNumber() : int
+    {
         return $this->startRowNumber;
     }
 
