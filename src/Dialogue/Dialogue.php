@@ -5,7 +5,7 @@ namespace PhpSchool\CliMenu\Dialogue;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Exception\MenuNotOpenException;
 use PhpSchool\CliMenu\MenuStyle;
-use PhpSchool\CliMenu\Terminal\TerminalInterface;
+use PhpSchool\Terminal\Terminal;
 
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
@@ -23,7 +23,7 @@ abstract class Dialogue
     protected $parentMenu;
 
     /**
-     * @var TerminalInterface
+     * @var Terminal
      */
     protected $terminal;
 
@@ -42,7 +42,7 @@ abstract class Dialogue
      */
     protected $y;
 
-    public function __construct(CliMenu $parentMenu, MenuStyle $menuStyle, TerminalInterface $terminal, string $text)
+    public function __construct(CliMenu $parentMenu, MenuStyle $menuStyle, Terminal $terminal, string $text)
     {
         $this->style        = $menuStyle;
         $this->terminal     = $terminal;
@@ -101,7 +101,7 @@ abstract class Dialogue
     protected function write(string $text, int $column = null) : void
     {
         $this->terminal->moveCursorToColumn($column ?: $this->x);
-        echo $text;
+        $this->terminal->write($text);
     }
 
     public function getStyle() : MenuStyle

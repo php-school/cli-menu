@@ -2,6 +2,9 @@
 
 namespace PhpSchool\CliMenu\Dialogue;
 
+use PhpSchool\Terminal\InputCharacter;
+use PhpSchool\Terminal\NonCanonicalReader;
+
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
@@ -33,34 +36,20 @@ class Confirm extends Dialogue
         $this->emptyRow();
 
         $confirmText = sprintf(' < %s > ', $confirmText);
-        $leftFill = ($promptWidth / 2) - (mb_strlen($confirmText) / 2);
+        $leftFill    = ($promptWidth / 2) - (mb_strlen($confirmText) / 2);
 
         $this->write(sprintf(
-            '%s%s%s',
+            "%s%s%s%s%s%s%s%s%s\n",
             $this->style->getUnselectedSetCode(),
             str_repeat(' ', $leftFill),
-            $this->style->getUnselectedSetCode()
+            $this->style->getUnselectedUnsetCode(),
+            $this->style->getSelectedSetCode(),
+            $confirmText,
+            $this->style->getSelectedUnsetCode(),
+            $this->style->getUnselectedSetCode(),
+            str_repeat(' ', ceil($promptWidth - $leftFill - mb_strlen($confirmText))),
+            $this->style->getUnselectedUnsetCode()
         ));
-
-        $this->write(
-            sprintf(
-                '%s%s%s',
-                $this->style->getSelectedSetCode(),
-                $confirmText,
-                $this->style->getSelectedUnsetCode()
-            ),
-            -1
-        );
-
-        $this->write(
-            sprintf(
-                "%s%s%s\n",
-                $this->style->getUnselectedSetCode(),
-                str_repeat(' ', ceil($promptWidth - $leftFill - mb_strlen($confirmText))),
-                $this->style->getSelectedUnsetCode()
-            ),
-            -1
-        );
 
         $this->write(sprintf(
             "%s%s%s%s%s\n",
@@ -72,12 +61,14 @@ class Confirm extends Dialogue
         ));
 
         $this->terminal->moveCursorToTop();
-        $input = $this->terminal->getKeyedInput();
 
-        while ($input !== 'enter') {
-            $input = $this->terminal->getKeyedInput();
+        $reader = new NonCanonicalReader($this->terminal);
+
+        while ($char = $reader->readCharacter()) {
+            if ($char->isControl() && $char->getControl() === InputCharacter::ENTER) {
+                $this->parentMenu->redraw();
+                return;
+            }
         }
-
-        $this->parentMenu->redraw();
     }
 }

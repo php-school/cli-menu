@@ -9,7 +9,7 @@ use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
-use PhpSchool\CliMenu\Terminal\TerminalInterface;
+use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -62,7 +62,7 @@ class CliMenuBuilderTest extends TestCase
         $builder->setItemExtra('*');
         $builder->setTitleSeparator('-');
 
-        $terminal = static::createMock(TerminalInterface::class);
+        $terminal = static::createMock(Terminal::class);
         $terminal
             ->expects($this->any())
             ->method('getWidth')

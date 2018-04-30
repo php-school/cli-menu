@@ -11,8 +11,8 @@ use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
-use PhpSchool\CliMenu\Terminal\TerminalInterface;
 use Assert\Assertion;
+use PhpSchool\Terminal\Terminal;
 use RuntimeException;
 
 /**
@@ -62,7 +62,7 @@ class CliMenuBuilder
     private $style;
 
     /**
-     * @var TerminalInterface
+     * @var Terminal
      */
     private $terminal;
 
@@ -262,7 +262,7 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function setTerminal(TerminalInterface $terminal) : self
+    public function setTerminal(Terminal $terminal) : self
     {
         $this->terminal = $terminal;
         return $this;

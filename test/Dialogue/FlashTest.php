@@ -5,7 +5,8 @@ namespace PhpSchool\CliMenuTest\Dialogue;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuStyle;
-use PhpSchool\CliMenu\Terminal\TerminalInterface;
+use PhpSchool\Terminal\IO\BufferedOutput;
+use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -13,26 +14,46 @@ use PHPUnit\Framework\TestCase;
  */
 class FlashTest extends TestCase
 {
-    public function testFlashWithOddLength() : void
-    {
-        $terminal = $this->createMock(TerminalInterface::class);
+    /**
+     * @var TerminalInterface
+     */
+    private $terminal;
 
-        $terminal->expects($this->any())
-            ->method('isTTY')
+    /**
+     * @var BufferedOutput
+     */
+    private $output;
+
+    public function setUp()
+    {
+        $this->output = new BufferedOutput;
+        $this->terminal = $this->createMock(Terminal::class);
+
+        $this->terminal->expects($this->any())
+            ->method('isInteractive')
             ->willReturn(true);
 
-        $terminal
-            ->method('getKeyedInput')
-            ->will($this->onConsecutiveCalls(
-                'enter',
-                'enter'
-            ));
-
-        $terminal->expects($this->any())
+        $this->terminal->expects($this->any())
             ->method('getWidth')
             ->willReturn(50);
 
-        $style = $this->getStyle($terminal);
+        $this->terminal->expects($this->any())
+            ->method('write')
+            ->will($this->returnCallback(function ($buffer) {
+                $this->output->write($buffer);
+            }));
+    }
+
+    public function testFlashWithOddLength() : void
+    {
+        $this->terminal
+            ->method('read')
+            ->will($this->onConsecutiveCalls(
+                "\n",
+                "\n"
+            ));
+
+        $style = $this->getStyle($this->terminal);
 
         $item = new SelectableItem('Item 1', function (CliMenu $menu) {
             $menu->flash('PHP School FTW!')
@@ -41,32 +62,22 @@ class FlashTest extends TestCase
             $menu->close();
         });
 
-        $this->expectOutputString(file_get_contents($this->getTestFile()));
-
-        $menu = new CliMenu('PHP School FTW', [$item], $terminal, $style);
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
+
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
     public function testFlashWithEvenLength() : void
     {
-        $terminal = $this->createMock(TerminalInterface::class);
-
-        $terminal->expects($this->any())
-            ->method('isTTY')
-            ->willReturn(true);
-
-        $terminal
-            ->method('getKeyedInput')
+        $this->terminal
+            ->method('read')
             ->will($this->onConsecutiveCalls(
-                'enter',
-                'enter'
+                "\n",
+                "\n"
             ));
 
-        $terminal->expects($this->any())
-            ->method('getWidth')
-            ->willReturn(50);
-
-        $style = $this->getStyle($terminal);
+        $style = $this->getStyle($this->terminal);
 
         $item = new SelectableItem('Item 1', function (CliMenu $menu) {
             $menu->flash('PHP School FTW')
@@ -75,10 +86,10 @@ class FlashTest extends TestCase
             $menu->close();
         });
 
-        $this->expectOutputString(file_get_contents($this->getTestFile()));
-
-        $menu = new CliMenu('PHP School FTW', [$item], $terminal, $style);
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
+
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
     /**
@@ -86,21 +97,11 @@ class FlashTest extends TestCase
      */
     public function testFlashCanBeClosedWithAnyKey(string $key) : void
     {
-        $terminal = $this->createMock(TerminalInterface::class);
+        $this->terminal
+            ->method('read')
+            ->will($this->onConsecutiveCalls("\n", $key));
 
-        $terminal->expects($this->any())
-            ->method('isTTY')
-            ->willReturn(true);
-
-        $terminal
-            ->method('getKeyedInput')
-            ->will($this->onConsecutiveCalls('enter', $key));
-
-        $terminal->expects($this->any())
-            ->method('getWidth')
-            ->willReturn(50);
-
-        $style = $this->getStyle($terminal);
+        $style = $this->getStyle($this->terminal);
 
         $item = new SelectableItem('Item 1', function (CliMenu $menu) {
             $menu->flash('PHP School FTW!')
@@ -109,16 +110,16 @@ class FlashTest extends TestCase
             $menu->close();
         });
 
-        $this->expectOutputString(file_get_contents($this->getTestFile()));
-
-        $menu = new CliMenu('PHP School FTW', [$item], $terminal, $style);
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
+
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
     public function keyProvider() : array
     {
         return [
-            ['enter'],
+            ["\n"],
             ['right'],
             ['down'],
             ['up'],
@@ -130,7 +131,7 @@ class FlashTest extends TestCase
         return sprintf('%s/../res/%s.txt', __DIR__, $this->getName(false));
     }
 
-    private function getStyle(TerminalInterface $terminal) : MenuStyle
+    private function getStyle(Terminal $terminal) : MenuStyle
     {
         return new MenuStyle($terminal);
     }

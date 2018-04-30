@@ -2,17 +2,26 @@
 
 namespace PhpSchool\CliMenu;
 
+use PhpSchool\CliMenu\Dialogue\NumberInput;
 use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\Exception\InvalidTerminalException;
 use PhpSchool\CliMenu\Exception\MenuNotOpenException;
+use PhpSchool\CliMenu\Input\InputIO;
+use PhpSchool\CliMenu\Input\Number;
+use PhpSchool\CliMenu\Input\Password;
+use PhpSchool\CliMenu\Input\Text;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Dialogue\Confirm;
 use PhpSchool\CliMenu\Dialogue\Flash;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
-use PhpSchool\CliMenu\Terminal\TerminalInterface;
 use PhpSchool\CliMenu\Util\StringUtil as s;
+use PhpSchool\Terminal\Exception\NotInteractiveTerminal;
+use PhpSchool\Terminal\InputCharacter;
+use PhpSchool\Terminal\NonCanonicalReader;
+use PhpSchool\Terminal\Terminal;
+use PhpSchool\Terminal\TerminalReader;
 
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
@@ -20,7 +29,7 @@ use PhpSchool\CliMenu\Util\StringUtil as s;
 class CliMenu
 {
     /**
-     * @var TerminalInterface
+     * @var Terminal
      */
     protected $terminal;
 
@@ -62,7 +71,7 @@ class CliMenu
     public function __construct(
         ?string $title,
         array $items,
-        TerminalInterface $terminal = null,
+        Terminal $terminal = null,
         MenuStyle $style = null
     ) {
         $this->title      = $title;
@@ -75,39 +84,32 @@ class CliMenu
 
     /**
      * Configure the terminal to work with CliMenu
-     *
-     * @throws InvalidTerminalException
      */
     protected function configureTerminal() : void
     {
         $this->assertTerminalIsValidTTY();
 
-        $this->terminal->setCanonicalMode();
+        $this->terminal->disableCanonicalMode();
+        $this->terminal->disableEchoBack();
         $this->terminal->disableCursor();
         $this->terminal->clear();
     }
 
     /**
      * Revert changes made to the terminal
-     *
-     * @throws InvalidTerminalException
      */
     protected function tearDownTerminal() : void
     {
-        $this->assertTerminalIsValidTTY();
-
-        $this->terminal->setCanonicalMode(false);
-        $this->terminal->enableCursor();
+        $this->terminal->restoreOriginalConfiguration();
     }
 
     private function assertTerminalIsValidTTY() : void
     {
-        if (!$this->terminal->isTTY()) {
-            throw new InvalidTerminalException(
-                sprintf('Terminal "%s" is not a valid TTY', $this->terminal->getDetails())
-            );
+        if (!$this->terminal->isInteractive()) {
+            throw new InvalidTerminalException('Terminal is not interactive (TTY)');
         }
     }
+
 
     public function setParent(CliMenu $parent) : void
     {
@@ -119,7 +121,7 @@ class CliMenu
         return $this->parent;
     }
 
-    public function getTerminal() : TerminalInterface
+    public function getTerminal() : Terminal
     {
         return $this->terminal;
     }
@@ -161,14 +163,28 @@ class CliMenu
     {
         $this->draw();
 
-        while ($this->isOpen() && $input = $this->terminal->getKeyedInput()) {
-            switch ($input) {
-                case 'up':
-                case 'down':
-                    $this->moveSelection($input);
+        $reader = new NonCanonicalReader($this->terminal);
+        $reader->addControlMappings([
+            '^P' => InputCharacter::UP,
+            'k'  => InputCharacter::UP,
+            '^K' => InputCharacter::DOWN,
+            'j'  => InputCharacter::DOWN,
+            "\r" => InputCharacter::ENTER,
+            ' '  => InputCharacter::ENTER,
+        ]);
+
+        while ($this->isOpen() && $char = $reader->readCharacter()) {
+            if (!$char->isHandledControl()) {
+                continue;
+            }
+
+            switch ($char->getControl()) {
+                case InputCharacter::UP:
+                case InputCharacter::DOWN:
+                    $this->moveSelection($char->getControl());
                     $this->draw();
                     break;
-                case 'enter':
+                case InputCharacter::ENTER:
                     $this->executeCurrentItem();
                     break;
             }
@@ -183,12 +199,12 @@ class CliMenu
         do {
             $itemKeys = array_keys($this->items);
 
-            $direction === 'up'
+            $direction === 'UP'
                 ? $this->selectedItem--
                 : $this->selectedItem++;
 
             if (!array_key_exists($this->selectedItem, $this->items)) {
-                $this->selectedItem  = $direction === 'up'
+                $this->selectedItem  = $direction === 'UP'
                     ? end($itemKeys)
                     : reset($itemKeys);
             } elseif ($this->getSelectedItem()->canSelect()) {
@@ -220,11 +236,15 @@ class CliMenu
      */
     public function redraw() : void
     {
+        $this->assertOpen();
+        $this->draw();
+    }
+
+    private function assertOpen() : void
+    {
         if (!$this->isOpen()) {
             throw new MenuNotOpenException;
         }
-
-        $this->draw();
     }
 
     /**
@@ -254,7 +274,7 @@ class CliMenu
         $frame->newLine(2);
 
         foreach ($frame->getRows() as $row) {
-            echo $row;
+            $this->terminal->write($row);
         }
 
         $this->currentFrame = $frame;
@@ -277,7 +297,7 @@ class CliMenu
 
         return array_map(function ($row) use ($setColour, $unsetColour) {
             return sprintf(
-                "%s%s%s%s%s%s%s\n\r",
+                "%s%s%s%s%s%s%s\n",
                 str_repeat(' ', $this->style->getMargin()),
                 $setColour,
                 str_repeat(' ', $this->style->getPadding()),
@@ -359,9 +379,7 @@ class CliMenu
 
     public function flash(string $text) : Flash
     {
-        if (strpos($text, "\n") !== false) {
-            throw new \InvalidArgumentException;
-        }
+        $this->guardSingleLine($text);
 
         $style = (new MenuStyle($this->terminal))
             ->setBg('yellow')
@@ -372,14 +390,52 @@ class CliMenu
 
     public function confirm($text) : Confirm
     {
-        if (strpos($text, "\n") !== false) {
-            throw new \InvalidArgumentException;
-        }
+        $this->guardSingleLine($text);
 
         $style = (new MenuStyle($this->terminal))
             ->setBg('yellow')
             ->setFg('red');
 
         return new Confirm($this, $style, $this->terminal, $text);
+    }
+
+    public function askNumber() : Number
+    {
+        $this->assertOpen();
+
+        $style = (new MenuStyle($this->terminal))
+            ->setBg('yellow')
+            ->setFg('red');
+
+        return new Number(new InputIO($this, $this->terminal), $style);
+    }
+
+    public function askText() : Text
+    {
+        $this->assertOpen();
+
+        $style = (new MenuStyle($this->terminal))
+            ->setBg('yellow')
+            ->setFg('red');
+
+        return new Text(new InputIO($this, $this->terminal), $style);
+    }
+
+    public function askPassword() : Password
+    {
+        $this->assertOpen();
+
+        $style = (new MenuStyle($this->terminal))
+            ->setBg('yellow')
+            ->setFg('red');
+
+        return new Password(new InputIO($this, $this->terminal), $style);
+    }
+
+    private function guardSingleLine($text)
+    {
+        if (strpos($text, "\n") !== false) {
+            throw new \InvalidArgumentException;
+        }
     }
 }

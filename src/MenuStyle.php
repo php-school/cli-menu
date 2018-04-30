@@ -4,7 +4,7 @@ namespace PhpSchool\CliMenu;
 
 use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
-use PhpSchool\CliMenu\Terminal\TerminalInterface;
+use PhpSchool\Terminal\Terminal;
 
 //TODO: B/W fallback
 
@@ -14,7 +14,7 @@ use PhpSchool\CliMenu\Terminal\TerminalInterface;
 class MenuStyle
 {
     /**
-     * @var TerminalInterface
+     * @var Terminal
      */
     protected $terminal;
 
@@ -141,7 +141,7 @@ class MenuStyle
     /**
      * Initialise style
      */
-    public function __construct(TerminalInterface $terminal = null)
+    public function __construct(Terminal $terminal = null)
     {
         $this->terminal = $terminal ?: TerminalFactory::fromSystem();
 
