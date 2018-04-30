@@ -58,6 +58,16 @@ interface TerminalInterface
     public function moveCursorToTop() : void;
 
     /**
+     * Move the cursor up a specific number of rows
+     */
+    public function moveCursorUp(int $numberOfRows) : void;
+
+    /**
+     * Move the cursor down a specific number of rows
+     */
+    public function moveCursorDown(int $numberOfRows) : void;
+
+    /**
      * Move the cursor to the start of a specific row
      */
     public function moveCursorToRow(int $rowNumber) : void;

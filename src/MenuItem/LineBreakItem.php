@@ -20,6 +20,16 @@ class LineBreakItem implements MenuItemInterface
      */
     private $lines;
 
+    /**
+     * @var int
+     */
+    private $numberOfRows = 0;
+
+    /**
+     * @var int
+     */
+    private $startRowNumber = 0;
+
     public function __construct(string $breakChar = ' ', int $lines = 1)
     {
         $this->breakChar = $breakChar;
@@ -27,17 +37,45 @@ class LineBreakItem implements MenuItemInterface
     }
 
     /**
+     * Returns the number of terminal rows the item takes
+     */
+    public function getNumberOfRows() : int
+    {
+        return $this->numberOfRows;
+    }
+
+    /**
+     * Sets the row number the item starts at in the frame
+     */
+    public function setStartRowNumber(int $rowNumber) : void
+    {
+        $this->startRowNumber = $rowNumber;
+    }
+
+    /**
+     * Returns the row number the item starts at in the frame
+     */
+    public function getStartRowNumber() : int
+    {
+        return $this->startRowNumber;
+    }
+
+    /**
      * The output text for the item
      */
     public function getRows(MenuStyle $style, bool $selected = false) : array
     {
-        return explode(
+        $rows = explode(
             "\n",
             rtrim(str_repeat(sprintf(
                 "%s\n",
                 mb_substr(str_repeat($this->breakChar, $style->getContentWidth()), 0, $style->getContentWidth())
             ), $this->lines))
         );
+
+        $this->numberOfRows = count($rows);
+
+        return $rows;
     }
 
     /**

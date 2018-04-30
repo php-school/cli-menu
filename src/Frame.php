@@ -2,6 +2,8 @@
 
 namespace PhpSchool\CliMenu;
 
+use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
+
 /**
  * Represents the current screen being displayed
  * contains all rows of output
@@ -22,8 +24,15 @@ class Frame implements \Countable
         }
     }
 
-    public function addRows(array $rows = []) : void
+    public function addRows(array $params = []) : void
     {
+        if (count($params) == 2 && is_array($params[0]) && $params[1] instanceof MenuItemInterface) {
+            list($rows, $item) = $params;
+            $item->setStartRowNumber(count($this->rows));
+        } else {
+            $rows = $params;
+        }
+
         foreach ($rows as $row) {
             $this->rows[] = $row;
         }

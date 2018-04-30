@@ -26,6 +26,40 @@ trait SelectableTrait
     private $disabled = false;
 
     /**
+     * @var int
+     */
+    private $numberOfRows = 0;
+
+    /**
+     * @var int
+     */
+    private $startRowNumber = 0;
+
+    /**
+     * Returns the number of terminal rows the item takes
+     */
+    public function getNumberOfRows() : int
+    {
+        return $this->numberOfRows;
+    }
+
+    /**
+     * Sets the row number the item starts at in the frame
+     */
+    public function setStartRowNumber(int $rowNumber) : void
+    {
+        $this->startRowNumber = $rowNumber;
+    }
+
+    /**
+     * Returns the row number the item starts at in the frame
+     */
+    public function getStartRowNumber() : int
+    {
+        return $this->startRowNumber;
+    }
+
+    /**
      * The output text for the item
      */
     public function getRows(MenuStyle $style, bool $selected = false) : array
@@ -44,6 +78,8 @@ trait SelectableTrait
                 sprintf("\n%s", str_repeat(' ', mb_strlen($marker)))
             )
         );
+
+        $this->numberOfRows = count($rows);
 
         return array_map(function ($row, $key) use ($style, $length) {
             $text = $this->disabled ? $style->getDisabledItemText($row) : $row;

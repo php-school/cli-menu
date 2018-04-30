@@ -16,9 +16,43 @@ class StaticItem implements MenuItemInterface
      */
     private $text;
 
+    /**
+     * @var int
+     */
+    private $numberOfRows = 0;
+
+    /**
+     * @var int
+     */
+    private $startRowNumber = 0;
+
     public function __construct(string $text)
     {
         $this->text = $text;
+    }
+
+    /**
+     * Returns the number of terminal rows the item takes
+     */
+    public function getNumberOfRows() : int
+    {
+        return $this->numberOfRows;
+    }
+
+    /**
+     * Sets the row number the item starts at in the frame
+     */
+    public function setStartRowNumber(int $rowNumber) : void
+    {
+        $this->startRowNumber = $rowNumber;
+    }
+
+    /**
+     * Returns the row number the item starts at in the frame
+     */
+    public function getStartRowNumber() : int
+    {
+        return $this->startRowNumber;
     }
 
     /**
@@ -26,7 +60,11 @@ class StaticItem implements MenuItemInterface
      */
     public function getRows(MenuStyle $style, bool $selected = false) : array
     {
-        return explode("\n", StringUtil::wordwrap($this->text, $style->getContentWidth()));
+        $rows = explode("\n", StringUtil::wordwrap($this->text, $style->getContentWidth()));
+
+        $this->numberOfRows = count($rows);
+
+        return $rows;
     }
 
     /**
