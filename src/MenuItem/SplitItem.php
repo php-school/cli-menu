@@ -24,8 +24,9 @@ class SplitItem implements MenuItemInterface
 
     /**
      * @var int
+     * -1 means no item selected
      */
-    private $selectedItemIndex = null;
+    private $selectedItemIndex = -1;
 
     /**
      * @var int
@@ -47,9 +48,9 @@ class SplitItem implements MenuItemInterface
         $numberOfItems = count($this->items);
 
         if (!$selected) {
-            $this->selectedItemIndex = null;
+            $this->selectedItemIndex = -1;
         } else {
-            if (empty($this->selectedItemIndex)) {
+            if ($this->selectedItemIndex === -1) {
                 $this->selectedItemIndex = 0;
             }
         }
@@ -64,9 +65,9 @@ class SplitItem implements MenuItemInterface
         foreach ($this->items as $index => $item) {
             $marker = sprintf("%s ", $style->getMarker($index === $this->selectedItemIndex));
             $content = StringUtil::wordwrap(
-                    sprintf('%s%s', $marker, $item->getText()),
-                    $length
-                );
+                sprintf('%s%s', $marker, $item->getText()),
+                $length
+            );
             $cell = array_map(function ($row) use ($index, $length, $style) {
                 $row = $row . str_repeat(' ', $length - strlen($row));
                 if ($index === $this->selectedItemIndex) {
@@ -116,7 +117,7 @@ class SplitItem implements MenuItemInterface
      */
     public function getSelectedItemIndex() : int
     {
-        if (empty($this->selectedItemIndex)) {
+        if ($this->selectedItemIndex === -1) {
             return 0;
         }
         return $this->selectedItemIndex;
