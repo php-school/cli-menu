@@ -347,6 +347,21 @@ $subMenu = $mainMenuBuilder->getSubMenu('Super Sub Menu');
 
 You can only do this after the main menu has been built, this is because the main menu builder takes care of building all sub menus.
 
+If you have already have a configured menu builder you can just pass that to `addSubMenu` and be done:
+
+```php
+
+$subMenuBuilder = (new CliMenuBuilder)
+    ->setTitle('Behold the awesomeness')
+    ->addItem(/** **/);
+
+$menu = (new CliMenuBuilder)
+    ->addSubMenu('Super Sub Menu', $subMenuBuilder)
+    ->build();
+```
+
+In this case `addSubMenu` will return the main menu builder, not the sub menu builder.
+
 #### Disabling Items & Sub Menus
 
 In this example we are disabling certain items and a submenu but still having them shown in the output. 
