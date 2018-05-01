@@ -144,6 +144,30 @@ class CliMenu
     }
 
     /**
+     * Add multiple Items to the menu
+     */
+    public function addItems(array $items) : void
+    {
+        foreach ($items as $item) {
+            $this->items[] = $item;
+        }
+
+        if (count($this->items) === count($items)) {
+            $this->selectFirstItem();
+        }
+    }
+
+    /**
+     * Set Items of the menu
+     */
+    public function setItems(array $items) : void
+    {
+        $this->items = $items;
+
+        $this->selectFirstItem();
+    }
+
+    /**
      * Set the selected pointer to the first selectable item
      */
     private function selectFirstItem() : void
