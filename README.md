@@ -417,7 +417,8 @@ $menu->open();
 
 #### Getting, Removing and Adding items
 
-You can also interact with the menu items in an action:
+You can also interact with the menu items in an action. You can add, remove and replace items. If you do this, you 
+will likely want to redraw the menu as well so the new list is rendered. 
 
 ```php
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
@@ -429,7 +430,14 @@ $itemCallable = function (CliMenu $menu) {
         $menu->removeItem($item);
     }
     
+    //add single item
     $menu->addItem(new LineBreakItem('-'));
+    
+    //add multiple items
+    $menu->addItems([new LineBreakItem('-'), new LineBreakItem('*')]);
+    
+    //replace all items
+    $menu->setItems([new LineBreakItem('+'), new LineBreakItem('-')]);
 
     $menu->redraw();
 };
