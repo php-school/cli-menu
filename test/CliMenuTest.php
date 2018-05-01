@@ -212,6 +212,57 @@ class CliMenuTest extends TestCase
         $this->assertCount(1, $menu->getItems());
     }
 
+    public function testAddItems() : void
+    {
+        $menu = new CliMenu('PHP School FTW', []);
+
+        $this->assertCount(0, $menu->getItems());
+
+        $item1 = new SelectableItem('Item 2', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $item2 = new SelectableItem('Item 2', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $menu->addItems([$item1, $item2]);
+
+        $this->assertCount(2, $menu->getItems());
+    }
+
+    public function testSetItems() : void
+    {
+        $menu = new CliMenu('PHP School FTW', []);
+
+        $this->assertCount(0, $menu->getItems());
+
+        $item1 = new SelectableItem('Item 2', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $item2 = new SelectableItem('Item 2', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $item3 = new SelectableItem('Item 2', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $item4 = new SelectableItem('Item 2', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $menu->addItems([$item1, $item2]);
+
+        $this->assertCount(2, $menu->getItems());
+        
+        $menu->setItems([$item3, $item4]);
+
+        $this->assertCount(2, $menu->getItems());
+        $this->assertSame([$item3, $item4], $menu->getItems());
+    }
+
     public function testAskNumberThrowsExceptionIfMenuNotOpen() : void
     {
         $menu = new CliMenu('PHP School FTW', []);
