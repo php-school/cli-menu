@@ -152,15 +152,16 @@ class CliMenuBuilder
      */
     public function addSubMenu(string $id, CliMenuBuilder $subMenuBuilder = null) : CliMenuBuilder
     {
-        $this->menuItems[]          = $id;
-        if (!empty($subMenuBuilder)) {
-            $subMenuBuilder->setParent($this);
-            $this->subMenuBuilders[$id] = $subMenuBuilder;
-            return $this;
-        } else {
+        $this->menuItems[]  = $id;
+        
+        if (null === $subMenuBuilder) {
             $this->subMenuBuilders[$id] = new static($this);
             return $this->subMenuBuilders[$id];
+            
         }
+        
+        $this->subMenuBuilders[$id] = $subMenuBuilder;
+        return $this;
     }
 
     /**
