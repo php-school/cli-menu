@@ -157,7 +157,6 @@ class CliMenuBuilder
         if (null === $subMenuBuilder) {
             $this->subMenuBuilders[$id] = new static($this);
             return $this->subMenuBuilders[$id];
-            
         }
         
         $this->subMenuBuilders[$id] = $subMenuBuilder;
