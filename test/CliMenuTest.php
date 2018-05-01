@@ -377,6 +377,71 @@ class CliMenuTest extends TestCase
         static::assertEquals('red', $password->getStyle()->getFg());
     }
 
+    public function testAddCustomControlMappingThrowsExceptionWhenOverwritingExistingDefaultControls() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot rebind this input');
+
+        $menu = new CliMenu('PHP School FTW', []);
+        $menu->addCustomControlMapping(' ', function () {
+        });
+    }
+
+    public function testAddCustomControlMappingThrowsExceptionWhenAttemptingToOverwriteAddedCustomControlMap() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot rebind this input');
+
+        $menu = new CliMenu('PHP School FTW', []);
+        $menu->addCustomControlMapping('c', function () {
+        });
+        $menu->addCustomControlMapping('c', function () {
+        });
+    }
+
+    public function testAddCustomControlMapping() : void
+    {
+        $this->terminal->expects($this->once())
+            ->method('read')
+            ->willReturn('c');
+
+        $style = $this->getStyle($this->terminal);
+
+        $action = function (CliMenu $menu) {
+            $menu->close();
+        };
+        $item = new SelectableItem('Item 1', $action);
+
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
+        $menu->addCustomControlMapping('c', $action);
+        $menu->open();
+
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+
+    public function testRemoveCustomControlMappingThrowsExceptionIfNoSuchMappingExists() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('This input is not registered');
+
+        $menu = new CliMenu('PHP School FTW', []);
+        $menu->removeCustomControlMapping('c');
+    }
+
+    public function testRemoveCustomControlMapping() : void
+    {
+        $action = function (CliMenu $menu) {
+            $menu->close();
+        };
+
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+        $menu->addCustomControlMapping('c', $action);
+        self::assertSame(['c' => $action], $this->readAttribute($menu, 'customControlMappings'));
+        
+        $menu->removeCustomControlMapping('c');
+        self::assertSame([], $this->readAttribute($menu, 'customControlMappings'));
+    }
+
     private function getTestFile() : string
     {
         return sprintf('%s/res/%s.txt', __DIR__, $this->getName());

@@ -205,7 +205,7 @@ class CliMenu
     public function addCustomControlMapping(string $input, callable $callable) : void
     {
         if (isset($this->defaultControlMappings[$input]) || isset($this->customControlMappings[$input])) {
-            throw new \InvalidArgumentException('Cannot rebind this input.');
+            throw new \InvalidArgumentException('Cannot rebind this input');
         }
 
         $this->customControlMappings[$input] = $callable;
@@ -217,7 +217,7 @@ class CliMenu
     public function removeCustomControlMapping(string $input) : void
     {
         if (!isset($this->customControlMappings[$input])) {
-            throw new \InvalidArgumentException('This input is not registered.');
+            throw new \InvalidArgumentException('This input is not registered');
         }
 
         unset($this->customControlMappings[$input]);
