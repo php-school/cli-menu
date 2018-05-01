@@ -156,11 +156,11 @@ class CliMenuBuilder
         if (!empty($subMenuBuilder)) {
             $subMenuBuilder->setParent($this);
             $this->subMenuBuilders[$id] = $subMenuBuilder;
+            return $this;
         } else {
             $this->subMenuBuilders[$id] = new static($this);
+            return $this->subMenuBuilders[$id];
         }
-
-        return $this->subMenuBuilders[$id];
     }
 
     /**
