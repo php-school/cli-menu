@@ -453,6 +453,41 @@ $menu = (new CliMenuBuilder)
 $menu->open();
 ```
 
+#### Custom Control Mapping
+
+This functionality allows to map custom key presses to a callable. For example we can set the key press "x" to close the menu:
+
+```php
+$exit = function(CliMenu $menu) {
+    $menu->close();
+}
+
+$menu = (new CliMenuBuilder)
+    ->addItem('Item 1')
+    ->build();
+
+$menu->addCustomMapping("x", $exit);
+
+$menu->open();
+```
+
+Another example is mapping shortcuts to a list of items:
+
+```php
+$myCallback = function(CliMenu $menu) {
+    // Do something
+}
+
+$menu = (new CliMenuBuilder)
+    ->addItem('List of [C]lients', $myCallback)
+    ->build();
+
+// Now, pressing Uppercase C (it's case sensitive) will call $myCallback
+$menu->addCustomMapping('C', $myCallback);
+
+$menu->open();
+```
+
 #### Dialogues
 
 ##### Flash
