@@ -286,6 +286,23 @@ class CliMenuBuilderTest extends TestCase
         $this->assertSame($builder, $subMenuBuilder->end());
     }
 
+    public function testAddSubMenuWithBuilder() : void
+    {
+        $subMenuBuilder = new CliMenuBuilder;
+        
+        $builder = new CliMenuBuilder;
+        $builder->disableDefaultItems();
+        $builder->addSubMenu('sub-menu', $subMenuBuilder);
+
+        $menu = $builder->build();
+
+        $this->checkItems($menu, [
+            [
+                'class' => MenuMenuItem::class
+            ]
+        ]);
+    }
+
     public function testSubMenuInheritsParentsStyle() : void
     {
         $builder = new CliMenuBuilder;
