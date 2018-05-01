@@ -212,6 +212,57 @@ class CliMenuTest extends TestCase
         $this->assertCount(1, $menu->getItems());
     }
 
+    public function testAddItems() : void
+    {
+        $menu = new CliMenu('PHP School FTW', []);
+
+        $this->assertCount(0, $menu->getItems());
+
+        $item1 = new SelectableItem('Item 2', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $item2 = new SelectableItem('Item 2', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $menu->addItems([$item1, $item2]);
+
+        $this->assertCount(2, $menu->getItems());
+    }
+
+    public function testSetItems() : void
+    {
+        $menu = new CliMenu('PHP School FTW', []);
+
+        $this->assertCount(0, $menu->getItems());
+
+        $item1 = new SelectableItem('Item 2', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $item2 = new SelectableItem('Item 2', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $item3 = new SelectableItem('Item 2', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $item4 = new SelectableItem('Item 2', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $menu->addItems([$item1, $item2]);
+
+        $this->assertCount(2, $menu->getItems());
+        
+        $menu->setItems([$item3, $item4]);
+
+        $this->assertCount(2, $menu->getItems());
+        $this->assertSame([$item3, $item4], $menu->getItems());
+    }
+
     public function testAskNumberThrowsExceptionIfMenuNotOpen() : void
     {
         $menu = new CliMenu('PHP School FTW', []);
@@ -324,6 +375,71 @@ class CliMenuTest extends TestCase
 
         static::assertEquals('yellow', $password->getStyle()->getBg());
         static::assertEquals('red', $password->getStyle()->getFg());
+    }
+
+    public function testAddCustomControlMappingThrowsExceptionWhenOverwritingExistingDefaultControls() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot rebind this input');
+
+        $menu = new CliMenu('PHP School FTW', []);
+        $menu->addCustomControlMapping(' ', function () {
+        });
+    }
+
+    public function testAddCustomControlMappingThrowsExceptionWhenAttemptingToOverwriteAddedCustomControlMap() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot rebind this input');
+
+        $menu = new CliMenu('PHP School FTW', []);
+        $menu->addCustomControlMapping('c', function () {
+        });
+        $menu->addCustomControlMapping('c', function () {
+        });
+    }
+
+    public function testAddCustomControlMapping() : void
+    {
+        $this->terminal->expects($this->once())
+            ->method('read')
+            ->willReturn('c');
+
+        $style = $this->getStyle($this->terminal);
+
+        $action = function (CliMenu $menu) {
+            $menu->close();
+        };
+        $item = new SelectableItem('Item 1', $action);
+
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
+        $menu->addCustomControlMapping('c', $action);
+        $menu->open();
+
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+
+    public function testRemoveCustomControlMappingThrowsExceptionIfNoSuchMappingExists() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('This input is not registered');
+
+        $menu = new CliMenu('PHP School FTW', []);
+        $menu->removeCustomControlMapping('c');
+    }
+
+    public function testRemoveCustomControlMapping() : void
+    {
+        $action = function (CliMenu $menu) {
+            $menu->close();
+        };
+
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+        $menu->addCustomControlMapping('c', $action);
+        self::assertSame(['c' => $action], $this->readAttribute($menu, 'customControlMappings'));
+        
+        $menu->removeCustomControlMapping('c');
+        self::assertSame([], $this->readAttribute($menu, 'customControlMappings'));
     }
 
     private function getTestFile() : string

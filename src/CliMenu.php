@@ -65,6 +65,25 @@ class CliMenu
     protected $parent;
 
     /**
+     * @var array
+     */
+    protected $defaultControlMappings = [
+        '^P' => InputCharacter::UP,
+        'k'  => InputCharacter::UP,
+        '^K' => InputCharacter::DOWN,
+        'j'  => InputCharacter::DOWN,
+        "\r" => InputCharacter::ENTER,
+        ' '  => InputCharacter::ENTER,
+        'l'  => InputCharacter::LEFT,
+        'm'  => InputCharacter::RIGHT,
+    ];
+
+    /**
+     * @var array
+     */
+    protected $customControlMappings = [];
+
+    /**
      * @var Frame
      */
     private $currentFrame;
@@ -145,6 +164,30 @@ class CliMenu
     }
 
     /**
+     * Add multiple Items to the menu
+     */
+    public function addItems(array $items) : void
+    {
+        foreach ($items as $item) {
+            $this->items[] = $item;
+        }
+
+        if (count($this->items) === count($items)) {
+            $this->selectFirstItem();
+        }
+    }
+
+    /**
+     * Set Items of the menu
+     */
+    public function setItems(array $items) : void
+    {
+        $this->items = $items;
+
+        $this->selectFirstItem();
+    }
+
+    /**
      * Set the selected pointer to the first selectable item
      */
     private function selectFirstItem() : void
@@ -158,6 +201,30 @@ class CliMenu
     }
 
     /**
+     * Adds a custom control mapping
+     */
+    public function addCustomControlMapping(string $input, callable $callable) : void
+    {
+        if (isset($this->defaultControlMappings[$input]) || isset($this->customControlMappings[$input])) {
+            throw new \InvalidArgumentException('Cannot rebind this input');
+        }
+
+        $this->customControlMappings[$input] = $callable;
+    }
+
+    /**
+     * Removes a custom control mapping
+     */
+    public function removeCustomControlMapping(string $input) : void
+    {
+        if (!isset($this->customControlMappings[$input])) {
+            throw new \InvalidArgumentException('This input is not registered');
+        }
+
+        unset($this->customControlMappings[$input]);
+    }
+
+    /**
      * Display menu and capture input
      */
     private function display() : void
@@ -165,19 +232,14 @@ class CliMenu
         $this->draw();
 
         $reader = new NonCanonicalReader($this->terminal);
-        $reader->addControlMappings([
-            '^P' => InputCharacter::UP,
-            'k'  => InputCharacter::UP,
-            '^K' => InputCharacter::DOWN,
-            'j'  => InputCharacter::DOWN,
-            "\r" => InputCharacter::ENTER,
-            ' '  => InputCharacter::ENTER,
-            'l'  => 'LEFT',
-            'm'  => 'RIGHT',
-        ]);
+        $reader->addControlMappings($this->defaultControlMappings);
 
         while ($this->isOpen() && $char = $reader->readCharacter()) {
             if (!$char->isHandledControl()) {
+                $rawChar = $char->get();
+                if (isset($this->customControlMappings[$rawChar])) {
+                    $this->customControlMappings[$rawChar]($this);
+                }
                 continue;
             }
 
@@ -288,9 +350,6 @@ class CliMenu
      */
     protected function draw() : void
     {
-        $this->terminal->clean();
-        $this->terminal->moveCursorToTop();
-
         $frame = new Frame;
 
         $frame->newLine(2);
@@ -308,10 +367,15 @@ class CliMenu
         $frame->addRows($this->drawMenuItem(new LineBreakItem()));
 
         $frame->newLine(2);
-
+        
+        $this->terminal->moveCursorToTop();
         foreach ($frame->getRows() as $row) {
+            if ($row == "\n") {
+                $this->terminal->write("\033[2K");
+            }
             $this->terminal->write($row);
         }
+        $this->terminal->write("\033[J");
 
         $this->currentFrame = $frame;
     }

@@ -347,6 +347,21 @@ $subMenu = $mainMenuBuilder->getSubMenu('Super Sub Menu');
 
 You can only do this after the main menu has been built, this is because the main menu builder takes care of building all sub menus.
 
+If you have already have a configured menu builder you can just pass that to `addSubMenu` and be done:
+
+```php
+
+$subMenuBuilder = (new CliMenuBuilder)
+    ->setTitle('Behold the awesomeness')
+    ->addItem(/** **/);
+
+$menu = (new CliMenuBuilder)
+    ->addSubMenu('Super Sub Menu', $subMenuBuilder)
+    ->build();
+```
+
+In this case `addSubMenu` will return the main menu builder, not the sub menu builder.
+
 #### Disabling Items & Sub Menus
 
 In this example we are disabling certain items and a submenu but still having them shown in the output. 
@@ -402,7 +417,8 @@ $menu->open();
 
 #### Getting, Removing and Adding items
 
-You can also interact with the menu items in an action:
+You can also interact with the menu items in an action. You can add, remove and replace items. If you do this, you 
+will likely want to redraw the menu as well so the new list is rendered. 
 
 ```php
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
@@ -414,7 +430,14 @@ $itemCallable = function (CliMenu $menu) {
         $menu->removeItem($item);
     }
     
+    //add single item
     $menu->addItem(new LineBreakItem('-'));
+    
+    //add multiple items
+    $menu->addItems([new LineBreakItem('-'), new LineBreakItem('*')]);
+    
+    //replace all items
+    $menu->setItems([new LineBreakItem('+'), new LineBreakItem('-')]);
 
     $menu->redraw();
 };
@@ -426,6 +449,41 @@ $menu = (new CliMenuBuilder)
     ->addItem('Third Item', $itemCallable)
     ->addLineBreak('-')
     ->build();
+
+$menu->open();
+```
+
+#### Custom Control Mapping
+
+This functionality allows to map custom key presses to a callable. For example we can set the key press "x" to close the menu:
+
+```php
+$exit = function(CliMenu $menu) {
+    $menu->close();
+}
+
+$menu = (new CliMenuBuilder)
+    ->addItem('Item 1')
+    ->build();
+
+$menu->addCustomMapping("x", $exit);
+
+$menu->open();
+```
+
+Another example is mapping shortcuts to a list of items:
+
+```php
+$myCallback = function(CliMenu $menu) {
+    // Do something
+}
+
+$menu = (new CliMenuBuilder)
+    ->addItem('List of [C]lients', $myCallback)
+    ->build();
+
+// Now, pressing Uppercase C (it's case sensitive) will call $myCallback
+$menu->addCustomMapping('C', $myCallback);
 
 $menu->open();
 ```
