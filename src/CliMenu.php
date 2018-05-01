@@ -64,6 +64,25 @@ class CliMenu
     protected $parent;
 
     /**
+     * @var array
+     */
+    protected $defaultControlMappings = [
+        '^P' => InputCharacter::UP,
+        'k'  => InputCharacter::UP,
+        '^K' => InputCharacter::DOWN,
+        'j'  => InputCharacter::DOWN,
+        "\r" => InputCharacter::ENTER,
+        ' '  => InputCharacter::ENTER,
+        'l'  => InputCharacter::LEFT,
+        'm'  => InputCharacter::RIGHT,
+    ];
+
+    /**
+     * @var array
+     */
+    protected $customControlMappings = [];
+
+    /**
      * @var Frame
      */
     private $currentFrame;
@@ -157,6 +176,30 @@ class CliMenu
     }
 
     /**
+     * Adds a custom control mapping
+     */
+    public function addCustomControlMapping(string $input, callable $callable) : void
+    {
+        if (isset($this->defaultControlMappings[$input]) || isset($this->customControlMappings[$input])) {
+            throw new \InvalidArgumentException('Cannot rebind this input.');
+        }
+
+        $this->customControlMappings[$input] = $callable;
+    }
+
+    /**
+     * Removes a custom control mapping
+     */
+    public function removeCustomControlMapping(string $input) : void
+    {
+        if (!isset($this->customControlMappings[$input])) {
+            throw new \InvalidArgumentException('This input is not registered.');
+        }
+
+        unset($this->customControlMappings[$input]);
+    }
+
+    /**
      * Display menu and capture input
      */
     private function display() : void
@@ -164,17 +207,14 @@ class CliMenu
         $this->draw();
 
         $reader = new NonCanonicalReader($this->terminal);
-        $reader->addControlMappings([
-            '^P' => InputCharacter::UP,
-            'k'  => InputCharacter::UP,
-            '^K' => InputCharacter::DOWN,
-            'j'  => InputCharacter::DOWN,
-            "\r" => InputCharacter::ENTER,
-            ' '  => InputCharacter::ENTER,
-        ]);
+        $reader->addControlMappings($this->defaultControlMappings);
 
         while ($this->isOpen() && $char = $reader->readCharacter()) {
             if (!$char->isHandledControl()) {
+                $rawChar = $char->get();
+                if (isset($this->customControlMappings[$rawChar])) {
+                    $this->customControlMappings[$rawChar]($this);
+                }
                 continue;
             }
 
