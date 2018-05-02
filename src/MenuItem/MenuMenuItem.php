@@ -39,6 +39,14 @@ class MenuMenuItem implements MenuItemInterface
     {
         return $this->text;
     }
+    
+    /**
+     * Returns the sub menu
+     */
+    public function getSubMenu() : CliMenu
+    {
+        return $this->subMenu;
+    }
 
     /**
      * Display the sub menu
