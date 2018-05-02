@@ -136,13 +136,9 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function addAsciiArt(string $art, string $position = AsciiArtItem::POSITION_CENTER) : self
+    public function addAsciiArt(string $art, string $position = AsciiArtItem::POSITION_CENTER, string $alt) : self
     {
-        $asciiArtItem = new AsciiArtItem($art, $position);
-
-        if ($asciiArtItem->getArtLength() <= $this->getMenuStyle()->getContentWidth()) {
-            $this->addMenuItem($asciiArtItem);
-        }
+        $this->addMenuItem(new AsciiArtItem($art, $position, $alt));
 
         return $this;
     }
