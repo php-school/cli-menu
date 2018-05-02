@@ -127,4 +127,18 @@ class AsciiArtItemTest extends TestCase
         $item->hideItemExtra();
         $this->assertFalse($item->showsItemExtra());
     }
+
+    public function testGetRowsReturnsStaticAltItemWhenWidthIsTooSmall()
+    {
+        $menuStyle = $this->createMock(MenuStyle::class);
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getContentWidth')
+            ->will($this->returnValue(10));
+        
+        $item = new AsciiArtItem('TOO LONG. SO SO LONG.', AsciiArtItem::POSITION_CENTER, 'my alt');
+        
+        self::assertSame(['my alt'], $item->getRows($menuStyle));
+    }
 }

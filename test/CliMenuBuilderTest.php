@@ -245,16 +245,23 @@ class CliMenuBuilderTest extends TestCase
         $this->checkItems($menu, $expected);
     }
 
-    public function testAddAsciiArtDetectsArtThatDoesNotFitAndSkipsIt() : void
+    public function testAsciiArtWithAlt() : void
     {
         $builder = new CliMenuBuilder;
-        $builder->setWidth(1);
-        $builder->addAsciiArt("//\n//", AsciiArtItem::POSITION_LEFT);
+        $builder->disableDefaultItems();
+        $builder->addAsciiArt("//\n//", AsciiArtItem::POSITION_LEFT, 'Some ALT');
         $menu = $builder->build();
 
-        foreach ($menu->getItems() as $menuItem) {
-            $this->assertNotInstanceOf(AsciiArtItem::class, $menuItem);
-        }
+        $expected = [
+            [
+                'class' => AsciiArtItem::class,
+                'text' => "//\n//",
+                'position'  => AsciiArtItem::POSITION_LEFT,
+                'alternateText' => 'Some ALT'
+            ]
+        ];
+
+        $this->checkItems($menu, $expected);
     }
 
     public function testEndThrowsExceptionIfNoParentBuilder() : void
