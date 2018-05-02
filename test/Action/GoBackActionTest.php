@@ -30,7 +30,7 @@ class GoBackActionTest extends TestCase
         
         $menu
             ->expects($this->once())
-            ->method('close');
+            ->method('closeThis');
         
         $parent
             ->expects($this->once())
