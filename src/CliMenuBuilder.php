@@ -84,7 +84,9 @@ class CliMenuBuilder
     public function __construct(CliMenuBuilder $parent = null)
     {
         $this->parent   = $parent;
-        $this->terminal = TerminalFactory::fromSystem();
+        $this->terminal = $this->parent !== null
+            ? $this->parent->getTerminal()
+            : TerminalFactory::fromSystem();
         $this->style    = MenuStyle::getDefaultStyleValues();
     }
 
@@ -271,6 +273,11 @@ class CliMenuBuilder
     {
         $this->terminal = $terminal;
         return $this;
+    }
+
+    public function getTerminal() : Terminal
+    {
+        return $this->terminal;
     }
 
     private function getDefaultItems() : array
