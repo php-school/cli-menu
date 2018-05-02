@@ -28,16 +28,22 @@ class AsciiArtItem implements MenuItemInterface
     private $position;
 
     /**
+     * @var string
+     */
+    private $alternateText;
+
+    /**
      * @var int
      */
     private $artLength;
 
-    public function __construct(string $text, string $position = self::POSITION_CENTER)
+    public function __construct(string $text, string $position = self::POSITION_CENTER, string $alt = '')
     {
         Assertion::inArray($position, [self::POSITION_CENTER, self::POSITION_RIGHT, self::POSITION_LEFT]);
         
         $this->text      = $text;
         $this->position  = $position;
+        $this->alternateText = $alt;
         $this->artLength = max(array_map('mb_strlen', explode("\n", $text)));
     }
 
@@ -46,6 +52,11 @@ class AsciiArtItem implements MenuItemInterface
      */
     public function getRows(MenuStyle $style, bool $selected = false) : array
     {
+        if ($this->artLength > $style->getContentWidth()) {
+            $alternate = new StaticItem($this->alternateText);
+            return $alternate->getRows($style, false);
+        }
+
         return array_map(function ($row) use ($style) {
             $length = mb_strlen($row);
 
