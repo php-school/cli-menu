@@ -119,6 +119,7 @@ class CliMenu
      */
     protected function tearDownTerminal() : void
     {
+        $this->terminal->enableCursor();
         $this->terminal->restoreOriginalConfiguration();
     }
 
