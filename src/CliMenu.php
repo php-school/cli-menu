@@ -337,11 +337,11 @@ class CliMenu
         $this->terminal->moveCursorToTop();
         foreach ($frame->getRows() as $row) {
             if ($row == "\n") {
-                $this->terminal->write("\033[2K");
+                $this->terminal->clearLine();
             }
             $this->terminal->write($row);
         }
-        $this->terminal->write("\033[J");
+        $this->terminal->clearDown();
 
         $this->currentFrame = $frame;
     }
