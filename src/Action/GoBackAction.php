@@ -12,7 +12,7 @@ class GoBackAction
     public function __invoke(CliMenu $menu) : void
     {
         if ($parent = $menu->getParent()) {
-            $menu->close();
+            $menu->closeThis();
             $parent->open();
         }
     }
