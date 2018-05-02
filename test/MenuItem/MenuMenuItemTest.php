@@ -159,4 +159,12 @@ class MenuMenuItemTest extends TestCase
         $item->hideItemExtra();
         $this->assertFalse($item->showsItemExtra());
     }
+
+    public function testGetSubMenu() : void
+    {
+        $subMenu = $this->createMock(CliMenu::class);
+        $item = new MenuMenuItem('Item', $subMenu);
+        
+        self::assertSame($subMenu, $item->getSubMenu());
+    }
 }
