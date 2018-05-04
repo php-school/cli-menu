@@ -459,56 +459,67 @@ class MenuStyle
 
         return $this;
     }
+
     public function setBorderTopWidth(int $width) : self
     {
         $this->borderTopWidth = $width;
 
         return $this;
     }
+
     public function setBorderRightWidth(int $width) : self
     {
         $this->borderRightWidth = $width;
 
         return $this;
     }
+
     public function setBorderBottomWidth(int $width) : self
     {
         $this->borderBottomWidth = $width;
 
         return $this;
     }
+
     public function setBorderLeftWidth(int $width) : self
     {
         $this->borderLeftWidth = $width;
 
         return $this;
     }
+
     public function setBorderColour(string $colour) : self
     {
         $this->borderColour = $colour;
 
         return $this;
     }
+
     public function getBorderTopWidth() : int
     {
         return $this->borderTopWidth;
     }
+
     public function getBorderRightWidth() : int
     {
         return $this->borderRightWidth;
     }
+
     public function getBorderBottomWidth() : int
     {
         return $this->borderBottomWidth;
     }
+
     public function getBorderLeftWidth() : int
     {
         return $this->borderLeftWidth;
     }
+
     public function getBorderColour() : string
     {
         return $this->borderColour;
     }
+
     public function getBorderColourCode() : string
     {
         return sprintf("\033[%sm", self::$availableBackgroundColors[$this->getBorderColour()]['set']);
