@@ -272,21 +272,22 @@ class CliMenuBuilder
         $leftWidth = null,
         string $colour = null
     ) : self {
-        $this->style['borderTopWidth'] = $topWidth;
-
         if (!is_int($rightWidth)) {
-            $this->style['borderRightWidth'] = $topWidth;
-            $this->style['borderBottomWidth'] = $topWidth;
-            $this->style['borderLeftWidth'] = $topWidth;
+            $rightWidth = $bottomWidth = $leftWidth = $topWidth;
             $colour = $rightWidth;
         } elseif (!is_int($bottomWidth)) {
-            $this->style['borderBottomWidth'] = $topWidth;
-            $this->style['borderLeftWidth'] = $rightWidth;
+            $bottomWidth = $topWidth;
+            $leftWidth = $rightWidth;
             $colour = $bottomWidth;
         } elseif (!is_int($leftWidth)) {
-            $this->style['borderLeftWidth'] = $rightWidth;
+            $leftWidth = $rightWidth;
             $colour = $leftWidth;
         }
+
+        $this->style['borderTopWidth'] = $topWidth;
+        $this->style['borderRightWidth'] = $rightWidth;
+        $this->style['borderBottomWidth'] = $bottomWidth;
+        $this->style['borderLeftWidth'] = $leftWidth;
 
         if (is_string($colour)) {
             $this->style['borderColour'] = $colour;
