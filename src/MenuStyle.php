@@ -190,7 +190,6 @@ class MenuStyle
         $this->setBorderBottomWidth(static::$defaultStyleValues['borderBottomWidth']);
         $this->setBorderLeftWidth(static::$defaultStyleValues['borderLeftWidth']);
         $this->setBorderColour(static::$defaultStyleValues['borderColour']);
-
     }
 
     public static function getAvailableColours() : array
@@ -269,7 +268,10 @@ class MenuStyle
      */
     protected function calculateContentWidth() : void
     {
-        $this->contentWidth = $this->width - ($this->padding*2) - ($this->margin*2) - ($this->borderRightWidth + $this->borderLeftWidth);
+        $this->contentWidth = $this->width
+            - ($this->padding*2)
+            - ($this->margin*2)
+            - ($this->borderRightWidth + $this->borderLeftWidth);
     }
 
     public function getFg() : string
@@ -303,7 +305,10 @@ class MenuStyle
 
     public function setWidth(int $width) : self
     {
-        $availableWidth = $this->terminal->getWidth() - ($this->margin * 2) - ($this->padding * 2) - ($this->borderRightWidth + $this->borderLeftWidth);
+        $availableWidth = $this->terminal->getWidth()
+            - ($this->margin * 2)
+            - ($this->padding * 2)
+            - ($this->borderRightWidth + $this->borderLeftWidth);
 
         if ($width >= $availableWidth) {
             $width = $availableWidth;
