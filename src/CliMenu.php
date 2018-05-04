@@ -388,7 +388,11 @@ class CliMenu
             ? $this->style->getSelectedUnsetCode()
             : $this->style->getUnselectedUnsetCode();
         
-        $borderColour = $this->style->getBorderColourCode();
+        if ($this->style->getBorderLeftWidth() || $this->style->getBorderRightWidth()) {
+            $borderColour = $this->style->getBorderColourCode();
+        } else {
+            $borderColour = '';
+        }
 
         return array_map(function ($row) use ($setColour, $unsetColour, $borderColour) {
             return sprintf(
