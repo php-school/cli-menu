@@ -444,11 +444,11 @@ class MenuStyle
         if (!is_int($rightWidth)) {
             $this->borderRightWidth = $this->borderBottomWidth = $this->borderLeftWidth = $topWidth;
             $colour = $rightWidth;
-        } else if (!is_int($bottomWidth)) {
+        } elseif (!is_int($bottomWidth)) {
             $this->borderBottomWidth = $topWidth;
             $this->borderLeftWidth = $rightWidth;
             $colour = $bottomWidth;
-        } else if (!is_int($leftWidth)) {
+        } elseif (!is_int($leftWidth)) {
             $this->borderLeftWidth = $rightWidth;
             $colour = $leftWidth;
         }
