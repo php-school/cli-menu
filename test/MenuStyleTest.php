@@ -241,8 +241,9 @@ class MenuStyleTest extends TestCase
         $style->setWidth(300);
         $style->setPadding(5);
         $style->setMargin(5);
+        $style->setBorder(2);
 
-        static::assertSame(280, $style->getContentWidth());
+        static::assertSame(276, $style->getContentWidth());
     }
 
     public function testRightHandPaddingCalculation() : void
@@ -252,7 +253,8 @@ class MenuStyleTest extends TestCase
         $style->setWidth(300);
         $style->setPadding(5);
         $style->setMargin(5);
+        $style->setBorder(2);
 
-        static::assertSame(235, $style->getRightHandPadding(50));
+        static::assertSame(231, $style->getRightHandPadding(50));
     }
 }
