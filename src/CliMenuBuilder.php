@@ -265,6 +265,18 @@ class CliMenuBuilder
         return $this;
     }
 
+    public function setBorder(
+        int $topWidth,
+        $rightWidth = null,
+        $bottomWidth = null,
+        $leftWidth = null,
+        string $colour = null
+    ) : self {
+        $this->style->setBorder($topWidth, $rightWidth, $bottomWidth, $leftWidth, $colour);
+
+        return $this;
+    }
+
     public function setTerminal(Terminal $terminal) : self
     {
         $this->terminal = $terminal;
