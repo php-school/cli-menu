@@ -427,13 +427,28 @@ class MenuStyle
     /**
      * Shorthand function to set all borders values at once
      */
-    public function setBorder(int $topWidth, int $rightWidth = null, int $bottomWidth = null, int $leftWidth = null, string $colour = null) : self
-    {
+    public function setBorder(
+        int $topWidth,
+        $rightWidth = null,
+        $bottomWidth = null,
+        $leftWidth = null,
+        string $colour = null
+    ) : self {
         $this->borderTopWidth = $topWidth;
-        $this->borderRightWidth = $rightWidth ?? $topWidth;
-        $this->borderBottomWidth = $bottomWidth ?? $topWidth;
-        $this->borderLeftWidth = $leftWidth ?? $rightWidth ?? $topWidth;
-        if ($colour !== null) {
+
+        if (!is_int($rightWidth)) {
+            $this->borderRightWidth = $this->borderBottomWidth = $this->borderLeftWidth = $topWidth;
+            $colour = $rightWidth;
+        } else if (!is_int($bottomWidth)) {
+            $this->borderBottomWidth = $topWidth;
+            $this->borderLeftWidth = $rightWidth;
+            $colour = $bottomWidth;
+        } else if (!is_int($leftWidth)) {
+            $this->borderLeftWidth = $rightWidth;
+            $colour = $leftWidth;
+        }
+
+        if (is_string($colour)) {
             $this->borderColour = $colour;
         }
 
