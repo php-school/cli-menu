@@ -439,19 +439,22 @@ class MenuStyle
         $leftWidth = null,
         string $colour = null
     ) : self {
-        $this->borderTopWidth = $topWidth;
-
         if (!is_int($rightWidth)) {
-            $this->borderRightWidth = $this->borderBottomWidth = $this->borderLeftWidth = $topWidth;
+            $rightWidth = $bottomWidth = $leftWidth = $topWidth;
             $colour = $rightWidth;
         } elseif (!is_int($bottomWidth)) {
-            $this->borderBottomWidth = $topWidth;
-            $this->borderLeftWidth = $rightWidth;
+            $bottomWidth = $topWidth;
+            $leftWidth = $rightWidth;
             $colour = $bottomWidth;
         } elseif (!is_int($leftWidth)) {
-            $this->borderLeftWidth = $rightWidth;
+            $leftWidth = $rightWidth;
             $colour = $leftWidth;
         }
+
+        $this->borderTopWidth = $topWidth;
+        $this->borderRightWidth = $rightWidth;
+        $this->borderBottomWidth = $bottomWidth;
+        $this->borderLeftWidth = $leftWidth;
 
         if (is_string($colour)) {
             $this->borderColour = $colour;
