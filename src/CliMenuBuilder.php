@@ -360,7 +360,12 @@ class CliMenuBuilder
             ->setUnselectedMarker($this->style['unselectedMarker'])
             ->setItemExtra($this->style['itemExtra'])
             ->setDisplaysExtra($this->style['displaysExtra'])
-            ->setTitleSeparator($this->style['titleSeparator']);
+            ->setTitleSeparator($this->style['titleSeparator'])
+            ->setBorderTopWidth($this->style['borderTopWidth'])
+            ->setBorderRightWidth($this->style['borderRightWidth'])
+            ->setBorderBottomWidth($this->style['borderBottomWidth'])
+            ->setBorderLeftWidth($this->style['borderLeftWidth'])
+            ->setBorderColour($this->style['borderColour']);
     }
 
     /**
