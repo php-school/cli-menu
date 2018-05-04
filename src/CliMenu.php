@@ -319,6 +319,27 @@ class CliMenu
         $frame = new Frame;
 
         $frame->newLine(2);
+        
+        $borderRow = [
+            sprintf(
+                "%s%s%s%s%s%s%s%s%s\n",
+                str_repeat(' ', $this->style->getMargin()),
+                $this->style->getBorderColourCode(),
+                str_repeat(' ', $this->style->getBorderLeftWidth()),
+                str_repeat(' ', $this->style->getPadding()),
+                str_repeat(' ', $this->style->getContentWidth()),
+                str_repeat(' ', $this->style->getPadding()),
+                str_repeat(' ', $this->style->getBorderRightWidth()),
+                "\033[0m",
+                str_repeat(' ', $this->style->getMargin())
+            )
+        ];
+
+        if ($this->style->getBorderTopWidth() > 0) {
+            for ($b = 0; $b < $this->style->getBorderTopWidth(); $b++) {
+                $frame->addRows($borderRow);
+            }
+        }
 
         if ($this->title) {
             $frame->addRows($this->drawMenuItem(new LineBreakItem()));
@@ -331,6 +352,12 @@ class CliMenu
         }, $this->items, array_keys($this->items));
 
         $frame->addRows($this->drawMenuItem(new LineBreakItem()));
+        
+        if ($this->style->getBorderBottomWidth() > 0) {
+            for ($b = 0; $b < $this->style->getBorderBottomWidth(); $b++) {
+                $frame->addRows($borderRow);
+            }
+        }
 
         $frame->newLine(2);
         
@@ -360,15 +387,21 @@ class CliMenu
         $unsetColour = $selected
             ? $this->style->getSelectedUnsetCode()
             : $this->style->getUnselectedUnsetCode();
+        
+        $borderColour = $this->style->getBorderColourCode();
 
-        return array_map(function ($row) use ($setColour, $unsetColour) {
+        return array_map(function ($row) use ($setColour, $unsetColour, $borderColour) {
             return sprintf(
-                "%s%s%s%s%s%s%s\n",
+                "%s%s%s%s%s%s%s%s%s%s%s\n",
                 str_repeat(' ', $this->style->getMargin()),
+                $borderColour,
+                str_repeat(' ', $this->style->getBorderLeftWidth()),
                 $setColour,
                 str_repeat(' ', $this->style->getPadding()),
                 $row,
                 str_repeat(' ', $this->style->getRightHandPadding(mb_strlen(s::stripAnsiEscapeSequence($row)))),
+                $borderColour,
+                str_repeat(' ', $this->style->getBorderRightWidth()),
                 $unsetColour,
                 str_repeat(' ', $this->style->getMargin())
             );
