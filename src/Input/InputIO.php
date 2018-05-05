@@ -240,7 +240,7 @@ class InputIO
             $input,
             $userInput,
             sprintf(
-                '%s%s%s%s%s',
+                '%s%s%s',
                 $input->getStyle()->getInvertedColoursSetCode(),
                 $userInput,
                 $input->getStyle()->getInvertedColoursUnsetCode()
