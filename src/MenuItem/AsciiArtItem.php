@@ -73,8 +73,7 @@ class AsciiArtItem implements MenuItemInterface
                     break;
                 case self::POSITION_CENTER:
                 default:
-                    $row = rtrim($row);
-                    $padding = $padding - ($this->artLength - mb_strlen($row));
+                    $padding = $padding - ($this->artLength - $length);
                     $left = ceil($padding/2);
                     $right = $padding - $left;
                     $row = sprintf('%s%s%s', str_repeat(' ', $left), $row, str_repeat(' ', $right));
