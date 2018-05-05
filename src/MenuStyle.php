@@ -244,14 +244,14 @@ class MenuStyle
         return $this->fg;
     }
 
-    public function setFg(string $fg) : self
+    public function setFg($fg) : self
     {
         if (is_int($fg)) {
             if ($this->terminal->getColourSupport() < 256) {
                 // Need to map to 8 colors
                 return $this;
             } elseif ($fg < 0 || $fg > 255) {
-                throw new Exception("Invalid colour value");
+                throw new Exception("Invalid colour code");
             }
         }
 
@@ -266,7 +266,7 @@ class MenuStyle
         return $this->bg;
     }
 
-    public function setBg(string $bg) : self
+    public function setBg($bg) : self
     {
         if (is_int($bg)) {
             if ($this->terminal->getColourSupport() < 256) {
@@ -274,7 +274,7 @@ class MenuStyle
                 return $this;
             }
             if ($bg < 0 || $bg > 255) {
-                throw new Exception("Invalid colour value");
+                throw new Exception("Invalid colour code");
             }
         }
         $this->bg = $bg;
