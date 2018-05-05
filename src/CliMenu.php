@@ -353,23 +353,22 @@ class CliMenu
     {
         $rows = $item->getRows($this->style, $selected);
 
-        $setColour = $selected
-            ? $this->style->getSelectedSetCode()
-            : $this->style->getUnselectedSetCode();
-
-        $unsetColour = $selected
-            ? $this->style->getSelectedUnsetCode()
-            : $this->style->getUnselectedUnsetCode();
+        $setColour = $this->style->getColoursSetCode();
+        $resetColour = $this->style->getColoursResetCode();
+        $invertedColour = $selected
+            ? $this->style->getInvertedColoursSetCode()
+            : '';
 
         return array_map(function ($row) use ($setColour, $unsetColour) {
             return sprintf(
-                "%s%s%s%s%s%s%s\n",
+                "%s%s%s%s%s%s%s%s\n",
                 str_repeat(' ', $this->style->getMargin()),
                 $setColour,
+                $invertedColour,
                 str_repeat(' ', $this->style->getPadding()),
                 $row,
                 str_repeat(' ', $this->style->getRightHandPadding(mb_strlen(s::stripAnsiEscapeSequence($row)))),
-                $unsetColour,
+                $resetColour,
                 str_repeat(' ', $this->style->getMargin())
             );
         }, $rows);
