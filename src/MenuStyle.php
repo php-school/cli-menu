@@ -460,6 +460,8 @@ class MenuStyle
             $this->borderColour = $colour;
         }
 
+        $this->calculateContentWidth();
+
         return $this;
     }
 
@@ -473,6 +475,7 @@ class MenuStyle
     public function setBorderRightWidth(int $width) : self
     {
         $this->borderRightWidth = $width;
+        $this->calculateContentWidth();
 
         return $this;
     }
@@ -487,6 +490,7 @@ class MenuStyle
     public function setBorderLeftWidth(int $width) : self
     {
         $this->borderLeftWidth = $width;
+        $this->calculateContentWidth();
 
         return $this;
     }
