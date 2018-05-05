@@ -23,11 +23,11 @@ class Flash extends Dialogue
 
         $this->write(sprintf(
             "%s%s%s%s%s\n",
-            $this->style->getUnselectedSetCode(),
+            $this->style->getColoursSetCode(),
             str_repeat(' ', $this->style->getPadding()),
             $this->text,
             str_repeat(' ', $this->style->getPadding()),
-            $this->style->getUnselectedUnsetCode()
+            $this->style->getColoursResetCode()
         ));
 
         $this->emptyRow();
