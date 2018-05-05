@@ -61,6 +61,7 @@ class CliMenuBuilderTest extends TestCase
         $builder->setSelectedMarker('x');
         $builder->setItemExtra('*');
         $builder->setTitleSeparator('-');
+        $builder->setBorder(2, 4, 5, 'green');
 
         $terminal = static::createMock(Terminal::class);
         $terminal
@@ -81,6 +82,11 @@ class CliMenuBuilderTest extends TestCase
         $this->checkStyleVariable($menu, 'selectedMarker', 'x');
         $this->checkStyleVariable($menu, 'itemExtra', '*');
         $this->checkStyleVariable($menu, 'titleSeparator', '-');
+        $this->checkStyleVariable($menu, 'borderTopWidth', 2);
+        $this->checkStyleVariable($menu, 'borderRightWidth', 4);
+        $this->checkStyleVariable($menu, 'borderBottomWidth', 5);
+        $this->checkStyleVariable($menu, 'borderLeftWidth', 4);
+        $this->checkStyleVariable($menu, 'borderColour', 'green');
     }
 
     public function testDisableDefaultItems() : void
