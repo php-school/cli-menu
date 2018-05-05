@@ -359,7 +359,7 @@ class CliMenu
             ? $this->style->getInvertedColoursSetCode()
             : '';
 
-        return array_map(function ($row) use ($setColour, $unsetColour) {
+        return array_map(function ($row) use ($setColour, $invertedColour, $resetColour) {
             return sprintf(
                 "%s%s%s%s%s%s%s%s\n",
                 str_repeat(' ', $this->style->getMargin()),
