@@ -86,6 +86,11 @@ class MenuStyle
     /**
      * @var string
      */
+    private $invertedColoursUnsetCode = "\033[27m";
+
+    /**
+     * @var string
+     */
     private $coloursResetCode = "\033[0m";
 
     /**
@@ -221,6 +226,14 @@ class MenuStyle
     public function getInvertedColoursSetCode() : string
     {
         return $this->invertedColoursSetCode;
+    }
+
+    /**
+     * Get the inverted escape sequence (used for selected elements)
+     */
+    public function getInvertedColoursUnsetCode() : string
+    {
+        return $this->invertedColoursUnsetCode;
     }
 
     /**
