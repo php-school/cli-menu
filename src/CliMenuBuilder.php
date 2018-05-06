@@ -204,9 +204,8 @@ class CliMenuBuilder
             if ($this->terminal->getColourSupport() < 256) {
                 $colour = $fallback;
                 Assertion::inArray($colour, MenuStyle::getAvailableColours());
-            }
-            if ($colour < 0 || $colour > 255) {
-                throw new Exception("Invalid colour code");
+            } elseif ($colour < 0 || $colour > 255) {
+                throw new \Exception("Invalid colour code");
             }
         } else {
             Assertion::inArray($colour, MenuStyle::getAvailableColours());
@@ -223,9 +222,8 @@ class CliMenuBuilder
             if ($this->terminal->getColourSupport() < 256) {
                 $colour = $fallback;
                 Assertion::inArray($colour, MenuStyle::getAvailableColours());
-            }
-            if ($colour < 0 || $colour > 255) {
-                throw new Exception("Invalid colour code");
+            } elseif ($colour < 0 || $colour > 255) {
+                throw new \Exception("Invalid colour code");
             }
         } else {
             Assertion::inArray($colour, MenuStyle::getAvailableColours());
