@@ -252,7 +252,7 @@ class MenuStyle
         $this->contentWidth = $this->width - ($this->padding*2) - ($this->margin*2);
     }
 
-    public function getFg() : string
+    public function getFg()
     {
         return $this->fg;
     }
@@ -273,7 +273,7 @@ class MenuStyle
         return $this;
     }
 
-    public function getBg() : string
+    public function getBg()
     {
         return $this->bg;
     }
