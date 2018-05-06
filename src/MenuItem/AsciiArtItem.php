@@ -80,7 +80,7 @@ class AsciiArtItem implements MenuItemInterface
                     break;
             }
 
-            return $row;
+            return rtrim($row, ' ');
         }, explode("\n", $this->text));
     }
 
