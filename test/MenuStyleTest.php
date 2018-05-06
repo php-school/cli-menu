@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class MenuStyleTest extends TestCase
 {
-    private function getMenuStyle() : MenuStyle
+    private function getMenuStyle(int $colours = 8) : MenuStyle
     {
         // Use the CliMenuBuilder & reflection to get the style Obj
         $builder = new CliMenuBuilder();
@@ -29,7 +29,7 @@ class MenuStyleTest extends TestCase
         $reflectionStyle  = new \ReflectionObject($style);
         $terminalProperty = $reflectionStyle->getProperty('terminal');
         $terminalProperty->setAccessible(true);
-        $terminalProperty->setValue($style, $this->getMockTerminal());
+        $terminalProperty->setValue($style, $this->getMockTerminal($colours));
 
         // Force recalculate terminal widths now terminal is set
         $style->setWidth(100);
@@ -37,7 +37,7 @@ class MenuStyleTest extends TestCase
         return $style;
     }
 
-    private function getMockTerminal() : MockObject
+    private function getMockTerminal(int $colours = 8) : MockObject
     {
         $terminal = $this
             ->getMockBuilder(UnixTerminal::class)
@@ -49,6 +49,11 @@ class MenuStyleTest extends TestCase
             ->expects(static::any())
             ->method('getWidth')
             ->will(static::returnValue(500));
+
+        $terminal
+            ->expects(static::any())
+            ->method('getColourSupport')
+            ->will(static::returnValue($colours));
 
         return $terminal;
     }
@@ -139,6 +144,23 @@ class MenuStyleTest extends TestCase
         static::assertSame(200, $style->getWidth());
         static::assertSame(10, $style->getMargin());
         static::assertSame(10, $style->getPadding());
+    }
+
+    public function test256ColoursCodes() : void
+    {
+        $style = $this->getMenuStyle(256);
+        $style->setBg(16, 'white');
+        $style->setFg(206, 'red');
+        static::assertSame(16, $style->getBg());
+        static::assertSame(206, $style->getFg());
+        static::assertSame("\033[38;5;206;48;5;16m, $style->getColoursSetCode());
+        
+        $style = $this->getMenuStyle(8);
+        $style->setBg(16, 'white');
+        $style->setFg(206, 'red');
+        static::assertSame('white', $style->getBg());
+        static::assertSame('red', $style->getFg());
+        static::assertSame("\033[37;41m, $style->getColoursSetCode());
     }
 
     public function testGetMarkerReturnsTheCorrectMarkers() : void
