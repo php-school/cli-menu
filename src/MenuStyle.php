@@ -19,12 +19,12 @@ class MenuStyle
     protected $terminal;
 
     /**
-     * @var string
+     * @var int|string
      */
     protected $fg;
 
     /**
-     * @var string
+     * @var int|string
      */
     protected $bg;
 
