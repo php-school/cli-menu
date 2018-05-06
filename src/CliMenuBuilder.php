@@ -198,12 +198,12 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function setBackgroundColour($colour) : self
+    public function setBackgroundColour($colour, string $fallback = null) : self
     {
         if (is_int($colour)) {
             if ($this->terminal->getColourSupport() < 256) {
-                // Need to fallback to 8 colors
-                return $this;
+                $colour = $fallback;
+                Assertion::inArray($colour, MenuStyle::getAvailableColours());
             }
             if ($colour < 0 || $colour > 255) {
                 throw new Exception("Invalid colour code");
@@ -217,12 +217,12 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function setForegroundColour($colour) : self
+    public function setForegroundColour($colour, string $fallback = null) : self
     {
         if (is_int($colour)) {
             if ($this->terminal->getColourSupport() < 256) {
-                // Need to fallback to 8 colors
-                return $this;
+                $colour = $fallback;
+                Assertion::inArray($colour, MenuStyle::getAvailableColours());
             }
             if ($colour < 0 || $colour > 255) {
                 throw new Exception("Invalid colour code");
