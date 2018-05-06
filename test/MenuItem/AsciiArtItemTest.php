@@ -96,6 +96,15 @@ class AsciiArtItemTest extends TestCase
             ],
             $item->getRows($menuStyle)
         );
+
+        $item = new AsciiArtItem("    //    \n//////////", AsciiArtItem::POSITION_CENTER);
+        $this->assertEquals(
+            [
+                "    //    ",
+                "//////////",
+            ],
+            $item->getRows($menuStyle)
+        );
     }
 
     public function testGetRowsCenterAlignedWithOddWidth() : void
@@ -112,6 +121,15 @@ class AsciiArtItemTest extends TestCase
             [
                 "     //    ",
                 "     //    ",
+            ],
+            $item->getRows($menuStyle)
+        );
+
+        $item = new AsciiArtItem("    //    \n//////////", AsciiArtItem::POSITION_CENTER);
+        $this->assertEquals(
+            [
+                "     //    ",
+                " //////////",
             ],
             $item->getRows($menuStyle)
         );
