@@ -576,12 +576,8 @@ class MenuStyle
         return $this;
     }
 
-    public function setBorderColour($colour, $fallback = null) : self
+    public function setBorderColour(string $colour, $fallback = null) : self
     {
-        if (is_string($colour) && ctype_digit($colour)) {
-            $colour = intval($colour);
-        }
-
         $this->borderColour = ColourUtil::validateColour(
             $this->terminal,
             $colour,
@@ -613,14 +609,14 @@ class MenuStyle
         return $this->borderLeftWidth;
     }
 
-    public function getBorderColour()
+    public function getBorderColour() : string
     {
         return $this->borderColour;
     }
 
     public function getBorderColourCode() : string
     {
-        if (is_string($this->borderColour)) {
+        if (ctype_digit($this->borderColour)) {
             $borderColourCode = self::$availableBackgroundColors[$this->bg];
         } else {
             $borderColourCode = sprintf("48;5;%s", $this->bg);
