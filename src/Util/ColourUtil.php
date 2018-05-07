@@ -2,6 +2,7 @@
 
 namespace PhpSchool\CliMenu\Util;
 
+use Assert\Assertion;
 use PhpSchool\Terminal\Terminal;
 
 class ColourUtil
