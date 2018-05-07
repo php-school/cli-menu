@@ -306,6 +306,8 @@ class CliMenuBuilder
 
         if (is_string($colour)) {
             $this->style['borderColour'] = $colour;
+        } elseif ($colour !== null) {
+            throw new \InvalidArgumentException('Invalid colour');
         }
 
         return $this;
