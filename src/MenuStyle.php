@@ -263,7 +263,7 @@ class MenuStyle
             if ($this->terminal->getColourSupport() < 256) {
                 $fg = $fallback;
             } elseif ($fg < 0 || $fg > 255) {
-                throw new \Exception("Invalid colour code");
+                throw new \InvalidArgumentException("Invalid colour code");
             }
         }
 
@@ -284,7 +284,7 @@ class MenuStyle
             if ($this->terminal->getColourSupport() < 256) {
                 $bg = $fallback;
             } elseif ($bg < 0 || $bg > 255) {
-                throw new \Exception("Invalid colour code");
+                throw new \InvalidArgumentException("Invalid colour code");
             }
         }
         $this->bg = $bg;
