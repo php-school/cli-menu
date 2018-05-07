@@ -257,7 +257,7 @@ class MenuStyle
     {
         $this->fg = ColourUtil::validateColour(
             $this->terminal,
-            $colour,
+            $fg,
             $fallback
         );
         $this->generateColoursSetCode();
@@ -274,7 +274,7 @@ class MenuStyle
     {
         $this->bg = ColourUtil::validateColour(
             $this->terminal,
-            $colour,
+            $bg,
             $fallback
         );
         $this->generateColoursSetCode();
