@@ -335,7 +335,6 @@ class CliMenuBuilder
             ->setBg($this->style['bg'])
             ->setWidth($this->style['width'])
             ->setPadding($this->style['padding'])
-            ->setMargin($this->style['margin'])
             ->setSelectedMarker($this->style['selectedMarker'])
             ->setUnselectedMarker($this->style['unselectedMarker'])
             ->setItemExtra($this->style['itemExtra'])
