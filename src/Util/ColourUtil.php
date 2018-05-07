@@ -2,8 +2,24 @@
 
 namespace PhpSchool\CliMenu\Util;
 
+use PhpSchool\Terminal\Terminal;
+
 class ColourUtil
 {
+    /**
+     * @var array
+     */
+    private $defaultColoursNames = [
+        'black',
+        'red',
+        'green',
+        'yellow',
+        'blue',
+        'magenta',
+        'cyan',
+        'white',
+    ];
+
     /**
      * @var array
      */
@@ -265,13 +281,40 @@ class ColourUtil
         254 => 'white',
         255 => 'white',
     ];
-    
+
+    public static function getDefaultColoursNames() : array
+    {
+        return static::$defaultColoursNames;
+    }
+
     /**
      * Simple function to transform a 8-bit (256 colours) colour code
      * to one of the default 8 colors available in the terminal
      */
-    public static function map256to8(int $colourCode) : string
+    public static function map256To8(int $colourCode) : string
     {
-        return static::coloursMap[$colourCode];
+        return static::$coloursMap[$colourCode];
+    }
+
+    /**
+     * Check if $colour exists
+     * If it's a 256-colours code and $terminal doesn't support it, returns a fallback value
+     */
+    public static function validateColour(Terminal $terminal, $colour, string $fallback = null)
+    {
+        if (is_int($colour)) {
+            if ($colour < 0 || $colour > 255) {
+                throw new \InvalidArgumentException("Invalid colour code");
+            }
+            if ($terminal->getColourSupport() < 256) {
+                if ($fallback !== null) {
+                    Assertion::inArray($fallback, static::getDefaultColoursNames());
+                    return $fallback;
+                }
+                return static::map256To8($colour);
+            }
+        }
+        Assertion::inArray($colour, static::getDefaultColoursNames());
+        return $colour;
     }
 }
