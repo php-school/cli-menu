@@ -172,6 +172,71 @@ class CliMenuBuilderTest extends TestCase
         $this->checkStyleVariable($menu, 'borderColour', 'green');
     }
 
+    public function test256ColoursCodes() : void
+    {
+        $terminal = static::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getColourSupport')
+            ->will($this->returnValue(256));
+
+        $builder = new CliMenuBuilder;
+        $builder->setTerminal($terminal);
+        $builder->setBackgroundColour(16, 'white');
+        $builder->setForegroundColour(206, 'red');
+        $menu = $builder->build();
+
+        $this->checkStyleVariable($menu, 'bg', 16);
+        $this->checkStyleVariable($menu, 'fg', 206);
+
+        $terminal = static::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getColourSupport')
+            ->will($this->returnValue(8));
+
+        $builder = new CliMenuBuilder;
+        $builder->setTerminal($terminal);
+        $builder->setBackgroundColour(16, 'white');
+        $builder->setForegroundColour(206, 'red');
+        $menu = $builder->build();
+
+        $this->checkStyleVariable($menu, 'bg', 'white');
+        $this->checkStyleVariable($menu, 'fg', 'red');
+    }
+
+    public function testSetFgThrowsExceptionWhenColourCodeIsNotInRange() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid colour code');
+
+        $terminal = static::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getColourSupport')
+            ->will($this->returnValue(256));
+
+        $builder = new CliMenuBuilder;
+        $builder->setTerminal($terminal);
+        $builder->setForegroundColour(512, 'white');
+    }
+
+    public function testSetBgThrowsExceptionWhenColourCodeIsNotInRange() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid colour code');
+
+        $terminal = static::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getColourSupport')
+            ->will($this->returnValue(256));
+
+        $builder = new CliMenuBuilder;
+        $builder->setTerminal($terminal);
+        $builder->setBackgroundColour(-5, 'white');
+    }
+
     public function testDisableDefaultItems() : void
     {
         $builder = new CliMenuBuilder;
@@ -525,6 +590,93 @@ class CliMenuBuilderTest extends TestCase
         $this->expectExceptionMessage('You can\'t disable the root menu');
 
         (new CliMenuBuilder)->disableMenu();
+    }
+
+    /**
+     * @dataProvider marginBelowZeroProvider
+     */
+    public function testSetMarginThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
+    {
+        self::expectException(\Assert\InvalidArgumentException::class);
+        
+        
+        (new CliMenuBuilder)->setMargin($value);
+    }
+
+    public function marginBelowZeroProvider() : array
+    {
+        return [[-1], [-2], [-10]];
+    }
+
+    /**
+     * @dataProvider marginAboveZeroProvider
+     */
+    public function testSetMarginAcceptsZeroAndPositiveIntegers(int $value) : void
+    {
+        $menu = (new CliMenuBuilder)->setMargin($value)->build();
+        
+        self::assertSame($value, $menu->getStyle()->getMargin());
+    }
+
+    public function marginAboveZeroProvider() : array
+    {
+        return [[0], [1], [10], [50]];
+    }
+
+    public function testSetMarginAutoAutomaticallyCalculatesMarginToCenter() : void
+    {
+        $terminal = self::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getWidth')
+            ->will($this->returnValue(200));
+
+        $builder = new CliMenuBuilder;
+        $menu = $builder
+            ->setTerminal($terminal)
+            ->setMarginAuto()
+            ->setWidth(100)
+            ->build();
+        
+        self::assertSame(50, $menu->getStyle()->getMargin());
+    }
+
+    public function testSetMarginAutoOverwritesSetMargin() : void
+    {
+        $terminal = self::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getWidth')
+            ->will($this->returnValue(200));
+
+        $builder = new CliMenuBuilder;
+        $menu = $builder
+            ->setTerminal($terminal)
+            ->setMargin(10)
+            ->setMarginAuto()
+            ->setWidth(100)
+            ->build();
+
+        self::assertSame(50, $menu->getStyle()->getMargin());
+    }
+
+    public function testSetMarginManuallyOverwritesSetMarginAuto() : void
+    {
+        $terminal = self::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getWidth')
+            ->will($this->returnValue(200));
+
+        $builder = new CliMenuBuilder;
+        $menu = $builder
+            ->setTerminal($terminal)
+            ->setMarginAuto()
+            ->setMargin(10)
+            ->setWidth(100)
+            ->build();
+
+        self::assertSame(10, $menu->getStyle()->getMargin());
     }
     
     private function checkItems(CliMenu $menu, array $expected) : void

@@ -26,11 +26,11 @@ class Confirm extends Dialogue
 
         $this->write(sprintf(
             "%s%s%s%s%s\n",
-            $this->style->getUnselectedSetCode(),
+            $this->style->getColoursSetCode(),
             str_repeat(' ', $this->style->getPadding()),
             $this->text,
             str_repeat(' ', $this->style->getPadding()),
-            $this->style->getUnselectedUnsetCode()
+            $this->style->getColoursResetCode()
         ));
 
         $this->emptyRow();
@@ -39,25 +39,23 @@ class Confirm extends Dialogue
         $leftFill    = ($promptWidth / 2) - (mb_strlen($confirmText) / 2);
 
         $this->write(sprintf(
-            "%s%s%s%s%s%s%s%s%s\n",
-            $this->style->getUnselectedSetCode(),
+            "%s%s%s%s%s%s%s\n",
+            $this->style->getColoursSetCode(),
             str_repeat(' ', $leftFill),
-            $this->style->getUnselectedUnsetCode(),
-            $this->style->getSelectedSetCode(),
+            $this->style->getInvertedColoursSetCode(),
             $confirmText,
-            $this->style->getSelectedUnsetCode(),
-            $this->style->getUnselectedSetCode(),
+            $this->style->getInvertedColoursUnsetCode(),
             str_repeat(' ', ceil($promptWidth - $leftFill - mb_strlen($confirmText))),
-            $this->style->getUnselectedUnsetCode()
+            $this->style->getColoursResetCode()
         ));
 
         $this->write(sprintf(
             "%s%s%s%s%s\n",
-            $this->style->getUnselectedSetCode(),
+            $this->style->getColoursSetCode(),
             str_repeat(' ', $this->style->getPadding()),
             str_repeat(' ', mb_strlen($this->text)),
             str_repeat(' ', $this->style->getPadding()),
-            $this->style->getUnselectedUnsetCode()
+            $this->style->getColoursResetCode()
         ));
 
         $this->terminal->moveCursorToTop();

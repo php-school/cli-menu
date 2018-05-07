@@ -11,6 +11,7 @@ use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
+use PhpSchool\CliMenu\Util\ColourUtil;
 use Assert\Assertion;
 use PhpSchool\Terminal\Terminal;
 use RuntimeException;
@@ -198,20 +199,24 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function setBackgroundColour(string $colour) : self
+    public function setBackgroundColour($colour, string $fallback = null) : self
     {
-        Assertion::inArray($colour, MenuStyle::getAvailableColours());
-
-        $this->style['bg'] = $colour;
+        $this->style['bg'] = ColourUtil::validateColour(
+            $this->terminal,
+            $colour,
+            $fallback
+        );
 
         return $this;
     }
 
-    public function setForegroundColour(string $colour) : self
+    public function setForegroundColour($colour, string $fallback = null) : self
     {
-        Assertion::inArray($colour, MenuStyle::getAvailableColours());
-
-        $this->style['fg'] = $colour;
+        $this->style['fg'] = ColourUtil::validateColour(
+            $this->terminal,
+            $colour,
+            $fallback
+        );
 
         return $this;
     }
@@ -230,8 +235,18 @@ class CliMenuBuilder
         return $this;
     }
 
+    public function setMarginAuto() : self
+    {
+        $this->style['marginAuto'] = true;
+        
+        return $this;
+    }
+
     public function setMargin(int $margin) : self
     {
+        Assertion::greaterOrEqualThan($margin, 0);
+        
+        $this->style['marginAuto'] = false;
         $this->style['margin'] = $margin;
 
         return $this;
@@ -351,12 +366,11 @@ class CliMenuBuilder
 
     private function buildStyle() : MenuStyle
     {
-        return (new MenuStyle($this->terminal))
+        $style = (new MenuStyle($this->terminal))
             ->setFg($this->style['fg'])
             ->setBg($this->style['bg'])
             ->setWidth($this->style['width'])
             ->setPadding($this->style['padding'])
-            ->setMargin($this->style['margin'])
             ->setSelectedMarker($this->style['selectedMarker'])
             ->setUnselectedMarker($this->style['unselectedMarker'])
             ->setItemExtra($this->style['itemExtra'])
@@ -367,6 +381,10 @@ class CliMenuBuilder
             ->setBorderBottomWidth($this->style['borderBottomWidth'])
             ->setBorderLeftWidth($this->style['borderLeftWidth'])
             ->setBorderColour($this->style['borderColour']);
+
+        $this->style['marginAuto'] ? $style->setMarginAuto() : $style->setMargin($this->style['margin']);
+        
+        return $style;
     }
 
     /**

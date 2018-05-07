@@ -91,8 +91,8 @@ class AsciiArtItemTest extends TestCase
         $item = new AsciiArtItem("//\n//", AsciiArtItem::POSITION_CENTER);
         $this->assertEquals(
             [
-                "    //    ",
-                "    //    ",
+                "    //",
+                "    //",
             ],
             $item->getRows($menuStyle)
         );
@@ -110,8 +110,8 @@ class AsciiArtItemTest extends TestCase
         $item = new AsciiArtItem("//\n//", AsciiArtItem::POSITION_CENTER);
         $this->assertEquals(
             [
-                "     //    ",
-                "     //    ",
+                "     //",
+                "     //",
             ],
             $item->getRows($menuStyle)
         );
@@ -128,7 +128,7 @@ class AsciiArtItemTest extends TestCase
         $this->assertFalse($item->showsItemExtra());
     }
 
-    public function testGetRowsReturnsStaticAltItemWhenWidthIsTooSmall()
+    public function testGetRowsReturnsStaticAltItemWhenWidthIsTooSmall() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -140,5 +140,100 @@ class AsciiArtItemTest extends TestCase
         $item = new AsciiArtItem('TOO LONG. SO SO LONG.', AsciiArtItem::POSITION_CENTER, 'my alt');
         
         self::assertSame(['my alt'], $item->getRows($menuStyle));
+    }
+
+    public function testWithRealAsciiArtCenterAligned() : void
+    {
+        $menuStyle = $this->createMock(MenuStyle::class);
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getContentWidth')
+            ->will($this->returnValue(30));
+
+        $art = <<<ART
+        _ __ _
+       / |..| \
+       \/ || \/
+        |_''_|
+      PHP SCHOOL
+LEARNING FOR ELEPHANTS
+ART;
+
+        $item = new AsciiArtItem($art, AsciiArtItem::POSITION_CENTER);
+        $this->assertEquals(
+            [
+                '            _ __ _',
+                '           / |..| \\',
+                '           \/ || \/',
+                "            |_''_|",
+                '          PHP SCHOOL',
+                '    LEARNING FOR ELEPHANTS'
+            ],
+            $item->getRows($menuStyle)
+        );
+    }
+
+    public function testWithRealAsciiArtRightAligned() : void
+    {
+        $menuStyle = $this->createMock(MenuStyle::class);
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getContentWidth')
+            ->will($this->returnValue(30));
+
+        $art = <<<ART
+        _ __ _
+       / |..| \
+       \/ || \/
+        |_''_|
+      PHP SCHOOL
+LEARNING FOR ELEPHANTS
+ART;
+
+        $item = new AsciiArtItem($art, AsciiArtItem::POSITION_RIGHT);
+        $this->assertEquals(
+            [
+                '                _ __ _',
+                '               / |..| \\',
+                '               \/ || \/',
+                "                |_''_|",
+                '              PHP SCHOOL',
+                '        LEARNING FOR ELEPHANTS'
+            ],
+            $item->getRows($menuStyle)
+        );
+    }
+
+    public function testWithRealAsciiArtCenterAlignedWithWhiteSpaceAtTheEndOfEachLine() : void
+    {
+        $menuStyle = $this->createMock(MenuStyle::class);
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getContentWidth')
+            ->will($this->returnValue(30));
+        
+        $art = <<<ART
+        _ __ _        
+       / |..| \       
+       \/ || \/       
+        |_''_|        
+      PHP SCHOOL      
+LEARNING FOR ELEPHANTS
+ART;
+        $item = new AsciiArtItem($art, AsciiArtItem::POSITION_CENTER);
+        $this->assertEquals(
+            [
+                '            _ __ _',
+                '           / |..| \\',
+                '           \/ || \/',
+                "            |_''_|",
+                '          PHP SCHOOL',
+                '    LEARNING FOR ELEPHANTS'
+            ],
+            $item->getRows($menuStyle)
+        );
     }
 }

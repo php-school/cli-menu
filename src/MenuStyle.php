@@ -4,6 +4,7 @@ namespace PhpSchool\CliMenu;
 
 use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
+use PhpSchool\CliMenu\Util\ColourUtil;
 use PhpSchool\Terminal\Terminal;
 
 //TODO: B/W fallback
@@ -19,12 +20,12 @@ class MenuStyle
     protected $terminal;
 
     /**
-     * @var string
+     * @var int|string
      */
     protected $fg;
 
     /**
-     * @var string
+     * @var int|string
      */
     protected $bg;
 
@@ -74,6 +75,26 @@ class MenuStyle
     private $titleSeparator;
 
     /**
+     * @var string
+     */
+    private $coloursSetCode;
+
+    /**
+     * @var string
+     */
+    private $invertedColoursSetCode = "\033[7m";
+
+    /**
+     * @var string
+     */
+    private $invertedColoursUnsetCode = "\033[27m";
+
+    /**
+     * @var string
+     */
+    private $coloursResetCode = "\033[0m";
+
+    /**
      * @var int
      */
     private $borderTopWidth;
@@ -99,6 +120,11 @@ class MenuStyle
     private $borderColour;
 
     /**
+     * @var bool
+     */
+    private $marginAuto = false;
+
+    /**
      * Default Values
      *
      * @var array
@@ -119,6 +145,7 @@ class MenuStyle
         'borderBottomWidth' => 0,
         'borderLeftWidth' => 0,
         'borderColour' => 'white',
+        'marginAuto' => false,
     ];
 
     public static function getDefaultStyleValues() : array
@@ -130,30 +157,30 @@ class MenuStyle
      * @var array
      */
     private static $availableForegroundColors = array(
-        'black'   => array('set' => 30, 'unset' => 39),
-        'red'     => array('set' => 31, 'unset' => 39),
-        'green'   => array('set' => 32, 'unset' => 39),
-        'yellow'  => array('set' => 33, 'unset' => 39),
-        'blue'    => array('set' => 34, 'unset' => 39),
-        'magenta' => array('set' => 35, 'unset' => 39),
-        'cyan'    => array('set' => 36, 'unset' => 39),
-        'white'   => array('set' => 37, 'unset' => 39),
-        'default' => array('set' => 39, 'unset' => 39),
+        'black'   => 30,
+        'red'     => 31,
+        'green'   => 32,
+        'yellow'  => 33,
+        'blue'    => 34,
+        'magenta' => 35,
+        'cyan'    => 36,
+        'white'   => 37,
+        'default' => 39,
     );
 
     /**
      * @var array
      */
     private static $availableBackgroundColors = array(
-        'black'   => array('set' => 40, 'unset' => 49),
-        'red'     => array('set' => 41, 'unset' => 49),
-        'green'   => array('set' => 42, 'unset' => 49),
-        'yellow'  => array('set' => 43, 'unset' => 49),
-        'blue'    => array('set' => 44, 'unset' => 49),
-        'magenta' => array('set' => 45, 'unset' => 49),
-        'cyan'    => array('set' => 46, 'unset' => 49),
-        'white'   => array('set' => 47, 'unset' => 49),
-        'default' => array('set' => 49, 'unset' => 49),
+        'black'   => 40,
+        'red'     => 41,
+        'green'   => 42,
+        'yellow'  => 43,
+        'blue'    => 44,
+        'magenta' => 45,
+        'cyan'    => 46,
+        'white'   => 47,
+        'default' => 49,
     );
 
     /**
@@ -192,11 +219,6 @@ class MenuStyle
         $this->setBorderColour(static::$defaultStyleValues['borderColour']);
     }
 
-    public static function getAvailableColours() : array
-    {
-        return array_keys(self::$availableBackgroundColors);
-    }
-
     public function getDisabledItemText(string $text) : string
     {
         return sprintf(
@@ -206,61 +228,57 @@ class MenuStyle
             self::$availableOptions['dim']['unset']
         );
     }
-    
+
     /**
-     * Get the colour code set for Bg and Fg
+     * Generates the ansi escape sequence to set the colours
      */
-    public function getSelectedSetCode() : string
+    private function generateColoursSetCode() : void
     {
-        return sprintf(
-            "\033[%sm",
-            implode(';', [
-                self::$availableBackgroundColors[$this->getFg()]['set'],
-                self::$availableForegroundColors[$this->getBg()]['set'],
-            ])
-        );
+        if (is_string($this->fg)) {
+            $fgCode = self::$availableForegroundColors[$this->fg];
+        } else {
+            $fgCode = sprintf("38;5;%s", $this->fg);
+        }
+
+        if (is_string($this->bg)) {
+            $bgCode = self::$availableBackgroundColors[$this->bg];
+        } else {
+            $bgCode = sprintf("48;5;%s", $this->bg);
+        }
+
+        $this->coloursSetCode = sprintf("\033[%s;%sm", $fgCode, $bgCode);
     }
 
     /**
-     * Get the colour unset code for Bg and Fg
+     * Get the colour code for Bg and Fg
      */
-    public function getSelectedUnsetCode() : string
+    public function getColoursSetCode() : string
     {
-        return sprintf(
-            "\033[%sm",
-            implode(';', [
-                self::$availableBackgroundColors[$this->getBg()]['unset'],
-                self::$availableForegroundColors[$this->getFg()]['unset'],
-            ])
-        );
+        return $this->coloursSetCode;
     }
 
     /**
-     * Get the inverted colour code
+     * Get the inverted escape sequence (used for selected elements)
      */
-    public function getUnselectedSetCode() : string
+    public function getInvertedColoursSetCode() : string
     {
-        return sprintf(
-            "\033[%sm",
-            implode(';', [
-                self::$availableBackgroundColors[$this->getBg()]['set'],
-                self::$availableForegroundColors[$this->getFg()]['set'],
-            ])
-        );
+        return $this->invertedColoursSetCode;
     }
 
     /**
-     * Get the inverted colour unset code
+     * Get the inverted escape sequence (used for selected elements)
      */
-    public function getUnselectedUnsetCode() : string
+    public function getInvertedColoursUnsetCode() : string
     {
-        return sprintf(
-            "\033[%sm",
-            implode(';', [
-                self::$availableBackgroundColors[$this->getBg()]['unset'],
-                self::$availableForegroundColors[$this->getFg()]['unset'],
-            ])
-        );
+        return $this->invertedColoursUnsetCode;
+    }
+
+    /**
+     * Get the escape sequence used to reset colours to default
+     */
+    public function getColoursResetCode() : string
+    {
+        return $this->coloursResetCode;
     }
 
     /**
@@ -269,31 +287,40 @@ class MenuStyle
     protected function calculateContentWidth() : void
     {
         $this->contentWidth = $this->width
-            - ($this->padding*2)
-            - ($this->margin*2)
+            - ($this->padding * 2)
             - ($this->borderRightWidth + $this->borderLeftWidth);
     }
 
-    public function getFg() : string
+    public function getFg()
     {
         return $this->fg;
     }
 
-    public function setFg(string $fg) : self
+    public function setFg($fg, string $fallback = null) : self
     {
-        $this->fg = $fg;
+        $this->fg = ColourUtil::validateColour(
+            $this->terminal,
+            $fg,
+            $fallback
+        );
+        $this->generateColoursSetCode();
 
         return $this;
     }
 
-    public function getBg() : string
+    public function getBg()
     {
         return $this->bg;
     }
 
-    public function setBg(string $bg) : self
+    public function setBg($bg, string $fallback = null) : self
     {
-        $this->bg = $bg;
+        $this->bg = ColourUtil::validateColour(
+            $this->terminal,
+            $bg,
+            $fallback
+        );
+        $this->generateColoursSetCode();
 
         return $this;
     }
@@ -305,16 +332,14 @@ class MenuStyle
 
     public function setWidth(int $width) : self
     {
-        $availableWidth = $this->terminal->getWidth()
-            - ($this->margin * 2)
-            - ($this->padding * 2)
-            - ($this->borderRightWidth + $this->borderLeftWidth);
-
-        if ($width >= $availableWidth) {
-            $width = $availableWidth;
+        if ($width >= $this->terminal->getWidth()) {
+            $width = $this->terminal->getWidth();
         }
 
         $this->width = $width;
+        if ($this->marginAuto) {
+            $this->setMarginAuto();
+        }
         $this->calculateContentWidth();
 
         return $this;
@@ -339,11 +364,18 @@ class MenuStyle
         return $this->margin;
     }
 
+    public function setMarginAuto() : self
+    {
+        $this->marginAuto = true;
+        $this->margin = floor(($this->terminal->getWidth() - $this->width) / 2);
+        
+        return $this;
+    }
+
     public function setMargin(int $margin) : self
     {
+        $this->marginAuto = false;
         $this->margin = $margin;
-
-        $this->calculateContentWidth();
 
         return $this;
     }

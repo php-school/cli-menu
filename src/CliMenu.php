@@ -380,33 +380,32 @@ class CliMenu
     {
         $rows = $item->getRows($this->style, $selected);
 
-        $setColour = $selected
-            ? $this->style->getSelectedSetCode()
-            : $this->style->getUnselectedSetCode();
+        $setColour = $this->style->getColoursSetCode();
+        $resetColour = $this->style->getColoursResetCode();
+        $invertedColour = $selected
+            ? $this->style->getInvertedColoursSetCode()
+            : '';
 
-        $unsetColour = $selected
-            ? $this->style->getSelectedUnsetCode()
-            : $this->style->getUnselectedUnsetCode();
-        
         if ($this->style->getBorderLeftWidth() || $this->style->getBorderRightWidth()) {
             $borderColour = $this->style->getBorderColourCode();
         } else {
             $borderColour = '';
         }
 
-        return array_map(function ($row) use ($setColour, $unsetColour, $borderColour) {
+        return array_map(function ($row) use ($setColour, $invertedColour, $resetColour, $borderColour) {
             return sprintf(
-                "%s%s%s%s%s%s%s%s%s%s%s\n",
+                "%s%s%s%s%s%s%s%s%s%s%s%s\n",
                 str_repeat(' ', $this->style->getMargin()),
                 $borderColour,
                 str_repeat(' ', $this->style->getBorderLeftWidth()),
                 $setColour,
+                $invertedColour,
                 str_repeat(' ', $this->style->getPadding()),
                 $row,
                 str_repeat(' ', $this->style->getRightHandPadding(mb_strlen(s::stripAnsiEscapeSequence($row)))),
                 $borderColour,
                 str_repeat(' ', $this->style->getBorderRightWidth()),
-                $unsetColour,
+                $resetColour,
                 str_repeat(' ', $this->style->getMargin())
             );
         }, $rows);
@@ -480,55 +479,55 @@ class CliMenu
         return $this->currentFrame;
     }
 
-    public function flash(string $text) : Flash
+    public function flash(string $text, MenuStyle $style = null) : Flash
     {
         $this->guardSingleLine($text);
 
-        $style = (new MenuStyle($this->terminal))
+        $style = $style ?? (new MenuStyle($this->terminal))
             ->setBg('yellow')
             ->setFg('red');
 
         return new Flash($this, $style, $this->terminal, $text);
     }
 
-    public function confirm($text) : Confirm
+    public function confirm(string $text, MenuStyle $style = null) : Confirm
     {
         $this->guardSingleLine($text);
 
-        $style = (new MenuStyle($this->terminal))
+        $style = $style ?? (new MenuStyle($this->terminal))
             ->setBg('yellow')
             ->setFg('red');
 
         return new Confirm($this, $style, $this->terminal, $text);
     }
 
-    public function askNumber() : Number
+    public function askNumber(MenuStyle $style = null) : Number
     {
         $this->assertOpen();
 
-        $style = (new MenuStyle($this->terminal))
+        $style = $style ?? (new MenuStyle($this->terminal))
             ->setBg('yellow')
             ->setFg('red');
 
         return new Number(new InputIO($this, $this->terminal), $style);
     }
 
-    public function askText() : Text
+    public function askText(MenuStyle $style = null) : Text
     {
         $this->assertOpen();
 
-        $style = (new MenuStyle($this->terminal))
+        $style = $style ?? (new MenuStyle($this->terminal))
             ->setBg('yellow')
             ->setFg('red');
 
         return new Text(new InputIO($this, $this->terminal), $style);
     }
 
-    public function askPassword() : Password
+    public function askPassword(MenuStyle $style = null) : Password
     {
         $this->assertOpen();
 
-        $style = (new MenuStyle($this->terminal))
+        $style = $style ?? (new MenuStyle($this->terminal))
             ->setBg('yellow')
             ->setFg('red');
 

@@ -74,7 +74,7 @@ abstract class Dialogue
         //x
         $parentStyle        = $this->parentMenu->getStyle();
         $dialogueHalfLength = (mb_strlen($this->text) + ($this->style->getPadding() * 2)) / 2;
-        $widthHalfLength    = ceil($parentStyle->getWidth() / 2);
+        $widthHalfLength    = ceil($parentStyle->getWidth() / 2 + $parentStyle->getMargin());
         $this->x            = $widthHalfLength - $dialogueHalfLength;
     }
 
@@ -86,11 +86,11 @@ abstract class Dialogue
         $this->write(
             sprintf(
                 "%s%s%s%s%s\n",
-                $this->style->getUnselectedSetCode(),
+                $this->style->getColoursSetCode(),
                 str_repeat(' ', $this->style->getPadding()),
                 str_repeat(' ', mb_strlen($this->text)),
                 str_repeat(' ', $this->style->getPadding()),
-                $this->style->getUnselectedUnsetCode()
+                $this->style->getColoursResetCode()
             )
         );
     }

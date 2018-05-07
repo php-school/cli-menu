@@ -132,7 +132,7 @@ class InputIO
 
         $parentStyle     = $this->parentMenu->getStyle();
         $halfWidth       = ($width + ($input->getStyle()->getPadding() * 2)) / 2;
-        $parentHalfWidth = ceil($parentStyle->getWidth() / 2);
+        $parentHalfWidth = ceil($parentStyle->getWidth() / 2 + $parentStyle->getMargin());
 
         return $parentHalfWidth - $halfWidth;
     }
@@ -143,11 +143,11 @@ class InputIO
 
         $line = sprintf(
             "%s%s%s%s%s\n",
-            $input->getStyle()->getUnselectedSetCode(),
+            $input->getStyle()->getColoursSetCode(),
             str_repeat(' ', $input->getStyle()->getPadding()),
             $text,
             str_repeat(' ', $input->getStyle()->getPadding()),
-            $input->getStyle()->getUnselectedUnsetCode()
+            $input->getStyle()->getColoursResetCode()
         );
 
         $this->terminal->write($line);
@@ -240,12 +240,10 @@ class InputIO
             $input,
             $userInput,
             sprintf(
-                '%s%s%s%s%s',
-                $input->getStyle()->getUnselectedUnsetCode(),
-                $input->getStyle()->getSelectedSetCode(),
+                '%s%s%s',
+                $input->getStyle()->getInvertedColoursSetCode(),
                 $userInput,
-                $input->getStyle()->getSelectedUnsetCode(),
-                $input->getStyle()->getUnselectedSetCode()
+                $input->getStyle()->getInvertedColoursUnsetCode()
             )
         );
     }
