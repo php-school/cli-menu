@@ -308,7 +308,7 @@ class ColourUtil
      */
     public static function validateColour(Terminal $terminal, string $colour, string $fallback = null) : string
     {
-        if (!is_numeric($colour)) {
+        if (!ctype_digit($colour)) {
             return static::validateColourName($colour);
         }
         

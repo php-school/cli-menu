@@ -145,7 +145,7 @@ class CliMenuBuilderTest extends TestCase
 
         $builder = new CliMenuBuilder;
         $builder->setTerminal($terminal);
-        $builder->setBackgroundColour(-5, 'white');
+        $builder->setBackgroundColour(257, 'white');
     }
 
     public function testDisableDefaultItems() : void

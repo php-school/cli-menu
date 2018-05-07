@@ -164,7 +164,7 @@ class MenuStyleTest extends TestCase
         $this->expectExceptionMessage('Invalid colour code');
 
         $style = $this->getMenuStyle(256);
-        $style->setBg(-5, 'white');
+        $style->setBg(257, 'white');
     }
 
     public function testGetMarkerReturnsTheCorrectMarkers() : void

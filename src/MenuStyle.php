@@ -202,13 +202,13 @@ class MenuStyle
      */
     private function generateColoursSetCode() : void
     {
-        if (!is_numeric($this->fg)) {
+        if (!ctype_digit($this->fg)) {
             $fgCode = self::$availableForegroundColors[$this->fg];
         } else {
             $fgCode = sprintf("38;5;%s", $this->fg);
         }
 
-        if (!is_numeric($this->bg)) {
+        if (!ctype_digit($this->bg)) {
             $bgCode = self::$availableBackgroundColors[$this->bg];
         } else {
             $bgCode = sprintf("48;5;%s", $this->bg);
