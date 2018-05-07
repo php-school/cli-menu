@@ -5,8 +5,9 @@ namespace PhpSchool\CliMenuTest;
 use PhpSchool\CliMenu\CliMenuBuilder;
 use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\MenuStyle;
-use PhpSchool\CliMenu\Terminal\TerminalInterface;
-use PhpSchool\CliMenu\Terminal\UnixTerminal;
+use PhpSchool\CliMenu\Util\ColourUtil;
+use PhpSchool\Terminal\Terminal;
+use PhpSchool\Terminal\UnixTerminal;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -85,7 +86,7 @@ class MenuStyleTest extends TestCase
             'cyan',
             'white',
             'default'
-        ], MenuStyle::getAvailableColours());
+        ], ColourUtil::getDefaultColoursNames());
     }
 
     public function testGetColoursSetCode() : void
