@@ -230,8 +230,18 @@ class CliMenuBuilder
         return $this;
     }
 
+    public function setMarginAuto() : self
+    {
+        $this->style['marginAuto'] = true;
+        
+        return $this;
+    }
+
     public function setMargin(int $margin) : self
     {
+        Assertion::greaterOrEqualThan($margin, 0);
+        
+        $this->style['marginAuto'] = false;
         $this->style['margin'] = $margin;
 
         return $this;
@@ -320,17 +330,20 @@ class CliMenuBuilder
 
     private function buildStyle() : MenuStyle
     {
-        return (new MenuStyle($this->terminal))
+        $style = (new MenuStyle($this->terminal))
             ->setFg($this->style['fg'])
             ->setBg($this->style['bg'])
             ->setWidth($this->style['width'])
             ->setPadding($this->style['padding'])
-            ->setMargin($this->style['margin'])
             ->setSelectedMarker($this->style['selectedMarker'])
             ->setUnselectedMarker($this->style['unselectedMarker'])
             ->setItemExtra($this->style['itemExtra'])
             ->setDisplaysExtra($this->style['displaysExtra'])
             ->setTitleSeparator($this->style['titleSeparator']);
+
+        $this->style['marginAuto'] ? $style->setMarginAuto() : $style->setMargin($this->style['margin']);
+        
+        return $style;
     }
 
     /**

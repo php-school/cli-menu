@@ -160,7 +160,7 @@ class MenuStyleTest extends TestCase
         $style->setPadding(5);
         $style->setMargin(5);
 
-        static::assertSame(280, $style->getContentWidth());
+        static::assertSame(290, $style->getContentWidth());
     }
 
     public function testRightHandPaddingCalculation() : void
@@ -171,6 +171,46 @@ class MenuStyleTest extends TestCase
         $style->setPadding(5);
         $style->setMargin(5);
 
-        static::assertSame(235, $style->getRightHandPadding(50));
+        static::assertSame(245, $style->getRightHandPadding(50));
+    }
+
+    public function testMargin() : void
+    {
+        $style = $this->getMenuStyle();
+
+        $style->setWidth(300);
+        $style->setPadding(5);
+        $style->setMargin(5);
+
+        self::assertSame(5, $style->getMargin());
+    }
+    
+    public function testMarginAutoCenters() : void
+    {
+        $style = $this->getMenuStyle();
+
+        $style->setWidth(300);
+        $style->setPadding(5);
+        $style->setMarginAuto();
+
+        self::assertSame(100, $style->getMargin());
+        self::assertSame(290, $style->getContentWidth());
+    }
+
+    public function testModifyWithWhenMarginAutoIsEnabledRecalculatesMargin() : void
+    {
+        $style = $this->getMenuStyle();
+
+        $style->setWidth(300);
+        $style->setPadding(5);
+        $style->setMarginAuto();
+
+        self::assertSame(100, $style->getMargin());
+        self::assertSame(290, $style->getContentWidth());
+        
+        $style->setWidth(400);
+
+        self::assertSame(50, $style->getMargin());
+        self::assertSame(390, $style->getContentWidth());
     }
 }
