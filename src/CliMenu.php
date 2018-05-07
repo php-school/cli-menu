@@ -320,6 +320,10 @@ class CliMenu
 
         $frame->newLine(2);
 
+        if ($this->style->getBorderTopWidth() > 0) {
+            $frame->addRows($this->style->getBorderTopRows());
+        }
+
         if ($this->title) {
             $frame->addRows($this->drawMenuItem(new LineBreakItem()));
             $frame->addRows($this->drawMenuItem(new StaticItem($this->title)));
@@ -331,6 +335,10 @@ class CliMenu
         }, $this->items, array_keys($this->items));
 
         $frame->addRows($this->drawMenuItem(new LineBreakItem()));
+        
+        if ($this->style->getBorderBottomWidth() > 0) {
+            $frame->addRows($this->style->getBorderBottomRows());
+        }
 
         $frame->newLine(2);
         
@@ -359,15 +367,26 @@ class CliMenu
             ? $this->style->getInvertedColoursSetCode()
             : '';
 
-        return array_map(function ($row) use ($setColour, $invertedColour, $resetColour) {
+        if ($this->style->getBorderLeftWidth() || $this->style->getBorderRightWidth()) {
+            $borderColour = $this->style->getBorderColourCode();
+        } else {
+            $borderColour = '';
+        }
+
+        return array_map(function ($row) use ($setColour, $invertedColour, $resetColour, $borderColour) {
             return sprintf(
-                "%s%s%s%s%s%s%s%s\n",
+                "%s%s%s%s%s%s%s%s%s%s%s%s%s\n",
                 str_repeat(' ', $this->style->getMargin()),
+                $borderColour,
+                str_repeat(' ', $this->style->getBorderLeftWidth()),
                 $setColour,
                 $invertedColour,
                 str_repeat(' ', $this->style->getPadding()),
                 $row,
                 str_repeat(' ', $this->style->getRightHandPadding(mb_strlen(s::stripAnsiEscapeSequence($row)))),
+                $this->style->getInvertedColoursUnsetCode(),
+                $borderColour,
+                str_repeat(' ', $this->style->getBorderRightWidth()),
                 $resetColour,
                 str_repeat(' ', $this->style->getMargin())
             );

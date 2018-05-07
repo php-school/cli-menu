@@ -95,6 +95,41 @@ class MenuStyle
     private $coloursResetCode = "\033[0m";
 
     /**
+     * @var int
+     */
+    private $borderTopWidth;
+
+    /**
+     * @var int
+     */
+    private $borderRightWidth;
+
+    /**
+     * @var int
+     */
+    private $borderBottomWidth;
+
+    /**
+     * @var int
+     */
+    private $borderLeftWidth;
+
+    /**
+     * @var string
+     */
+    private $borderColour = 'white';
+
+    /**
+     * @var array
+     */
+    private $borderTopRows = [];
+
+    /**
+     * @var array
+     */
+    private $borderBottomRows = [];
+
+    /**
      * @var bool
      */
     private $marginAuto = false;
@@ -115,6 +150,11 @@ class MenuStyle
         'itemExtra' => '✔',
         'displaysExtra' => false,
         'titleSeparator' => '=',
+        'borderTopWidth' => 0,
+        'borderRightWidth' => 0,
+        'borderBottomWidth' => 0,
+        'borderLeftWidth' => 0,
+        'borderColour' => 'white',
         'marginAuto' => false,
     ];
 
@@ -185,6 +225,11 @@ class MenuStyle
         $this->setItemExtra(static::$defaultStyleValues['itemExtra']);
         $this->setDisplaysExtra(static::$defaultStyleValues['displaysExtra']);
         $this->setTitleSeparator(static::$defaultStyleValues['titleSeparator']);
+        $this->setBorderTopWidth(static::$defaultStyleValues['borderTopWidth']);
+        $this->setBorderRightWidth(static::$defaultStyleValues['borderRightWidth']);
+        $this->setBorderBottomWidth(static::$defaultStyleValues['borderBottomWidth']);
+        $this->setBorderLeftWidth(static::$defaultStyleValues['borderLeftWidth']);
+        $this->setBorderColour(static::$defaultStyleValues['borderColour']);
     }
 
     public function getDisabledItemText(string $text) : string
@@ -254,7 +299,9 @@ class MenuStyle
      */
     protected function calculateContentWidth() : void
     {
-        $this->contentWidth = $this->width - ($this->padding * 2);
+        $this->contentWidth = $this->width
+            - ($this->padding * 2)
+            - ($this->borderRightWidth + $this->borderLeftWidth);
     }
 
     public function getFg()
@@ -306,7 +353,9 @@ class MenuStyle
         if ($this->marginAuto) {
             $this->setMarginAuto();
         }
+
         $this->calculateContentWidth();
+        $this->generateBorderRows();
 
         return $this;
     }
@@ -334,7 +383,9 @@ class MenuStyle
     {
         $this->marginAuto = true;
         $this->margin = floor(($this->terminal->getWidth() - $this->width) / 2);
-        
+
+        $this->generateBorderRows();
+
         return $this;
     }
 
@@ -342,6 +393,8 @@ class MenuStyle
     {
         $this->marginAuto = false;
         $this->margin = $margin;
+
+        $this->generateBorderRows();
 
         return $this;
     }
@@ -425,5 +478,152 @@ class MenuStyle
         $this->titleSeparator = $actionSeparator;
 
         return $this;
+    }
+
+    private function generateBorderRows() : void
+    {
+        $borderRow = sprintf(
+            "%s%s%s%s%s\n",
+            str_repeat(' ', $this->margin),
+            $this->getBorderColourCode(),
+            str_repeat(' ', $this->width),
+            $this->coloursResetCode,
+            str_repeat(' ', $this->margin)
+        );
+
+        $this->borderTopRows = array_fill(0, $this->borderTopWidth, $borderRow);
+        $this->borderBottomRows = array_fill(0, $this->borderBottomWidth, $borderRow);
+    }
+
+    public function getBorderTopRows() : array
+    {
+        return $this->borderTopRows;
+    }
+
+    public function getBorderBottomRows() : array
+    {
+        return $this->borderBottomRows;
+    }
+
+    /**
+     * Shorthand function to set all borders values at once
+     */
+    public function setBorder(
+        int $topWidth,
+        $rightWidth = null,
+        $bottomWidth = null,
+        $leftWidth = null,
+        string $colour = null
+    ) : self {
+        if (!is_int($rightWidth)) {
+            $colour = $rightWidth;
+            $rightWidth = $bottomWidth = $leftWidth = $topWidth;
+        } elseif (!is_int($bottomWidth)) {
+            $colour = $bottomWidth;
+            $bottomWidth = $topWidth;
+            $leftWidth = $rightWidth;
+        } elseif (!is_int($leftWidth)) {
+            $colour = $leftWidth;
+            $leftWidth = $rightWidth;
+        }
+
+        $this->borderTopWidth = $topWidth;
+        $this->borderRightWidth = $rightWidth;
+        $this->borderBottomWidth = $bottomWidth;
+        $this->borderLeftWidth = $leftWidth;
+
+        if (is_string($colour)) {
+            $this->setBorderColour($colour);
+        } elseif ($colour !== null) {
+            throw new \InvalidArgumentException('Invalid colour');
+        }
+
+        $this->calculateContentWidth();
+        $this->generateBorderRows();
+
+        return $this;
+    }
+
+    public function setBorderTopWidth(int $width) : self
+    {
+        $this->borderTopWidth = $width;
+
+        $this->generateBorderRows();
+
+        return $this;
+    }
+
+    public function setBorderRightWidth(int $width) : self
+    {
+        $this->borderRightWidth = $width;
+        $this->calculateContentWidth();
+
+        return $this;
+    }
+
+    public function setBorderBottomWidth(int $width) : self
+    {
+        $this->borderBottomWidth = $width;
+
+        $this->generateBorderRows();
+
+        return $this;
+    }
+
+    public function setBorderLeftWidth(int $width) : self
+    {
+        $this->borderLeftWidth = $width;
+        $this->calculateContentWidth();
+
+        return $this;
+    }
+
+    public function setBorderColour(string $colour, $fallback = null) : self
+    {
+        $this->borderColour = ColourUtil::validateColour(
+            $this->terminal,
+            $colour,
+            $fallback
+        );
+
+        $this->generateBorderRows();
+
+        return $this;
+    }
+
+    public function getBorderTopWidth() : int
+    {
+        return $this->borderTopWidth;
+    }
+
+    public function getBorderRightWidth() : int
+    {
+        return $this->borderRightWidth;
+    }
+
+    public function getBorderBottomWidth() : int
+    {
+        return $this->borderBottomWidth;
+    }
+
+    public function getBorderLeftWidth() : int
+    {
+        return $this->borderLeftWidth;
+    }
+
+    public function getBorderColour() : string
+    {
+        return $this->borderColour;
+    }
+
+    public function getBorderColourCode() : string
+    {
+        if (!ctype_digit($this->borderColour)) {
+            $borderColourCode = self::$availableBackgroundColors[$this->borderColour];
+        } else {
+            $borderColourCode = sprintf("48;5;%s", $this->borderColour);
+        }
+
+        return sprintf("\033[%sm", $borderColourCode);
     }
 }

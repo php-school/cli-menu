@@ -280,6 +280,39 @@ class CliMenuBuilder
         return $this;
     }
 
+    public function setBorder(
+        int $topWidth,
+        $rightWidth = null,
+        $bottomWidth = null,
+        $leftWidth = null,
+        string $colour = null
+    ) : self {
+        if (!is_int($rightWidth)) {
+            $colour = $rightWidth;
+            $rightWidth = $bottomWidth = $leftWidth = $topWidth;
+        } elseif (!is_int($bottomWidth)) {
+            $colour = $bottomWidth;
+            $bottomWidth = $topWidth;
+            $leftWidth = $rightWidth;
+        } elseif (!is_int($leftWidth)) {
+            $colour = $leftWidth;
+            $leftWidth = $rightWidth;
+        }
+
+        $this->style['borderTopWidth'] = $topWidth;
+        $this->style['borderRightWidth'] = $rightWidth;
+        $this->style['borderBottomWidth'] = $bottomWidth;
+        $this->style['borderLeftWidth'] = $leftWidth;
+
+        if (is_string($colour)) {
+            $this->style['borderColour'] = $colour;
+        } elseif ($colour !== null) {
+            throw new \InvalidArgumentException('Invalid colour');
+        }
+
+        return $this;
+    }
+
     public function setTerminal(Terminal $terminal) : self
     {
         $this->terminal = $terminal;
@@ -344,7 +377,12 @@ class CliMenuBuilder
             ->setUnselectedMarker($this->style['unselectedMarker'])
             ->setItemExtra($this->style['itemExtra'])
             ->setDisplaysExtra($this->style['displaysExtra'])
-            ->setTitleSeparator($this->style['titleSeparator']);
+            ->setTitleSeparator($this->style['titleSeparator'])
+            ->setBorderTopWidth($this->style['borderTopWidth'])
+            ->setBorderRightWidth($this->style['borderRightWidth'])
+            ->setBorderBottomWidth($this->style['borderBottomWidth'])
+            ->setBorderLeftWidth($this->style['borderLeftWidth'])
+            ->setBorderColour($this->style['borderColour']);
 
         $this->style['marginAuto'] ? $style->setMarginAuto() : $style->setMargin($this->style['margin']);
         
