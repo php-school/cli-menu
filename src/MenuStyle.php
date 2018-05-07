@@ -94,7 +94,7 @@ class MenuStyle
      */
     private $coloursResetCode = "\033[0m";
 
-    /** 
+    /**
      * @var bool
      */
     private $marginAuto = false;
