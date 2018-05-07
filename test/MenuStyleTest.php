@@ -42,7 +42,7 @@ class MenuStyleTest extends TestCase
         $terminal = $this
             ->getMockBuilder(UnixTerminal::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWidth'])
+            ->setMethods(['getWidth', 'getColourSupport'])
             ->getMock();
 
         $terminal
