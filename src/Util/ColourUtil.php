@@ -318,8 +318,9 @@ class ColourUtil
                 }
                 return static::map256To8($colour);
             }
+        } else {
+            Assertion::inArray($colour, static::getDefaultColoursNames());
         }
-        Assertion::inArray($colour, static::getDefaultColoursNames());
         return $colour;
     }
 }
