@@ -443,55 +443,55 @@ class CliMenu
         return $this->currentFrame;
     }
 
-    public function flash(string $text) : Flash
+    public function flash(string $text, MenuStyle $style = null) : Flash
     {
         $this->guardSingleLine($text);
 
-        $style = (new MenuStyle($this->terminal))
+        $style = $style ?? (new MenuStyle($this->terminal))
             ->setBg('yellow')
             ->setFg('red');
 
         return new Flash($this, $style, $this->terminal, $text);
     }
 
-    public function confirm($text) : Confirm
+    public function confirm($text, MenuStyle $style = null) : Confirm
     {
         $this->guardSingleLine($text);
 
-        $style = (new MenuStyle($this->terminal))
+        $style = $style ?? (new MenuStyle($this->terminal))
             ->setBg('yellow')
             ->setFg('red');
 
         return new Confirm($this, $style, $this->terminal, $text);
     }
 
-    public function askNumber() : Number
+    public function askNumber(MenuStyle $style = null) : Number
     {
         $this->assertOpen();
 
-        $style = (new MenuStyle($this->terminal))
+        $style = $style ?? (new MenuStyle($this->terminal))
             ->setBg('yellow')
             ->setFg('red');
 
         return new Number(new InputIO($this, $this->terminal), $style);
     }
 
-    public function askText() : Text
+    public function askText(MenuStyle $style = null) : Text
     {
         $this->assertOpen();
 
-        $style = (new MenuStyle($this->terminal))
+        $style = $style ?? (new MenuStyle($this->terminal))
             ->setBg('yellow')
             ->setFg('red');
 
         return new Text(new InputIO($this, $this->terminal), $style);
     }
 
-    public function askPassword() : Password
+    public function askPassword(MenuStyle $style = null) : Password
     {
         $this->assertOpen();
 
-        $style = (new MenuStyle($this->terminal))
+        $style = $style ?? (new MenuStyle($this->terminal))
             ->setBg('yellow')
             ->setFg('red');
 
