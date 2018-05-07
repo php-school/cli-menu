@@ -322,15 +322,11 @@ class CliMenu
         
         $borderRow = [
             sprintf(
-                "%s%s%s%s%s%s%s%s%s\n",
+                "%s%s%s%s%s\n",
                 str_repeat(' ', $this->style->getMargin()),
                 $this->style->getBorderColourCode(),
-                str_repeat(' ', $this->style->getBorderLeftWidth()),
-                str_repeat(' ', $this->style->getPadding()),
-                str_repeat(' ', $this->style->getContentWidth()),
-                str_repeat(' ', $this->style->getPadding()),
-                str_repeat(' ', $this->style->getBorderRightWidth()),
-                "\033[0m",
+                str_repeat(' ', $this->style->getWidth()),
+                $this->style->getColoursResetCode(),
                 str_repeat(' ', $this->style->getMargin())
             )
         ];
