@@ -59,21 +59,17 @@ class AsciiArtItem implements MenuItemInterface
             return $alternate->getRows($style, false);
         }
 
-        return array_map(function ($row) use ($style) {
-            $length = mb_strlen($row);
-
-            $padding = $style->getContentWidth() - $length;
-
+        $padding = $style->getContentWidth() - $this->artLength;
+        
+        return array_map(function ($row) use ($style, $padding) {
             switch ($this->position) {
                 case self::POSITION_LEFT:
                     break;
                 case self::POSITION_RIGHT:
-                    $padding -= ($this->artLength - $length);
                     $row = sprintf('%s%s', str_repeat(' ', $padding), $row);
                     break;
                 case self::POSITION_CENTER:
                 default:
-                    $padding -= ($this->artLength - $length);
                     $left = ceil($padding / 2);
                     $row = sprintf('%s%s', str_repeat(' ', $left), $row);
                     break;

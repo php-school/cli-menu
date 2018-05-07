@@ -174,6 +174,38 @@ ART;
         );
     }
 
+    public function testWithAsciiArtRightAligned() : void
+    {
+        $menuStyle = $this->createMock(MenuStyle::class);
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getContentWidth')
+            ->will($this->returnValue(30));
+
+        $art = <<<ART
+        _ __ _
+       / |..| \
+       \/ || \/
+        |_''_|
+      PHP SCHOOL
+LEARNING FOR ELEPHANTS
+ART;
+
+        $item = new AsciiArtItem($art, AsciiArtItem::POSITION_RIGHT);
+        $this->assertEquals(
+            [
+                '                _ __ _',
+                '               / |..| \\',
+                '               \/ || \/',
+                "                |_''_|",
+                '              PHP SCHOOL',
+                '        LEARNING FOR ELEPHANTS'
+            ],
+            $item->getRows($menuStyle)
+        );
+    }
+
     public function testWithRealAsciiArtCenteredWithWhiteSpaceAtTheEndOfEachLine() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
