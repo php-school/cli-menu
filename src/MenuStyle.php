@@ -380,7 +380,9 @@ class MenuStyle
     {
         $this->marginAuto = true;
         $this->margin = floor(($this->terminal->getWidth() - $this->width) / 2);
-        
+
+        $this->generateBorderRows();
+
         return $this;
     }
 
@@ -388,6 +390,8 @@ class MenuStyle
     {
         $this->marginAuto = false;
         $this->margin = $margin;
+
+        $this->generateBorderRows();
 
         return $this;
     }
@@ -611,10 +615,10 @@ class MenuStyle
 
     public function getBorderColourCode() : string
     {
-        if (ctype_digit($this->borderColour)) {
-            $borderColourCode = self::$availableBackgroundColors[$this->bg];
+        if (!ctype_digit($this->borderColour)) {
+            $borderColourCode = self::$availableBackgroundColors[$this->borderColour];
         } else {
-            $borderColourCode = sprintf("48;5;%s", $this->bg);
+            $borderColourCode = sprintf("48;5;%s", $this->borderColour);
         }
 
         return sprintf("\033[%sm", $borderColourCode);
