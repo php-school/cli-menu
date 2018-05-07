@@ -263,15 +263,15 @@ class ColourUtil
         252 => 'white',
         253 => 'white',
         254 => 'white',
-        255 => 'white'
+        255 => 'white',
     ];
     
     /**
      * Simple function to transform a 8-bit (256 colours) colour code
-     * to one of the default 8 colors available in the terminal.
+     * to one of the default 8 colors available in the terminal
      */
     public static function map256to8(int $colourCode) : string
     {
-        return $this->coloursMap[$colourCode];
+        return static::coloursMap[$colourCode];
     }
 }
