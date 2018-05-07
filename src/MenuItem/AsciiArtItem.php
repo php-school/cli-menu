@@ -61,7 +61,7 @@ class AsciiArtItem implements MenuItemInterface
 
         $padding = $style->getContentWidth() - $this->artLength;
         
-        return array_map(function ($row) use ($style, $padding) {
+        return array_map(function ($row) use ($padding) {
             switch ($this->position) {
                 case self::POSITION_LEFT:
                     break;
