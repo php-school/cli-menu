@@ -480,17 +480,17 @@ class MenuStyle
             str_repeat(' ', $this->margin),
             $this->getBorderColourCode(),
             str_repeat(' ', $this->width),
-            $this->coloursResetCode(),
+            $this->coloursResetCode,
             str_repeat(' ', $this->margin)
         );
 
         $this->borderTopRows = [];
-        for ($b = 0; $b < $this->style->getBorderTopWidth(); $b++) {
+        for ($b = 0; $b < $this->borderTopWidth; $b++) {
             $this->borderTopRows[] = $borderRow;
         }
 
         $this->borderBottomRows = [];
-        for ($b = 0; $b < $this->style->getBorderBottomWidth(); $b++) {
+        for ($b = 0; $b < $this->borderBottomWidth; $b++) {
             $this->borderBottomRows[] = $borderRow;
         }
     }
@@ -576,7 +576,7 @@ class MenuStyle
         return $this;
     }
 
-    public function setBorderColour($colour) : self
+    public function setBorderColour($colour, $fallback = null) : self
     {
         if (is_string($colour) && ctype_digit($colour)) {
             $colour = intval($colour);
@@ -584,7 +584,7 @@ class MenuStyle
 
         $this->borderColour = ColourUtil::validateColour(
             $this->terminal,
-            $bg,
+            $colour,
             $fallback
         );
 
