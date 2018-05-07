@@ -90,7 +90,7 @@ class MenuStyleTest extends TestCase
 
     public function testGetColoursSetCode() : void
     {
-        static::assertSame("\e[47;34m", $this->getMenuStyle()->getColoursSetCode());
+        static::assertSame("\e[37;44m", $this->getMenuStyle()->getColoursSetCode());
     }
 
     public function testGetColoursResetCode() : void
@@ -164,7 +164,7 @@ class MenuStyleTest extends TestCase
     }
 
     public function testSetFgThrowsExceptionWhenColourCodeIsNotInRange() : void
-    {   
+    {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid colour code');
 
@@ -173,7 +173,7 @@ class MenuStyleTest extends TestCase
     }
 
     public function testSetBgThrowsExceptionWhenColourCodeIsNotInRange() : void
-    {   
+    {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid colour code');
 
