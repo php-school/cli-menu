@@ -233,7 +233,7 @@ class MenuStyle
      */
     protected function calculateContentWidth() : void
     {
-        $this->contentWidth = $this->width - ($this->padding*2);
+        $this->contentWidth = $this->width - ($this->padding * 2);
     }
 
     public function getFg() : string
@@ -301,7 +301,7 @@ class MenuStyle
 
     public function setMargin(int $margin) : self
     {
-        if ($this->margin === -1) {
+        if ($margin === -1) {
             $this->margin = floor(($this->terminal->getWidth() - $this->width) / 2);
         } else {
             $this->margin = $margin;
