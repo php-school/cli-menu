@@ -454,7 +454,7 @@ class CliMenu
         return new Flash($this, $style, $this->terminal, $text);
     }
 
-    public function confirm($text, MenuStyle $style = null) : Confirm
+    public function confirm(string $text, MenuStyle $style = null) : Confirm
     {
         $this->guardSingleLine($text);
 
