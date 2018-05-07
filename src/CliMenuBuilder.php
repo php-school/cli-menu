@@ -11,6 +11,7 @@ use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
+use PhpSchool\CliMenu\Util\ColourUtil;
 use Assert\Assertion;
 use PhpSchool\Terminal\Terminal;
 use RuntimeException;
@@ -200,36 +201,22 @@ class CliMenuBuilder
 
     public function setBackgroundColour($colour, string $fallback = null) : self
     {
-        if (is_int($colour)) {
-            if ($this->terminal->getColourSupport() < 256) {
-                $colour = $fallback;
-                Assertion::inArray($colour, MenuStyle::getAvailableColours());
-            } elseif ($colour < 0 || $colour > 255) {
-                throw new \InvalidArgumentException("Invalid colour code");
-            }
-        } else {
-            Assertion::inArray($colour, MenuStyle::getAvailableColours());
-        }
-
-        $this->style['bg'] = $colour;
+        $this->style['bg'] = ColourUtil::validateColour(
+            $this->terminal,
+            $colour,
+            $fallback
+        );
 
         return $this;
     }
 
     public function setForegroundColour($colour, string $fallback = null) : self
     {
-        if (is_int($colour)) {
-            if ($this->terminal->getColourSupport() < 256) {
-                $colour = $fallback;
-                Assertion::inArray($colour, MenuStyle::getAvailableColours());
-            } elseif ($colour < 0 || $colour > 255) {
-                throw new \InvalidArgumentException("Invalid colour code");
-            }
-        } else {
-            Assertion::inArray($colour, MenuStyle::getAvailableColours());
-        }
-
-        $this->style['fg'] = $colour;
+        $this->style['fg'] = ColourUtil::validateColour(
+            $this->terminal,
+            $colour,
+            $fallback
+        );
 
         return $this;
     }
