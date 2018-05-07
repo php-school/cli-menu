@@ -120,6 +120,16 @@ class MenuStyle
     private $borderColour;
 
     /**
+     * @var array
+     */
+    private $borderTopRows = [];
+
+    /**
+     * @var array
+     */
+    private $borderBottomRows = [];
+
+    /**
      * @var bool
      */
     private $marginAuto = false;
@@ -340,7 +350,9 @@ class MenuStyle
         if ($this->marginAuto) {
             $this->setMarginAuto();
         }
+
         $this->calculateContentWidth();
+        $this->generateBorderRows();
 
         return $this;
     }
@@ -460,7 +472,39 @@ class MenuStyle
 
         return $this;
     }
-    
+
+    private function generateBorderRows() : void
+    {
+        $borderRow = sprintf(
+            "%s%s%s%s%s\n",
+            str_repeat(' ', $this->style->getMargin()),
+            $this->style->getBorderColourCode(),
+            str_repeat(' ', $this->style->getWidth()),
+            $this->style->getColoursResetCode(),
+            str_repeat(' ', $this->style->getMargin())
+        );
+
+        $this->borderTopRows = [];
+        for ($b = 0; $b < $this->style->getBorderTopWidth(); $b++) {
+            $this->borderTopRows[] = $borderRow;
+        }
+
+        $this->borderBottomRows = [];
+        for ($b = 0; $b < $this->style->getBorderBottomWidth(); $b++) {
+            $this->borderBottomRows[] = $borderRow;
+        }
+    }
+
+    public function getBorderTopRows() : array
+    {
+        return $this->borderTopRows;
+    }
+
+    public function getBorderBottomRows() : array
+    {
+        return $this->borderBottomRows;
+    }
+
     /**
      * Shorthand function to set all borders values at once
      */
@@ -493,6 +537,7 @@ class MenuStyle
         }
 
         $this->calculateContentWidth();
+        $this->generateBorderRows();
 
         return $this;
     }
@@ -500,6 +545,8 @@ class MenuStyle
     public function setBorderTopWidth(int $width) : self
     {
         $this->borderTopWidth = $width;
+
+        $this->generateBorderRows();
 
         return $this;
     }
@@ -516,6 +563,8 @@ class MenuStyle
     {
         $this->borderBottomWidth = $width;
 
+        $this->generateBorderRows();
+
         return $this;
     }
 
@@ -530,6 +579,8 @@ class MenuStyle
     public function setBorderColour(string $colour) : self
     {
         $this->borderColour = $colour;
+
+        $this->generateBorderRows();
 
         return $this;
     }
