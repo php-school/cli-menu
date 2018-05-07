@@ -120,6 +120,7 @@ class CliMenu
     protected function tearDownTerminal() : void
     {
         $this->terminal->restoreOriginalConfiguration();
+        $this->terminal->enableCursor();
     }
 
     private function assertTerminalIsValidTTY() : void
