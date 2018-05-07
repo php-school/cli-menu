@@ -484,15 +484,8 @@ class MenuStyle
             str_repeat(' ', $this->margin)
         );
 
-        $this->borderTopRows = [];
-        for ($b = 0; $b < $this->borderTopWidth; $b++) {
-            $this->borderTopRows[] = $borderRow;
-        }
-
-        $this->borderBottomRows = [];
-        for ($b = 0; $b < $this->borderBottomWidth; $b++) {
-            $this->borderBottomRows[] = $borderRow;
-        }
+        $this->borderTopRows = array_fill(0, $this->borderTopWidth, $borderRow)
+        $this->borderBottomRows = array_fill(0, $this->borderBottomWidth, $borderRow)
     }
 
     public function getBorderTopRows() : array
@@ -534,6 +527,8 @@ class MenuStyle
 
         if (is_string($colour)) {
             $this->setBorderColour($colour);
+        } elseif ($colour !== null) {
+            throw new \InvalidArgumentException('Invalid colour');
         }
 
         $this->calculateContentWidth();
