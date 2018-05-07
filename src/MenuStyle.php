@@ -20,12 +20,12 @@ class MenuStyle
     protected $terminal;
 
     /**
-     * @var int|string
+     * @var string
      */
     protected $fg;
 
     /**
-     * @var int|string
+     * @var string
      */
     protected $bg;
 
@@ -172,8 +172,11 @@ class MenuStyle
     {
         $this->terminal = $terminal ?: TerminalFactory::fromSystem();
 
-        $this->setFg(static::$defaultStyleValues['fg']);
-        $this->setBg(static::$defaultStyleValues['bg']);
+        $this->fg = static::$defaultStyleValues['fg'];
+        $this->bg = static::$defaultStyleValues['bg'];
+        
+        $this->generateColoursSetCode();
+        
         $this->setWidth(static::$defaultStyleValues['width']);
         $this->setPadding(static::$defaultStyleValues['padding']);
         $this->setMargin(static::$defaultStyleValues['margin']);
@@ -199,13 +202,13 @@ class MenuStyle
      */
     private function generateColoursSetCode() : void
     {
-        if (is_string($this->fg)) {
+        if (!is_numeric($this->fg)) {
             $fgCode = self::$availableForegroundColors[$this->fg];
         } else {
             $fgCode = sprintf("38;5;%s", $this->fg);
         }
 
-        if (is_string($this->bg)) {
+        if (!is_numeric($this->bg)) {
             $bgCode = self::$availableBackgroundColors[$this->bg];
         } else {
             $bgCode = sprintf("48;5;%s", $this->bg);
@@ -259,7 +262,7 @@ class MenuStyle
         return $this->fg;
     }
 
-    public function setFg($fg, string $fallback = null) : self
+    public function setFg(string $fg, string $fallback = null) : self
     {
         $this->fg = ColourUtil::validateColour(
             $this->terminal,
@@ -276,7 +279,7 @@ class MenuStyle
         return $this->bg;
     }
 
-    public function setBg($bg, string $fallback = null) : self
+    public function setBg(string $bg, string $fallback = null) : self
     {
         $this->bg = ColourUtil::validateColour(
             $this->terminal,

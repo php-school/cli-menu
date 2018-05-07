@@ -199,7 +199,7 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function setBackgroundColour($colour, string $fallback = null) : self
+    public function setBackgroundColour(string $colour, string $fallback = null) : self
     {
         $this->style['bg'] = ColourUtil::validateColour(
             $this->terminal,
@@ -210,7 +210,7 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function setForegroundColour($colour, string $fallback = null) : self
+    public function setForegroundColour(string $colour, string $fallback = null) : self
     {
         $this->style['fg'] = ColourUtil::validateColour(
             $this->terminal,
