@@ -83,6 +83,71 @@ class CliMenuBuilderTest extends TestCase
         $this->checkStyleVariable($menu, 'titleSeparator', '-');
     }
 
+    public function test256ColoursCodes() : void
+    {
+        $terminal = static::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getColourSupport')
+            ->will($this->returnValue(256));
+
+        $builder = new CliMenuBuilder;
+        $builder->setTerminal($terminal);
+        $builder->setBackgroundColour(16, 'white');
+        $builder->setForegroundColour(206, 'red');
+        $menu = $builder->build();
+
+        $this->checkStyleVariable($menu, 'bg', 16);
+        $this->checkStyleVariable($menu, 'fg', 206);
+
+        $terminal = static::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getColourSupport')
+            ->will($this->returnValue(8));
+
+        $builder = new CliMenuBuilder;
+        $builder->setTerminal($terminal);
+        $builder->setBackgroundColour(16, 'white');
+        $builder->setForegroundColour(206, 'red');
+        $menu = $builder->build();
+
+        $this->checkStyleVariable($menu, 'bg', 'white');
+        $this->checkStyleVariable($menu, 'fg', 'red');
+    }
+
+    public function testSetFgThrowsExceptionWhenColourCodeIsNotInRange() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid colour code');
+
+        $terminal = static::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getColourSupport')
+            ->will($this->returnValue(256));
+
+        $builder = new CliMenuBuilder;
+        $builder->setTerminal($terminal);
+        $builder->setForegroundColour(512, 'white');
+    }
+
+    public function testSetBgThrowsExceptionWhenColourCodeIsNotInRange() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid colour code');
+
+        $terminal = static::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getColourSupport')
+            ->will($this->returnValue(256));
+
+        $builder = new CliMenuBuilder;
+        $builder->setTerminal($terminal);
+        $builder->setBackgroundColour(-5, 'white');
+    }
+
     public function testDisableDefaultItems() : void
     {
         $builder = new CliMenuBuilder;

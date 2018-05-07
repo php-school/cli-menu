@@ -11,6 +11,7 @@ use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
+use PhpSchool\CliMenu\Util\ColourUtil;
 use Assert\Assertion;
 use PhpSchool\Terminal\Terminal;
 use RuntimeException;
@@ -198,20 +199,24 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function setBackgroundColour(string $colour) : self
+    public function setBackgroundColour($colour, string $fallback = null) : self
     {
-        Assertion::inArray($colour, MenuStyle::getAvailableColours());
-
-        $this->style['bg'] = $colour;
+        $this->style['bg'] = ColourUtil::validateColour(
+            $this->terminal,
+            $colour,
+            $fallback
+        );
 
         return $this;
     }
 
-    public function setForegroundColour(string $colour) : self
+    public function setForegroundColour($colour, string $fallback = null) : self
     {
-        Assertion::inArray($colour, MenuStyle::getAvailableColours());
-
-        $this->style['fg'] = $colour;
+        $this->style['fg'] = ColourUtil::validateColour(
+            $this->terminal,
+            $colour,
+            $fallback
+        );
 
         return $this;
     }

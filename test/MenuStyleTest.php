@@ -5,8 +5,9 @@ namespace PhpSchool\CliMenuTest;
 use PhpSchool\CliMenu\CliMenuBuilder;
 use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\MenuStyle;
-use PhpSchool\CliMenu\Terminal\TerminalInterface;
-use PhpSchool\CliMenu\Terminal\UnixTerminal;
+use PhpSchool\CliMenu\Util\ColourUtil;
+use PhpSchool\Terminal\Terminal;
+use PhpSchool\Terminal\UnixTerminal;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -15,7 +16,7 @@ use PHPUnit\Framework\TestCase;
  */
 class MenuStyleTest extends TestCase
 {
-    private function getMenuStyle() : MenuStyle
+    private function getMenuStyle(int $colours = 8) : MenuStyle
     {
         // Use the CliMenuBuilder & reflection to get the style Obj
         $builder = new CliMenuBuilder();
@@ -29,7 +30,7 @@ class MenuStyleTest extends TestCase
         $reflectionStyle  = new \ReflectionObject($style);
         $terminalProperty = $reflectionStyle->getProperty('terminal');
         $terminalProperty->setAccessible(true);
-        $terminalProperty->setValue($style, $this->getMockTerminal());
+        $terminalProperty->setValue($style, $this->getMockTerminal($colours));
 
         // Force recalculate terminal widths now terminal is set
         $style->setWidth(100);
@@ -37,18 +38,23 @@ class MenuStyleTest extends TestCase
         return $style;
     }
 
-    private function getMockTerminal() : MockObject
+    private function getMockTerminal(int $colours = 8) : MockObject
     {
         $terminal = $this
             ->getMockBuilder(UnixTerminal::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWidth'])
+            ->setMethods(['getWidth', 'getColourSupport'])
             ->getMock();
 
         $terminal
             ->expects(static::any())
             ->method('getWidth')
             ->will(static::returnValue(500));
+
+        $terminal
+            ->expects(static::any())
+            ->method('getColourSupport')
+            ->will(static::returnValue($colours));
 
         return $terminal;
     }
@@ -80,27 +86,27 @@ class MenuStyleTest extends TestCase
             'cyan',
             'white',
             'default'
-        ], MenuStyle::getAvailableColours());
+        ], ColourUtil::getDefaultColoursNames());
     }
 
-    public function testGetSelectedSetCode() : void
+    public function testGetColoursSetCode() : void
     {
-        static::assertSame("\e[47;34m", $this->getMenuStyle()->getSelectedSetCode());
+        static::assertSame("\e[37;44m", $this->getMenuStyle()->getColoursSetCode());
     }
 
-    public function testGetSelectedUnsetCode() : void
+    public function testGetColoursResetCode() : void
     {
-        static::assertSame("\e[49;39m", $this->getMenuStyle()->getSelectedUnsetCode());
+        static::assertSame("\e[0m", $this->getMenuStyle()->getColoursResetCode());
     }
 
-    public function testGetUnselectedSetCode() : void
+    public function testGetInvertedColoursSetCode() : void
     {
-        static::assertSame("\e[44;37m", $this->getMenuStyle()->getUnselectedSetCode());
+        static::assertSame("\e[7m", $this->getMenuStyle()->getInvertedColoursSetCode());
     }
 
-    public function testGetUnselectedUnsetCode() : void
+    public function testGetInvertedColoursUnsetCode() : void
     {
-        static::assertSame("\e[49;39m", $this->getMenuStyle()->getUnselectedUnsetCode());
+        static::assertSame("\e[27m", $this->getMenuStyle()->getInvertedColoursUnsetCode());
     }
 
     public function testGetterAndSetters() : void
@@ -139,6 +145,41 @@ class MenuStyleTest extends TestCase
         static::assertSame(200, $style->getWidth());
         static::assertSame(10, $style->getMargin());
         static::assertSame(10, $style->getPadding());
+    }
+
+    public function test256ColoursCodes() : void
+    {
+        $style = $this->getMenuStyle(256);
+        $style->setBg(16, 'white');
+        $style->setFg(206, 'red');
+        static::assertSame(16, $style->getBg());
+        static::assertSame(206, $style->getFg());
+        static::assertSame("\033[38;5;206;48;5;16m", $style->getColoursSetCode());
+        
+        $style = $this->getMenuStyle(8);
+        $style->setBg(16, 'white');
+        $style->setFg(206, 'red');
+        static::assertSame('white', $style->getBg());
+        static::assertSame('red', $style->getFg());
+        static::assertSame("\033[31;47m", $style->getColoursSetCode());
+    }
+
+    public function testSetFgThrowsExceptionWhenColourCodeIsNotInRange() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid colour code');
+
+        $style = $this->getMenuStyle(256);
+        $style->setFg(512, 'white');
+    }
+
+    public function testSetBgThrowsExceptionWhenColourCodeIsNotInRange() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid colour code');
+
+        $style = $this->getMenuStyle(256);
+        $style->setBg(-5, 'white');
     }
 
     public function testGetMarkerReturnsTheCorrectMarkers() : void
