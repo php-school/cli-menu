@@ -88,24 +88,24 @@ class MenuStyleTest extends TestCase
         ], MenuStyle::getAvailableColours());
     }
 
-    public function testGetSelectedSetCode() : void
+    public function testGetColoursSetCode() : void
     {
-        static::assertSame("\e[47;34m", $this->getMenuStyle()->getSelectedSetCode());
+        static::assertSame("\e[47;34m", $this->getMenuStyle()->getColoursSetCode());
     }
 
-    public function testGetSelectedUnsetCode() : void
+    public function testGetColoursResetCode() : void
     {
-        static::assertSame("\e[49;39m", $this->getMenuStyle()->getSelectedUnsetCode());
+        static::assertSame("\e[0m", $this->getMenuStyle()->getColoursResetCode());
     }
 
-    public function testGetUnselectedSetCode() : void
+    public function testGetInvertedColoursSetCode() : void
     {
-        static::assertSame("\e[44;37m", $this->getMenuStyle()->getUnselectedSetCode());
+        static::assertSame("\e[7m", $this->getMenuStyle()->getInvertedColoursSetCode());
     }
 
-    public function testGetUnselectedUnsetCode() : void
+    public function testGetInvertedColoursUnsetCode() : void
     {
-        static::assertSame("\e[49;39m", $this->getMenuStyle()->getUnselectedUnsetCode());
+        static::assertSame("\e[27m", $this->getMenuStyle()->getInvertedColoursUnsetCode());
     }
 
     public function testGetterAndSetters() : void
