@@ -4,6 +4,7 @@ namespace PhpSchool\CliMenu;
 
 use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
+use PhpSchool\CliMenu\Util\ColourUtil;
 use PhpSchool\Terminal\Terminal;
 
 //TODO: B/W fallback
@@ -177,11 +178,6 @@ class MenuStyle
         $this->setTitleSeparator(static::$defaultStyleValues['titleSeparator']);
     }
 
-    public static function getAvailableColours() : array
-    {
-        return array_keys(self::$availableBackgroundColors);
-    }
-
     public function getDisabledItemText(string $text) : string
     {
         return sprintf(
@@ -259,15 +255,11 @@ class MenuStyle
 
     public function setFg($fg, string $fallback = null) : self
     {
-        if (is_int($fg)) {
-            if ($this->terminal->getColourSupport() < 256) {
-                $fg = $fallback;
-            } elseif ($fg < 0 || $fg > 255) {
-                throw new \InvalidArgumentException("Invalid colour code");
-            }
-        }
-
-        $this->fg = $fg;
+        $this->fg = ColourUtil::validateColour(
+            $this->terminal,
+            $colour,
+            $fallback
+        );
         $this->generateColoursSetCode();
 
         return $this;
@@ -280,14 +272,11 @@ class MenuStyle
 
     public function setBg($bg, string $fallback = null) : self
     {
-        if (is_int($bg)) {
-            if ($this->terminal->getColourSupport() < 256) {
-                $bg = $fallback;
-            } elseif ($bg < 0 || $bg > 255) {
-                throw new \InvalidArgumentException("Invalid colour code");
-            }
-        }
-        $this->bg = $bg;
+        $this->bg = ColourUtil::validateColour(
+            $this->terminal,
+            $colour,
+            $fallback
+        );
         $this->generateColoursSetCode();
 
         return $this;
