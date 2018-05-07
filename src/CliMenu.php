@@ -337,7 +337,7 @@ class CliMenu
         $frame->addRows($this->drawMenuItem(new LineBreakItem()));
         
         if ($this->style->getBorderBottomWidth() > 0) {
-            $frame->addRows($this->style>getBorderBottomRows());
+            $frame->addRows($this->style->getBorderBottomRows());
         }
 
         $frame->newLine(2);
