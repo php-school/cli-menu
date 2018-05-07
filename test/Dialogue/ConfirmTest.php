@@ -35,7 +35,7 @@ class ConfirmTest extends TestCase
 
         $this->terminal->expects($this->any())
             ->method('getWidth')
-            ->willReturn(50);
+            ->willReturn(46);
 
         $this->terminal->expects($this->any())
             ->method('write')
