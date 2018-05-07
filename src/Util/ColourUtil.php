@@ -295,7 +295,7 @@ class ColourUtil
     public static function map256To8(int $colourCode) : string
     {
         if (!isset(static::$coloursMap[$colourCode]))
-            throw new new \InvalidArgumentException("Invalid colour code");
+            throw new \InvalidArgumentException("Invalid colour code");
 
         return static::$coloursMap[$colourCode];
     }
