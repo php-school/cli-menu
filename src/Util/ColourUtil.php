@@ -322,7 +322,7 @@ class ColourUtil
             return static::validateColourName($fallback);
         }
         
-        return static::map256To8($colour);
+        return static::map256To8((int) $colour);
     }
     
     private static function validateColourName(string $colourName) : string

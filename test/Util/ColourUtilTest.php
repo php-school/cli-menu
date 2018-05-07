@@ -100,9 +100,9 @@ class ColourUtilTest extends TestCase
     public function invalidColourCodeProvider() : array
     {
         return [
-            [-1],  
-            [256],  
-            [1000],  
+            [-1],
+            [256],
+            [1000],
         ];
     }
 
