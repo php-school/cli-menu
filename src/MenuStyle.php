@@ -484,8 +484,8 @@ class MenuStyle
             str_repeat(' ', $this->margin)
         );
 
-        $this->borderTopRows = array_fill(0, $this->borderTopWidth, $borderRow)
-        $this->borderBottomRows = array_fill(0, $this->borderBottomWidth, $borderRow)
+        $this->borderTopRows = array_fill(0, $this->borderTopWidth, $borderRow);
+        $this->borderBottomRows = array_fill(0, $this->borderBottomWidth, $borderRow);
     }
 
     public function getBorderTopRows() : array
