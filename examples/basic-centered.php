@@ -12,11 +12,14 @@ $itemCallable = function (CliMenu $menu) {
 $menu = (new CliMenuBuilder)
     ->setTitle('Basic CLI Menu')
     ->addItem('First Item', $itemCallable)
-    ->addItem('Second Item', $itemCallable)
+    ->addItem('Make menu wider', function (CliMenu $menu) {
+        $menu->getStyle()->setWidth($menu->getStyle()->getWidth() + 10);
+        $menu->redraw();
+    })
     ->addItem('Third Item', $itemCallable)
     ->addLineBreak('-')
     ->setWidth(70)
-    ->setMargin(-1)
+    ->setMarginAuto()
     ->build();
 
 $menu->open();

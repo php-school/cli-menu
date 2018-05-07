@@ -74,6 +74,11 @@ class MenuStyle
     private $titleSeparator;
 
     /**
+     * @var bool
+     */
+    private $marginAuto = false;
+
+    /**
      * Default Values
      *
      * @var array
@@ -89,6 +94,7 @@ class MenuStyle
         'itemExtra' => '✔',
         'displaysExtra' => false,
         'titleSeparator' => '=',
+        'marginAuto' => false,
     ];
 
     public static function getDefaultStyleValues() : array
@@ -272,8 +278,8 @@ class MenuStyle
         }
 
         $this->width = $width;
-        if ($this->margin === -1) {
-            $this->setMargin(-1);
+        if ($this->marginAuto) {
+            $this->setMarginAuto();
         }
         $this->calculateContentWidth();
 
@@ -299,13 +305,18 @@ class MenuStyle
         return $this->margin;
     }
 
+    public function setMarginAuto() : self
+    {
+        $this->marginAuto = true;
+        $this->margin = floor(($this->terminal->getWidth() - $this->width) / 2);
+        
+        return $this;
+    }
+
     public function setMargin(int $margin) : self
     {
-        if ($margin === -1) {
-            $this->margin = floor(($this->terminal->getWidth() - $this->width) / 2);
-        } else {
-            $this->margin = $margin;
-        }
+        $this->marginAuto = false;
+        $this->margin = $margin;
 
         return $this;
     }

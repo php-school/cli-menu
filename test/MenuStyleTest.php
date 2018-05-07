@@ -191,9 +191,26 @@ class MenuStyleTest extends TestCase
 
         $style->setWidth(300);
         $style->setPadding(5);
-        $style->setMargin(-1);
+        $style->setMarginAuto();
 
         self::assertSame(100, $style->getMargin());
         self::assertSame(290, $style->getContentWidth());
+    }
+
+    public function testModifyWithWhenMarginAutoIsEnabledRecalculatesMargin() : void
+    {
+        $style = $this->getMenuStyle();
+
+        $style->setWidth(300);
+        $style->setPadding(5);
+        $style->setMarginAuto();
+
+        self::assertSame(100, $style->getMargin());
+        self::assertSame(290, $style->getContentWidth());
+        
+        $style->setWidth(400);
+
+        self::assertSame(50, $style->getMargin());
+        self::assertSame(390, $style->getContentWidth());
     }
 }
