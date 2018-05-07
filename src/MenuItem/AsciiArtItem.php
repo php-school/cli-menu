@@ -41,7 +41,9 @@ class AsciiArtItem implements MenuItemInterface
     {
         Assertion::inArray($position, [self::POSITION_CENTER, self::POSITION_RIGHT, self::POSITION_LEFT]);
         
-        $this->text      = $text;
+        $this->text = implode("\n", array_map(function (string $line) {
+            return rtrim($line, ' ');
+        }, explode("\n", $text)));
         $this->position  = $position;
         $this->alternateText = $alt;
         $this->artLength = max(array_map('mb_strlen', explode("\n", $text)));
@@ -57,27 +59,19 @@ class AsciiArtItem implements MenuItemInterface
             return $alternate->getRows($style, false);
         }
 
-        return array_map(function ($row) use ($style) {
-            $length = mb_strlen($row);
-
-            $padding = $style->getContentWidth() - $length;
-
+        $padding = $style->getContentWidth() - $this->artLength;
+        
+        return array_map(function ($row) use ($padding) {
             switch ($this->position) {
                 case self::POSITION_LEFT:
-                    return $row;
                     break;
                 case self::POSITION_RIGHT:
-                    $row = rtrim($row);
-                    $padding = $padding - ($this->artLength - mb_strlen($row));
                     $row = sprintf('%s%s', str_repeat(' ', $padding), $row);
                     break;
                 case self::POSITION_CENTER:
                 default:
-                    $row = rtrim($row);
-                    $padding = $padding - ($this->artLength - mb_strlen($row));
-                    $left = ceil($padding/2);
-                    $right = $padding - $left;
-                    $row = sprintf('%s%s%s', str_repeat(' ', $left), $row, str_repeat(' ', $right));
+                    $left = ceil($padding / 2);
+                    $row = sprintf('%s%s', str_repeat(' ', $left), $row);
                     break;
             }
 

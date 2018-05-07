@@ -132,7 +132,7 @@ class InputIO
 
         $parentStyle     = $this->parentMenu->getStyle();
         $halfWidth       = ($width + ($input->getStyle()->getPadding() * 2)) / 2;
-        $parentHalfWidth = ceil($parentStyle->getWidth() / 2);
+        $parentHalfWidth = ceil($parentStyle->getWidth() / 2 + $parentStyle->getMargin());
 
         return $parentHalfWidth - $halfWidth;
     }

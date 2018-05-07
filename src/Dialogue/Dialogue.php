@@ -74,7 +74,7 @@ abstract class Dialogue
         //x
         $parentStyle        = $this->parentMenu->getStyle();
         $dialogueHalfLength = (mb_strlen($this->text) + ($this->style->getPadding() * 2)) / 2;
-        $widthHalfLength    = ceil($parentStyle->getWidth() / 2);
+        $widthHalfLength    = ceil($parentStyle->getWidth() / 2 + $parentStyle->getMargin());
         $this->x            = $widthHalfLength - $dialogueHalfLength;
     }
 

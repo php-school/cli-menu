@@ -94,6 +94,11 @@ class MenuStyle
      */
     private $coloursResetCode = "\033[0m";
 
+    /** 
+     * @var bool
+     */
+    private $marginAuto = false;
+
     /**
      * Default Values
      *
@@ -110,6 +115,7 @@ class MenuStyle
         'itemExtra' => '✔',
         'displaysExtra' => false,
         'titleSeparator' => '=',
+        'marginAuto' => false,
     ];
 
     public static function getDefaultStyleValues() : array
@@ -245,7 +251,7 @@ class MenuStyle
      */
     protected function calculateContentWidth() : void
     {
-        $this->contentWidth = $this->width - ($this->padding*2) - ($this->margin*2);
+        $this->contentWidth = $this->width - ($this->padding * 2);
     }
 
     public function getFg()
@@ -289,13 +295,14 @@ class MenuStyle
 
     public function setWidth(int $width) : self
     {
-        $availableWidth = $this->terminal->getWidth() - ($this->margin * 2) - ($this->padding * 2);
-
-        if ($width >= $availableWidth) {
-            $width = $availableWidth;
+        if ($width >= $this->terminal->getWidth()) {
+            $width = $this->terminal->getWidth();
         }
 
         $this->width = $width;
+        if ($this->marginAuto) {
+            $this->setMarginAuto();
+        }
         $this->calculateContentWidth();
 
         return $this;
@@ -320,11 +327,18 @@ class MenuStyle
         return $this->margin;
     }
 
+    public function setMarginAuto() : self
+    {
+        $this->marginAuto = true;
+        $this->margin = floor(($this->terminal->getWidth() - $this->width) / 2);
+        
+        return $this;
+    }
+
     public function setMargin(int $margin) : self
     {
+        $this->marginAuto = false;
         $this->margin = $margin;
-
-        $this->calculateContentWidth();
 
         return $this;
     }
