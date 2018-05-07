@@ -160,7 +160,7 @@ class MenuStyleTest extends TestCase
         $style->setFg(206, 'red');
         static::assertSame('white', $style->getBg());
         static::assertSame('red', $style->getFg());
-        static::assertSame("\033[37;41m", $style->getColoursSetCode());
+        static::assertSame("\033[31;47m", $style->getColoursSetCode());
     }
 
     public function testGetMarkerReturnsTheCorrectMarkers() : void
