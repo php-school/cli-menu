@@ -117,7 +117,7 @@ class CliMenuBuilderTest extends TestCase
     }
 
     public function testSetFgThrowsExceptionWhenColourCodeIsNotInRange() : void
-    {   
+    {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid colour code');
 
@@ -133,7 +133,7 @@ class CliMenuBuilderTest extends TestCase
     }
 
     public function testSetBgThrowsExceptionWhenColourCodeIsNotInRange() : void
-    {   
+    {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid colour code');
 
