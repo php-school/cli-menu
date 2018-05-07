@@ -10,7 +10,7 @@ class ColourUtil
     /**
      * @var array
      */
-    private $defaultColoursNames = [
+    private static $defaultColoursNames = [
         'black',
         'red',
         'green',
@@ -24,7 +24,7 @@ class ColourUtil
     /**
      * @var array
      */
-    private $coloursMap = [
+    private static $coloursMap = [
         0 => 'black',
         1 => 'red',
         2 => 'green',
