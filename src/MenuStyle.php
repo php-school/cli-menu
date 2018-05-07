@@ -477,11 +477,11 @@ class MenuStyle
     {
         $borderRow = sprintf(
             "%s%s%s%s%s\n",
-            str_repeat(' ', $this->style->getMargin()),
-            $this->style->getBorderColourCode(),
-            str_repeat(' ', $this->style->getWidth()),
-            $this->style->getColoursResetCode(),
-            str_repeat(' ', $this->style->getMargin())
+            str_repeat(' ', $this->margin),
+            $this->getBorderColourCode(),
+            str_repeat(' ', $this->width),
+            $this->coloursResetCode(),
+            str_repeat(' ', $this->margin)
         );
 
         $this->borderTopRows = [];
