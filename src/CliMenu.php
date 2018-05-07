@@ -376,6 +376,13 @@ class CliMenu
         }
 
         return array_map(function ($row) use ($invertedColour, $notInvertedColour, $borderColour) {
+
+            $rightPadding = $this->style->getRightHandPadding(mb_strlen(s::stripAnsiEscapeSequence($row)));
+            
+            if ($rightPadding < 0) {
+                $rightPadding = 0;
+            }
+        
             return sprintf(
                 "%s%s%s%s%s%s%s%s%s%s%s%s%s\n",
                 str_repeat(' ', $this->style->getMargin()),
@@ -385,7 +392,7 @@ class CliMenu
                 $invertedColour,
                 str_repeat(' ', $this->style->getPadding()),
                 $row,
-                str_repeat(' ', $this->style->getRightHandPadding(mb_strlen(s::stripAnsiEscapeSequence($row)))),
+                str_repeat(' ', $rightPadding),
                 $notInvertedColour,
                 $borderColour,
                 str_repeat(' ', $this->style->getBorderRightWidth()),
