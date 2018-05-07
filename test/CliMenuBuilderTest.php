@@ -437,6 +437,93 @@ class CliMenuBuilderTest extends TestCase
 
         (new CliMenuBuilder)->disableMenu();
     }
+
+    /**
+     * @dataProvider marginBelowZeroProvider
+     */
+    public function testSetMarginThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
+    {
+        self::expectException(\Assert\InvalidArgumentException::class);
+        
+        
+        (new CliMenuBuilder)->setMargin($value);
+    }
+
+    public function marginBelowZeroProvider() : array
+    {
+        return [[-1], [-2], [-10]];
+    }
+
+    /**
+     * @dataProvider marginAboveZeroProvider
+     */
+    public function testSetMarginAcceptsZeroAndPositiveIntegers(int $value) : void
+    {
+        $menu = (new CliMenuBuilder)->setMargin($value)->build();
+        
+        self::assertSame($value, $menu->getStyle()->getMargin());
+    }
+
+    public function marginAboveZeroProvider() : array
+    {
+        return [[0], [1], [10], [50]];
+    }
+
+    public function testSetMarginAutoAutomaticallyCalculatesMarginToCenter() : void
+    {
+        $terminal = self::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getWidth')
+            ->will($this->returnValue(200));
+
+        $builder = new CliMenuBuilder;
+        $menu = $builder
+            ->setTerminal($terminal)
+            ->setMarginAuto()
+            ->setWidth(100)
+            ->build();
+        
+        self::assertSame(50, $menu->getStyle()->getMargin());
+    }
+
+    public function testSetMarginAutoOverwritesSetMargin() : void
+    {
+        $terminal = self::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getWidth')
+            ->will($this->returnValue(200));
+
+        $builder = new CliMenuBuilder;
+        $menu = $builder
+            ->setTerminal($terminal)
+            ->setMargin(10)
+            ->setMarginAuto()
+            ->setWidth(100)
+            ->build();
+
+        self::assertSame(50, $menu->getStyle()->getMargin());
+    }
+
+    public function testSetMarginManuallyOverwritesSetMarginAuto() : void
+    {
+        $terminal = self::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getWidth')
+            ->will($this->returnValue(200));
+
+        $builder = new CliMenuBuilder;
+        $menu = $builder
+            ->setTerminal($terminal)
+            ->setMarginAuto()
+            ->setMargin(10)
+            ->setWidth(100)
+            ->build();
+
+        self::assertSame(10, $menu->getStyle()->getMargin());
+    }
     
     private function checkItems(CliMenu $menu, array $expected) : void
     {
