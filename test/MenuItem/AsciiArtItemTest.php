@@ -142,7 +142,7 @@ class AsciiArtItemTest extends TestCase
         self::assertSame(['my alt'], $item->getRows($menuStyle));
     }
 
-    public function testWithAsciiArtCentered() : void
+    public function testWithRealAsciiArtCenterAligned() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -174,7 +174,7 @@ ART;
         );
     }
 
-    public function testWithAsciiArtRightAligned() : void
+    public function testWithRealAsciiArtRightAligned() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -206,7 +206,7 @@ ART;
         );
     }
 
-    public function testWithRealAsciiArtCenteredWithWhiteSpaceAtTheEndOfEachLine() : void
+    public function testWithRealAsciiArtCenterAlignedWithWhiteSpaceAtTheEndOfEachLine() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
