@@ -115,9 +115,9 @@ class MenuStyle
     private $borderLeftWidth;
 
     /**
-     * @var string
+     * @var int|string
      */
-    private $borderColour;
+    private $borderColour = 'white';
 
     /**
      * @var array
@@ -533,7 +533,7 @@ class MenuStyle
         $this->borderLeftWidth = $leftWidth;
 
         if (is_string($colour)) {
-            $this->borderColour = $colour;
+            $this->setBorderColour($colour);
         }
 
         $this->calculateContentWidth();
@@ -576,9 +576,17 @@ class MenuStyle
         return $this;
     }
 
-    public function setBorderColour(string $colour) : self
+    public function setBorderColour($colour) : self
     {
-        $this->borderColour = $colour;
+        if (is_string($colour) && ctype_digit($colour)) {
+            $colour = intval($colour);
+        }
+
+        $this->borderColour = ColourUtil::validateColour(
+            $this->terminal,
+            $bg,
+            $fallback
+        );
 
         $this->generateBorderRows();
 
@@ -605,13 +613,19 @@ class MenuStyle
         return $this->borderLeftWidth;
     }
 
-    public function getBorderColour() : string
+    public function getBorderColour()
     {
         return $this->borderColour;
     }
 
     public function getBorderColourCode() : string
     {
-        return sprintf("\033[%sm", self::$availableBackgroundColors[$this->getBorderColour()]['set']);
+        if (is_string($this->borderColour)) {
+            $borderColourCode = self::$availableBackgroundColors[$this->bg];
+        } else {
+            $borderColourCode = sprintf("48;5;%s", $this->bg);
+        }
+
+        return sprintf("\033[%sm", $borderColourCode);
     }
 }
