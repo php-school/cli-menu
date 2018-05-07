@@ -238,10 +238,10 @@ class CliMenuBuilder
     }
 
     public function setMargin(int $margin) : self
-    {   
+    {
         Assertion::greaterOrEqualThan($margin, 0);
         
-        $this->style['marginAuto'] = false;    
+        $this->style['marginAuto'] = false;
         $this->style['margin'] = $margin;
 
         return $this;
