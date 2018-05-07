@@ -84,6 +84,67 @@ class CliMenuTest extends TestCase
         static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
+    public function testSimpleOpenCloseWithBorders() : void
+    {
+        $this->terminal->expects($this->once())
+            ->method('read')
+            ->willReturn("\n");
+
+        $style = $this->getStyle($this->terminal);
+        $style->setBorder(1, 2, 'red');
+
+        $item = new SelectableItem('Item 1', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
+        $menu->open();
+
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+
+    public function testSimpleOpenCloseWithLeftAndRightBorders() : void
+    {
+        $this->terminal->expects($this->once())
+            ->method('read')
+            ->willReturn("\n");
+
+        $style = $this->getStyle($this->terminal);
+        $style->setBorderLeftWidth(2);
+        $style->setBorderRightWidth(2);
+        $style->setBorderColour('red');
+
+        $item = new SelectableItem('Item 1', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
+        $menu->open();
+
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+
+    public function testSimpleOpenCloseWithMarginAutoAndBorders() : void
+    {
+        $this->terminal->expects($this->once())
+            ->method('read')
+            ->willReturn("\n");
+
+        $style = $this->getStyle($this->terminal);
+        $style->setBorder(1, 2, 'red');
+        $style->setMarginAuto();
+        $style->setWidth(30);
+
+        $item = new SelectableItem('Item 1', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
+        $menu->open();
+
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+
     public function testReDrawReDrawsImmediately() : void
     {
         $this->terminal->expects($this->once())
