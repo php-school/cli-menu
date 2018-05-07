@@ -319,22 +319,9 @@ class CliMenu
         $frame = new Frame;
 
         $frame->newLine(2);
-        
-        $borderRow = [
-            sprintf(
-                "%s%s%s%s%s\n",
-                str_repeat(' ', $this->style->getMargin()),
-                $this->style->getBorderColourCode(),
-                str_repeat(' ', $this->style->getWidth()),
-                $this->style->getColoursResetCode(),
-                str_repeat(' ', $this->style->getMargin())
-            )
-        ];
 
         if ($this->style->getBorderTopWidth() > 0) {
-            for ($b = 0; $b < $this->style->getBorderTopWidth(); $b++) {
-                $frame->addRows($borderRow);
-            }
+            $frame->addRows($this->style->getBorderTopRows());
         }
 
         if ($this->title) {
@@ -350,9 +337,7 @@ class CliMenu
         $frame->addRows($this->drawMenuItem(new LineBreakItem()));
         
         if ($this->style->getBorderBottomWidth() > 0) {
-            for ($b = 0; $b < $this->style->getBorderBottomWidth(); $b++) {
-                $frame->addRows($borderRow);
-            }
+            $frame->addRows($this->style>getBorderBottomRows());
         }
 
         $frame->newLine(2);
