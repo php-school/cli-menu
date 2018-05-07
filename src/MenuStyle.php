@@ -115,7 +115,7 @@ class MenuStyle
     private $borderLeftWidth;
 
     /**
-     * @var int|string
+     * @var string
      */
     private $borderColour = 'white';
 
