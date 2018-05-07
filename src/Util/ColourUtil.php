@@ -19,6 +19,7 @@ class ColourUtil
         'magenta',
         'cyan',
         'white',
+        'default',
     ];
 
     /**
