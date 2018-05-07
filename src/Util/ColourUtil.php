@@ -284,7 +284,7 @@ class ColourUtil
         255 => 'white',
     ];
 
-    public static function getDefaultColoursNames() : array
+    public static function getDefaultColourNames() : array
     {
         return static::$defaultColoursNames;
     }
@@ -296,7 +296,7 @@ class ColourUtil
     public static function map256To8(int $colourCode) : string
     {
         if (!isset(static::$coloursMap[$colourCode])) {
-            throw new \InvalidArgumentException("Invalid colour code");
+            throw new \InvalidArgumentException('Invalid colour code');
         }
 
         return static::$coloursMap[$colourCode];
@@ -306,22 +306,28 @@ class ColourUtil
      * Check if $colour exists
      * If it's a 256-colours code and $terminal doesn't support it, returns a fallback value
      */
-    public static function validateColour(Terminal $terminal, $colour, string $fallback = null)
+    public static function validateColour(Terminal $terminal, string $colour, string $fallback = null) : string
     {
-        if (is_int($colour)) {
-            if ($colour < 0 || $colour > 255) {
-                throw new \InvalidArgumentException("Invalid colour code");
-            }
-            if ($terminal->getColourSupport() < 256) {
-                if ($fallback !== null) {
-                    Assertion::inArray($fallback, static::getDefaultColoursNames());
-                    return $fallback;
-                }
-                return static::map256To8($colour);
-            }
-        } else {
-            Assertion::inArray($colour, static::getDefaultColoursNames());
+        if (!ctype_digit($colour)) {
+            return static::validateColourName($colour);
         }
-        return $colour;
+        
+        Assertion::between($colour, 0, 255, 'Invalid colour code');
+        
+        if ($terminal->getColourSupport() >= 256) {
+            return $colour;
+        }
+
+        if ($fallback !== null) {
+            return static::validateColourName($fallback);
+        }
+        
+        return static::map256To8((int) $colour);
+    }
+    
+    private static function validateColourName(string $colourName) : string
+    {
+        Assertion::inArray($colourName, static::getDefaultColourNames());
+        return $colourName;
     }
 }

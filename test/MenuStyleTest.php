@@ -74,21 +74,6 @@ class MenuStyleTest extends TestCase
         static::assertSame(MenuStyle::class, get_class($style));
     }
 
-    public function testAvailableColours() : void
-    {
-        static::assertSame([
-            'black',
-            'red',
-            'green',
-            'yellow',
-            'blue',
-            'magenta',
-            'cyan',
-            'white',
-            'default'
-        ], ColourUtil::getDefaultColoursNames());
-    }
-
     public function testGetColoursSetCode() : void
     {
         static::assertSame("\e[37;44m", $this->getMenuStyle()->getColoursSetCode());
@@ -152,8 +137,8 @@ class MenuStyleTest extends TestCase
         $style = $this->getMenuStyle(256);
         $style->setBg(16, 'white');
         $style->setFg(206, 'red');
-        static::assertSame(16, $style->getBg());
-        static::assertSame(206, $style->getFg());
+        static::assertSame('16', $style->getBg());
+        static::assertSame('206', $style->getFg());
         static::assertSame("\033[38;5;206;48;5;16m", $style->getColoursSetCode());
         
         $style = $this->getMenuStyle(8);
@@ -179,7 +164,7 @@ class MenuStyleTest extends TestCase
         $this->expectExceptionMessage('Invalid colour code');
 
         $style = $this->getMenuStyle(256);
-        $style->setBg(-5, 'white');
+        $style->setBg(257, 'white');
     }
 
     public function testGetMarkerReturnsTheCorrectMarkers() : void
