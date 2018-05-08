@@ -487,7 +487,8 @@ class CliMenuTest extends TestCase
 
         $menu = new CliMenu('PHP School FTW', []);
         $menu->addCustomControlMappings([
-            ' ' => function () {}
+            ' ' => function () {
+            }
         ]);
     }
 
@@ -498,8 +499,10 @@ class CliMenuTest extends TestCase
 
         $menu = new CliMenu('PHP School FTW', []);
         $menu->addCustomControlMappings([
-            'c', function () {},
-            'c', function () {}
+            'c' => function () {
+            },
+            'c' => function () {
+            }
         ]);
     }
 
