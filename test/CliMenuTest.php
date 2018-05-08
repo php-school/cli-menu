@@ -510,7 +510,6 @@ class CliMenuTest extends TestCase
 
     public function testAddCustomControlMappings() : void
     {
-        $first = true;
         $this->terminal->expects($this->any())
             ->method('read')
             ->willReturn('c', 'x');
@@ -531,7 +530,6 @@ class CliMenuTest extends TestCase
         $menu->open();
         static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
 
-        $first = false;
         $menu->open();
         static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
