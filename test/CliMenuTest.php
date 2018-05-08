@@ -500,7 +500,9 @@ class CliMenuTest extends TestCase
         $menu = new CliMenu('PHP School FTW', []);
         $menu->addCustomControlMappings([
             'c' => function () {
-            },
+            }
+        ]);
+        $menu->addCustomControlMappings([
             'c' => function () {
             }
         ]);
@@ -511,13 +513,7 @@ class CliMenuTest extends TestCase
         $first = true;
         $this->terminal->expects($this->any())
             ->method('read')
-            ->will(
-                $this->returnCallback(
-                    function () use (&$first) {
-                        return $first ? 'c' : 'x';
-                    }
-                )
-            );
+            ->willReturn('c', 'x');
 
         $style = $this->getStyle($this->terminal);
 
