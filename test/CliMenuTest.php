@@ -511,14 +511,10 @@ class CliMenuTest extends TestCase
         $first = true;
         $this->terminal->expects($this->any())
             ->method('read')
-            ->willReturn(
+            ->will(
                 $this->returnCallback(
-                    function() use ($first) {
-                        if ($first) {
-                            $first = false;
-                            return 'c';
-                        }
-                        return 'x';
+                    function() use (&$first) {
+                        return $first ? 'c' : 'x';
                     }
                 )
             );
@@ -539,6 +535,7 @@ class CliMenuTest extends TestCase
         $menu->open();
         static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
 
+        $first = false;
         $menu->open();
         static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
