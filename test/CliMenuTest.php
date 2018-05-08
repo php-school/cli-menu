@@ -511,13 +511,17 @@ class CliMenuTest extends TestCase
         $first = true;
         $this->terminal->expects($this->any())
             ->method('read')
-            ->willReturn(function() use ($first) {
-                if ($first) {
-                    $first = false;
-                    return 'c';
-                }
-                return 'x';
-            });
+            ->willReturn(
+                $this->returnCallback(
+                    function() use ($first) {
+                        if ($first) {
+                            $first = false;
+                            return 'c';
+                        }
+                        return 'x';
+                    }
+                )
+            );
 
         $style = $this->getStyle($this->terminal);
 
