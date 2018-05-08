@@ -415,6 +415,27 @@ $menu = (new CliMenuBuilder)
 $menu->open();
 ```
 
+If you change the menu drastically, such as making the width smaller, when it redraws you might see artifacts of the previous draw
+as `redraw` only draws over the top of the terminal. If this happens you can pass `true` to `redraw` and it will first clear
+the terminal before redrawing.
+
+```php
+$itemCallable = function (CliMenu $menu) {
+    $menu->getStyle()->setWidth($menu->getStyle()->getWidth() === 100 ? 80 : 100);
+    $menu->redraw(true);
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('First Item', $itemCallable)
+    ->addItem('Second Item', $itemCallable)
+    ->addItem('Third Item', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+```
+
 #### Getting, Removing and Adding items
 
 You can also interact with the menu items in an action. You can add, remove and replace items. If you do this, you 

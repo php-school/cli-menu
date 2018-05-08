@@ -46,7 +46,7 @@ $itemCallable = function (CliMenu $menu) {
         }
     );
     
-    $menu->redraw();
+    $menu->redraw(true);
 };
 
 $menu = (new CliMenuBuilder)
