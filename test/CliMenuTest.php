@@ -50,11 +50,11 @@ class CliMenuTest extends TestCase
     public function testGetMenuStyle() : void
     {
         $menu = new CliMenu('PHP School FTW', []);
-        static::assertInstanceOf(MenuStyle::class, $menu->getStyle());
+        self::assertInstanceOf(MenuStyle::class, $menu->getStyle());
 
         $style = new MenuStyle();
         $menu = new CliMenu('PHP School FTW', [], null, $style);
-        static::assertSame($style, $menu->getStyle());
+        self::assertSame($style, $menu->getStyle());
     }
 
     public function testReDrawThrowsExceptionIfMenuNotOpen() : void
@@ -81,7 +81,7 @@ class CliMenuTest extends TestCase
         $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
 
-        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+        self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
     public function testSimpleOpenCloseWithBorders() : void
@@ -100,7 +100,7 @@ class CliMenuTest extends TestCase
         $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
 
-        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+        self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
     public function testSimpleOpenCloseWithLeftAndRightBorders() : void
@@ -121,7 +121,7 @@ class CliMenuTest extends TestCase
         $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
 
-        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+        self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
     public function testSimpleOpenCloseWithMarginAutoAndBorders() : void
@@ -142,7 +142,7 @@ class CliMenuTest extends TestCase
         $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
 
-        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+        self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
     public function testReDrawReDrawsImmediately() : void
@@ -162,7 +162,7 @@ class CliMenuTest extends TestCase
         $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
         $menu->open();
 
-        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+        self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
     public function testGetItems() : void
@@ -184,7 +184,7 @@ class CliMenuTest extends TestCase
             $style
         );
 
-        static::assertSame([$item1, $item2], $menu->getItems());
+        self::assertSame([$item1, $item2], $menu->getItems());
     }
 
     public function testRemoveItem() : void
@@ -205,12 +205,12 @@ class CliMenuTest extends TestCase
             $style
         );
 
-        static::assertEquals([$item1, $item2], $menu->getItems());
+        self::assertEquals([$item1, $item2], $menu->getItems());
 
         $menu->removeItem($item1);
 
-        static::assertCount(1, $menu->getItems());
-        static::assertContains($item2, $menu->getItems());
+        self::assertCount(1, $menu->getItems());
+        self::assertContains($item2, $menu->getItems());
     }
 
     public function testRemoveItemThrowsExceptionWhenItemDoesntExistInMenu() : void
@@ -255,7 +255,7 @@ class CliMenuTest extends TestCase
     public function testGetTerminal() : void
     {
         $menu = new CliMenu('PHP School FTW', []);
-        static::assertInstanceOf(UnixTerminal::class, $menu->getTerminal());
+        self::assertInstanceOf(UnixTerminal::class, $menu->getTerminal());
     }
 
     public function testAddItem() : void
@@ -328,7 +328,7 @@ class CliMenuTest extends TestCase
     {
         $menu = new CliMenu('PHP School FTW', []);
 
-        static::expectException(MenuNotOpenException::class);
+        self::expectException(MenuNotOpenException::class);
 
         $menu->askNumber();
     }
@@ -358,15 +358,15 @@ class CliMenuTest extends TestCase
         }));
         $menu->open();
 
-        static::assertEquals('yellow', $number->getStyle()->getBg());
-        static::assertEquals('red', $number->getStyle()->getFg());
+        self::assertEquals('yellow', $number->getStyle()->getBg());
+        self::assertEquals('red', $number->getStyle()->getFg());
     }
 
     public function testAskTextThrowsExceptionIfMenuNotOpen() : void
     {
         $menu = new CliMenu('PHP School FTW', []);
 
-        static::expectException(MenuNotOpenException::class);
+        self::expectException(MenuNotOpenException::class);
 
         $menu->askText();
     }
@@ -396,15 +396,15 @@ class CliMenuTest extends TestCase
         }));
         $menu->open();
 
-        static::assertEquals('yellow', $text->getStyle()->getBg());
-        static::assertEquals('red', $text->getStyle()->getFg());
+        self::assertEquals('yellow', $text->getStyle()->getBg());
+        self::assertEquals('red', $text->getStyle()->getFg());
     }
 
     public function testAskPasswordThrowsExceptionIfMenuNotOpen() : void
     {
         $menu = new CliMenu('PHP School FTW', []);
 
-        static::expectException(MenuNotOpenException::class);
+        self::expectException(MenuNotOpenException::class);
 
         $menu->askPassword();
     }
@@ -434,8 +434,8 @@ class CliMenuTest extends TestCase
         }));
         $menu->open();
 
-        static::assertEquals('yellow', $password->getStyle()->getBg());
-        static::assertEquals('red', $password->getStyle()->getFg());
+        self::assertEquals('yellow', $password->getStyle()->getBg());
+        self::assertEquals('red', $password->getStyle()->getFg());
     }
 
     public function testAddCustomControlMappingThrowsExceptionWhenOverwritingExistingDefaultControls() : void
@@ -477,7 +477,7 @@ class CliMenuTest extends TestCase
         $menu->addCustomControlMapping('c', $action);
         $menu->open();
 
-        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+        self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
     public function testAddCustomControlMappingsThrowsExceptionWhenOverwritingExistingDefaultControls() : void
@@ -528,10 +528,10 @@ class CliMenuTest extends TestCase
         ]);
 
         $menu->open();
-        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+        self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
 
         $menu->open();
-        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+        self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
     public function testRemoveCustomControlMappingThrowsExceptionIfNoSuchMappingExists() : void

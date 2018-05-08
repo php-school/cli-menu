@@ -47,14 +47,14 @@ class MenuStyleTest extends TestCase
             ->getMock();
 
         $terminal
-            ->expects(static::any())
+            ->expects(self::any())
             ->method('getWidth')
-            ->will(static::returnValue(500));
+            ->will(self::returnValue(500));
 
         $terminal
-            ->expects(static::any())
+            ->expects(self::any())
             ->method('getColourSupport')
-            ->will(static::returnValue($colours));
+            ->will(self::returnValue($colours));
 
         return $terminal;
     }
@@ -65,54 +65,54 @@ class MenuStyleTest extends TestCase
         $menu    = $builder->build();
 
         $reflectionMenu = new \ReflectionObject($menu);
-        static::assertTrue($reflectionMenu->hasProperty('style'));
+        self::assertTrue($reflectionMenu->hasProperty('style'));
 
         $styleProperty = $reflectionMenu->getProperty('style');
         $styleProperty->setAccessible(true);
         $style = $styleProperty->getValue($menu);
 
-        static::assertSame(MenuStyle::class, get_class($style));
+        self::assertSame(MenuStyle::class, get_class($style));
     }
 
     public function testGetColoursSetCode() : void
     {
-        static::assertSame("\e[37;44m", $this->getMenuStyle()->getColoursSetCode());
+        self::assertSame("\e[37;44m", $this->getMenuStyle()->getColoursSetCode());
     }
 
     public function testGetColoursResetCode() : void
     {
-        static::assertSame("\e[0m", $this->getMenuStyle()->getColoursResetCode());
+        self::assertSame("\e[0m", $this->getMenuStyle()->getColoursResetCode());
     }
 
     public function testGetInvertedColoursSetCode() : void
     {
-        static::assertSame("\e[7m", $this->getMenuStyle()->getInvertedColoursSetCode());
+        self::assertSame("\e[7m", $this->getMenuStyle()->getInvertedColoursSetCode());
     }
 
     public function testGetInvertedColoursUnsetCode() : void
     {
-        static::assertSame("\e[27m", $this->getMenuStyle()->getInvertedColoursUnsetCode());
+        self::assertSame("\e[27m", $this->getMenuStyle()->getInvertedColoursUnsetCode());
     }
 
     public function testGetterAndSetters() : void
     {
         $style = $this->getMenuStyle();
 
-        static::assertSame('blue', $style->getBg());
-        static::assertSame('white', $style->getFg());
-        static::assertSame('○', $style->getUnselectedMarker());
-        static::assertSame('●', $style->getSelectedMarker());
-        static::assertSame('✔', $style->getItemExtra());
-        static::assertFalse($style->getDisplaysExtra());
-        static::assertSame('=', $style->getTitleSeparator());
-        static::assertSame(100, $style->getWidth());
-        static::assertSame(2, $style->getMargin());
-        static::assertSame(2, $style->getPadding());
-        static::assertSame(0, $style->getBorderTopWidth());
-        static::assertSame(0, $style->getBorderRightWidth());
-        static::assertSame(0, $style->getBorderBottomWidth());
-        static::assertSame(0, $style->getBorderLeftWidth());
-        static::assertSame('white', $style->getBorderColour());
+        self::assertSame('blue', $style->getBg());
+        self::assertSame('white', $style->getFg());
+        self::assertSame('○', $style->getUnselectedMarker());
+        self::assertSame('●', $style->getSelectedMarker());
+        self::assertSame('✔', $style->getItemExtra());
+        self::assertFalse($style->getDisplaysExtra());
+        self::assertSame('=', $style->getTitleSeparator());
+        self::assertSame(100, $style->getWidth());
+        self::assertSame(2, $style->getMargin());
+        self::assertSame(2, $style->getPadding());
+        self::assertSame(0, $style->getBorderTopWidth());
+        self::assertSame(0, $style->getBorderRightWidth());
+        self::assertSame(0, $style->getBorderBottomWidth());
+        self::assertSame(0, $style->getBorderLeftWidth());
+        self::assertSame('white', $style->getBorderColour());
 
         $style->setBg('red');
         $style->setFg('yellow');
@@ -130,80 +130,80 @@ class MenuStyleTest extends TestCase
         $style->setBorderLeftWidth(4);
         $style->setBorderColour('green');
 
-        static::assertSame('red', $style->getBg());
-        static::assertSame('yellow', $style->getFg());
-        static::assertSame('-', $style->getUnselectedMarker());
-        static::assertSame('>', $style->getSelectedMarker());
-        static::assertSame('EXTRA!', $style->getItemExtra());
-        static::assertTrue($style->getDisplaysExtra());
-        static::assertSame('+', $style->getTitleSeparator());
-        static::assertSame(200, $style->getWidth());
-        static::assertSame(10, $style->getMargin());
-        static::assertSame(10, $style->getPadding());
-        static::assertSame(1, $style->getBorderTopWidth());
-        static::assertSame(2, $style->getBorderRightWidth());
-        static::assertSame(3, $style->getBorderBottomWidth());
-        static::assertSame(4, $style->getBorderLeftWidth());
-        static::assertSame('green', $style->getBorderColour());
+        self::assertSame('red', $style->getBg());
+        self::assertSame('yellow', $style->getFg());
+        self::assertSame('-', $style->getUnselectedMarker());
+        self::assertSame('>', $style->getSelectedMarker());
+        self::assertSame('EXTRA!', $style->getItemExtra());
+        self::assertTrue($style->getDisplaysExtra());
+        self::assertSame('+', $style->getTitleSeparator());
+        self::assertSame(200, $style->getWidth());
+        self::assertSame(10, $style->getMargin());
+        self::assertSame(10, $style->getPadding());
+        self::assertSame(1, $style->getBorderTopWidth());
+        self::assertSame(2, $style->getBorderRightWidth());
+        self::assertSame(3, $style->getBorderBottomWidth());
+        self::assertSame(4, $style->getBorderLeftWidth());
+        self::assertSame('green', $style->getBorderColour());
     }
     
     public function testSetBorderShorthandFunction() : void
     {
         $style = $this->getMenuStyle();
         $style->setBorder(3);
-        static::assertSame(3, $style->getBorderTopWidth());
-        static::assertSame(3, $style->getBorderRightWidth());
-        static::assertSame(3, $style->getBorderBottomWidth());
-        static::assertSame(3, $style->getBorderLeftWidth());
-        static::assertSame('white', $style->getBorderColour());
+        self::assertSame(3, $style->getBorderTopWidth());
+        self::assertSame(3, $style->getBorderRightWidth());
+        self::assertSame(3, $style->getBorderBottomWidth());
+        self::assertSame(3, $style->getBorderLeftWidth());
+        self::assertSame('white', $style->getBorderColour());
 
         $style = $this->getMenuStyle();
         $style->setBorder(3, 4);
-        static::assertSame(3, $style->getBorderTopWidth());
-        static::assertSame(4, $style->getBorderRightWidth());
-        static::assertSame(3, $style->getBorderBottomWidth());
-        static::assertSame(4, $style->getBorderLeftWidth());
-        static::assertSame('white', $style->getBorderColour());
+        self::assertSame(3, $style->getBorderTopWidth());
+        self::assertSame(4, $style->getBorderRightWidth());
+        self::assertSame(3, $style->getBorderBottomWidth());
+        self::assertSame(4, $style->getBorderLeftWidth());
+        self::assertSame('white', $style->getBorderColour());
 
         $style = $this->getMenuStyle();
         $style->setBorder(3, 4, 5);
-        static::assertSame(3, $style->getBorderTopWidth());
-        static::assertSame(4, $style->getBorderRightWidth());
-        static::assertSame(5, $style->getBorderBottomWidth());
-        static::assertSame(4, $style->getBorderLeftWidth());
-        static::assertSame('white', $style->getBorderColour());
+        self::assertSame(3, $style->getBorderTopWidth());
+        self::assertSame(4, $style->getBorderRightWidth());
+        self::assertSame(5, $style->getBorderBottomWidth());
+        self::assertSame(4, $style->getBorderLeftWidth());
+        self::assertSame('white', $style->getBorderColour());
 
         $style = $this->getMenuStyle();
         $style->setBorder(3, 4, 5, 6);
-        static::assertSame(3, $style->getBorderTopWidth());
-        static::assertSame(4, $style->getBorderRightWidth());
-        static::assertSame(5, $style->getBorderBottomWidth());
-        static::assertSame(6, $style->getBorderLeftWidth());
-        static::assertSame('white', $style->getBorderColour());
+        self::assertSame(3, $style->getBorderTopWidth());
+        self::assertSame(4, $style->getBorderRightWidth());
+        self::assertSame(5, $style->getBorderBottomWidth());
+        self::assertSame(6, $style->getBorderLeftWidth());
+        self::assertSame('white', $style->getBorderColour());
 
         $style = $this->getMenuStyle();
         $style->setBorder(3, 4, 5, 6, 'red');
-        static::assertSame(3, $style->getBorderTopWidth());
-        static::assertSame(4, $style->getBorderRightWidth());
-        static::assertSame(5, $style->getBorderBottomWidth());
-        static::assertSame(6, $style->getBorderLeftWidth());
-        static::assertSame('red', $style->getBorderColour());
+        self::assertSame(3, $style->getBorderTopWidth());
+        self::assertSame(4, $style->getBorderRightWidth());
+        self::assertSame(5, $style->getBorderBottomWidth());
+        self::assertSame(6, $style->getBorderLeftWidth());
+        self::assertSame('red', $style->getBorderColour());
 
         $style = $this->getMenuStyle();
         $style->setBorder(3, 4, 5, 'red');
-        static::assertSame(3, $style->getBorderTopWidth());
-        static::assertSame(4, $style->getBorderRightWidth());
-        static::assertSame(5, $style->getBorderBottomWidth());
-        static::assertSame(4, $style->getBorderLeftWidth());
-        static::assertSame('red', $style->getBorderColour());
+        self::assertSame(3, $style->getBorderTopWidth());
+        self::assertSame(4, $style->getBorderRightWidth());
+        self::assertSame(5, $style->getBorderBottomWidth());
+        self::assertSame(4, $style->getBorderLeftWidth());
+        self::assertSame('red', $style->getBorderColour());
 
         $style = $this->getMenuStyle();
         $style->setBorder(3, 4, 'red');
-        static::assertSame(3, $style->getBorderTopWidth());
-        static::assertSame(4, $style->getBorderRightWidth());
-        static::assertSame(3, $style->getBorderBottomWidth());
-        static::assertSame(4, $style->getBorderLeftWidth());
-        static::assertSame('red', $style->getBorderColour());
+        self::assertSame(3, $style->getBorderTopWidth());
+        self::assertSame(4, $style->getBorderRightWidth());
+        self::assertSame(3, $style->getBorderBottomWidth());
+        self::assertSame(4, $style->getBorderLeftWidth());
+        self::assertSame('red', $style->getBorderColour());
 
         $style = $this->getMenuStyle();
         $style->setBorder(3, 'red');
