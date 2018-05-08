@@ -508,12 +508,16 @@ class CliMenuTest extends TestCase
 
     public function testAddCustomControlMappings() : void
     {
-        $this->terminal->expects($this->at(0))
+        $first = true;
+        $this->terminal->expects($this->any())
             ->method('read')
-            ->willReturn('c');
-        $this->terminal->expects($this->at(1))
-            ->method('read')
-            ->willReturn('x');
+            ->willReturn(function() use ($first) {
+                if ($first) {
+                    $first = false;
+                    return 'c';
+                }
+                return 'x';
+            });
 
         $style = $this->getStyle($this->terminal);
 
