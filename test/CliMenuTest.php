@@ -165,6 +165,58 @@ class CliMenuTest extends TestCase
         self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
+    public function testRedrawClearsTerminalFirstIfOptionIsPassed() : void
+    {
+        $terminal = $this->createMock(Terminal::class);
+        $terminal->expects($this->any())
+            ->method('isInteractive')
+            ->willReturn(true);
+
+        $terminal->expects($this->any())
+            ->method('getWidth')
+            ->willReturn(80);
+
+        $terminal->expects($this->any())
+            ->method('write')
+            ->will($this->returnCallback(function ($buffer) {
+                $this->output->write($buffer);
+            }));
+        
+        $terminal->expects($this->exactly(3))
+            ->method('read')
+            ->willReturn("\n", "\n", "\n");
+        
+        $terminal->expects($this->atLeast(2))
+            ->method('clear');
+
+        $style = $this->getStyle($terminal);
+        $style->setWidth(70);
+
+        $hits = 0;
+        $item = new SelectableItem('Item 1', function (CliMenu $menu) use (&$hits) {
+            if ($hits === 0) {
+                $menu->getStyle()->setWidth(50);
+                $menu->redraw(true);
+            }
+
+            if ($hits === 1) {
+                $menu->getStyle()->setWidth(70);
+                $menu->redraw(true);
+            }
+            
+            if ($hits === 2) {
+                $menu->close();
+            }
+            
+            $hits++;
+        });
+
+        $menu = new CliMenu('PHP School FTW', [$item], $terminal, $style);
+        $menu->open();
+
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+
     public function testGetItems() : void
     {
         $item1 = new LineBreakItem();

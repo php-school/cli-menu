@@ -307,10 +307,18 @@ class CliMenu
     }
 
     /**
+     * If true we clear the whole terminal screen, useful
+     * for example when reducing the width of the menu, to not
+     * leave leftovers of the previous wider menu.
+     *
      * Redraw the menu
      */
-    public function redraw() : void
+    public function redraw(bool $clear = false) : void
     {
+        if ($clear) {
+            $this->terminal->clear();
+        }
+        
         $this->assertOpen();
         $this->draw();
     }
