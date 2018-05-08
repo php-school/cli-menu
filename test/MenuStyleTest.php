@@ -301,6 +301,35 @@ class MenuStyleTest extends TestCase
         static::assertSame(241, $style->getRightHandPadding(50));
     }
 
+    public function testRightHandPaddingReturnsZeroWhenContentLengthTooLong() : void
+    {
+        $style = $this->getMenuStyle();
+        $style->setPadding(0);
+        $style->setMargin(0);
+        $style->setBorder(0);
+
+        $style->setWidth(100);
+        
+        self::assertEquals(0, $style->getRightHandPadding(100));
+        self::assertEquals(0, $style->getRightHandPadding(150));
+    }
+
+    public function testRightHandPaddingReturnsZeroWhenContentLengthTooLongBecauseOfBorder() : void
+    {
+        $style = $this->getMenuStyle();
+        $style->setPadding(10);
+        $style->setMargin(0);
+        $style->setBorder(10);
+
+        $style->setWidth(100);
+
+        self::assertEquals(11, $style->getRightHandPadding(59));
+        self::assertEquals(10, $style->getRightHandPadding(60));
+        self::assertEquals(0, $style->getRightHandPadding(70));
+        self::assertEquals(0, $style->getRightHandPadding(71));
+        self::assertEquals(0, $style->getRightHandPadding(100));
+    }
+
     public function testMargin() : void
     {
         $style = $this->getMenuStyle();
