@@ -213,6 +213,16 @@ class CliMenu
     }
 
     /**
+     * Shorthand function to add multiple custom control mapping at once
+     */
+    public function addCustomControlMappings(array $map) : void
+    {
+        foreach ($map as $input => $callable) {
+            $this->addCustomControlMapping($input, $callable);
+        }
+    }
+
+    /**
      * Removes a custom control mapping
      */
     public function removeCustomControlMapping(string $input) : void
