@@ -480,6 +480,62 @@ class CliMenuTest extends TestCase
         static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
+    public function testAddCustomControlMappingsThrowsExceptionWhenOverwritingExistingDefaultControls() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot rebind this input');
+
+        $menu = new CliMenu('PHP School FTW', []);
+        $menu->addCustomControlMappings([
+            ' ' => function () {
+            }
+        ]);
+    }
+
+    public function testAddCustomControlMappingsThrowsExceptionWhenAttemptingToOverwriteAddedCustomControlMap() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot rebind this input');
+
+        $menu = new CliMenu('PHP School FTW', []);
+        $menu->addCustomControlMappings([
+            'c' => function () {
+            }
+        ]);
+        $menu->addCustomControlMappings([
+            'c' => function () {
+            }
+        ]);
+    }
+
+    public function testAddCustomControlMappings() : void
+    {
+        $first = true;
+        $this->terminal->expects($this->any())
+            ->method('read')
+            ->willReturn('c', 'x');
+
+        $style = $this->getStyle($this->terminal);
+
+        $action = function (CliMenu $menu) {
+            $menu->close();
+        };
+        $item = new SelectableItem('Item 1', $action);
+
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
+        $menu->addCustomControlMappings([
+            'c' => $action,
+            'x' => $action
+        ]);
+
+        $menu->open();
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+
+        $first = false;
+        $menu->open();
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+
     public function testRemoveCustomControlMappingThrowsExceptionIfNoSuchMappingExists() : void
     {
         $this->expectException(\InvalidArgumentException::class);
