@@ -409,7 +409,13 @@ class MenuStyle
      */
     public function getRightHandPadding(int $contentLength) : int
     {
-        return $this->getContentWidth() - $contentLength + $this->getPadding();
+        $rightPadding = $this->getContentWidth() - $contentLength + $this->getPadding();
+
+        if ($rightPadding < 0) {
+            $rightPadding = 0;
+        }
+
+        return $rightPadding;
     }
 
     public function getSelectedMarker() : string
