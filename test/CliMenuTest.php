@@ -513,7 +513,7 @@ class CliMenuTest extends TestCase
             ->method('read')
             ->will(
                 $this->returnCallback(
-                    function() use (&$first) {
+                    function () use (&$first) {
                         return $first ? 'c' : 'x';
                     }
                 )
