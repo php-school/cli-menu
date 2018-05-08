@@ -387,7 +387,7 @@ class CliMenu
 
         return array_map(function ($row) use ($invertedColour, $notInvertedColour, $borderColour) {
             return sprintf(
-                "%s%s%s%s%s%s%s%s%s%s%s%s%s\n",
+                "%s%s%s%s%s%s%s%s%s%s%s%s\n",
                 str_repeat(' ', $this->style->getMargin()),
                 $borderColour,
                 str_repeat(' ', $this->style->getBorderLeftWidth()),
@@ -399,8 +399,7 @@ class CliMenu
                 $notInvertedColour,
                 $borderColour,
                 str_repeat(' ', $this->style->getBorderRightWidth()),
-                $this->style->getColoursResetCode(),
-                str_repeat(' ', $this->style->getMargin())
+                $this->style->getColoursResetCode()
             );
         }, $rows);
     }

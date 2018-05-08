@@ -489,12 +489,11 @@ class MenuStyle
     private function generateBorderRows() : void
     {
         $borderRow = sprintf(
-            "%s%s%s%s%s\n",
+            "%s%s%s%s\n",
             str_repeat(' ', $this->margin),
             $this->getBorderColourCode(),
             str_repeat(' ', $this->width),
-            $this->coloursResetCode,
-            str_repeat(' ', $this->margin)
+            $this->coloursResetCode
         );
 
         $this->borderTopRows = array_fill(0, $this->borderTopWidth, $borderRow);
