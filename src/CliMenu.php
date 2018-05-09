@@ -380,10 +380,10 @@ class CliMenu
     {
         $rows = $item->getRows($this->style, $selected);
 
-        $invertedColour = $selected
+        $invertedColoursSetCode = $selected
             ? $this->style->getInvertedColoursSetCode()
             : '';
-        $notInvertedColour = $selected
+        $invertedColoursUnsetCode = $selected
             ? $this->style->getInvertedColoursUnsetCode()
             : '';
 
@@ -393,18 +393,18 @@ class CliMenu
             $borderColour = '';
         }
 
-        return array_map(function ($row) use ($invertedColour, $notInvertedColour, $borderColour) {
+        return array_map(function ($row) use ($invertedColoursSetCode, $invertedColoursUnsetCode, $borderColour) {
             return sprintf(
                 "%s%s%s%s%s%s%s%s%s%s%s%s\n",
                 str_repeat(' ', $this->style->getMargin()),
                 $borderColour,
                 str_repeat(' ', $this->style->getBorderLeftWidth()),
                 $this->style->getColoursSetCode(),
-                $invertedColour,
+                $invertedColoursSetCode,
                 str_repeat(' ', $this->style->getPadding()),
                 $row,
                 str_repeat(' ', $this->style->getRightHandPadding(mb_strlen(s::stripAnsiEscapeSequence($row)))),
-                $notInvertedColour,
+                $invertedColoursUnsetCode,
                 $borderColour,
                 str_repeat(' ', $this->style->getBorderRightWidth()),
                 $this->style->getColoursResetCode()
