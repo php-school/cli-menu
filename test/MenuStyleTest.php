@@ -107,7 +107,7 @@ class MenuStyleTest extends TestCase
         self::assertSame('=', $style->getTitleSeparator());
         self::assertSame(100, $style->getWidth());
         self::assertSame(2, $style->getMargin());
-        self::assertSame(2, $style->getPaddingTopBottom());
+        self::assertSame(1, $style->getPaddingTopBottom());
         self::assertSame(2, $style->getPaddingLeftRight());
         self::assertSame(0, $style->getBorderTopWidth());
         self::assertSame(0, $style->getBorderRightWidth());
