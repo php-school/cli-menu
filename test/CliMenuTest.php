@@ -145,6 +145,64 @@ class CliMenuTest extends TestCase
         self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
+    public function testSimpleOpenCloseWithPaddingTopAndBottom() : void
+    {
+        $this->terminal->expects($this->once())
+            ->method('read')
+            ->willReturn("\n");
+
+        $style = $this->getStyle($this->terminal);
+        $style->setPaddingTopBottom(2);
+
+        $item = new SelectableItem('Item 1', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
+        $menu->open();
+
+        self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+
+    public function testSimpleOpenCloseWithPaddingLeftAndRight() : void
+    {
+        $this->terminal->expects($this->once())
+            ->method('read')
+            ->willReturn("\n");
+
+        $style = $this->getStyle($this->terminal);
+        $style->setPaddingLeftRight(5);
+
+        $item = new SelectableItem('Item 1', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
+        $menu->open();
+
+        self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+
+    public function testSimpleOpenCloseWithDifferentXAndYPadding() : void
+    {
+        $this->terminal->expects($this->once())
+            ->method('read')
+            ->willReturn("\n");
+
+        $style = $this->getStyle($this->terminal);
+        $style->setPaddingLeftRight(5);
+        $style->setPaddingTopBottom(4);
+
+        $item = new SelectableItem('Item 1', function (CliMenu $menu) {
+            $menu->close();
+        });
+
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
+        $menu->open();
+
+        self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+    
     public function testReDrawReDrawsImmediately() : void
     {
         $this->terminal->expects($this->once())

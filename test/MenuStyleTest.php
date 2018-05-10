@@ -372,4 +372,308 @@ class MenuStyleTest extends TestCase
         self::assertSame(50, $style->getMargin());
         self::assertSame(390, $style->getContentWidth());
     }
+
+    public function testSetBgRecalculatesPaddingTopAndBottomRows() : void
+    {
+        $style = $this->getMenuStyle();
+        $style->setWidth(30);
+
+        self::assertEquals(
+            ["  \033[37;44m                              \033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+
+        $style->setBg('yellow');
+
+        self::assertEquals(
+            ["  \033[37;43m                              \033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+    }
+
+    public function testSetWidthRecalculatesPaddingTopAndBottomRows() : void
+    {
+        $style = $this->getMenuStyle();
+        $style->setWidth(30);
+
+        self::assertEquals(
+            ["  \033[37;44m                              \033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+
+        $style->setWidth(34);
+
+        self::assertEquals(
+            ["  \033[37;44m                                  \033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+    }
+
+    public function testSetPaddingRecalculatesPaddingTopAndBottomRows() : void
+    {
+        $style = $this->getMenuStyle();
+        $style->setWidth(30);
+
+        self::assertEquals(
+            ["  \033[37;44m                              \033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+
+        $style->setPadding(3, 2);
+
+        self::assertEquals(
+            [
+                "  \033[37;44m                              \033[0m\n",
+                "  \033[37;44m                              \033[0m\n",
+                "  \033[37;44m                              \033[0m\n",
+            ],
+            $style->getPaddingTopBottomRows()
+        );
+    }
+
+    public function testSetPaddingTopAndBottomRecalculatesPaddingTopAndBottomRows() : void
+    {
+        $style = $this->getMenuStyle();
+        $style->setWidth(30);
+
+        self::assertEquals(
+            ["  \033[37;44m                              \033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+
+        $style->setPaddingTopBottom(2);
+
+        self::assertEquals(
+            [
+                "  \033[37;44m                              \033[0m\n",
+                "  \033[37;44m                              \033[0m\n",
+            ],
+            $style->getPaddingTopBottomRows()
+        );
+    }
+
+    public function testSetPaddingLeftAndRightRecalculatesPaddingTopAndBottomRows() : void
+    {
+        $style = $this->getMenuStyle();
+        $style->setWidth(30);
+
+        self::assertEquals(
+            ["  \033[37;44m                              \033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+
+        $style->setPaddingLeftRight(4);
+
+        self::assertEquals(
+            ["  \033[37;44m                              \033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+    }
+
+    public function testSetMarginRecalculatesPaddingTopAndBottomRows() : void
+    {
+        $style = $this->getMenuStyle();
+        $style->setWidth(30);
+
+        self::assertEquals(
+            ["  \033[37;44m                              \033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+
+        $style->setMargin(4);
+
+        self::assertEquals(
+            ["    \033[37;44m                              \033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+    }
+
+    public function testSetBorderRecalculatesPaddingTopAndBottomRows() : void
+    {
+        $style = $this->getMenuStyle();
+        $style->setWidth(30);
+        $style->setBorderColour('green');
+
+        self::assertEquals(
+            ["  \033[37;44m                              \033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+
+        $style->setBorder(1, 2, 1, 1, 'green');
+
+        self::assertEquals(
+            ["  \033[42m \033[37;44m                           \033[42m  \033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+    }
+
+    public function testSetBorderRightRecalculatesPaddingTopAndBottomRows() : void
+    {
+        $style = $this->getMenuStyle();
+        $style->setWidth(30);
+        $style->setBorderColour('green');
+
+        self::assertEquals(
+            ["  \033[37;44m                              \033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+
+        $style->setBorderRightWidth(1);
+
+        self::assertEquals(
+            ["  \033[42m\033[37;44m                             \033[42m \033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+    }
+
+    public function testSetBorderLeftRecalculatesPaddingTopAndBottomRows() : void
+    {
+        $style = $this->getMenuStyle();
+        $style->setWidth(30);
+        $style->setBorderColour('green');
+
+        self::assertEquals(
+            ["  \033[37;44m                              \033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+        
+        $style->setBorderLeftWidth(1);
+
+        self::assertEquals(
+            ["  \033[42m \033[37;44m                             \033[42m\033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+    }
+
+    public function testSetBorderColourRecalculatesPaddingTopAndBottomRows() : void
+    {
+        $style = $this->getMenuStyle();
+        $style->setWidth(30);
+        $style->setBorder(1, 'red');
+
+        self::assertEquals(
+            ["  \033[41m \e[37;44m                            \033[41m \033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+        
+        $style->setBorderColour('green');
+
+        self::assertEquals(
+            ["  \033[42m \033[37;44m                            \033[42m \033[0m\n"],
+            $style->getPaddingTopBottomRows()
+        );
+    }
+
+    /**
+     * @dataProvider belowZeroProvider
+     */
+    public function testSetWidthThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
+    {
+        self::expectException(\Assert\InvalidArgumentException::class);
+
+        $this->getMenuStyle()->setWidth($value);
+    }
+
+    public function belowZeroProvider() : array
+    {
+        return [[-1], [-2], [-10]];
+    }
+
+    public function testSetPaddingWithUniversalValue() : void
+    {
+        $style = $this->getMenuStyle();
+
+        self::assertEquals(1, $style->getPaddingTopBottom());
+        self::assertEquals(2, $style->getPaddingLeftRight());
+        
+        $style->setPadding(10);
+
+        self::assertEquals(10, $style->getPaddingTopBottom());
+        self::assertEquals(10, $style->getPaddingLeftRight());
+    }
+
+    public function testSetPaddingWithXAndYValues() : void
+    {
+        $style = $this->getMenuStyle();
+
+        self::assertEquals(1, $style->getPaddingTopBottom());
+        self::assertEquals(2, $style->getPaddingLeftRight());
+
+        $style->setPadding(5, 6);
+
+        self::assertEquals(5, $style->getPaddingTopBottom());
+        self::assertEquals(6, $style->getPaddingLeftRight());
+    }
+
+    public function testSetPaddingTopAndBottom() : void
+    {
+        $style = $this->getMenuStyle();
+
+        self::assertEquals(1, $style->getPaddingTopBottom());
+
+        $style->setPaddingTopBottom(5);
+
+        self::assertEquals(5, $style->getPaddingTopBottom());
+    }
+
+    public function testSetPaddingLeftAndRight() : void
+    {
+        $style = $this->getMenuStyle();
+        
+        self::assertEquals(2, $style->getPaddingLeftRight());
+        
+        $style->setPaddingLeftRight(4);
+        
+        self::assertEquals(4, $style->getPaddingLeftRight());
+    }
+
+    /**
+     * @dataProvider belowZeroProvider
+     */
+    public function testSetPaddingTopAndBottomThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
+    {
+        self::expectException(\Assert\InvalidArgumentException::class);
+
+        $this->getMenuStyle()->setPaddingTopBottom($value);
+    }
+
+    /**
+     * @dataProvider belowZeroProvider
+     */
+    public function testSetPaddingLeftAndRightThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
+    {
+        self::expectException(\Assert\InvalidArgumentException::class);
+
+        $this->getMenuStyle()->setPaddingLeftRight($value);
+    }
+
+    /**
+     * @dataProvider belowZeroProvider
+     */
+    public function testSetPaddingThrowsExceptionIfTopBottomValueIsNotZeroOrAbove(int $value) : void 
+    {
+        self::expectException(\Assert\InvalidArgumentException::class);
+
+        $this->getMenuStyle()->setPadding($value, 1);
+    }
+
+    /**
+     * @dataProvider belowZeroProvider
+     */
+    public function testSetPaddingThrowsExceptionIfLeftRightValueIsNotZeroOrAbove(int $value) : void
+    {
+        self::expectException(\Assert\InvalidArgumentException::class);
+
+        $this->getMenuStyle()->setPadding(1, $value);
+    }
+
+    /**
+     * @dataProvider belowZeroProvider
+     */
+    public function testSetMarginThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
+    {
+        self::expectException(\Assert\InvalidArgumentException::class);
+
+        $this->getMenuStyle()->setMargin($value);
+    }
 }

@@ -84,7 +84,7 @@ class CliMenuBuilderTest extends TestCase
         $this->checkStyleVariable($menu, 'titleSeparator', '-');
     }
 
-    public function testSetBorderShorthandFunction()
+    public function testSetBorderShorthandFunction() : void
     {
         $terminal = static::createMock(Terminal::class);
         $terminal
@@ -678,6 +678,48 @@ class CliMenuBuilderTest extends TestCase
             ->build();
 
         self::assertSame(10, $menu->getStyle()->getMargin());
+    }
+
+    public function testSetPaddingWithUniversalValue() : void
+    {
+        $builder = new CliMenuBuilder;
+        $builder->setPadding(3);
+
+        $style = $builder->build()->getStyle();
+        
+        self::assertEquals(3, $style->getPaddingTopBottom());
+        self::assertEquals(3, $style->getPaddingLeftRight());
+    }
+
+    public function testSetPaddingWithXAndYValues() : void
+    {
+        $builder = new CliMenuBuilder;
+        $builder->setPadding(2, 3);
+
+        $style = $builder->build()->getStyle();
+
+        self::assertEquals(2, $style->getPaddingTopBottom());
+        self::assertEquals(3, $style->getPaddingLeftRight());
+    }
+
+    public function testSetPaddingTopAndBottom() : void
+    {
+        $builder = new CliMenuBuilder;
+        $builder->setPaddingTopBottom(2);
+
+        $style = $builder->build()->getStyle();
+
+        self::assertEquals(2, $style->getPaddingTopBottom());
+    }
+
+    public function testSetPaddingLeftAndRight() : void
+    {
+        $builder = new CliMenuBuilder;
+        $builder->setPaddingLeftRight(3);
+
+        $style = $builder->build()->getStyle();
+
+        self::assertEquals(3, $style->getPaddingLeftRight());
     }
     
     private function checkItems(CliMenu $menu, array $expected) : void
