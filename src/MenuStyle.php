@@ -37,7 +37,12 @@ class MenuStyle
     /**
      * @var int
      */
-    protected $padding;
+    protected $paddingTopBottom;
+
+    /**
+     * @var int
+     */
+    protected $paddingLeftRight;
 
     /**
      * @var int
@@ -143,7 +148,8 @@ class MenuStyle
         'fg' => 'white',
         'bg' => 'blue',
         'width' => 100,
-        'padding' => 2,
+        'paddingTopBottom' => 0,
+        'paddingLeftRight' => 2,
         'margin' => 2,
         'selectedMarker' => '●',
         'unselectedMarker' => '○',
@@ -218,7 +224,8 @@ class MenuStyle
         $this->generateColoursSetCode();
         
         $this->setWidth(static::$defaultStyleValues['width']);
-        $this->setPadding(static::$defaultStyleValues['padding']);
+        $this->setPaddingTopBottom(static::$defaultStyleValues['paddingTopBottom']);
+        $this->setPaddingLeftRight(static::$defaultStyleValues['paddingLeftRight']);
         $this->setMargin(static::$defaultStyleValues['margin']);
         $this->setSelectedMarker(static::$defaultStyleValues['selectedMarker']);
         $this->setUnselectedMarker(static::$defaultStyleValues['unselectedMarker']);
@@ -300,7 +307,7 @@ class MenuStyle
     protected function calculateContentWidth() : void
     {
         $this->contentWidth = $this->width
-            - ($this->padding * 2)
+            - ($this->paddingLeftRight * 2)
             - ($this->borderRightWidth + $this->borderLeftWidth);
     }
 
@@ -360,14 +367,42 @@ class MenuStyle
         return $this;
     }
 
-    public function getPadding() : int
+    public function getPaddingTopBottom() : int
     {
-        return $this->padding;
+        return $this->paddingTopBottom;
     }
 
-    public function setPadding(int $padding) : self
+    public function getPaddingLeftRight() : int
     {
-        $this->padding = $padding;
+        return $this->paddingLeftRight;
+    }
+
+    public function setPadding(int $topBottom, int $leftRight = null) : self
+    {
+        if ($leftRight === null) {
+            $leftRight = $topBottom;
+        }
+
+        $this->setPaddingTopBottom($topBottom);
+        $this->setPaddingLeftRight($leftRight);
+
+        $this->calculateContentWidth();
+
+        return $this;
+    }
+
+    public function setPaddingTopBottom(int $topBottom) : self
+    {
+        Assertion::greaterOrEqualThan($topBottom, 0);
+        $this->paddingTopBottom = $topBottom;
+
+        return $this;
+    }
+    
+    public function setPaddingLeftRight(int $leftRight) : self
+    {
+        Assertion::greaterOrEqualThan($leftRight, 0);
+        $this->paddingLeftRight = $leftRight;
 
         $this->calculateContentWidth();
 
@@ -409,7 +444,7 @@ class MenuStyle
      */
     public function getRightHandPadding(int $contentLength) : int
     {
-        $rightPadding = $this->getContentWidth() - $contentLength + $this->getPadding();
+        $rightPadding = $this->getContentWidth() - $contentLength + $this->getPaddingLeftRight();
 
         if ($rightPadding < 0) {
             $rightPadding = 0;
