@@ -315,6 +315,10 @@ class MenuStyle
         $this->contentWidth = $this->width
             - ($this->paddingLeftRight * 2)
             - ($this->borderRightWidth + $this->borderLeftWidth);
+
+        if ($this->contentWidth < 0) {
+            $this->contentWidth = 0;
+        }
     }
 
     public function getFg()
