@@ -601,7 +601,7 @@ class CliMenuBuilderTest extends TestCase
         self::expectException(\Assert\InvalidArgumentException::class);
         
         
-        (new CliMenuBuilder)->setMargin($value);
+        (new CliMenuBuilder)->setMargin($value)->build();
     }
 
     public function marginBelowZeroProvider() : array
