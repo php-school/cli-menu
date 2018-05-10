@@ -27,9 +27,9 @@ class Confirm extends Dialogue
         $this->write(sprintf(
             "%s%s%s%s%s\n",
             $this->style->getColoursSetCode(),
-            str_repeat(' ', $this->style->getPadding()),
+            str_repeat(' ', $this->style->getPaddingLeftRight()),
             $this->text,
-            str_repeat(' ', $this->style->getPadding()),
+            str_repeat(' ', $this->style->getPaddingLeftRight()),
             $this->style->getColoursResetCode()
         ));
 
@@ -52,9 +52,9 @@ class Confirm extends Dialogue
         $this->write(sprintf(
             "%s%s%s%s%s\n",
             $this->style->getColoursSetCode(),
-            str_repeat(' ', $this->style->getPadding()),
+            str_repeat(' ', $this->style->getPaddingLeftRight()),
             str_repeat(' ', mb_strlen($this->text)),
-            str_repeat(' ', $this->style->getPadding()),
+            str_repeat(' ', $this->style->getPaddingLeftRight()),
             $this->style->getColoursResetCode()
         ));
 

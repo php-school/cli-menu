@@ -16,7 +16,7 @@ class AsciiArtItem implements MenuItemInterface
     const POSITION_CENTER = 'center';
     const POSITION_LEFT   = 'left';
     const POSITION_RIGHT  = 'right';
-    
+
     /**
      * @var string
      */
@@ -40,7 +40,7 @@ class AsciiArtItem implements MenuItemInterface
     public function __construct(string $text, string $position = self::POSITION_CENTER, string $alt = '')
     {
         Assertion::inArray($position, [self::POSITION_CENTER, self::POSITION_RIGHT, self::POSITION_LEFT]);
-        
+
         $this->text = implode("\n", array_map(function (string $line) {
             return rtrim($line, ' ');
         }, explode("\n", $text)));
@@ -60,7 +60,7 @@ class AsciiArtItem implements MenuItemInterface
         }
 
         $padding = $style->getContentWidth() - $this->artLength;
-        
+
         return array_map(function ($row) use ($padding) {
             switch ($this->position) {
                 case self::POSITION_LEFT:

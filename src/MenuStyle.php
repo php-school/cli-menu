@@ -6,6 +6,7 @@ use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\CliMenu\Util\ColourUtil;
 use PhpSchool\Terminal\Terminal;
+use Assert\Assertion;
 
 //TODO: B/W fallback
 
@@ -37,6 +38,11 @@ class MenuStyle
     /**
      * @var int
      */
+    protected $margin;
+
+    /**
+     * @var int
+     */
     protected $paddingTopBottom;
 
     /**
@@ -45,9 +51,9 @@ class MenuStyle
     protected $paddingLeftRight;
 
     /**
-     * @var int
+     * @var array
      */
-    protected $margin;
+    private $paddingTopBottomRows = [];
 
     /**
      * @var int
@@ -148,7 +154,7 @@ class MenuStyle
         'fg' => 'white',
         'bg' => 'blue',
         'width' => 100,
-        'paddingTopBottom' => 0,
+        'paddingTopBottom' => 1,
         'paddingLeftRight' => 2,
         'margin' => 2,
         'selectedMarker' => '●',
@@ -220,9 +226,9 @@ class MenuStyle
 
         $this->fg = static::$defaultStyleValues['fg'];
         $this->bg = static::$defaultStyleValues['bg'];
-        
+
         $this->generateColoursSetCode();
-        
+
         $this->setWidth(static::$defaultStyleValues['width']);
         $this->setPaddingTopBottom(static::$defaultStyleValues['paddingTopBottom']);
         $this->setPaddingLeftRight(static::$defaultStyleValues['paddingLeftRight']);
@@ -340,7 +346,9 @@ class MenuStyle
             $bg,
             $fallback
         );
+
         $this->generateColoursSetCode();
+        $this->generatePaddingTopBottomRows();
 
         return $this;
     }
@@ -352,6 +360,8 @@ class MenuStyle
 
     public function setWidth(int $width) : self
     {
+        Assertion::greaterOrEqualThan($width, 0);
+
         if ($width >= $this->terminal->getWidth()) {
             $width = $this->terminal->getWidth();
         }
@@ -363,6 +373,7 @@ class MenuStyle
 
         $this->calculateContentWidth();
         $this->generateBorderRows();
+        $this->generatePaddingTopBottomRows();
 
         return $this;
     }
@@ -377,6 +388,30 @@ class MenuStyle
         return $this->paddingLeftRight;
     }
 
+    private function generatePaddingTopBottomRows() : void
+    {
+        $paddingRow = sprintf(
+            "%s%s%s%s%s%s%s%s%s%s\n",
+            str_repeat(' ', $this->margin),
+            $this->getBorderColourCode(),
+            str_repeat(' ', $this->borderRightWidth),
+            $this->getColoursSetCode(),
+            str_repeat(' ', $this->paddingLeftRight),
+            str_repeat(' ', $this->contentWidth),
+            str_repeat(' ', $this->paddingLeftRight),
+            $this->getBorderColourCode(),
+            str_repeat(' ', $this->borderRightWidth),
+            $this->coloursResetCode
+        );
+
+        $this->paddingTopBottomRows = array_fill(0, $this->paddingTopBottom, $paddingRow);
+    }
+
+    public function getPaddingTopBottomRows() : array
+    {
+        return $this->paddingTopBottomRows;
+    }
+
     public function setPadding(int $topBottom, int $leftRight = null) : self
     {
         if ($leftRight === null) {
@@ -387,6 +422,7 @@ class MenuStyle
         $this->setPaddingLeftRight($leftRight);
 
         $this->calculateContentWidth();
+        $this->generatePaddingTopBottomRows();
 
         return $this;
     }
@@ -396,15 +432,18 @@ class MenuStyle
         Assertion::greaterOrEqualThan($topBottom, 0);
         $this->paddingTopBottom = $topBottom;
 
+        $this->generatePaddingTopBottomRows();
+
         return $this;
     }
-    
+
     public function setPaddingLeftRight(int $leftRight) : self
     {
         Assertion::greaterOrEqualThan($leftRight, 0);
         $this->paddingLeftRight = $leftRight;
 
         $this->calculateContentWidth();
+        $this->generatePaddingTopBottomRows();
 
         return $this;
     }
@@ -420,16 +459,20 @@ class MenuStyle
         $this->margin = floor(($this->terminal->getWidth() - $this->width) / 2);
 
         $this->generateBorderRows();
+        $this->generatePaddingTopBottomRows();
 
         return $this;
     }
 
     public function setMargin(int $margin) : self
     {
+        Assertion::greaterOrEqualThan($margin, 0);
+
         $this->marginAuto = false;
         $this->margin = $margin;
 
         $this->generateBorderRows();
+        $this->generatePaddingTopBottomRows();
 
         return $this;
     }
@@ -580,6 +623,7 @@ class MenuStyle
 
         $this->calculateContentWidth();
         $this->generateBorderRows();
+        $this->generatePaddingTopBottomRows();
 
         return $this;
     }
@@ -598,6 +642,8 @@ class MenuStyle
         $this->borderRightWidth = $width;
         $this->calculateContentWidth();
 
+        $this->generatePaddingTopBottomRows();
+
         return $this;
     }
 
@@ -615,6 +661,8 @@ class MenuStyle
         $this->borderLeftWidth = $width;
         $this->calculateContentWidth();
 
+        $this->generatePaddingTopBottomRows();
+
         return $this;
     }
 
@@ -627,6 +675,7 @@ class MenuStyle
         );
 
         $this->generateBorderRows();
+        $this->generatePaddingTopBottomRows();
 
         return $this;
     }

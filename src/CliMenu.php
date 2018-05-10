@@ -157,7 +157,7 @@ class CliMenu
     public function addItem(MenuItemInterface $item) : void
     {
         $this->items[] = $item;
-        
+
         if (count($this->items) === 1) {
             $this->selectFirstItem();
         }
@@ -318,7 +318,7 @@ class CliMenu
         if ($clear) {
             $this->terminal->clear();
         }
-        
+
         $this->assertOpen();
         $this->draw();
     }
@@ -343,8 +343,11 @@ class CliMenu
             $frame->addRows($this->style->getBorderTopRows());
         }
 
+        if ($this->style->getPaddingTopBottom() > 0) {
+            $frame->addRows($this->style->getPaddingTopBottomRows());
+        }
+
         if ($this->title) {
-            $frame->addRows($this->drawMenuItem(new LineBreakItem()));
             $frame->addRows($this->drawMenuItem(new StaticItem($this->title)));
             $frame->addRows($this->drawMenuItem(new LineBreakItem($this->style->getTitleSeparator())));
         }
@@ -353,14 +356,17 @@ class CliMenu
             $frame->addRows($this->drawMenuItem($item, $index === $this->selectedItem));
         }, $this->items, array_keys($this->items));
 
-        $frame->addRows($this->drawMenuItem(new LineBreakItem()));
-        
+
+        if ($this->style->getPaddingTopBottom() > 0) {
+            $frame->addRows($this->style->getPaddingTopBottomRows());
+        }
+
         if ($this->style->getBorderBottomWidth() > 0) {
             $frame->addRows($this->style->getBorderBottomRows());
         }
 
         $frame->newLine(2);
-        
+
         $this->terminal->moveCursorToTop();
         foreach ($frame->getRows() as $row) {
             if ($row == "\n") {
@@ -401,7 +407,7 @@ class CliMenu
                 str_repeat(' ', $this->style->getBorderLeftWidth()),
                 $this->style->getColoursSetCode(),
                 $invertedColoursSetCode,
-                str_repeat(' ', $this->style->getPadding()),
+                str_repeat(' ', $this->style->getPaddingLeftRight()),
                 $row,
                 str_repeat(' ', $this->style->getRightHandPadding(mb_strlen(s::stripAnsiEscapeSequence($row)))),
                 $invertedColoursUnsetCode,
@@ -439,7 +445,7 @@ class CliMenu
             $menu->closeThis();
             $menu = $menu->getParent();
         } while (null !== $menu);
-        
+
         $this->tearDownTerminal();
     }
 
