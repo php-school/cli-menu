@@ -390,16 +390,22 @@ class MenuStyle
 
     private function generatePaddingTopBottomRows() : void
     {
+        if ($this->borderLeftWidth || $this->borderRightWidth) {
+            $borderColour = $this->getBorderColourCode();
+        } else {
+            $borderColour = '';
+        }
+
         $paddingRow = sprintf(
             "%s%s%s%s%s%s%s%s%s%s\n",
             str_repeat(' ', $this->margin),
-            $this->getBorderColourCode(),
+            $borderColour,
             str_repeat(' ', $this->borderRightWidth),
             $this->getColoursSetCode(),
             str_repeat(' ', $this->paddingLeftRight),
             str_repeat(' ', $this->contentWidth),
             str_repeat(' ', $this->paddingLeftRight),
-            $this->getBorderColourCode(),
+            $borderColour,
             str_repeat(' ', $this->borderRightWidth),
             $this->coloursResetCode
         );
