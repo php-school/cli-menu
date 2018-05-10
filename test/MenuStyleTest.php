@@ -124,7 +124,8 @@ class MenuStyleTest extends TestCase
         $style->setTitleSeparator('+');
         $style->setWidth(200);
         $style->setMargin(10);
-        $style->setPadding(10);
+        $style->setPaddingTopBottom(5);
+        $style->setPaddingLeftRight(10);
         $style->setBorderTopWidth(1);
         $style->setBorderRightWidth(2);
         $style->setBorderBottomWidth(3);
@@ -140,7 +141,8 @@ class MenuStyleTest extends TestCase
         self::assertSame('+', $style->getTitleSeparator());
         self::assertSame(200, $style->getWidth());
         self::assertSame(10, $style->getMargin());
-        self::assertSame(10, $style->getPadding());
+        self::assertSame(5, $style->getPaddingTopBottom());
+        self::assertSame(10, $style->getPaddingLeftRight());
         self::assertSame(1, $style->getBorderTopWidth());
         self::assertSame(2, $style->getBorderRightWidth());
         self::assertSame(3, $style->getBorderBottomWidth());
