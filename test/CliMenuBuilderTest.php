@@ -55,7 +55,7 @@ class CliMenuBuilderTest extends TestCase
         $builder->setBackgroundColour('red');
         $builder->setForegroundColour('red');
         $builder->setWidth(40);
-        $builder->setPadding(4);
+        $builder->setPadding(4, 1);
         $builder->setMargin(4);
         $builder->setUnselectedMarker('>');
         $builder->setSelectedMarker('x');
@@ -75,7 +75,8 @@ class CliMenuBuilderTest extends TestCase
         $this->checkStyleVariable($menu, 'bg', 'red');
         $this->checkStyleVariable($menu, 'fg', 'red');
         $this->checkStyleVariable($menu, 'width', 40);
-        $this->checkStyleVariable($menu, 'padding', 4);
+        $this->checkStyleVariable($menu, 'paddingTopBottom', 4);
+        $this->checkStyleVariable($menu, 'paddingLeftRight', 1);
         $this->checkStyleVariable($menu, 'margin', 4);
         $this->checkStyleVariable($menu, 'unselectedMarker', '>');
         $this->checkStyleVariable($menu, 'selectedMarker', 'x');

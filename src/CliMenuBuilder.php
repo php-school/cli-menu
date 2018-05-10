@@ -12,7 +12,6 @@ use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\CliMenu\Util\ColourUtil;
-use Assert\Assertion;
 use PhpSchool\Terminal\Terminal;
 use RuntimeException;
 
@@ -31,7 +30,7 @@ class CliMenuBuilder
      * @var null|self
      */
     private $parent;
-    
+
     /**
      * @var self[]
      */
@@ -46,7 +45,7 @@ class CliMenuBuilder
      * @var string
      */
     private $goBackButtonText = 'Go Back';
-    
+
     /**
      * @var string
      */
@@ -121,7 +120,7 @@ class CliMenuBuilder
         foreach ($items as $item) {
             $this->addItem(...$item);
         }
-        
+
         return $this;
     }
 
@@ -152,12 +151,12 @@ class CliMenuBuilder
     public function addSubMenu(string $id, CliMenuBuilder $subMenuBuilder = null) : CliMenuBuilder
     {
         $this->menuItems[]  = $id;
-        
+
         if (null === $subMenuBuilder) {
             $this->subMenuBuilders[$id] = new static($this);
             return $this->subMenuBuilders[$id];
         }
-        
+
         $this->subMenuBuilders[$id] = $subMenuBuilder;
         return $this;
     }
@@ -188,14 +187,14 @@ class CliMenuBuilder
     public function setGoBackButtonText(string $goBackButtonTest) : self
     {
         $this->goBackButtonText = $goBackButtonTest;
-        
+
         return $this;
     }
 
     public function setExitButtonText(string $exitButtonText) : self
     {
         $this->exitButtonText = $exitButtonText;
-        
+
         return $this;
     }
 
@@ -228,9 +227,28 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function setPadding(int $padding) : self
+    public function setPadding(int $topBottom, int $leftRight = null) : self
     {
-        $this->style['padding'] = $padding;
+        if ($leftRight === null) {
+            $leftRight = $topBottom;
+        }
+
+        $this->setPaddingTopBottom($topBottom);
+        $this->setPaddingLeftRight($leftRight);
+
+        return $this;
+    }
+
+    public function setPaddingTopBottom(int $topBottom) : self
+    {
+        $this->style['paddingTopBottom'] = $topBottom;
+
+        return $this;
+    }
+
+    public function setPaddingLeftRight(int $leftRight) : self
+    {
+        $this->style['paddingLeftRight'] = $leftRight;
 
         return $this;
     }
@@ -238,14 +256,12 @@ class CliMenuBuilder
     public function setMarginAuto() : self
     {
         $this->style['marginAuto'] = true;
-        
+
         return $this;
     }
 
     public function setMargin(int $margin) : self
     {
-        Assertion::greaterOrEqualThan($margin, 0);
-        
         $this->style['marginAuto'] = false;
         $this->style['margin'] = $margin;
 
@@ -330,7 +346,7 @@ class CliMenuBuilder
         if ($this->parent) {
             $actions[] = new SelectableItem($this->goBackButtonText, new GoBackAction);
         }
-        
+
         $actions[] = new SelectableItem($this->exitButtonText, new ExitAction);
         return $actions;
     }
@@ -372,7 +388,8 @@ class CliMenuBuilder
             ->setFg($this->style['fg'])
             ->setBg($this->style['bg'])
             ->setWidth($this->style['width'])
-            ->setPadding($this->style['padding'])
+            ->setPaddingTopBottom($this->style['paddingTopBottom'])
+            ->setPaddingLeftRight($this->style['paddingLeftRight'])
             ->setSelectedMarker($this->style['selectedMarker'])
             ->setUnselectedMarker($this->style['unselectedMarker'])
             ->setItemExtra($this->style['itemExtra'])
@@ -385,7 +402,7 @@ class CliMenuBuilder
             ->setBorderColour($this->style['borderColour']);
 
         $this->style['marginAuto'] ? $style->setMarginAuto() : $style->setMargin($this->style['margin']);
-        
+
         return $style;
     }
 
@@ -447,7 +464,7 @@ class CliMenuBuilder
             $this->terminal,
             $this->getMenuStyle()
         );
-        
+
         foreach ($this->subMenus as $subMenu) {
             $subMenu->setParent($menu);
         }

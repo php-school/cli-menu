@@ -6,6 +6,7 @@ use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\CliMenu\Util\ColourUtil;
 use PhpSchool\Terminal\Terminal;
+use Assert\Assertion;
 
 //TODO: B/W fallback
 
@@ -37,12 +38,22 @@ class MenuStyle
     /**
      * @var int
      */
-    protected $padding;
+    protected $margin;
 
     /**
      * @var int
      */
-    protected $margin;
+    protected $paddingTopBottom;
+
+    /**
+     * @var int
+     */
+    protected $paddingLeftRight;
+
+    /**
+     * @var array
+     */
+    private $paddingTopBottomRows = [];
 
     /**
      * @var int
@@ -143,7 +154,8 @@ class MenuStyle
         'fg' => 'white',
         'bg' => 'blue',
         'width' => 100,
-        'padding' => 2,
+        'paddingTopBottom' => 1,
+        'paddingLeftRight' => 2,
         'margin' => 2,
         'selectedMarker' => '●',
         'unselectedMarker' => '○',
@@ -214,11 +226,12 @@ class MenuStyle
 
         $this->fg = static::$defaultStyleValues['fg'];
         $this->bg = static::$defaultStyleValues['bg'];
-        
+
         $this->generateColoursSetCode();
-        
+
         $this->setWidth(static::$defaultStyleValues['width']);
-        $this->setPadding(static::$defaultStyleValues['padding']);
+        $this->setPaddingTopBottom(static::$defaultStyleValues['paddingTopBottom']);
+        $this->setPaddingLeftRight(static::$defaultStyleValues['paddingLeftRight']);
         $this->setMargin(static::$defaultStyleValues['margin']);
         $this->setSelectedMarker(static::$defaultStyleValues['selectedMarker']);
         $this->setUnselectedMarker(static::$defaultStyleValues['unselectedMarker']);
@@ -300,8 +313,12 @@ class MenuStyle
     protected function calculateContentWidth() : void
     {
         $this->contentWidth = $this->width
-            - ($this->padding * 2)
+            - ($this->paddingLeftRight * 2)
             - ($this->borderRightWidth + $this->borderLeftWidth);
+
+        if ($this->contentWidth < 0) {
+            $this->contentWidth = 0;
+        }
     }
 
     public function getFg()
@@ -333,7 +350,9 @@ class MenuStyle
             $bg,
             $fallback
         );
+
         $this->generateColoursSetCode();
+        $this->generatePaddingTopBottomRows();
 
         return $this;
     }
@@ -345,6 +364,8 @@ class MenuStyle
 
     public function setWidth(int $width) : self
     {
+        Assertion::greaterOrEqualThan($width, 0);
+
         if ($width >= $this->terminal->getWidth()) {
             $width = $this->terminal->getWidth();
         }
@@ -356,20 +377,83 @@ class MenuStyle
 
         $this->calculateContentWidth();
         $this->generateBorderRows();
+        $this->generatePaddingTopBottomRows();
 
         return $this;
     }
 
-    public function getPadding() : int
+    public function getPaddingTopBottom() : int
     {
-        return $this->padding;
+        return $this->paddingTopBottom;
     }
 
-    public function setPadding(int $padding) : self
+    public function getPaddingLeftRight() : int
     {
-        $this->padding = $padding;
+        return $this->paddingLeftRight;
+    }
+
+    private function generatePaddingTopBottomRows() : void
+    {
+        if ($this->borderLeftWidth || $this->borderRightWidth) {
+            $borderColour = $this->getBorderColourCode();
+        } else {
+            $borderColour = '';
+        }
+
+        $paddingRow = sprintf(
+            "%s%s%s%s%s%s%s%s%s%s\n",
+            str_repeat(' ', $this->margin),
+            $borderColour,
+            str_repeat(' ', $this->borderRightWidth),
+            $this->getColoursSetCode(),
+            str_repeat(' ', $this->paddingLeftRight),
+            str_repeat(' ', $this->contentWidth),
+            str_repeat(' ', $this->paddingLeftRight),
+            $borderColour,
+            str_repeat(' ', $this->borderRightWidth),
+            $this->coloursResetCode
+        );
+
+        $this->paddingTopBottomRows = array_fill(0, $this->paddingTopBottom, $paddingRow);
+    }
+
+    public function getPaddingTopBottomRows() : array
+    {
+        return $this->paddingTopBottomRows;
+    }
+
+    public function setPadding(int $topBottom, int $leftRight = null) : self
+    {
+        if ($leftRight === null) {
+            $leftRight = $topBottom;
+        }
+
+        $this->setPaddingTopBottom($topBottom);
+        $this->setPaddingLeftRight($leftRight);
 
         $this->calculateContentWidth();
+        $this->generatePaddingTopBottomRows();
+
+        return $this;
+    }
+
+    public function setPaddingTopBottom(int $topBottom) : self
+    {
+        Assertion::greaterOrEqualThan($topBottom, 0);
+        $this->paddingTopBottom = $topBottom;
+
+        $this->generatePaddingTopBottomRows();
+
+        return $this;
+    }
+
+    public function setPaddingLeftRight(int $leftRight) : self
+    {
+        Assertion::greaterOrEqualThan($leftRight, 0);
+        $this->paddingLeftRight = $leftRight;
+
+        $this->calculateContentWidth();
+        $this->generatePaddingTopBottomRows();
 
         return $this;
     }
@@ -385,16 +469,20 @@ class MenuStyle
         $this->margin = floor(($this->terminal->getWidth() - $this->width) / 2);
 
         $this->generateBorderRows();
+        $this->generatePaddingTopBottomRows();
 
         return $this;
     }
 
     public function setMargin(int $margin) : self
     {
+        Assertion::greaterOrEqualThan($margin, 0);
+
         $this->marginAuto = false;
         $this->margin = $margin;
 
         $this->generateBorderRows();
+        $this->generatePaddingTopBottomRows();
 
         return $this;
     }
@@ -409,7 +497,7 @@ class MenuStyle
      */
     public function getRightHandPadding(int $contentLength) : int
     {
-        $rightPadding = $this->getContentWidth() - $contentLength + $this->getPadding();
+        $rightPadding = $this->getContentWidth() - $contentLength + $this->getPaddingLeftRight();
 
         if ($rightPadding < 0) {
             $rightPadding = 0;
@@ -545,6 +633,7 @@ class MenuStyle
 
         $this->calculateContentWidth();
         $this->generateBorderRows();
+        $this->generatePaddingTopBottomRows();
 
         return $this;
     }
@@ -563,6 +652,8 @@ class MenuStyle
         $this->borderRightWidth = $width;
         $this->calculateContentWidth();
 
+        $this->generatePaddingTopBottomRows();
+
         return $this;
     }
 
@@ -580,6 +671,8 @@ class MenuStyle
         $this->borderLeftWidth = $width;
         $this->calculateContentWidth();
 
+        $this->generatePaddingTopBottomRows();
+
         return $this;
     }
 
@@ -592,6 +685,7 @@ class MenuStyle
         );
 
         $this->generateBorderRows();
+        $this->generatePaddingTopBottomRows();
 
         return $this;
     }

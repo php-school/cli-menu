@@ -34,7 +34,7 @@ class MenuStyleTest extends TestCase
 
         // Force recalculate terminal widths now terminal is set
         $style->setWidth(100);
-        
+
         return $style;
     }
 
@@ -107,7 +107,8 @@ class MenuStyleTest extends TestCase
         self::assertSame('=', $style->getTitleSeparator());
         self::assertSame(100, $style->getWidth());
         self::assertSame(2, $style->getMargin());
-        self::assertSame(2, $style->getPadding());
+        self::assertSame(1, $style->getPaddingTopBottom());
+        self::assertSame(2, $style->getPaddingLeftRight());
         self::assertSame(0, $style->getBorderTopWidth());
         self::assertSame(0, $style->getBorderRightWidth());
         self::assertSame(0, $style->getBorderBottomWidth());
@@ -123,7 +124,8 @@ class MenuStyleTest extends TestCase
         $style->setTitleSeparator('+');
         $style->setWidth(200);
         $style->setMargin(10);
-        $style->setPadding(10);
+        $style->setPaddingTopBottom(5);
+        $style->setPaddingLeftRight(10);
         $style->setBorderTopWidth(1);
         $style->setBorderRightWidth(2);
         $style->setBorderBottomWidth(3);
@@ -139,14 +141,15 @@ class MenuStyleTest extends TestCase
         self::assertSame('+', $style->getTitleSeparator());
         self::assertSame(200, $style->getWidth());
         self::assertSame(10, $style->getMargin());
-        self::assertSame(10, $style->getPadding());
+        self::assertSame(5, $style->getPaddingTopBottom());
+        self::assertSame(10, $style->getPaddingLeftRight());
         self::assertSame(1, $style->getBorderTopWidth());
         self::assertSame(2, $style->getBorderRightWidth());
         self::assertSame(3, $style->getBorderBottomWidth());
         self::assertSame(4, $style->getBorderLeftWidth());
         self::assertSame('green', $style->getBorderColour());
     }
-    
+
     public function testSetBorderShorthandFunction() : void
     {
         $style = $this->getMenuStyle();
@@ -222,7 +225,7 @@ class MenuStyleTest extends TestCase
         static::assertSame('16', $style->getBg());
         static::assertSame('206', $style->getFg());
         static::assertSame("\033[38;5;206;48;5;16m", $style->getColoursSetCode());
-        
+
         $style = $this->getMenuStyle(8);
         $style->setBg(16, 'white');
         $style->setFg(206, 'red');
@@ -309,7 +312,7 @@ class MenuStyleTest extends TestCase
         $style->setBorder(0);
 
         $style->setWidth(100);
-        
+
         self::assertEquals(0, $style->getRightHandPadding(100));
         self::assertEquals(0, $style->getRightHandPadding(150));
     }
@@ -340,7 +343,7 @@ class MenuStyleTest extends TestCase
 
         self::assertSame(5, $style->getMargin());
     }
-    
+
     public function testMarginAutoCenters() : void
     {
         $style = $this->getMenuStyle();
@@ -363,7 +366,7 @@ class MenuStyleTest extends TestCase
 
         self::assertSame(100, $style->getMargin());
         self::assertSame(290, $style->getContentWidth());
-        
+
         $style->setWidth(400);
 
         self::assertSame(50, $style->getMargin());
