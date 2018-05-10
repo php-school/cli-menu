@@ -650,7 +650,7 @@ class MenuStyleTest extends TestCase
     /**
      * @dataProvider belowZeroProvider
      */
-    public function testSetPaddingThrowsExceptionIfTopBottomValueIsNotZeroOrAbove(int $value) : void 
+    public function testSetPaddingThrowsExceptionIfTopBottomValueIsNotZeroOrAbove(int $value) : void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
 
