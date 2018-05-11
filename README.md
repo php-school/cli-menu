@@ -29,6 +29,33 @@
     * [Quick Setup](#quick-setup)
     * [Examples](#examples)
   * [API](#api)
+    * [Appearance](#appearance)
+      * [Width](#width)
+      * [Padding](#padding)
+      * [Margin](#margin)
+      * [Borders](#borders)
+      * [Exit Button Text](#exit-button-text)
+      * [Remove Exit Button](#remove-exit-button)
+    * [Item Extra](#item-extra)
+    * [Items](#appearance)
+      * [Selectable Item](#selectable-item)
+      * [Line Break Item](#line-break-item)
+      * [Static Item](#static-item)
+      * [Ascii Art Item](#ascii-art-item)
+      * [Sub Menu Item](#sub-menu-item)
+    * [Disabling Items & Sub Menus](#disabling-items--sub-menus)
+    * [Redrawing the Menu](#redrawing-the-menu)
+    * [Getting, Removing and Adding items](#getting-removing-and-adding-items)
+    * [Custom Control Mapping](#custom-control-mapping)
+    * [Dialogues](#dialogues)
+      * [Flash](#flash)
+      * [Confirm](#confirm)
+    * [Inputs](#inputs)
+      * [Text](#text-input)
+      * [Number](#number-input)
+      * [Password](#password-input)
+      * [Custom Input](#custom-input)
+    * [Dialogues & Input Styling](#dialogues-input-styling)
   * [Docs Translations](#docs-translations)
   * [Integrations](#integrations)
 
@@ -66,11 +93,14 @@ $menu = (new CliMenuBuilder)
     ->addItem('Second Item', $itemCallable)
     ->addItem('Third Item', $itemCallable)
     ->addLineBreak('-')
+    ->setBorder(1, 2, 'yellow')
+    ->setPadding(2, 4)
+    ->setMarginAuto()
     ->build();
+
 
 $menu->open();
 ```
-
 
 #### Examples
 
@@ -78,6 +108,9 @@ Check out the [examples](examples) directory and run them to check out what is p
 
 ##### Basic Menu 
 <img width="600" alt="basic" src="https://cloud.githubusercontent.com/assets/2817002/11442386/cb0e41a2-950c-11e5-8dd6-913aeab1632a.png">
+
+##### Basic Menu Auto Centered
+<img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39929334-1c68a450-5538-11e8-947a-e97b21c4fa1a.png">
 
 ##### Basic Menu with separation
 <img width="600" alt="basic-seperation" src="https://cloud.githubusercontent.com/assets/2817002/11442388/cdece950-950c-11e5-8128-4f849a1aea9f.png">
@@ -88,10 +121,13 @@ Check out the [examples](examples) directory and run them to check out what is p
 ##### Custom Styles
 <img width="600" alt="custom-styles" src="https://cloud.githubusercontent.com/assets/2817002/11442391/d3d72d1c-950c-11e5-9698-c2aeec002b24.png">
 
+##### Borders and 256 colours
+<img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39929340-1cee9fce-5538-11e8-91de-eccac734f2a5.png">
+
 ##### Useful Separation
 <img width="600" alt="useful-seperation" src="https://cloud.githubusercontent.com/assets/2817002/11442393/d862c72e-950c-11e5-8cbc-d8c73899627a.png">
 
-##### Item Extra
+##### Displaying Item Extra
 <img width="600" alt="item-extra" src="https://cloud.githubusercontent.com/assets/2817002/11442395/dfe460f2-950c-11e5-9aed-9bc9c91b7ea6.png">
 
 ##### Remove Defaults
@@ -109,6 +145,16 @@ Check out the [examples](examples) directory and run them to check out what is p
 
 ##### Confirm Dialogue
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/19786092/215d2dc2-9c94-11e6-910d-191b7b74f4d2.png">
+
+##### Number Input
+<img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39929969-bf45be46-5539-11e8-99f5-3dfdc0cf1fe3.png">
+<img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39930002-d2353dd8-5539-11e8-8dfb-e404201b7c42.png">
+
+##### Text Input
+<img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39929338-1cbc5a28-5538-11e8-9a68-b4e84e772251.png">
+
+##### Password Input
+<img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39929339-1cd4cd2e-5538-11e8-9330-335dd1b7ed1c.png">
 
 ### API
 
@@ -131,6 +177,8 @@ $menu->close();
 
 #### Appearance
 
+##### Colour
+
 You can change the foreground and background colour of the menu to any of the following colours:
 
 * black
@@ -149,15 +197,121 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-The width, padding and margin can also be customised:
+If your terminal supports 256 colours then you can also use any of those by specifying the code, like `230`. You can find a list
+of the [colours and codes here](https://jonasjacek.github.io/colors/). If you specify a code and the terminal does not support 256 colours
+it will automatically fallback to a sane default, using a generated map you can see in src/Util/ColourUtil.php. You can also manually specify the
+fallback colour as the second argument to `setForegroundColour` and `setBackgroundColour.
+
+In this example if no 256 colour support is found it will automatically fall back to `green` and `blue`.
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setForegroundColour('40')
+    ->setBackgroundColour('92')
+    ->build();
+```
+
+In this example if no 256 colour support is found it will fall back to `yellow` and `magenta`.
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setForegroundColour('40', 'yellow')
+    ->setBackgroundColour('92', 'magenta')
+    ->build();
+```
+
+##### Width
+
+Customise the width of the menu. Setting a value larger than the size of the terminal will result in
+the width being the same as the terminal size.
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setWidth(1000) //if terminal is only 400, width will also be 400
+    ->build();
+```
+
+##### Padding
+
+The padding can be set for all sides with one value or can be set individually for top/bottom and left/right.
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setPadding(10) //10 padding top/bottom/left/right
+    ->build();
+```
+
+Different values can also be set for the top/bottom and the left/right padding:
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setPaddingTopBottom(10)
+    ->setPaddingLeftRight(5)
+    ->build();
+```
+
+##### Margin
+
+The margin can be customised as one value. It is only applied to the left side of the menu. It can also be
+set automatically which will center the menu nicely in the terminal.
+
+Automatically center menu:
 
 ```php
 $menu = (new CliMenuBuilder)
     ->setWidth(200)
-    ->setPadding(10)
-    ->setMargin(5)
+    ->setMarginAuto() 
     ->build();
 ```
+
+Arbitrary margin:
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setWidth(200)
+    ->setMargin(5) //5 margin left
+    ->build();
+```
+
+##### Borders
+
+Borders can be customised just like CSS borders. We can add any amount of border to either side, left, right top or 
+bottom and we can apply a colour to it.
+
+Set universal red border of 2:
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setWidth(200)
+    ->setBorder(2, 'red')
+    ->build();
+```
+
+Configure each border separately:
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setWidth(200)
+    ->setBorderTopWidth(2)
+    ->setBorderRightWidth(4)
+    ->setBorderBottomWidth(2)
+    ->setBorderLeftWidth(4)
+    ->setBorderColour('42', 'red') //SpringGreen2 fallback to red
+    ->build();
+```
+
+Configure each border separately using the shorthand method, like CSS:
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setWidth(200)
+    ->setBorder(3, 4, 'red') //top/bottom = 3, left/right = 4
+    ->setBorder(3, 4, 5, 'red') //top = 3, left/right = 4, bottom = 5
+    ->setBorder(3, 4, 5, 6, 'red') //top = 3, left = 4, bottom = 5, right = 6
+    ->build();
+```
+
+##### Exit Button Text
 
 Modify the exit button text:
 
@@ -166,6 +320,8 @@ $menu = (new CliMenuBuilder)
     ->setExitButtonText("Don't you want me baby?")
     ->build();
 ```
+
+##### Remove Exit Button
 
 You can remove the exit button altogether:
 
@@ -303,7 +459,11 @@ ART;
 $menu = (new CliMenuBuilder)
     ->addAsciiArt($art, AsciiArtItem::POSITION_CENTER)
     ->build();
-```    
+```
+
+The third optional parameter to `addAsciiArt` is alternate text. If the ascii art is too wide for the terminal, then 
+it will not be displayed at all. However, if you pass a string to the third argument, in the case that the ascii art is too 
+wide for the terminal the alternate text will be displayed instead.    
 
 #### Sub Menu Item
 
@@ -368,6 +528,9 @@ $menu = (new CliMenuBuilder)
 
 In this case `addSubMenu` will return the main menu builder, not the sub menu builder.
 
+The submenu menu item will be an instance of `\PhpSchool\CliMenu\MenuItem\MenuMenuItem`. If you need access to the submenu,
+you can get it via `$menuMenuItem->getSubMenu()`.
+
 #### Disabling Items & Sub Menus
 
 In this example we are disabling certain items and a submenu but still having them shown in the output. 
@@ -399,7 +562,7 @@ The third param on the `->addItem` call is what disables an item while the `->di
 
 The outcome is a full menu with dimmed rows to denote them being disabled. When a user navigates these items are jumped over to the next available selectable item.
 
-#### Redrawing the menu
+#### Redrawing the Menu
 
 You can modify the menu and its style when executing an action and then you can redraw it! In this example we will toggle the background
 colour in an action.
@@ -560,6 +723,284 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 $itemCallable = function (CliMenu $menu) {
     $menu->confirm('PHP School FTW!')
         ->display('OK!');
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('First Item', $itemCallable)
+    ->addItem('Second Item', $itemCallable)
+    ->addItem('Third Item', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+```
+#### Inputs
+
+Inputs - added in version 3.0 of `cli-menu` allow to prompt the user for input and validate it. The following types are supported:
+text, number and password. Inputs can be executed in any item callback. They have separate style objects which are colored by default different to the menu.
+They can be modified to suit your own style.
+
+Each input is created by calling one of the `ask*` methods which will return an
+instance of the input you requested. To execute the prompt and wait for the input you must
+call `ask()` on the input. When the input has been received and validated, `ask()` will return
+an instance of `InputResult`. `InputResult` exposes the method `fetch` to grab the raw input.
+
+##### Text Input
+
+The text input will prompt for a string and when the enter key is hit it will validate that
+the string is not empty. As well as the style you can modify the prompt text (the default is 'Enter text:'), the 
+placeholder text (the default is empty) and the validation failed text (the default is 'Invalid, try again').
+
+```php
+<?php
+
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$itemCallable = function (CliMenu $menu) {
+    $result = $menu->askText()
+        ->setPromptText('Enter your name')
+        ->setPlaceholderText('Jane Doe')
+        ->setValidationFailedText('Please enter your name')
+        ->ask();
+
+    var_dump($result->fetch());
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('Enter text', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+
+```
+
+##### Number Input
+
+The number input will prompt for an integer value (signed or not) and when the enter key is hit it will validate that
+the input is actually a number (`/^-?\d+$/`). As well as the style you can modify the prompt text (the default is 'Enter a number:'), the 
+placeholder text (the default is empty) and the validation failed text (the default is 'Not a valid number, try again').
+
+When entering a number you can use the up/down keys to increment and decrement the number.
+
+```php
+<?php
+
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$itemCallable = function (CliMenu $menu) {
+    $result = $menu->askNumber()
+        ->setPrompt('Enter your age')
+        ->setPlaceholderText(10)
+        ->setValidationFailedText('Invalid age, try again')
+        ->ask();
+
+    var_dump($result->fetch());
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('Enter number', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+
+```
+
+##### Password Input
+
+The password input will prompt for a text value and when the enter key is hit it will validate that the input is 16 characters or longer.
+As well as the style you can modify the prompt text (the default is 'Enter password:'), the 
+placeholder text (the default is empty) and the validation failed text (the default is 'Invalid password, try again'). You can also set
+a custom password validator as a PHP callable. When typing passwords they are echo'd back to the user as an asterisk. 
+
+Ask for a password with the default validation:
+
+```php
+<?php
+
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$itemCallable = function (CliMenu $menu) {
+    $result = $menu->askPassword()
+        ->setPromptText('Please enter your password')
+        ->setValidationFailedText('Invalid password, try again')
+        ->setPlaceholderText('')
+        ->ask();
+
+    var_dump($result->fetch());
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('Enter password', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+
+```
+
+Validators can be any PHP callable. The callable will be passed the input value and must return a boolean, false indicating
+validation failure and true indicating validation success. If validation fails then the validation failure text will be shown.
+
+It is also possible to customise the validation failure message dynamically, but only when using a `Closure` as a validator.
+The closure will be binded to the `Password` input class which will allow you to call `setValidationFailedText` inside the closure.
+
+Ask for a password with custom validation. Here we validate the password is not equal to `password` and that the
+password is longer than 20 characters.
+
+```php
+<?php
+
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$itemCallable = function (CliMenu $menu) {
+    $result = $menu->askPassword()
+        ->setPromptText('Please enter your password')
+        ->setValidationFailedText('Invalid password, try again')
+        ->setPlaceholderText('')
+        ->setValidator(function ($password) {
+            return $password !== 'password' && strlen($password) > 20;            
+        })
+        ->ask();
+
+    var_dump($result->fetch());
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('Enter password', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+
+```
+
+Ask for a password with custom validation and set the validation failure message dynamically:
+
+```php
+<?php
+
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$itemCallable = function (CliMenu $menu) {
+    $result = $menu->askPassword()
+        ->setPromptText('Please enter your password')
+        ->setValidationFailedText('Invalid password, try again')
+        ->setPlaceholderText('')
+        ->setValidator(function ($password) {
+            if ($password === 'password') {
+                $this->setValidationFailedText('Password is too weak');
+                return false;
+            } else if (strlen($password) <= 20) {
+                $this->setValidationFailedText('Password is not long enough');
+                return false;
+            } 
+            
+            return true;
+        })
+        ->ask();
+
+    var_dump($result->fetch());
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('Enter password', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+
+```
+
+##### Custom Input
+
+If you need a new type of input which is not covered by the bundled selection then you can create your own by implementing
+`\PhpSchool\CliMenu\Input\Input` - take a look at existing implementations to see how they are built. If all you need is some custom
+validation - extend the `\PhpSchool\CliMenu\Input\Text` class and overwrite the `validate` method. You can then use it in
+your menu item actions like so:
+
+```php
+<?php
+
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\Input\Text;
+use PhpSchool\CliMenu\Input\InputIO;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$itemCallable = function (CliMenu $menu) {
+    
+    $style = (new MenuStyle())
+        ->setBg('yellow')
+        ->setFg('black');
+        
+    $input = new class (new InputIO($menu, $menu->getTerminal()), $style) extends Text {
+        public function validate(string $value) : bool
+        {
+            //some validation
+            return true;
+        }
+    };
+    
+    $result = $input->ask();
+
+    var_dump($result->fetch());
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('Enter password', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+
+```
+
+
+#### Dialogues & Input Styling
+
+All of the dialogues and inputs expose a `getStyle()` method which you can use to customise the appearance of them. However, if
+you want to create a consistent style for all your dialogues and inputs without configuring it for each one
+you can build up a `MenuStyle` object and pass it to the dialogue and input methods like so:
+
+```php
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$popupStyle = (new MenuStyle)
+    ->setBg('green')
+    ->setFg('magenta');
+    
+$itemCallable = function (CliMenu $menu) use ($popupStyle) {
+    $menu->flash("PHP School FTW!!", $popupStyle)->display();
+    $menu->confirm('PHP School FTW!', $popupStyle)->display('OK!')
+    $menu->askNumber($popupStyle)->ask();
 };
 
 $menu = (new CliMenuBuilder)

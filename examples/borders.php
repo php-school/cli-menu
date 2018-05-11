@@ -6,20 +6,17 @@ use PhpSchool\CliMenu\CliMenuBuilder;
 require_once(__DIR__ . '/../vendor/autoload.php');
 
 $itemCallable = function (CliMenu $menu) {
-    $result = $menu->askText()
-        ->setPlaceholderText('Enter something here')
-        ->ask();
-
-    var_dump($result->fetch());
+    echo $menu->getSelectedItem()->getText();
 };
 
 $menu = (new CliMenuBuilder)
     ->setTitle('Basic CLI Menu')
-    ->addItem('Enter text', $itemCallable)
+    ->addItem('First Item', $itemCallable)
     ->addItem('Second Item', $itemCallable)
     ->addItem('Third Item', $itemCallable)
+    ->setBorder(1, 2, '36')
+    ->setMarginAuto()
     ->addLineBreak('-')
-    ->setMarginAuto('-')
     ->build();
 
 $menu->open();

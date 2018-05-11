@@ -30,6 +30,7 @@ $menu = (new CliMenuBuilder)
     ->addItem('Second Item', $itemCallable)
     ->addItem('Third Item', $itemCallable)
     ->addLineBreak('-')
+    ->setMarginAuto()
     ->build();
 
 $menu->open();
