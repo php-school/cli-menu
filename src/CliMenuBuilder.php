@@ -20,29 +20,24 @@ use RuntimeException;
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  * @author Aydin Hassan <aydin@hotmail.com>
  */
-class CliMenuBuilder
+class CliMenuBuilder implements Builder
 {
+    use BuilderUtils;
+    
     /**
      * @var bool
      */
     private $isBuilt = false;
 
     /**
-     * @var null|self
+     * @var SplitItemBuilder[]
      */
-    private $parent;
-
-    private $previousBuilder = null;
+    private $splitItemBuilders = [];
 
     /**
-     * @var self[]
+     * @var SplitItem[]
      */
-    private $subMenuBuilders = [];
-
-    /**
-     * @var CliMenu[]
-     */
-    private $subMenus = [];
+    private $splitItems = [];
 
     /**
      * @var string
@@ -57,11 +52,6 @@ class CliMenuBuilder
     /**
      * @var array
      */
-    private $menuItems = [];
-
-    /**
-     * @var array
-     */
     private $style;
 
     /**
@@ -72,7 +62,7 @@ class CliMenuBuilder
     /**
      * @var string
      */
-    private $menuTitle = null;
+    private $menuTitle;
 
     /**
      * @var bool
@@ -84,14 +74,13 @@ class CliMenuBuilder
      */
     private $disabled = false;
 
-    public function __construct(CliMenuBuilder $parent = null, $previousBuilder = null)
+    public function __construct(Builder $parent = null)
     {
         $this->parent   = $parent;
-        $this->previousBuilder = $previousBuilder;
         $this->terminal = $this->parent !== null
             ? $this->parent->getTerminal()
             : TerminalFactory::fromSystem();
-        $this->style    = MenuStyle::getDefaultStyleValues();
+        $this->style = MenuStyle::getDefaultStyleValues();
     }
 
     public function setTitle(string $title) : self
@@ -108,17 +97,6 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function addItem(
-        string $text,
-        callable $itemCallable,
-        bool $showItemExtra = false,
-        bool $disabled = false
-    ) : self {
-        $this->addMenuItem(new SelectableItem($text, $itemCallable, $showItemExtra, $disabled));
-
-        return $this;
-    }
-
     public function addItems(array $items) : self
     {
         foreach ($items as $item) {
@@ -128,40 +106,10 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function addStaticItem(string $text) : self
-    {
-        $this->addMenuItem(new StaticItem($text));
-
-        return $this;
-    }
-
-    public function addLineBreak(string $breakChar = ' ', int $lines = 1) : self
-    {
-        $this->addMenuItem(new LineBreakItem($breakChar, $lines));
-
-        return $this;
-    }
-
     public function addAsciiArt(string $art, string $position = AsciiArtItem::POSITION_CENTER, string $alt = '') : self
     {
         $this->addMenuItem(new AsciiArtItem($art, $position, $alt));
 
-        return $this;
-    }
-
-    /**
-     * Add a submenu with a string identifier
-     */
-    public function addSubMenu(string $id, CliMenuBuilder $subMenuBuilder = null) : CliMenuBuilder
-    {
-        $this->menuItems[]  = $id;
-
-        if (null === $subMenuBuilder) {
-            $this->subMenuBuilders[$id] = new static($this);
-            return $this->subMenuBuilders[$id];
-        }
-
-        $this->subMenuBuilders[$id] = $subMenuBuilder;
         return $this;
     }
 
@@ -178,12 +126,12 @@ class CliMenuBuilder
     /**
      * Add a split item
      */
-    public function addSplitItem() : SplitItem
+    public function addSplitItem() : SplitItemBuilder
     {
-        $splitItem = new SplitItem($this);
-        $this->addMenuItem($splitItem);
-
-        return $splitItem;
+        $this->menuItems[] = $id = uniqid('splititem-placeholder-', true);
+        
+        $this->splitItemBuilders[$id] = new SplitItemBuilder($this);
+        return $this->splitItemBuilders[$id];
     }
 
     /**
@@ -430,7 +378,7 @@ class CliMenuBuilder
      * Recursively drop back to the parents menu style
      * when the current menu has a parent and has no changes
      */
-    private function getMenuStyle() : MenuStyle
+    public function getMenuStyle() : MenuStyle
     {
         if (null === $this->parent) {
             return $this->buildStyle();
@@ -468,24 +416,6 @@ class CliMenuBuilder
     }
 
     /**
-     * Return to parent builder
-     *
-     * @throws RuntimeException
-     */
-    public function end()
-    {
-        if (null !== $this->previousBuilder) {
-            return $this->previousBuilder;
-        }
-
-        if (null === $this->parent) {
-            throw new RuntimeException('No parent builder to return to');
-        }
-
-        return $this->parent;
-    }
-
-    /**
      * @throws RuntimeException
      */
     public function getSubMenu(string $id) : CliMenu
@@ -494,20 +424,20 @@ class CliMenuBuilder
             throw new RuntimeException(sprintf('Menu: "%s" cannot be retrieved until menu has been built', $id));
         }
 
-        return $this->subMenus[$id];
+        return $this->subMenus['submenu-placeholder-' . $id];
     }
-
-    private function buildSubMenus(array $items) : array
+    
+    private function buildSplitItems(array $items) : array
     {
         return array_map(function ($item) {
-            if (!is_string($item)) {
+            if (!is_string($item) || 0 !== strpos($item, 'splititem-placeholder-')) {
                 return $item;
             }
 
-            $menuBuilder           = $this->subMenuBuilders[$item];
-            $this->subMenus[$item] = $menuBuilder->build();
+            $splitItemBuilder        = $this->splitItemBuilders[$item];
+            $this->splitItems[$item] = $splitItemBuilder->build();
 
-            return new MenuMenuItem($item, $this->subMenus[$item], $menuBuilder->isMenuDisabled());
+            return $this->splitItems[$item];
         }, $items);
     }
 
@@ -519,7 +449,9 @@ class CliMenuBuilder
             ? $this->menuItems
             : array_merge($this->menuItems, $this->getDefaultItems());
 
-        $menuItems = $this->buildSubMenus($mergedItems);
+        
+        $menuItems = $this->buildSplitItems($mergedItems);
+        $menuItems = $this->buildSubMenus($menuItems);
 
         $this->style['displaysExtra'] = $this->itemsHaveExtra($menuItems);
 
@@ -532,6 +464,10 @@ class CliMenuBuilder
 
         foreach ($this->subMenus as $subMenu) {
             $subMenu->setParent($menu);
+        }
+        
+        foreach ($this->splitItemBuilders as $splitItemBuilder) {
+            $splitItemBuilder->setSubMenuParents($menu);
         }
 
         return $menu;

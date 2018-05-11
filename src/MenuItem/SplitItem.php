@@ -19,11 +19,6 @@ class SplitItem implements MenuItemInterface
     private $items;
 
     /**
-     * @var CliMenuBuilder
-     */
-    private $parentBuilder;
-
-    /**
      * @var int
      */
     private $selectedItemIndex;
@@ -38,19 +33,53 @@ class SplitItem implements MenuItemInterface
      */
     private $margin = 2;
 
+    /**
+     * @var array
+     */
+    private static $blacklistedItems = [
+        \PhpSchool\CliMenu\MenuItem\AsciiArtItem::class,
+        \PhpSchool\CliMenu\MenuItem\LineBreakItem::class,
+        \PhpSchool\CliMenu\MenuItem\SplitItem::class,
+    ];
 
-    public function __construct(CliMenuBuilder $builder, array $items = [])
+    public function __construct(array $items = [])
     {
-        $this->parentBuilder = $builder;
-        $this->items         = $items;
+        $this->items = $items;
 
         $this->setDefaultSelectedItem();
+    }
+
+    public function addMenuItem(MenuItemInterface $item) : self
+    {
+        foreach (self::$blacklistedItems as $bl) {
+            if ($item instanceof $bl) {
+                throw new \InvalidArgumentException("Cannot add a $bl to a SplitItem");
+            }
+        }
+        $this->items[] = $item;
+        $this->setDefaultSelectedItem();
+        return $this;
+    }
+
+    public function addMenuItems(array $items) : self
+    {
+        foreach ($items as $item) {
+            $this->addMenuItem($item);
+        }
+        return $this;
+    }
+    
+    public function setItems(array $items) : self
+    {
+        $this->items = [];
+        $this->addMenuItems($items);
+        return $this;
     }
 
     /**
      * Select default item
      */
-    private function setDefaultSelectedItem()
+    private function setDefaultSelectedItem() : void
     {
         foreach ($this->items as $index => $item) {
             if ($item->canSelect()) {
@@ -62,55 +91,6 @@ class SplitItem implements MenuItemInterface
 
         $this->canBeSelected = false;
         $this->selectedItemIndex = null;
-    }
-
-    public function addItem(
-        string $text,
-        callable $itemCallable,
-        bool $showItemExtra = false,
-        bool $disabled = false
-    ) : self {
-        $this->items[] = new SelectableItem($text, $itemCallable, $showItemExtra, $disabled);
-
-        return $this;
-    }
-
-    public function addStaticItem(string $text) : self
-    {
-        $this->items[] = new StaticItem($text);
-
-        return $this;
-    }
-
-    public function addSubMenu(string $id, CliMenuBuilder $subMenuBuilder = null) : CliMenuBuilder
-    {
-        if (null === $subMenuBuilder) {
-            $subMenuBuilder = new CliMenuBuilder($this->parentBuilder, $this);
-        }
-
-        $this->items[] = $id;
-        $this->subMenuBuilders[$id] = $subMenuBuilder;
-
-        return $subMenuBuilder;
-    }
-
-    public function end() : CliMenuBuilder
-    {
-        $this->items = array_map(function ($item) {
-            if (!is_string($item) || empty($this->subMenuBuilders[$item])) {
-                return $item;
-            }
-
-            $subMenuBuilder = $this->subMenuBuilders[$item];
-            $subMenu = $subMenuBuilder->build();
-            $this->parentBuilder->injectSubMenu($item, $subMenu);
-
-            return new MenuMenuItem($item, $subMenu, $subMenuBuilder->isMenuDisabled());
-        }, $this->items);
-
-        $this->setDefaultSelectedItem();
-
-        return $this->parentBuilder;
     }
 
     /**
