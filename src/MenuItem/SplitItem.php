@@ -50,7 +50,8 @@ class SplitItem implements MenuItemInterface
     /**
      * Select default item
      */
-    private function setDefaultSelectedItem() {
+    private function setDefaultSelectedItem()
+    {
         foreach ($this->items as $index => $item) {
             if ($item->canSelect()) {
                 $this->canBeSelected = true;
@@ -121,7 +122,8 @@ class SplitItem implements MenuItemInterface
                     ? $style->getInvertedColoursUnsetCode()
                     : '';
 
-                return sprintf("%s%s%s%s%s",
+                return sprintf(
+                    "%s%s%s%s%s",
                     $invertedColoursSetCode,
                     $row,
                     str_repeat(' ', $length - mb_strlen($row)),
