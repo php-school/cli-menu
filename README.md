@@ -712,6 +712,39 @@ $menu = (new CliMenuBuilder)
 $menu->open();
 ```
 
+#### Dialogues & Input Styling
+
+All of the dialogues and inputs expose a `getStyle()` method which you can use to customise the appearance of them. However, if
+you want to create a consistent style for all your dialogues and inputs without configuring it for each one
+you can build up a `MenuStyle` object and pass it to the dialogue and input methods like so:
+
+```php
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$popupStyle = (new MenuStyle)
+    ->setBg('green')
+    ->setFg('magenta');
+    
+$itemCallable = function (CliMenu $menu) use ($popupStyle) {
+    $menu->flash("PHP School FTW!!", $popupStyle)->display();
+    $menu->confirm('PHP School FTW!', $popupStyle)->display('OK!')
+    $menu->askNumber($popupStyle)->ask();
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('First Item', $itemCallable)
+    ->addItem('Second Item', $itemCallable)
+    ->addItem('Third Item', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+```
+
 ---
 
 Once you get going you might just end up with something that looks a little like this... 
