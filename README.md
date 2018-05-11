@@ -50,7 +50,7 @@
     * [Dialogues](#dialogues)
       * [Flash](#flash)
       * [Confirm](#confirm)
-    
+    * [Dialogues & Input Styling](#dialogues-input-styling)
   * [Docs Translations](#docs-translations)
   * [Integrations](#integrations)
 
