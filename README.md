@@ -342,7 +342,11 @@ ART;
 $menu = (new CliMenuBuilder)
     ->addAsciiArt($art, AsciiArtItem::POSITION_CENTER)
     ->build();
-```    
+```
+
+The third optional parameter is to `addAsciiArt` is alternate text. If the terminal is too wide for the Ascii art, then 
+it will not be displayed at all. However, if you pass a string to the third argument, in the case that the ascii art is too 
+wide for the terminal the alternate text will be displayed instead.    
 
 #### Sub Menu Item
 
