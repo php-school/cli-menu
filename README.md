@@ -23,6 +23,7 @@
 ---
 ## Contents
 
+  * [Minimum Requirements](#minimum-requirements)
   * [Installation](#installation)
   * [Usage](#usage)
     * [Quick Setup](#quick-setup)
@@ -31,6 +32,11 @@
   * [Docs Translations](#docs-translations)
   * [Integrations](#integrations)
 
+### Minimum Requirements
+
+ * PHP 7.1
+ * Composer
+ * ext-posix
 
 ### Installation
 
