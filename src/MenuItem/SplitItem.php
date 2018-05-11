@@ -42,9 +42,9 @@ class SplitItem implements MenuItemInterface
      * @var array
      */
     private $blacklistedItems = [
-        "AsciiArtItem",
-        "LineBreakItem",
-        "SplitItem",
+        '\PhpSchool\CliMenu\MenuItem\AsciiArtItem',
+        '\PhpSchool\CliMenu\MenuItem\LineBreakItem',
+        '\PhpSchool\CliMenu\MenuItem\SplitItem',
     ];
 
 
@@ -62,7 +62,7 @@ class SplitItem implements MenuItemInterface
     private function setDefaultSelectedItem()
     {
         foreach ($this->items as $index => $item) {
-            if ($item->canSelect()) {
+            if ($item instanceof MenuItemInterface && $item->canSelect()) {
                 $this->canBeSelected = true;
                 $this->selectedItemIndex = $index;
                 return;
@@ -82,6 +82,25 @@ class SplitItem implements MenuItemInterface
         }
 
         $this->items[] = $item;
+
+        $this->setDefaultSelectedItem();
+
+        return $this;
+    }
+
+    public function addMenuItems(array $items) : self
+    {
+        foreach ($items as $item) {
+            $this->addMenuItem($item);
+        }
+
+        return $this;
+    }
+
+    public function setItems(array $items) : self
+    {
+        $this->items = [];
+        $this->addMenuItems($item);
 
         return $this;
     }
