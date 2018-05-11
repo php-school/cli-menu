@@ -257,8 +257,8 @@ class CliMenu
             switch ($char->getControl()) {
                 case InputCharacter::UP:
                 case InputCharacter::DOWN:
-                case 'LEFT':
-                case 'RIGHT':
+                case InputCharacter::LEFT:
+                case InputCharacter::RIGHT:
                     $this->moveSelection($char->getControl());
                     $this->draw();
                     break;
@@ -301,6 +301,7 @@ class CliMenu
                     ? $selectedItemIndex--
                     : $selectedItemIndex++;
                 $item->setSelectedItemIndex($selectedItemIndex);
+
                 if (!array_key_exists($selectedItemIndex, $item->getItems())) {
                     $selectedItemIndex = $direction === 'LEFT'
                         ? end($itemKeys)

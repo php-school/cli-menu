@@ -4,6 +4,7 @@ namespace PhpSchool\CliMenu\MenuItem;
 
 use Assert\Assertion;
 use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
 
@@ -13,20 +14,24 @@ use PhpSchool\CliMenu\Util\StringUtil;
 class SplitItem implements MenuItemInterface
 {
     /**
-     * @var string
-     */
-    private $text;
-
-    /**
      * @var array
      */
     private $items;
 
     /**
-     * @var int
-     * -1 means no item selected
+     * @var CliMenuBuilder
      */
-    private $selectedItemIndex = -1;
+    private $parentBuilder;
+
+    /**
+     * @var int
+     */
+    private $selectedItemIndex;
+
+    /**
+     * @var bool
+     */
+    private $canBeSelected = true;
 
     /**
      * @var int
@@ -34,10 +39,53 @@ class SplitItem implements MenuItemInterface
     private $margin = 2;
 
 
-    public function __construct(string $text, array $items)
+    public function __construct(CliMenuBuilder $builder, array $items = [])
     {
-        $this->text     = $text;
-        $this->items    = $items;
+        $this->parentBuilder = $builder;
+        $this->items         = $items;
+
+        $this->setDefaultSelectedItem();
+    }
+
+    /**
+     * Select default item
+     */
+    private function setDefaultSelectedItem() {
+        foreach ($this->items as $index => $item) {
+            if ($item->canSelect()) {
+                $this->canBeSelected = true;
+                $this->selectedItemIndex = $index;
+                return;
+            }
+        }
+
+        $this->canBeSelected = false;
+        $this->selectedItemIndex = null;
+    }
+
+    public function addItem(
+        string $text,
+        callable $itemCallable,
+        bool $showItemExtra = false,
+        bool $disabled = false
+    ) : self {
+        $this->items[] = new SelectableItem($text, $itemCallable, $showItemExtra, $disabled);
+        $this->setDefaultSelectedItem();
+
+        return $this;
+    }
+
+    public function addStaticItem(string $text) : self
+    {
+        $this->items[] = new StaticItem($text);
+        $this->setDefaultSelectedItem();
+
+        return $this;
+    }
+
+    public function end() : CliMenuBuilder
+    {
+        return $this->parentBuilder;
     }
 
     /**
@@ -48,11 +96,7 @@ class SplitItem implements MenuItemInterface
         $numberOfItems = count($this->items);
 
         if (!$selected) {
-            $this->selectedItemIndex = -1;
-        } else {
-            if ($this->selectedItemIndex === -1) {
-                $this->selectedItemIndex = 0;
-            }
+            $this->setDefaultSelectedItem();
         }
 
         $length = $style->getDisplaysExtra()
@@ -63,20 +107,27 @@ class SplitItem implements MenuItemInterface
         $lines = 0;
         $cells = [];
         foreach ($this->items as $index => $item) {
-            $marker = sprintf("%s ", $style->getMarker($index === $this->selectedItemIndex));
+            $isSelected = $selected && $index === $this->selectedItemIndex;
+            $marker = sprintf("%s ", $style->getMarker($isSelected));
             $content = StringUtil::wordwrap(
                 sprintf('%s%s', $marker, $item->getText()),
                 $length
             );
-            $cell = array_map(function ($row) use ($index, $length, $style) {
-                $row = $row . str_repeat(' ', $length - strlen($row));
-                if ($index === $this->selectedItemIndex) {
-                    $row = $style->getSelectedSetCode() . $row . $style->getSelectedUnsetCode();
-                } else {
-                    $row = $style->getUnselectedSetCode() . $row . $style->getUnselectedUnsetCode();
-                }
-                $row .= $style->getUnselectedSetCode() . str_repeat(' ', $this->margin);
-                return $row;
+            $cell = array_map(function ($row) use ($index, $length, $style, $isSelected) {
+                $invertedColoursSetCode = $isSelected
+                    ? $style->getInvertedColoursSetCode()
+                    : '';
+                $invertedColoursUnsetCode = $isSelected
+                    ? $style->getInvertedColoursUnsetCode()
+                    : '';
+
+                return sprintf("%s%s%s%s%s",
+                    $invertedColoursSetCode,
+                    $row,
+                    str_repeat(' ', $length - mb_strlen($row)),
+                    $invertedColoursUnsetCode,
+                    str_repeat(' ', $this->margin)
+                );
             }, explode("\n", $content));
             $lineCount = count($cell);
             if ($lineCount > $lines) {
@@ -88,6 +139,9 @@ class SplitItem implements MenuItemInterface
         $rows = [];
         for ($i = 0; $i < $lines; $i++) {
             $row = "";
+            if ($i > 0) {
+                $row .= str_repeat(' ', 2);
+            }
             foreach ($cells as $cell) {
                 if (isset($cell[$i])) {
                     $row .= $cell[$i];
@@ -104,28 +158,24 @@ class SplitItem implements MenuItemInterface
         return $rows;
     }
 
-    /**
-     *
-     */
     public function setSelectedItemIndex(int $index) : void
     {
         $this->selectedItemIndex = $index;
     }
 
-    /**
-     *
-     */
     public function getSelectedItemIndex() : int
     {
-        if ($this->selectedItemIndex === -1) {
+        if ($this->selectedItemIndex === null) {
             return 0;
         }
         return $this->selectedItemIndex;
     }
-    
-    /**
-     *
-     */
+
+    public function getSelectedItem() : MenuItem
+    {
+        return $this->items[$this->selectedItemIndex];
+    }
+
     public function getItems() : array
     {
         return $this->items;
@@ -133,10 +183,11 @@ class SplitItem implements MenuItemInterface
 
     /**
      * Can the item be selected
+     * Not really in this case but that's the trick
      */
     public function canSelect() : bool
     {
-        return true;
+        return $this->canBeSelected;
     }
 
     /**
@@ -176,6 +227,10 @@ class SplitItem implements MenuItemInterface
      */
     public function getText() : string
     {
-        return $this->text;
+        $text = [];
+        foreach ($this->items as $item) {
+            $text[] = $item->getText();
+        }
+        return explode(' - ', $text);
     }
 }

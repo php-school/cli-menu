@@ -163,6 +163,17 @@ class CliMenuBuilder
     }
 
     /**
+     * Add a split item
+     */
+    public function addSplitItem() : SplitItem
+    {
+        $splitItem = new SplitItem($this);
+        $this->addMenuItem($splitItem);
+
+        return $splitItem;
+    }
+
+    /**
      * Disable a submenu
      *
      * @throws \InvalidArgumentException
