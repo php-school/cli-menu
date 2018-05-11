@@ -202,6 +202,8 @@ of the [colours and codes here](https://jonasjacek.github.io/colors/). If you sp
 it will automatically fallback to a sane default, using a generated map you can see in src/Util/ColourUtil.php. You can also manually specify the
 fallback colour as the second argument to `setForegroundColour` and `setBackgroundColour.
 
+In this example if no 256 colour support is found it will automatically fall back to `green` and `blue`.
+
 ```php
 $menu = (new CliMenuBuilder)
     ->setForegroundColour('40')
@@ -209,7 +211,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-In this example if is no 256 colour support is found it would automatically fall back to `green` and `blue`.
+In this example if no 256 colour support is found it will fall back to `yellow` and `magenta`.
 
 ```php
 $menu = (new CliMenuBuilder)
@@ -218,16 +220,14 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-In this example if is no 256 colour support is found it would fall back to `yellow` and `magenta`.
-
 ##### Width
 
-Customise the width of the menu, setting a value larger than the size of the terminal will result in
+Customise the width of the menu. Setting a value larger than the size of the terminal will result in
 the width being the same as the terminal size.
 
 ```php
 $menu = (new CliMenuBuilder)
-    ->setWidth(1000) //if terminal is only 400, width will be 400
+    ->setWidth(1000) //if terminal is only 400, width will also be 400
     ->build();
 ```
 
@@ -246,7 +246,7 @@ Different values can also be set for the top/bottom and the left/right padding:
 ```php
 $menu = (new CliMenuBuilder)
     ->setPaddingTopBottom(10)
-        ->setPaddingLeftRight(5)
+    ->setPaddingLeftRight(5)
     ->build();
 ```
 
@@ -461,7 +461,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-The third optional parameter is to `addAsciiArt` is alternate text. If the terminal is too wide for the Ascii art, then 
+The third optional parameter to `addAsciiArt` is alternate text. If the ascii art is too wide for the terminal, then 
 it will not be displayed at all. However, if you pass a string to the third argument, in the case that the ascii art is too 
 wide for the terminal the alternate text will be displayed instead.    
 
@@ -738,18 +738,18 @@ $menu->open();
 #### Inputs
 
 Inputs - added in version 3.0 of `cli-menu` allow to prompt the user for input and validate it. The following types are supported:
-text, number and password. Inputs can be executed in any item callback. It has a separate style object which is colored by default different to the menu.
-It can be modified to suit your own style.
+text, number and password. Inputs can be executed in any item callback. They have separate style objects which are colored by default different to the menu.
+They can be modified to suit your own style.
 
 Each input is created by calling one of the `ask*` methods which will return an
 instance of the input you requested. To execute the prompt and wait for the input you must
-call `ask()` on the input. When the input has been received and validate, `ask()` will return
+call `ask()` on the input. When the input has been received and validated, `ask()` will return
 an instance of `InputResult`. `InputResult` exposes the method `fetch` to grab the raw input.
 
 ##### Text Input
 
 The text input will prompt for a string and when the enter key is hit it will validate that
-the string is not empty. As well as the style you can modify the prompt text (the default is 'Enter text:`), the 
+the string is not empty. As well as the style you can modify the prompt text (the default is 'Enter text:'), the 
 placeholder text (the default is empty) and the validation failed text (the default is 'Invalid, try again').
 
 ```php
@@ -783,7 +783,7 @@ $menu->open();
 ##### Number Input
 
 The number input will prompt for an integer value (signed or not) and when the enter key is hit it will validate that
-the input is actually a number (`/^-?\d+$/`). As well as the style you can modify the prompt text (the default is 'Enter a number:`), the 
+the input is actually a number (`/^-?\d+$/`). As well as the style you can modify the prompt text (the default is 'Enter a number:'), the 
 placeholder text (the default is empty) and the validation failed text (the default is 'Not a valid number, try again').
 
 When entering a number you can use the up/down keys to increment and decrement the number.
@@ -819,7 +819,7 @@ $menu->open();
 ##### Password Input
 
 The password input will prompt for a text value and when the enter key is hit it will validate that the input is 16 characters or longer.
-As well as the style you can modify the prompt text (the default is 'Enter password:`), the 
+As well as the style you can modify the prompt text (the default is 'Enter password:'), the 
 placeholder text (the default is empty) and the validation failed text (the default is 'Invalid password, try again'). You can also set
 a custom password validator as a PHP callable. When typing passwords they are echo'd back to the user as an asterisk. 
 
