@@ -32,6 +32,8 @@ class CliMenuBuilder
      */
     private $parent;
 
+    private $previousBuilder = null;
+
     /**
      * @var self[]
      */
@@ -82,9 +84,10 @@ class CliMenuBuilder
      */
     private $disabled = false;
 
-    public function __construct(CliMenuBuilder $parent = null)
+    public function __construct(CliMenuBuilder $parent = null, $previousBuilder = null)
     {
         $this->parent   = $parent;
+        $this->previousBuilder = $previousBuilder;
         $this->terminal = $this->parent !== null
             ? $this->parent->getTerminal()
             : TerminalFactory::fromSystem();
@@ -159,6 +162,16 @@ class CliMenuBuilder
         }
 
         $this->subMenuBuilders[$id] = $subMenuBuilder;
+        return $this;
+    }
+
+    /**
+     * Injects a submenu directly (without going through the builder
+     */
+    public function injectSubMenu(string $id, CliMenu $subMenu) : CliMenuBuilder
+    {
+        $this->subMenus[$id] = $subMenu;
+
         return $this;
     }
 
@@ -423,8 +436,12 @@ class CliMenuBuilder
      *
      * @throws RuntimeException
      */
-    public function end() : CliMenuBuilder
+    public function end()
     {
+        if (null !== $this->previousBuilder) {
+            return $this->previousBuilder;
+        }
+
         if (null === $this->parent) {
             throw new RuntimeException('No parent builder to return to');
         }

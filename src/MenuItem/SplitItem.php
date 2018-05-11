@@ -71,7 +71,6 @@ class SplitItem implements MenuItemInterface
         bool $disabled = false
     ) : self {
         $this->items[] = new SelectableItem($text, $itemCallable, $showItemExtra, $disabled);
-        $this->setDefaultSelectedItem();
 
         return $this;
     }
@@ -79,13 +78,38 @@ class SplitItem implements MenuItemInterface
     public function addStaticItem(string $text) : self
     {
         $this->items[] = new StaticItem($text);
-        $this->setDefaultSelectedItem();
 
         return $this;
     }
 
+    public function addSubMenu(string $id, CliMenuBuilder $subMenuBuilder = null) : CliMenuBuilder
+    {
+        if (null === $subMenuBuilder) {
+            $subMenuBuilder = new CliMenuBuilder($this->parentBuilder, $this);
+        }
+
+        $this->items[] = $id;
+        $this->subMenuBuilders[$id] = $subMenuBuilder;
+
+        return $subMenuBuilder;
+    }
+
     public function end() : CliMenuBuilder
     {
+        $this->items = array_map(function ($item) {
+            if (!is_string($item) || empty($this->subMenuBuilders[$item])) {
+                return $item;
+            }
+
+            $subMenuBuilder = $this->subMenuBuilders[$item];
+            $subMenu = $subMenuBuilder->build();
+            $this->parentBuilder->injectSubMenu($item, $subMenu);
+
+            return new MenuMenuItem($item, $subMenu, $subMenuBuilder->isMenuDisabled());
+        }, $this->items);
+
+        $this->setDefaultSelectedItem();
+
         return $this->parentBuilder;
     }
 
