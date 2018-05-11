@@ -30,6 +30,11 @@
     * [Examples](#examples)
   * [API](#api)
     * [Appearance](#appearance)
+      * [Width](#width)
+      * [Padding](#padding)
+      * [Margin](#margin)
+      * [Exit Button Text](#exit-button-text)
+      * [Remove Exit Button](#remove-exit-button)
     * [Item Extra](#item-extra)
     * [Items](#appearance)
       * [Selectable Item](#selectable-item)
@@ -147,6 +152,8 @@ $menu->close();
 
 #### Appearance
 
+##### Colour
+
 You can change the foreground and background colour of the menu to any of the following colours:
 
 * black
@@ -188,15 +195,60 @@ $menu = (new CliMenuBuilder)
 
 In this example if is no 256 colour support is found it would fall back to `yellow` and `magenta`.
 
-The width, padding and margin can also be customised:
+##### Width
+
+Customise the width of the menu, setting a value larger than the size of the terminal will result in
+the width being the same as the terminal size.
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setWidth(1000) //if terminal is only 400, width will be 400
+    ->build();
+```
+
+##### Padding
+
+The padding can be set for all sides with one value or can be set individually for top/bottom and left/right.
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setPadding(10) //10 padding top/bottom/left/right
+    ->build();
+```
+
+Different values can also be set for the top/bottom and the left/right padding:
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setPaddingTopBottom(10)
+        ->setPaddingLeftRight(5)
+    ->build();
+```
+
+##### Margin
+
+The margin can be customised as one value. It is only applied to the left side of the menu. It can also be
+set automatically which will center the menu nicely in the terminal.
+
+Automatically center menu:
 
 ```php
 $menu = (new CliMenuBuilder)
     ->setWidth(200)
-    ->setPadding(10)
-    ->setMargin(5)
+    ->setMarginAuto() 
     ->build();
 ```
+
+Arbitrary margin:
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setWidth(200)
+    ->setMargin(5) //5 margin left
+    ->build();
+```
+
+##### Exit Button Text
 
 Modify the exit button text:
 
@@ -205,6 +257,8 @@ $menu = (new CliMenuBuilder)
     ->setExitButtonText("Don't you want me baby?")
     ->build();
 ```
+
+##### Remove Exit Button
 
 You can remove the exit button altogether:
 
