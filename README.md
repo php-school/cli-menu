@@ -50,6 +50,11 @@
     * [Dialogues](#dialogues)
       * [Flash](#flash)
       * [Confirm](#confirm)
+    * [Inputs](#inputs)
+      * [Text](#text-input)
+      * [Number](#number-input)
+      * [Password](#password-input)
+      * [Custom Input](#custom-input)
     * [Dialogues & Input Styling](#dialogues-input-styling)
   * [Docs Translations](#docs-translations)
   * [Integrations](#integrations)
@@ -710,6 +715,204 @@ $menu = (new CliMenuBuilder)
     ->build();
 
 $menu->open();
+```
+#### Inputs
+
+Inputs - added in version 3.0 of `cli-menu` allow to prompt the user for input and validate it. The following types are supported:
+text, number and password. Inputs can be executed in any item callback. It has a separate style object which is colored by default different to the menu.
+It can be modified to suit your own style.
+
+Each input is created by calling one of the `ask*` methods which will return an
+instance of the input you requested. To execute the prompt and wait for the input you must
+call `ask()` on the input. When the input has been received and validate, `ask()` will return
+an instance of `InputResult`. `InputResult` exposes the method `fetch` to grab the raw input.
+
+##### Text Input
+
+The text input will prompt for a string and when the enter key is hit it will validate that
+the string is not empty. As well as the style you can modify the prompt text (the default is 'Enter text:`), the 
+placeholder text (the default is empty) and the validation failed text (the default is 'Invalid, try again').
+
+```php
+<?php
+
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$itemCallable = function (CliMenu $menu) {
+    $result = $menu->askText()
+        ->setPromptText('Enter your name')
+        ->setPlaceholderText('Jane Doe')
+        ->setValidationFailedText('Please enter your name')
+        ->ask();
+
+    var_dump($result->fetch());
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('Enter text', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+
+```
+
+##### Number Input
+
+The number input will prompt for an integer value (signed or not) and when the enter key is hit it will validate that
+the input is actually a number (`/^-?\d+$/`). As well as the style you can modify the prompt text (the default is 'Enter a number:`), the 
+placeholder text (the default is empty) and the validation failed text (the default is 'Not a valid number, try again').
+
+When entering a number you can use the up/down keys to increment and decrement the number.
+
+```php
+<?php
+
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$itemCallable = function (CliMenu $menu) {
+    $result = $menu->askNumber()
+        ->setPrompt('Enter your age')
+        ->setPlaceholderText(10)
+        ->setValidationFailedText('Invalid age, try again')
+        ->ask();
+
+    var_dump($result->fetch());
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('Enter number', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+
+```
+
+##### Password Input
+
+The password input will prompt for a text value and when the enter key is hit it will validate that the input is 16 characters or longer.
+As well as the style you can modify the prompt text (the default is 'Enter password:`), the 
+placeholder text (the default is empty) and the validation failed text (the default is 'Invalid password, try again'). You can also set
+a custom password validator as a PHP callable. When typing passwords they are echo'd back to the user as an asterisk. 
+
+Ask for a password with the default validation:
+
+```php
+<?php
+
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$itemCallable = function (CliMenu $menu) {
+    $result = $menu->askPassword()
+        ->setPromptText('Please enter your password')
+        ->setValidationFailedText('Invalid password, try again')
+        ->setPlaceholderText('')
+        ->ask();
+
+    var_dump($result->fetch());
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('Enter password', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+
+```
+
+Validators can be any PHP callable. The callable will be passed the input value and must return a boolean, false indicating
+validation failure and true indicating validation success. If validation fails then the validation failure text will be shown.
+
+It is also possible to customise the validation failure message dynamically, but only when using a `Closure` as a validator.
+The closure will be binded to the `Password` input class which will allow you to call `setValidationFailedText` inside the closure.
+
+Ask for a password with custom validation. Here we validate the password is not equal to `password` and that the
+password is longer than 20 characters.
+
+```php
+<?php
+
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$itemCallable = function (CliMenu $menu) {
+    $result = $menu->askPassword()
+        ->setPromptText('Please enter your password')
+        ->setValidationFailedText('Invalid password, try again')
+        ->setPlaceholderText('')
+        ->setValidator(function ($password) {
+            return $password !== 'password' && strlen($password) > 20;            
+        })
+        ->ask();
+
+    var_dump($result->fetch());
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('Enter password', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+
+```
+
+Ask for a password with custom validation and set the validation failure message dynamically:
+
+```php
+<?php
+
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$itemCallable = function (CliMenu $menu) {
+    $result = $menu->askPassword()
+        ->setPromptText('Please enter your password')
+        ->setValidationFailedText('Invalid password, try again')
+        ->setPlaceholderText('')
+        ->setValidator(function ($password) {
+            if ($password === 'password') {
+                $this->setValidationFailedText('Password is too weak');
+                return false;
+            } else if (strlen($password) <= 20) {
+                $this->setValidationFailedText('Password is not long enough');
+                return false;
+            } 
+            
+            return true;
+        })
+        ->ask();
+
+    var_dump($result->fetch());
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('Enter password', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+
 ```
 
 #### Dialogues & Input Styling
