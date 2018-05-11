@@ -102,13 +102,15 @@ $menu = (new CliMenuBuilder)
 $menu->open();
 ```
 
-
 #### Examples
 
 Check out the [examples](examples) directory and run them to check out what is possible! 
 
 ##### Basic Menu 
 <img width="600" alt="basic" src="https://cloud.githubusercontent.com/assets/2817002/11442386/cb0e41a2-950c-11e5-8dd6-913aeab1632a.png">
+
+##### Basic Menu Auto Centered
+<img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39929334-1c68a450-5538-11e8-947a-e97b21c4fa1a.png">
 
 ##### Basic Menu with separation
 <img width="600" alt="basic-seperation" src="https://cloud.githubusercontent.com/assets/2817002/11442388/cdece950-950c-11e5-8128-4f849a1aea9f.png">
@@ -118,6 +120,9 @@ Check out the [examples](examples) directory and run them to check out what is p
 
 ##### Custom Styles
 <img width="600" alt="custom-styles" src="https://cloud.githubusercontent.com/assets/2817002/11442391/d3d72d1c-950c-11e5-9698-c2aeec002b24.png">
+
+##### Borders and 256 colours
+<img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39929340-1cee9fce-5538-11e8-91de-eccac734f2a5.png">
 
 ##### Useful Separation
 <img width="600" alt="useful-seperation" src="https://cloud.githubusercontent.com/assets/2817002/11442393/d862c72e-950c-11e5-8cbc-d8c73899627a.png">
@@ -140,6 +145,16 @@ Check out the [examples](examples) directory and run them to check out what is p
 
 ##### Confirm Dialogue
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/19786092/215d2dc2-9c94-11e6-910d-191b7b74f4d2.png">
+
+##### Number Input
+<img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39929969-bf45be46-5539-11e8-99f5-3dfdc0cf1fe3.png">
+<img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39930002-d2353dd8-5539-11e8-8dfb-e404201b7c42.png">
+
+##### Text Input
+<img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39929338-1cbc5a28-5538-11e8-9a68-b4e84e772251.png">
+
+##### Password Input
+<img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39929339-1cd4cd2e-5538-11e8-9330-335dd1b7ed1c.png">
 
 ### API
 

@@ -30,6 +30,7 @@ $menu = (new CliMenuBuilder)
     ->setTitle('Basic CLI Menu')
     ->addItem('Enter password', $itemCallable)
     ->addLineBreak('-')
+    ->setMarginAuto()
     ->build();
 
 $menu->open();
