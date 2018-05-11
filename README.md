@@ -296,7 +296,7 @@ $menu = (new CliMenuBuilder)
     ->setBorderRightWidth(4)
     ->setBorderBottomWidth(2)
     ->setBorderLeftWidth(4)
-    ->setBorderColour('red')
+    ->setBorderColour('42', 'red') //SpringGreen2 fallback to red
     ->build();
 ```
 
