@@ -93,7 +93,11 @@ $menu = (new CliMenuBuilder)
     ->addItem('Second Item', $itemCallable)
     ->addItem('Third Item', $itemCallable)
     ->addLineBreak('-')
+    ->setBorder(1, 2, 'yellow')
+    ->setPadding(2, 4)
+    ->setMarginAuto()
     ->build();
+
 
 $menu->open();
 ```
