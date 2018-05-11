@@ -149,6 +149,29 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
+If your terminal supports 256 colours then you can also use any of those by specifying the code, like `230`. You can find a list
+of the [colours and codes here](https://jonasjacek.github.io/colors/). If you specify a code and the terminal does not support 256 colours
+it will automatically fallback to a sane default, using a generated map you can see in src/Util/ColourUtil.php. You can also manually specify the
+fallback colour as the second argument to `setForegroundColour` and `setBackgroundColour.
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setForegroundColour('40')
+    ->setBackgroundColour('92')
+    ->build();
+```
+
+In this example if is no 256 colour support is found it would automatically fall back to `green` and `blue`.
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setForegroundColour('40', 'yellow')
+    ->setBackgroundColour('92', 'magenta')
+    ->build();
+```
+
+In this example if is no 256 colour support is found it would fall back to `yellow` and `magenta`.
+
 The width, padding and margin can also be customised:
 
 ```php
