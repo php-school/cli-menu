@@ -62,7 +62,7 @@ trait BuilderUtils
      * Add a submenu with a name. The name will be displayed as the item text
      * in the parent menu.
      */
-    public function addSubMenu(string $name, CliMenuBuilder $subMenuBuilder = null) : self
+    public function addSubMenu(string $name, CliMenuBuilder $subMenuBuilder = null) : Builder
     {
         $this->menuItems[]  = $id = 'submenu-placeholder-' . $name;
 
