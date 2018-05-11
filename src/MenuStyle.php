@@ -167,6 +167,7 @@ class MenuStyle
         'borderBottomWidth' => 0,
         'borderLeftWidth' => 0,
         'borderColour' => 'white',
+        'borderColourFallback' => null,
         'marginAuto' => false,
     ];
 
@@ -242,7 +243,10 @@ class MenuStyle
         $this->setBorderRightWidth(static::$defaultStyleValues['borderRightWidth']);
         $this->setBorderBottomWidth(static::$defaultStyleValues['borderBottomWidth']);
         $this->setBorderLeftWidth(static::$defaultStyleValues['borderLeftWidth']);
-        $this->setBorderColour(static::$defaultStyleValues['borderColour']);
+        $this->setBorderColour(
+            static::$defaultStyleValues['borderColour'],
+            static::$defaultStyleValues['borderColourFallback']
+        );
     }
 
     public function getDisabledItemText(string $text) : string

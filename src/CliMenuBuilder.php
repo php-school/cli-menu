@@ -329,6 +329,42 @@ class CliMenuBuilder
         return $this;
     }
 
+    public function setBorderTopWidth(int $width) : self
+    {
+        $this->style['borderTopWidth'] = $width;
+        
+        return $this;
+    }
+
+    public function setBorderRightWidth(int $width) : self
+    {
+        $this->style['borderRightWidth'] = $width;
+
+        return $this;
+    }
+
+    public function setBorderBottomWidth(int $width) : self
+    {
+        $this->style['borderBottomWidth'] = $width;
+
+        return $this;
+    }
+
+    public function setBorderLeftWidth(int $width) : self
+    {
+        $this->style['borderLeftWidth'] = $width;
+
+        return $this;
+    }
+
+    public function setBorderColour(string $colour, $fallback = null) : self
+    {
+        $this->style['borderColour'] = $colour;
+        $this->style['borderColourFallback'] = $fallback;
+
+        return $this;
+    }
+
     public function setTerminal(Terminal $terminal) : self
     {
         $this->terminal = $terminal;
@@ -399,7 +435,7 @@ class CliMenuBuilder
             ->setBorderRightWidth($this->style['borderRightWidth'])
             ->setBorderBottomWidth($this->style['borderBottomWidth'])
             ->setBorderLeftWidth($this->style['borderLeftWidth'])
-            ->setBorderColour($this->style['borderColour']);
+            ->setBorderColour($this->style['borderColour'], $this->style['borderColourFallback']);
 
         $this->style['marginAuto'] ? $style->setMarginAuto() : $style->setMargin($this->style['margin']);
 

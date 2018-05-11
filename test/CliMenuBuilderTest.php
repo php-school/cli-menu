@@ -173,6 +173,56 @@ class CliMenuBuilderTest extends TestCase
         $this->checkStyleVariable($menu, 'borderColour', 'green');
     }
 
+    public function testSetBorderTopWidth() : void
+    {
+        $builder = new CliMenuBuilder;
+        $builder->setBorderTopWidth(5);
+
+        $style = $builder->build()->getStyle();
+
+        self::assertEquals(5, $style->getBorderTopWidth());
+    }
+
+    public function testSetBorderRightWidth() : void
+    {
+        $builder = new CliMenuBuilder;
+        $builder->setBorderRightWidth(6);
+
+        $style = $builder->build()->getStyle();
+
+        self::assertEquals(6, $style->getBorderRightWidth());
+    }
+
+    public function testSetBorderBottomWidth() : void
+    {
+        $builder = new CliMenuBuilder;
+        $builder->setBorderBottomWidth(7);
+
+        $style = $builder->build()->getStyle();
+
+        self::assertEquals(7, $style->getBorderBottomWidth());
+    }
+
+    public function testSetBorderLeftWidth() : void
+    {
+        $builder = new CliMenuBuilder;
+        $builder->setBorderLeftWidth(8);
+
+        $style = $builder->build()->getStyle();
+
+        self::assertEquals(8, $style->getBorderLeftWidth());
+    }
+
+    public function testSetBorderColour() : void
+    {
+        $builder = new CliMenuBuilder;
+        $builder->setBorderColour('red');
+
+        $style = $builder->build()->getStyle();
+
+        self::assertEquals('red', $style->getBorderColour());
+    }
+    
     public function test256ColoursCodes() : void
     {
         $terminal = static::createMock(Terminal::class);
