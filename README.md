@@ -915,6 +915,53 @@ $menu->open();
 
 ```
 
+##### Custom Input
+
+If you need a new type of input which is not covered by the bundled selection then you can create your own by implementing
+`\PhpSchool\CliMenu\Input\Input` - take a look at existing implementations to see how they are built. If all you need is some custom
+validation - extend the `\PhpSchool\CliMenu\Input\Text` class and overwrite the `validate` method. You can then use it in
+your menu item actions like so:
+
+```php
+<?php
+
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\Input\Text;
+use PhpSchool\CliMenu\Input\InputIO;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$itemCallable = function (CliMenu $menu) {
+    
+    $style = (new MenuStyle())
+        ->setBg('yellow')
+        ->setFg('black');
+        
+    $input = new class (new InputIO($menu, $menu->getTerminal()), $style) extends Text {
+        public function validate(string $value) : bool
+        {
+            //some validation
+            return true;
+        }
+    };
+    
+    $result = $input->ask();
+
+    var_dump($result->fetch());
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('Basic CLI Menu')
+    ->addItem('Enter password', $itemCallable)
+    ->addLineBreak('-')
+    ->build();
+
+$menu->open();
+
+```
+
+
 #### Dialogues & Input Styling
 
 All of the dialogues and inputs expose a `getStyle()` method which you can use to customise the appearance of them. However, if
