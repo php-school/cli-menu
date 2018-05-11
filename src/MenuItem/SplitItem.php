@@ -38,6 +38,15 @@ class SplitItem implements MenuItemInterface
      */
     private $margin = 2;
 
+    /**
+     * @var array
+     */
+    private $blacklistedItems = [
+        "AsciiArtItem",
+        "LineBreakItem",
+        "SplitItem",
+    ];
+
 
     public function __construct(CliMenuBuilder $builder, array $items = [])
     {
@@ -62,6 +71,19 @@ class SplitItem implements MenuItemInterface
 
         $this->canBeSelected = false;
         $this->selectedItemIndex = null;
+    }
+
+    public function addMenuItem(MenuItemInterface $item) : self
+    {
+        foreach ($this->blacklistedItems as $bl) {
+            if ($item instanceof $bl) {
+                throw new \InvalidArgumentException("Cannot add a $bl to a SplitItem");
+            }
+        }
+
+        $this->items[] = $item;
+
+        return $this;
     }
 
     public function addItem(
