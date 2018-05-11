@@ -404,7 +404,7 @@ class MenuStyle
             "%s%s%s%s%s%s%s%s%s%s\n",
             str_repeat(' ', $this->margin),
             $borderColour,
-            str_repeat(' ', $this->borderRightWidth),
+            str_repeat(' ', $this->borderLeftWidth),
             $this->getColoursSetCode(),
             str_repeat(' ', $this->paddingLeftRight),
             str_repeat(' ', $this->contentWidth),
