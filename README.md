@@ -407,6 +407,9 @@ $menu = (new CliMenuBuilder)
 
 In this case `addSubMenu` will return the main menu builder, not the sub menu builder.
 
+The submenu menu item will be an instance of `\PhpSchool\CliMenu\MenuItem\MenuMenuItem`. If you need access to the submenu,
+you can get it via `$menuMenuItem->getSubMenu()`.
+
 #### Disabling Items & Sub Menus
 
 In this example we are disabling certain items and a submenu but still having them shown in the output. 
