@@ -9,6 +9,7 @@ use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
+use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\CliMenu\Util\ColourUtil;
@@ -159,6 +160,17 @@ class CliMenuBuilder
 
         $this->subMenuBuilders[$id] = $subMenuBuilder;
         return $this;
+    }
+
+    /**
+     * Add a split item
+     */
+    public function addSplitItem() : SplitItem
+    {
+        $splitItem = new SplitItem($this);
+        $this->addMenuItem($splitItem);
+
+        return $splitItem;
     }
 
     /**
