@@ -105,8 +105,11 @@ class SplitItem implements MenuItemInterface
         }
 
         $length = $style->getDisplaysExtra()
-            ? floor(($style->getContentWidth() - mb_strlen($style->getItemExtra()) + 2) / $numberOfItems) - $this->margin
-            : floor($style->getContentWidth() / $numberOfItems) - $this->margin;
+            ? floor(($style->getContentWidth() - mb_strlen($style->getItemExtra()) + 2) / $numberOfItems)
+            : floor($style->getContentWidth() / $numberOfItems);
+            
+        $length -= $this->margin;
+        
         $missingLength = $style->getContentWidth() % $numberOfItems;
 
         $lines = 0;
@@ -118,7 +121,7 @@ class SplitItem implements MenuItemInterface
                 sprintf('%s%s', $marker, $item->getText()),
                 $length
             );
-            $cell = array_map(function ($row) use ($index, $length, $style, $isSelected) {
+            $cell = array_map(function ($row) use ($length, $style, $isSelected) {
                 $invertedColoursSetCode = $isSelected
                     ? $style->getInvertedColoursSetCode()
                     : '';
@@ -177,7 +180,7 @@ class SplitItem implements MenuItemInterface
         return $this->selectedItemIndex;
     }
 
-    public function getSelectedItem() : MenuItem
+    public function getSelectedItem() : MenuItemInterface
     {
         return $this->items[$this->selectedItemIndex];
     }
