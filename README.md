@@ -33,6 +33,7 @@
       * [Width](#width)
       * [Padding](#padding)
       * [Margin](#margin)
+      * [Borders](#borders)
       * [Exit Button Text](#exit-button-text)
       * [Remove Exit Button](#remove-exit-button)
     * [Item Extra](#item-extra)
@@ -245,6 +246,44 @@ Arbitrary margin:
 $menu = (new CliMenuBuilder)
     ->setWidth(200)
     ->setMargin(5) //5 margin left
+    ->build();
+```
+
+##### Borders
+
+Borders can be customised just like CSS borders. We can add any amount of border to either side, left, right top or 
+bottom and we can apply a colour to it.
+
+Set universal red border of 2:
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setWidth(200)
+    ->setBorder(2, 'red')
+    ->build();
+```
+
+Configure each border separately:
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setWidth(200)
+    ->setBorderTopWidth(2)
+    ->setBorderRightWidth(4)
+    ->setBorderBottomWidth(2)
+    ->setBorderLeftWidth(4)
+    ->setBorderColour('red')
+    ->build();
+```
+
+Configure each border separately using the shorthand method, like CSS:
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setWidth(200)
+    ->setBorder(3, 4, 'red') //top/bottom = 3, left/right = 4
+    ->setBorder(3, 4, 5, 'red') //top = 3, left/right = 4, bottom = 5
+    ->setBorder(3, 4, 5, 6, 'red') //top = 3, left = 4, bottom = 5, right = 6
     ->build();
 ```
 
