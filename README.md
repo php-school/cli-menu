@@ -29,6 +29,22 @@
     * [Quick Setup](#quick-setup)
     * [Examples](#examples)
   * [API](#api)
+    * [Appearance](#appearance)
+    * [Item Extra](#item-extra)
+    * [Items](#appearance)
+      * [Selectable Item](#selectable-item)
+      * [Line Break Item](#line-break-item)
+      * [Static Item](#static-item)
+      * [Ascii Art Item](#ascii-art-item)
+      * [Sub Menu Item](#sub-menu-item)
+    * [Disabling Items & Sub Menus](#disabled-items-&-submenus)
+    * [Redrawing the Menu](#redrawing-the-menu)
+    * [Getting, Removing and Adding items](#getting,-removing-and-adding-items)
+    * [Custom Control Mapping](#custom-control-mapping)
+    * [Dialogues](#dialogues)
+      * [Flash](#flash)
+      * [Confirm](#confirm)
+    
   * [Docs Translations](#docs-translations)
   * [Integrations](#integrations)
 
@@ -91,7 +107,7 @@ Check out the [examples](examples) directory and run them to check out what is p
 ##### Useful Separation
 <img width="600" alt="useful-seperation" src="https://cloud.githubusercontent.com/assets/2817002/11442393/d862c72e-950c-11e5-8cbc-d8c73899627a.png">
 
-##### Item Extra
+##### Displaying Item Extra
 <img width="600" alt="item-extra" src="https://cloud.githubusercontent.com/assets/2817002/11442395/dfe460f2-950c-11e5-9aed-9bc9c91b7ea6.png">
 
 ##### Remove Defaults
@@ -422,7 +438,7 @@ The third param on the `->addItem` call is what disables an item while the `->di
 
 The outcome is a full menu with dimmed rows to denote them being disabled. When a user navigates these items are jumped over to the next available selectable item.
 
-#### Redrawing the menu
+#### Redrawing the Menu
 
 You can modify the menu and its style when executing an action and then you can redraw it! In this example we will toggle the background
 colour in an action.
