@@ -104,7 +104,15 @@ $menu->open();
 
 #### Examples
 
-Check out the [examples](examples) directory and run them to check out what is possible! 
+Check out the [examples](examples) directory and run them to see what is possible! The best way to run the examples is to git clone the repository:
+
+```shell
+git clone git@github.com:php-school/cli-menu.git
+cd cli-menu
+composer install --no-dev
+cd examples
+php basic.php
+```
 
 ##### Basic Menu 
 <img width="600" alt="basic" src="https://cloud.githubusercontent.com/assets/2817002/11442386/cb0e41a2-950c-11e5-8dd6-913aeab1632a.png">
