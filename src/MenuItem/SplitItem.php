@@ -110,10 +110,6 @@ class SplitItem implements MenuItemInterface
 
         $length        = floor($style->getContentWidth() / $numberOfItems) - $this->margin;
         $missingLength = $style->getContentWidth() % $numberOfItems;
-
-        if ($missingLength < 1) {
-            $missingLength = 0;
-        }
         
         return $this->buildRows(
             array_map(function ($index, $item) use ($selected, $length, $style) {
