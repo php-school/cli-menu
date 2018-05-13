@@ -19,7 +19,7 @@ class SplitItem implements MenuItemInterface
     private $items;
 
     /**
-     * @var int
+     * @var int|null
      */
     private $selectedItemIndex;
 
@@ -112,16 +112,16 @@ class SplitItem implements MenuItemInterface
         
         $missingLength = $style->getContentWidth() % $numberOfItems;
 
-        $lines = 0;
-        $cells = [];
-        foreach ($this->items as $index => $item) {
+        $cells = array_map(function ($index, $item) use ($selected, $length, $style) {
             $isSelected = $selected && $index === $this->selectedItemIndex;
-            $marker = sprintf("%s ", $style->getMarker($isSelected));
+            $marker = $item->canSelect()
+                ? sprintf("%s ", $style->getMarker($isSelected))
+                : sprintf("%s ", str_repeat(' ', mb_strlen($style->getMarker(false))));
             $content = StringUtil::wordwrap(
                 sprintf('%s%s', $marker, $item->getText()),
                 $length
             );
-            $cell = array_map(function ($row) use ($length, $style, $isSelected) {
+            return array_map(function ($row) use ($length, $style, $isSelected) {
                 $invertedColoursSetCode = $isSelected
                     ? $style->getInvertedColoursSetCode()
                     : '';
@@ -138,12 +138,9 @@ class SplitItem implements MenuItemInterface
                     str_repeat(' ', $this->margin)
                 );
             }, explode("\n", $content));
-            $lineCount = count($cell);
-            if ($lineCount > $lines) {
-                $lines = $lineCount;
-            }
-            $cells[] = $cell;
-        }
+        }, array_keys($this->items), $this->items);
+
+        $lines = max(array_map('count', $cells));
 
         $rows = [];
         for ($i = 0; $i < $lines; $i++) {
@@ -172,17 +169,16 @@ class SplitItem implements MenuItemInterface
         $this->selectedItemIndex = $index;
     }
 
-    public function getSelectedItemIndex() : int
+    public function getSelectedItemIndex() : ?int
     {
-        if ($this->selectedItemIndex === null) {
-            return 0;
-        }
         return $this->selectedItemIndex;
     }
 
     public function getSelectedItem() : MenuItemInterface
     {
-        return $this->items[$this->selectedItemIndex];
+        return $this->selectedItemIndex !== null
+            ? $this->items[$this->selectedItemIndex]
+            : $this;
     }
 
     public function getItems() : array
@@ -192,7 +188,7 @@ class SplitItem implements MenuItemInterface
 
     /**
      * Can the item be selected
-     * Not really in this case but that's the trick
+     * In this case, it indicates if at least 1 item inside the SplitItem can be selected
      */
     public function canSelect() : bool
     {
@@ -232,14 +228,10 @@ class SplitItem implements MenuItemInterface
     }
 
     /**
-     * Return the raw string of text
+     * Nothing to return with SplitItem
      */
     public function getText() : string
     {
-        $text = [];
-        foreach ($this->items as $item) {
-            $text[] = $item->getText();
-        }
-        return explode(' - ', $text);
+        throw new \BadMethodCallException(sprintf('Not supported on: %s', SplitItem::class));
     }
 }
