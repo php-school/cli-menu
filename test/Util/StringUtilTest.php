@@ -28,11 +28,11 @@ class StringUtilTest extends TestCase
     {
 
         $result = StringUtil::wordwrap($this->dummyText, 80);
-        $expected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor \n" .
-            "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis \n" .
-            "nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \n" .
-            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu \n" .
-            "fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in \n" .
+        $expected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\n" .
+            "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis\n" .
+            "nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n" .
+            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu\n" .
+            "fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in\n" .
             "culpa qui officia deserunt mollit anim id est laborum";
 
         self::assertEquals($expected, $result);
@@ -42,13 +42,13 @@ class StringUtilTest extends TestCase
     {
 
         $result = StringUtil::wordwrap($this->dummyText, 60);
-        $expected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, \n" .
-            "sed do eiusmod tempor incididunt ut labore et dolore magna \n" .
-            "aliqua. Ut enim ad minim veniam, quis nostrud exercitation \n" .
-            "ullamco laboris nisi ut aliquip ex ea commodo consequat. \n" .
-            "Duis aute irure dolor in reprehenderit in voluptate velit \n" .
-            "esse cillum dolore eu fugiat nulla pariatur. Excepteur sint \n" .
-            "occaecat cupidatat non proident, sunt in culpa qui officia \n" .
+        $expected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed\n" .
+            "do eiusmod tempor incididunt ut labore et dolore magna\n" .
+            "aliqua. Ut enim ad minim veniam, quis nostrud exercitation\n" .
+            "ullamco laboris nisi ut aliquip ex ea commodo consequat.\n" .
+            "Duis aute irure dolor in reprehenderit in voluptate velit\n" .
+            "esse cillum dolore eu fugiat nulla pariatur. Excepteur sint\n" .
+            "occaecat cupidatat non proident, sunt in culpa qui officia\n" .
             "deserunt mollit anim id est laborum";
 
         self::assertEquals($expected, $result);
@@ -58,13 +58,13 @@ class StringUtilTest extends TestCase
     {
         $result = StringUtil::wordwrap($this->dummyText, 60, 'H');
         
-        $expected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, H" .
-            "sed do eiusmod tempor incididunt ut labore et dolore magna H" .
-            "aliqua. Ut enim ad minim veniam, quis nostrud exercitation H" .
-            "ullamco laboris nisi ut aliquip ex ea commodo consequat. H" .
-            "Duis aute irure dolor in reprehenderit in voluptate velit H" .
-            "esse cillum dolore eu fugiat nulla pariatur. Excepteur sint H" .
-            "occaecat cupidatat non proident, sunt in culpa qui officia H" .
+        $expected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sedH" .
+            "do eiusmod tempor incididunt ut labore et dolore magnaH" .
+            "aliqua. Ut enim ad minim veniam, quis nostrud exercitationH" .
+            "ullamco laboris nisi ut aliquip ex ea commodo consequat.H" .
+            "Duis aute irure dolor in reprehenderit in voluptate velitH" .
+            "esse cillum dolore eu fugiat nulla pariatur. Excepteur sintH" .
+            "occaecat cupidatat non proident, sunt in culpa qui officiaH" .
             "deserunt mollit anim id est laborum";
 
         self::assertEquals($expected, $result);
@@ -84,10 +84,10 @@ class StringUtilTest extends TestCase
 
     public function testSplitItemBug() : void
     {
-        $test = 'item three I guess it isn\'t that bad, is it ?';
+        $test = 'Item three I guess it isn\'t that bad, is it ?';
         
         self::assertEquals(
-            "item three \nI guess it \nisn't that \nbad, is it \n?",
+            "Item three\nI guess it\nisn't that\nbad, is it\n?",
             StringUtil::wordwrap($test, 11)
         );
     }

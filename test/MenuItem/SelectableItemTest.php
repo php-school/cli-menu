@@ -138,9 +138,8 @@ class SelectableItemTest extends TestCase
         }, true);
         $this->assertEquals(
             [
-                " LONG       [EXTRA]",
-                " ITEM ",
-                " LINE"
+                " LONG ITEM  [EXTRA]",
+                " LINE",
             ],
             $item->getRows($menuStyle)
         );
