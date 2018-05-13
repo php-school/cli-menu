@@ -704,8 +704,10 @@ class CliMenuTest extends TestCase
 
         $menu = new CliMenu('PHP School FTW', [], $this->terminal);
         $menu->addItem(new SelectableItem('One', $action));
-        $menu->addItem(new SplitItem(
-            [new SelectableItem('Two', $splitAction), new SelectableItem('Three', $splitAction)])
+        $menu->addItem(
+            new SplitItem(
+                [new SelectableItem('Two', $splitAction), new SelectableItem('Three', $splitAction)]
+            )
         );
         $menu->addItem(new SelectableItem('Four', $action));
 
@@ -729,8 +731,10 @@ class CliMenuTest extends TestCase
 
         $menu = new CliMenu('PHP School FTW', [], $this->terminal);
         $menu->addItem(new SelectableItem('One', $action));
-        $menu->addItem(new SplitItem(
-            [new SelectableItem('Two', $splitAction), new SelectableItem('Three', $splitAction)])
+        $menu->addItem(
+            new SplitItem(
+                [new SelectableItem('Two', $splitAction), new SelectableItem('Three', $splitAction)]
+            )
         );
         $menu->addItem(new SelectableItem('Four', $action));
 

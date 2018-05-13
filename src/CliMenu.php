@@ -323,13 +323,13 @@ class CliMenu
 
     /**
      * Can the currently selected item actually be selected?
-     * 
+     *
      * For example:
      *  selectable item -> yes
      *  static item -> no
      *  split item with only static items -> no
      *  split item with at least one selectable item -> yes
-     * 
+     *
      * @return bool
      */
     private function canSelect() : bool
@@ -339,7 +339,7 @@ class CliMenu
 
     /**
      * Retrieve the item the user actually selected
-     * 
+     *
      */
     public function getSelectedItem() : MenuItemInterface
     {
