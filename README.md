@@ -44,6 +44,8 @@
       * [Ascii Art Item](#ascii-art-item)
       * [Sub Menu Item](#sub-menu-item)
     * [Disabling Items & Sub Menus](#disabling-items--sub-menus)
+    * [Item Markers](#item-markers)
+    * [Menu Title](#menu-title)
     * [Redrawing the Menu](#redrawing-the-menu)
     * [Getting, Removing and Adding items](#getting-removing-and-adding-items)
     * [Custom Control Mapping](#custom-control-mapping)
@@ -369,6 +371,8 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
+##### Item Markers
+
 The marker displayed by the side of the currently active item can be modified, UTF-8 characters are supported.
 The marker for un-selected items can also be modified. If you want to disable it, just set it to a space character.
 
@@ -381,6 +385,8 @@ $menu = (new CliMenuBuilder)
     ->setUnselectedMarker(' ')
     ->build();
 ```
+
+##### Menu Title
 
 You can give your menu a title and you can customise the separator, a line which displays under the title.
 Whatever string you pass to `setTitleSeparator` will be repeated for the width of the Menu.
