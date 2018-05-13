@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpSchool\CliMenu;
+namespace PhpSchool\CliMenu\Builder;
 
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;

@@ -1,16 +1,15 @@
 <?php
 
-namespace PhpSchool\CliMenu;
+namespace PhpSchool\CliMenu\Builder;
 
 use PhpSchool\CliMenu\Action\ExitAction;
 use PhpSchool\CliMenu\Action\GoBackAction;
 use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
-use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
-use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
-use PhpSchool\CliMenu\MenuItem\StaticItem;
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\CliMenu\Util\ColourUtil;
 use PhpSchool\Terminal\Terminal;

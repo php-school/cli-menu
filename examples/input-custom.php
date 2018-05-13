@@ -1,7 +1,7 @@
 <?php
 
 use PhpSchool\CliMenu\CliMenu;
-use PhpSchool\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\Input\Text;
 use PhpSchool\CliMenu\Input\InputIO;
 use PhpSchool\CliMenu\MenuStyle;

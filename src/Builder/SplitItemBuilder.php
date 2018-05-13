@@ -1,8 +1,10 @@
 <?php
 
-namespace PhpSchool\CliMenu;
+namespace PhpSchool\CliMenu\Builder;
 
+use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
+use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\Terminal\Terminal;
 
 /**
