@@ -188,7 +188,7 @@ class SplitItem implements MenuItemInterface
 
     /**
      * Can the item be selected
-     * Not really in this case but that's the trick
+     * In this case, it indicates if at least 1 item inside the SplitItem can be selected
      */
     public function canSelect() : bool
     {
@@ -228,14 +228,10 @@ class SplitItem implements MenuItemInterface
     }
 
     /**
-     * Return the raw string of text
+     * Nothing to return with SplitItem
      */
     public function getText() : string
     {
-        $text = [];
-        foreach ($this->items as $item) {
-            $text[] = $item->getText();
-        }
-        return explode(' - ', $text);
+        throw new \BadMethodCallException(sprintf('Not supported on: %s', SplitItem::class));
     }
 }
