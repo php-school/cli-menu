@@ -59,11 +59,11 @@ class StringUtilTest extends TestCase
         $result = StringUtil::wordwrap($this->dummyText, 60, 'H');
         
         $expected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, H" .
-            "sed do eiusmod tempor incididunt ut labore et dolore magna H" . 
+            "sed do eiusmod tempor incididunt ut labore et dolore magna H" .
             "aliqua. Ut enim ad minim veniam, quis nostrud exercitation H" .
             "ullamco laboris nisi ut aliquip ex ea commodo consequat. H" .
             "Duis aute irure dolor in reprehenderit in voluptate velit H" .
-            "esse cillum dolore eu fugiat nulla pariatur. Excepteur sint H" . 
+            "esse cillum dolore eu fugiat nulla pariatur. Excepteur sint H" .
             "occaecat cupidatat non proident, sunt in culpa qui officia H" .
             "deserunt mollit anim id est laborum";
 
@@ -87,7 +87,7 @@ class StringUtilTest extends TestCase
         $test = 'item three I guess it isn\'t that bad, is it ?';
         
         self::assertEquals(
-            "item three \nI guess it \nisn't that \nbad, is it \n?", 
+            "item three \nI guess it \nisn't that \nbad, is it \n?",
             StringUtil::wordwrap($test, 11)
         );
     }
