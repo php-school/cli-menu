@@ -12,6 +12,7 @@ use PhpSchool\CliMenu\Input\Password;
 use PhpSchool\CliMenu\Input\Text;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
+use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Dialogue\Confirm;
 use PhpSchool\CliMenu\Dialogue\Flash;
@@ -256,6 +257,8 @@ class CliMenu
             switch ($char->getControl()) {
                 case InputCharacter::UP:
                 case InputCharacter::DOWN:
+                case InputCharacter::LEFT:
+                case InputCharacter::RIGHT:
                     $this->moveSelection($char->getControl());
                     $this->draw();
                     break;
@@ -272,25 +275,57 @@ class CliMenu
     protected function moveSelection(string $direction) : void
     {
         do {
-            $itemKeys = array_keys($this->items);
+            if ($direction === 'UP' || $direction === 'DOWN') {
+                $itemKeys = array_keys($this->items);
 
-            $direction === 'UP'
-                ? $this->selectedItem--
-                : $this->selectedItem++;
+                $direction === 'UP'
+                    ? $this->selectedItem--
+                    : $this->selectedItem++;
 
-            if (!array_key_exists($this->selectedItem, $this->items)) {
-                $this->selectedItem  = $direction === 'UP'
-                    ? end($itemKeys)
-                    : reset($itemKeys);
-            } elseif ($this->getSelectedItem()->canSelect()) {
-                return;
+                if (!array_key_exists($this->selectedItem, $this->items)) {
+                    $this->selectedItem  = $direction === 'UP'
+                        ? end($itemKeys)
+                        : reset($itemKeys);
+                } elseif ($this->getSelectedItem()->canSelect()) {
+                    return;
+                }
+            } else {
+                $item = $this->getSelectedItem(true);
+                if (!$item instanceof SplitItem) {
+                    return;
+                }
+
+                $itemKeys = array_keys($item->getItems());
+                $selectedItemIndex = $item->getSelectedItemIndex();
+                $direction === 'LEFT'
+                    ? $selectedItemIndex--
+                    : $selectedItemIndex++;
+                $item->setSelectedItemIndex($selectedItemIndex);
+
+                if (!array_key_exists($selectedItemIndex, $item->getItems())) {
+                    $selectedItemIndex = $direction === 'LEFT'
+                        ? end($itemKeys)
+                        : reset($itemKeys);
+                    $item->setSelectedItemIndex($selectedItemIndex);
+                } elseif ($item->getItems()[$item->getSelectedItemIndex()]->canSelect()) {
+                    return;
+                }
             }
         } while (!$this->getSelectedItem()->canSelect());
     }
 
-    public function getSelectedItem() : MenuItemInterface
+    public function getSelectedItem(bool $oneLevelDeep = false) : MenuItemInterface
     {
-        return $this->items[$this->selectedItem];
+        if ($oneLevelDeep) {
+            return $this->items[$this->selectedItem];
+        } else {
+            $item = $this->items[$this->selectedItem];
+            if ($item instanceof SplitItem) {
+                $item = $item->getItems()[$item->getSelectedItemIndex()];
+            }
+
+            return $item;
+        }
     }
 
     /**
@@ -385,6 +420,10 @@ class CliMenu
     protected function drawMenuItem(MenuItemInterface $item, bool $selected = false) : array
     {
         $rows = $item->getRows($this->style, $selected);
+        
+        if ($item instanceof SplitItem) {
+            $selected = false;
+        }
 
         $invertedColoursSetCode = $selected
             ? $this->style->getInvertedColoursSetCode()

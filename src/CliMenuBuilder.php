@@ -9,6 +9,7 @@ use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
+use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\CliMenu\Util\ColourUtil;
@@ -30,6 +31,8 @@ class CliMenuBuilder
      * @var null|self
      */
     private $parent;
+
+    private $previousBuilder = null;
 
     /**
      * @var self[]
@@ -81,9 +84,10 @@ class CliMenuBuilder
      */
     private $disabled = false;
 
-    public function __construct(CliMenuBuilder $parent = null)
+    public function __construct(CliMenuBuilder $parent = null, $previousBuilder = null)
     {
         $this->parent   = $parent;
+        $this->previousBuilder = $previousBuilder;
         $this->terminal = $this->parent !== null
             ? $this->parent->getTerminal()
             : TerminalFactory::fromSystem();
@@ -159,6 +163,27 @@ class CliMenuBuilder
 
         $this->subMenuBuilders[$id] = $subMenuBuilder;
         return $this;
+    }
+
+    /**
+     * Injects a submenu directly (without going through the builder
+     */
+    public function injectSubMenu(string $id, CliMenu $subMenu) : CliMenuBuilder
+    {
+        $this->subMenus[$id] = $subMenu;
+
+        return $this;
+    }
+
+    /**
+     * Add a split item
+     */
+    public function addSplitItem() : SplitItem
+    {
+        $splitItem = new SplitItem($this);
+        $this->addMenuItem($splitItem);
+
+        return $splitItem;
     }
 
     /**
@@ -447,8 +472,12 @@ class CliMenuBuilder
      *
      * @throws RuntimeException
      */
-    public function end() : CliMenuBuilder
+    public function end()
     {
+        if (null !== $this->previousBuilder) {
+            return $this->previousBuilder;
+        }
+
         if (null === $this->parent) {
             throw new RuntimeException('No parent builder to return to');
         }
