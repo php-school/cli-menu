@@ -108,7 +108,12 @@ class SplitItem implements MenuItemInterface
             $this->setDefaultSelectedItem();
         }
 
-        $length        = floor($style->getContentWidth() / $numberOfItems) - $this->margin;
+        $length = $style->getDisplaysExtra()
+            ? floor($style->getContentWidth() / $numberOfItems) - (mb_strlen($style->getItemExtra()) + 2)
+            : floor($style->getContentWidth() / $numberOfItems);
+        
+        $length -= $this->margin;
+        
         $missingLength = $style->getContentWidth() % $numberOfItems;
         
         return $this->buildRows(
@@ -118,37 +123,48 @@ class SplitItem implements MenuItemInterface
                     ? sprintf('%s ', $style->getMarker($isSelected))
                     : '';
 
+                $itemExtra = '';
+                if ($style->getDisplaysExtra()) {
+                    $itemExtra = $item->showsItemExtra()
+                        ? sprintf('  %s', $style->getItemExtra())
+                        : sprintf('  %s', str_repeat(' ', mb_strlen($style->getItemExtra())));
+                }
+
                 return $this->buildCell(
                     explode("\n", StringUtil::wordwrap(sprintf('%s%s', $marker, $item->getText()), $length)),
                     $length,
                     $style,
-                    $isSelected
+                    $isSelected,
+                    $itemExtra
                 );
             }, array_keys($this->items), $this->items),
+            $style,
             $missingLength,
             $length
         );
     }
 
-    private function buildRows(array $cells, int $missingLength, int $length) : array
+    private function buildRows(array $cells, MenuStyle $style, int $missingLength, int $length) : array
     {
+        $extraPadLength = $style->getDisplaysExtra() ? 2 + mb_strlen($style->getItemExtra()) : 0;
+        
         return array_map(
-            function ($i) use ($cells, $length, $missingLength) {
-                return $this->buildRow($cells, $i, $length, $missingLength);
+            function ($i) use ($cells, $length, $missingLength, $extraPadLength) {
+                return $this->buildRow($cells, $i, $length, $missingLength, $extraPadLength);
             },
             range(0, max(array_map('count', $cells)) - 1)
         );
     }
 
-    private function buildRow(array $cells, int $index, int $length, int $missingLength) : string
+    private function buildRow(array $cells, int $index, int $length, int $missingLength, int $extraPadLength) : string
     {
         return sprintf(
             '%s%s',
             implode(
                 '',
                 array_map(
-                    function ($cell) use ($index, $length) {
-                        return $cell[$index] ?? str_repeat(' ', $length + $this->margin);
+                    function ($cell) use ($index, $length, $extraPadLength) {
+                        return $cell[$index] ?? str_repeat(' ', $length + $this->margin + $extraPadLength);
                     },
                     $cells
                 )
@@ -157,9 +173,14 @@ class SplitItem implements MenuItemInterface
         );
     }
 
-    private function buildCell(array $content, int $length, MenuStyle $style, bool $isSelected) : array
-    {
-        return array_map(function ($row) use ($length, $style, $isSelected) {
+    private function buildCell(
+        array $content,
+        int $length,
+        MenuStyle $style,
+        bool $isSelected,
+        string $itemExtra
+    ) : array {
+        return array_map(function ($row, $index) use ($length, $style, $isSelected, $itemExtra) {
             $invertedColoursSetCode = $isSelected
                 ? $style->getInvertedColoursSetCode()
                 : '';
@@ -168,14 +189,15 @@ class SplitItem implements MenuItemInterface
                 : '';
 
             return sprintf(
-                '%s%s%s%s%s',
+                '%s%s%s%s%s%s',
                 $invertedColoursSetCode,
                 $row,
                 str_repeat(' ', $length - mb_strlen($row)),
+                $index === 0 ? $itemExtra : str_repeat(' ', mb_strlen($itemExtra)),
                 $invertedColoursUnsetCode,
                 str_repeat(' ', $this->margin)
             );
-        }, $content);
+        }, $content, array_keys($content));
     }
 
     public function setSelectedItemIndex(int $index) : void

@@ -262,6 +262,111 @@ class SplitItemTest extends TestCase
             $item->getRows($menuStyle, true)
         );
     }
+
+    public function testGetRowsWithItemExtra() : void
+    {
+        $menuStyle = $this->createMock(MenuStyle::class);
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getContentWidth')
+            ->will($this->returnValue(50));
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getItemExtra')
+            ->will($this->returnValue('[EXTRA]'));
+        
+        $menuStyle
+            ->expects($this->any())
+            ->method('getDisplaysExtra')
+            ->willReturn(true);
+
+        $item = new SplitItem(
+            [
+                new SelectableItem('Item 1', function () {
+                }, true),
+                new SelectableItem('Item 2', function () {
+                }, true)
+            ]
+        );
+        
+        self::assertEquals([' Item 1         [EXTRA]   Item 2         [EXTRA]  '], $item->getRows($menuStyle));
+    }
+
+    public function testGetRowsWithMultipleLinesWithItemExtra() : void
+    {
+        $menuStyle = $this->createMock(MenuStyle::class);
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getContentWidth')
+            ->will($this->returnValue(50));
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getItemExtra')
+            ->will($this->returnValue('[EXTRA]'));
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getDisplaysExtra')
+            ->willReturn(true);
+
+        $item = new SplitItem(
+            [
+                new SelectableItem("Item 1\nItem 1", function () {
+                }, true),
+                new SelectableItem("Item 2\nItem 2", function () {
+                }, true)
+            ]
+        );
+
+        self::assertEquals(
+            [
+                ' Item 1         [EXTRA]   Item 2         [EXTRA]  ',
+                'Item 1                   Item 2                   ',
+            ],
+            $item->getRows($menuStyle)
+        );
+    }
+
+    public function testGetRowsWithMultipleLinesWithItemExtraOnOne() : void
+    {
+        $menuStyle = $this->createMock(MenuStyle::class);
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getContentWidth')
+            ->will($this->returnValue(50));
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getItemExtra')
+            ->will($this->returnValue('[EXTRA]'));
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getDisplaysExtra')
+            ->willReturn(true);
+
+        $item = new SplitItem(
+            [
+                new SelectableItem("Item 1\nItem 1", function () {
+                }),
+                new SelectableItem("Item 2\nItem 2", function () {
+                }, true)
+            ]
+        );
+
+        self::assertEquals(
+            [
+                ' Item 1                   Item 2         [EXTRA]  ',
+                'Item 1                   Item 2                   ',
+            ],
+            $item->getRows($menuStyle)
+        );
+    }
     
     public function testGetTextThrowsAnException() : void
     {
