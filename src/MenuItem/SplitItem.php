@@ -112,16 +112,16 @@ class SplitItem implements MenuItemInterface
         
         $missingLength = $style->getContentWidth() % $numberOfItems;
 
-        $lines = 0;
-        $cells = [];
-        foreach ($this->items as $index => $item) {
+        $cells = array_map(function ($index, $item) use ($selected, $length, $style) {
             $isSelected = $selected && $index === $this->selectedItemIndex;
-            $marker = sprintf("%s ", $style->getMarker($isSelected));
+            $marker = $item->canSelect()
+                ? sprintf("%s ", $style->getMarker($isSelected))
+                : sprintf("%s ", str_repeat(' ', mb_strlen($style->getMarker(false))));
             $content = StringUtil::wordwrap(
                 sprintf('%s%s', $marker, $item->getText()),
                 $length
             );
-            $cell = array_map(function ($row) use ($length, $style, $isSelected) {
+            return array_map(function ($row) use ($length, $style, $isSelected) {
                 $invertedColoursSetCode = $isSelected
                     ? $style->getInvertedColoursSetCode()
                     : '';
@@ -138,12 +138,9 @@ class SplitItem implements MenuItemInterface
                     str_repeat(' ', $this->margin)
                 );
             }, explode("\n", $content));
-            $lineCount = count($cell);
-            if ($lineCount > $lines) {
-                $lines = $lineCount;
-            }
-            $cells[] = $cell;
-        }
+        }, array_keys($this->items), $this->items);
+
+        $lines = max(array_map('count', $cells));
 
         $rows = [];
         for ($i = 0; $i < $lines; $i++) {
@@ -172,7 +169,7 @@ class SplitItem implements MenuItemInterface
         $this->selectedItemIndex = $index;
     }
 
-    public function getSelectedItemIndex()
+    public function getSelectedItemIndex() : ?int
     {
         return $this->selectedItemIndex;
     }
