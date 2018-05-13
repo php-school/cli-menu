@@ -278,4 +278,15 @@ class SplitItemTest extends TestCase
         
         (new SplitItem([]))->getRows($this->createMock(MenuStyle::class));
     }
+
+    public function testCanBeSelectedReturnsTrueWhenItContainsSelectableItems() : void
+    {
+        self::assertTrue((new SplitItem([new SelectableItem('One', function () {})]))->canSelect());
+    }
+
+    public function testCanBeSelectedReturnsFalseWhenItContainsNoSelectableItems() : void
+    {
+        self::assertFalse((new SplitItem([new StaticItem('One')]))->canSelect());
+    }
+
 }
