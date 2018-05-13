@@ -6,6 +6,8 @@ use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Exception\MenuNotOpenException;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
+use PhpSchool\CliMenu\MenuItem\SplitItem;
+use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\Terminal\Terminal;
 use PhpSchool\Terminal\UnixTerminal;
@@ -665,6 +667,167 @@ class CliMenuTest extends TestCase
         
         $menu->removeCustomControlMapping('c');
         self::assertSame([], $this->readAttribute($menu, 'customControlMappings'));
+    }
+
+    public function testSplitItemWithNoSelectableItemsScrollingVertically() : void
+    {
+        $this->terminal->expects($this->exactly(3))
+            ->method('read')
+            ->willReturn("\033[B", "\033[B", "\n");
+        
+        $action = function (CliMenu $menu) {
+            $menu->close();
+        };
+        
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+        $menu->addItem(new SelectableItem('One', $action));
+        $menu->addItem(new SplitItem([new StaticItem('Two'), new StaticItem('Three')]));
+        $menu->addItem(new SelectableItem('Four', $action));
+        
+        $menu->open();
+
+        self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+
+    public function testSplitItemWithSelectableItemsScrollingVertical() : void
+    {
+        $this->terminal->expects($this->exactly(4))
+            ->method('read')
+            ->willReturn("\033[B", "\033[B", "\033[B", "\n");
+
+        $action = function (CliMenu $menu) {
+            $menu->close();
+        };
+
+        $splitAction = function (CliMenu $menu) {
+        };
+
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+        $menu->addItem(new SelectableItem('One', $action));
+        $menu->addItem(new SplitItem(
+            [new SelectableItem('Two', $splitAction), new SelectableItem('Three', $splitAction)])
+        );
+        $menu->addItem(new SelectableItem('Four', $action));
+
+        $menu->open();
+
+        self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+
+    public function testSplitItemWithSelectableItemsScrollingRight() : void
+    {
+        $this->terminal->expects($this->exactly(6))
+            ->method('read')
+            ->willReturn("\033[B", "\033[C", "\033[C", "\033[C", "\033[B", "\n");
+
+        $action = function (CliMenu $menu) {
+            $menu->close();
+        };
+
+        $splitAction = function (CliMenu $menu) {
+        };
+
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+        $menu->addItem(new SelectableItem('One', $action));
+        $menu->addItem(new SplitItem(
+            [new SelectableItem('Two', $splitAction), new SelectableItem('Three', $splitAction)])
+        );
+        $menu->addItem(new SelectableItem('Four', $action));
+
+        $menu->open();
+
+        self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+
+    public function testSplitItemWithSelectableItemsScrollingLeft() : void
+    {
+        $this->terminal->expects($this->exactly(6))
+            ->method('read')
+            ->willReturn("\033[B", "\033[D", "\033[D", "\033[D", "\033[B", "\n");
+
+        $action = function (CliMenu $menu) {
+            $menu->close();
+        };
+
+        $splitAction = function (CliMenu $menu) {
+        };
+
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+        $menu->addItem(new SelectableItem('One', $action));
+        $menu->addItem(
+            new SplitItem(
+                [
+                    new SelectableItem('Two', $splitAction),
+                    new SelectableItem('Three', $splitAction),
+                    new SelectableItem('Four', $splitAction),
+                ]
+            )
+        );
+        $menu->addItem(new SelectableItem('Five', $action));
+
+        $menu->open();
+
+        self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+
+    public function testSplitItemWithSelectableAndStaticItemsScrollingHorizontally() : void
+    {
+        $this->terminal->expects($this->exactly(6))
+            ->method('read')
+            ->willReturn("\033[B", "\033[D", "\033[D", "\033[D", "\033[B", "\n");
+
+        $action = function (CliMenu $menu) {
+            $menu->close();
+        };
+
+        $splitAction = function (CliMenu $menu) {
+        };
+
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+        $menu->addItem(new SelectableItem('One', $action));
+        $menu->addItem(
+            new SplitItem(
+                [
+                    new SelectableItem('Two', $splitAction),
+                    new StaticItem('Three'),
+                    new SelectableItem('Four', $splitAction),
+                ]
+            )
+        );
+        $menu->addItem(new SelectableItem('Five', $action));
+
+        $menu->open();
+
+        self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+
+
+    public function testSelectableCallableReceivesSelectableAndNotSplitItem() : void
+    {
+        $this->terminal->expects($this->exactly(1))
+            ->method('read')
+            ->willReturn("\n");
+
+        $actualSelectedItem = null;
+        $action = function (CliMenu $menu) use (&$actualSelectedItem) {
+            $actualSelectedItem = $menu->getSelectedItem();
+            $menu->close();
+        };
+
+        $expectedSelectedItem  = new SelectableItem('Two', $action);
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+        $menu->addItem(
+            new SplitItem(
+                [
+                    $expectedSelectedItem,
+                    new StaticItem('Three'),
+                    new SelectableItem('Four', $action),
+                ]
+            )
+        );
+        $menu->open();
+        
+        self::assertSame($expectedSelectedItem, $actualSelectedItem);
     }
 
     private function getTestFile() : string

@@ -431,11 +431,27 @@ class SplitItemTest extends TestCase
         self::assertSame($item2, $splitItem->getSelectedItem());
     }
 
-    public function testGetSelectedItemReturnsSplitItemWhenNoSelectableItemExists() : void
+    public function testGetSelectedItemThrowsExceptionWhenNoSelectableItemExists() : void
     {
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionMessage('No item is selected');
+        
         $item1 = new StaticItem('One');
 
         $splitItem = new SplitItem([$item1]);
         self::assertSame($splitItem, $splitItem->getSelectedItem());
+    }
+
+    public function testCanSelectIndex() : void
+    {
+        $item1 = new StaticItem('One');
+        $item2 = new SelectableItem('Two', function () {
+        });
+
+        $splitItem = new SplitItem([$item1, $item2]);
+        
+        self::assertFalse($splitItem->canSelectIndex(0));
+        self::assertFalse($splitItem->canSelectIndex(5));
+        self::assertTrue($splitItem->canSelectIndex(1));
     }
 }

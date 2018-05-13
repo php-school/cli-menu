@@ -289,7 +289,7 @@ class CliMenu
                     ? end($itemKeys)
                     : reset($itemKeys);
             }
-        } while (!$this->getSelectedItem()->canSelect());
+        } while (!$this->canSelect());
     }
 
     /**
@@ -301,6 +301,7 @@ class CliMenu
             return;
         }
 
+        /** @var SplitItem $item */
         $item = $this->items[$this->selectedItem];
         $itemKeys = array_keys($item->getItems());
         $selectedItemIndex = $item->getSelectedItemIndex();
@@ -309,17 +310,37 @@ class CliMenu
             $direction === 'LEFT'
                 ? $selectedItemIndex--
                 : $selectedItemIndex++;
-            $item->setSelectedItemIndex($selectedItemIndex);
 
             if (!array_key_exists($selectedItemIndex, $item->getItems())) {
                 $selectedItemIndex = $direction === 'LEFT'
                     ? end($itemKeys)
                     : reset($itemKeys);
-                $item->setSelectedItemIndex($selectedItemIndex);
             }
-        } while (!$item->getSelectedItem()->canSelect());
+        } while (!$item->canSelectIndex($selectedItemIndex));
+        
+        $item->setSelectedItemIndex($selectedItemIndex);
     }
 
+    /**
+     * Can the currently selected item actually be selected?
+     * 
+     * For example:
+     *  selectable item -> no
+     *  static item -> no
+     *  split item with static items -> no
+     *  split item with selectable item -> yes
+     * 
+     * @return bool
+     */
+    private function canSelect() : bool
+    {
+        return $this->items[$this->selectedItem]->canSelect();
+    }
+
+    /**
+     * Retrieve the item the user actually selected
+     * 
+     */
     public function getSelectedItem() : MenuItemInterface
     {
         $item = $this->items[$this->selectedItem];
