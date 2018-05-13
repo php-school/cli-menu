@@ -251,6 +251,6 @@ class SplitItem implements MenuItemInterface
      */
     public function getText() : string
     {
-        throw new \BadMethodCallException(sprintf('Not supported on: %s', SplitItem::class));
+        throw new \BadMethodCallException(sprintf('Not supported on: %s', __CLASS__));
     }
 }
