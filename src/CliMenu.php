@@ -257,9 +257,12 @@ class CliMenu
             switch ($char->getControl()) {
                 case InputCharacter::UP:
                 case InputCharacter::DOWN:
+                    $this->moveSelectionVertically($char->getControl());
+                    $this->draw();
+                    break;
                 case InputCharacter::LEFT:
                 case InputCharacter::RIGHT:
-                    $this->moveSelection($char->getControl());
+                    $this->moveSelectionHorizontally($char->getControl());
                     $this->draw();
                     break;
                 case InputCharacter::ENTER:
@@ -272,60 +275,57 @@ class CliMenu
     /**
      * Move the selection in a given direction, up / down
      */
-    protected function moveSelection(string $direction) : void
+    protected function moveSelectionVertically(string $direction) : void
     {
+        $itemKeys = array_keys($this->items);
+
         do {
-            if ($direction === 'UP' || $direction === 'DOWN') {
-                $itemKeys = array_keys($this->items);
+            $direction === 'UP'
+                ? $this->selectedItem--
+                : $this->selectedItem++;
 
-                $direction === 'UP'
-                    ? $this->selectedItem--
-                    : $this->selectedItem++;
-
-                if (!array_key_exists($this->selectedItem, $this->items)) {
-                    $this->selectedItem  = $direction === 'UP'
-                        ? end($itemKeys)
-                        : reset($itemKeys);
-                } elseif ($this->getSelectedItem()->canSelect()) {
-                    return;
-                }
-            } else {
-                $item = $this->getSelectedItem(true);
-                if (!$item instanceof SplitItem) {
-                    return;
-                }
-
-                $itemKeys = array_keys($item->getItems());
-                $selectedItemIndex = $item->getSelectedItemIndex();
-                $direction === 'LEFT'
-                    ? $selectedItemIndex--
-                    : $selectedItemIndex++;
-                $item->setSelectedItemIndex($selectedItemIndex);
-
-                if (!array_key_exists($selectedItemIndex, $item->getItems())) {
-                    $selectedItemIndex = $direction === 'LEFT'
-                        ? end($itemKeys)
-                        : reset($itemKeys);
-                    $item->setSelectedItemIndex($selectedItemIndex);
-                } elseif ($item->getItems()[$item->getSelectedItemIndex()]->canSelect()) {
-                    return;
-                }
+            if (!array_key_exists($this->selectedItem, $this->items)) {
+                $this->selectedItem  = $direction === 'UP'
+                    ? end($itemKeys)
+                    : reset($itemKeys);
             }
         } while (!$this->getSelectedItem()->canSelect());
     }
 
-    public function getSelectedItem(bool $oneLevelDeep = false) : MenuItemInterface
+    /**
+     * Move the selection in a given direction, left / right
+     */
+    protected function moveSelectionHorizontally(string $direction) : void
     {
-        if ($oneLevelDeep) {
-            return $this->items[$this->selectedItem];
-        } else {
-            $item = $this->items[$this->selectedItem];
-            if ($item instanceof SplitItem) {
-                $item = $item->getItems()[$item->getSelectedItemIndex()];
-            }
-
-            return $item;
+        if (!$this->items[$this->selectedItem] instanceof SplitItem) {
+            return;
         }
+
+        $item = $this->items[$this->selectedItem];
+        $itemKeys = array_keys($item->getItems());
+        $selectedItemIndex = $item->getSelectedItemIndex();
+
+        do {
+            $direction === 'LEFT'
+                ? $selectedItemIndex--
+                : $selectedItemIndex++;
+            $item->setSelectedItemIndex($selectedItemIndex);
+
+            if (!array_key_exists($selectedItemIndex, $item->getItems())) {
+                $selectedItemIndex = $direction === 'LEFT'
+                    ? end($itemKeys)
+                    : reset($itemKeys);
+                $item->setSelectedItemIndex($selectedItemIndex);
+            }
+        } while (!$item->getSelectedItem()->canSelect());
+    }
+
+    public function getSelectedItem() : MenuItemInterface
+    {
+        $item = $this->items[$this->selectedItem];
+        return $item instanceof SplitItem
+            ? $item->getSelectedItem()
+            : $item;
     }
 
     /**
