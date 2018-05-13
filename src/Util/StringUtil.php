@@ -18,8 +18,9 @@ class StringUtil
             $length += (mb_strlen($word) + 1);
 
             if ($length > $width) {
-                $length = mb_strlen($break);
-                return sprintf('%s%s', $break, $word);
+                $word = sprintf('%s%s', $break, $word);
+                $length = mb_strlen($word);
+                return $word;
             }
 
             return $word;
