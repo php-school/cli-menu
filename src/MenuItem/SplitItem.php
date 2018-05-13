@@ -100,6 +100,10 @@ class SplitItem implements MenuItemInterface
     {
         $numberOfItems = count($this->items);
 
+        if ($numberOfItems === 0) {
+            throw new \RuntimeException(sprintf('There should be at least one item added to: %s', __CLASS__));
+        }
+        
         if (!$selected) {
             $this->setDefaultSelectedItem();
         }

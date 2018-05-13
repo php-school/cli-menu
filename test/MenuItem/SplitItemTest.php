@@ -271,4 +271,12 @@ class SplitItemTest extends TestCase
         
         (new SplitItem([]))->getText();
     }
+
+    public function testGetRowsThrowsAnExceptionIfNoItemsWereAdded() : void
+    {
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionMessage(sprintf('There should be at least one item added to: %s', SplitItem::class));
+        
+        (new SplitItem([]))->getRows($this->createMock(MenuStyle::class));
+    }
 }
