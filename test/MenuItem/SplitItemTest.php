@@ -82,7 +82,6 @@ class SplitItemTest extends TestCase
         $splitItem->addItem($item2);
 
         self::assertEquals([$item1, $item2], $splitItem->getItems());
-
     }
 
     public function testAddItems() : void
