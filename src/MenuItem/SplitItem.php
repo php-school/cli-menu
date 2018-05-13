@@ -135,7 +135,7 @@ class SplitItem implements MenuItemInterface
     }
 
     private function buildRows(array $cells, int $missingLength, int $length) : array
-    {   
+    {
         return array_map(
             function ($i) use ($cells, $length, $missingLength) {
                 return $this->buildRow($cells, $i, $length, $missingLength);
@@ -162,7 +162,7 @@ class SplitItem implements MenuItemInterface
     }
 
     private function buildCell(array $content, int $length, MenuStyle $style, bool $isSelected) : array
-    {        
+    {
         return array_map(function ($row) use ($length, $style, $isSelected) {
             $invertedColoursSetCode = $isSelected
                 ? $style->getInvertedColoursSetCode()
