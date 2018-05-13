@@ -16,7 +16,7 @@ class SplitItem implements MenuItemInterface
     /**
      * @var array
      */
-    private $items;
+    private $items = [];
 
     /**
      * @var int|null
@@ -44,8 +44,7 @@ class SplitItem implements MenuItemInterface
 
     public function __construct(array $items = [])
     {
-        $this->items = $items;
-
+        $this->addMenuItems($items);
         $this->setDefaultSelectedItem();
     }
 
@@ -115,8 +114,8 @@ class SplitItem implements MenuItemInterface
         $cells = array_map(function ($index, $item) use ($selected, $length, $style) {
             $isSelected = $selected && $index === $this->selectedItemIndex;
             $marker = $item->canSelect()
-                ? sprintf("%s ", $style->getMarker($isSelected))
-                : sprintf("%s ", str_repeat(' ', mb_strlen($style->getMarker(false))));
+                ? sprintf('%s ', $style->getMarker($isSelected))
+                : '';
             $content = StringUtil::wordwrap(
                 sprintf('%s%s', $marker, $item->getText()),
                 $length
@@ -145,9 +144,6 @@ class SplitItem implements MenuItemInterface
         $rows = [];
         for ($i = 0; $i < $lines; $i++) {
             $row = "";
-            if ($i > 0) {
-                $row .= str_repeat(' ', 2);
-            }
             foreach ($cells as $cell) {
                 if (isset($cell[$i])) {
                     $row .= $cell[$i];
