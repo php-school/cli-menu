@@ -44,11 +44,11 @@ class SplitItem implements MenuItemInterface
 
     public function __construct(array $items = [])
     {
-        $this->addMenuItems($items);
+        $this->addItems($items);
         $this->setDefaultSelectedItem();
     }
 
-    public function addMenuItem(MenuItemInterface $item) : self
+    public function addItem(MenuItemInterface $item) : self
     {
         foreach (self::$blacklistedItems as $bl) {
             if ($item instanceof $bl) {
@@ -60,18 +60,19 @@ class SplitItem implements MenuItemInterface
         return $this;
     }
 
-    public function addMenuItems(array $items) : self
+    public function addItems(array $items) : self
     {
         foreach ($items as $item) {
-            $this->addMenuItem($item);
+            $this->addItem($item);
         }
+            
         return $this;
     }
 
     public function setItems(array $items) : self
     {
         $this->items = [];
-        $this->addMenuItems($items);
+        $this->addItems($items);
         return $this;
     }
 

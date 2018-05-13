@@ -31,29 +31,29 @@ class SplitItemTest extends TestCase
     /**
      * @dataProvider blacklistedItemProvider
      */
-    public function testAddMenuItemsWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem) : void
+    public function testAddItemsWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem) : void
     {
         self::expectExceptionMessage(\InvalidArgumentException::class);
         self::expectExceptionMessage(sprintf('Cannot add a %s to a SplitItem', get_class($menuItem)));
 
-        (new SplitItem([]))->addMenuItems([$menuItem]);
+        (new SplitItem([]))->addItems([$menuItem]);
     }
 
     /**
      * @dataProvider blacklistedItemProvider
      */
-    public function testAddMenuItemWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem) : void
+    public function testAddItemWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem) : void
     {
         self::expectExceptionMessage(\InvalidArgumentException::class);
         self::expectExceptionMessage(sprintf('Cannot add a %s to a SplitItem', get_class($menuItem)));
 
-        (new SplitItem([]))->addMenuItem($menuItem);
+        (new SplitItem([]))->addItem($menuItem);
     }
 
     /**
      * @dataProvider blacklistedItemProvider
      */
-    public function testSetMenuItemsWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem) : void
+    public function testSetItemsWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem) : void
     {
         self::expectExceptionMessage(\InvalidArgumentException::class);
         self::expectExceptionMessage(sprintf('Cannot add a %s to a SplitItem', get_class($menuItem)));
