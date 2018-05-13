@@ -114,16 +114,6 @@ class CliMenuBuilder implements Builder
     }
 
     /**
-     * Injects a submenu directly (without going through the builder
-     */
-    public function injectSubMenu(string $id, CliMenu $subMenu) : CliMenuBuilder
-    {
-        $this->subMenus[$id] = $subMenu;
-
-        return $this;
-    }
-
-    /**
      * Add a split item
      */
     public function addSplitItem() : SplitItemBuilder
