@@ -348,7 +348,26 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-Note: This will also disable the Go Back button for sub menus.
+Note: This will also disable the Go Back button for sub menus. 
+
+You can manually add exit and go back buttons using the following:
+
+```php
+use PhpSchool\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\Action\ExitAction;
+use \PhpSchool\CliMenu\Action\GoBackAction;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$menu = (new CliMenuBuilder)
+    ->disableDefaultItems()
+    ->addSubMenu('Super Sub Menu')
+        ->setTitle('Behold the awesomeness')
+        ->addItem('Return to parent menu', new GoBackAction) //add a go back button
+        ->end()
+    ->addItem('Leave this place now !', new ExitAction) //add an exit button
+    ->build();
+```
 
 The marker displayed by the side of the currently active item can be modified, UTF-8 characters are supported.
 The marker for un-selected items can also be modified. If you want to disable it, just set it to a space character.
