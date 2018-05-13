@@ -108,12 +108,7 @@ class SplitItem implements MenuItemInterface
             $this->setDefaultSelectedItem();
         }
 
-        $length = $style->getDisplaysExtra()
-            ? floor(($style->getContentWidth() - mb_strlen($style->getItemExtra()) + 2) / $numberOfItems)
-            : floor($style->getContentWidth() / $numberOfItems);
-
-        $length -= $this->margin;
-
+        $length        = floor($style->getContentWidth() / $numberOfItems) - $this->margin;
         $missingLength = $style->getContentWidth() % $numberOfItems;
 
         if ($missingLength < 1) {
@@ -157,7 +152,7 @@ class SplitItem implements MenuItemInterface
                 '',
                 array_map(
                     function ($cell) use ($index, $length) {
-                        return $cell[$index] ?? str_repeat(' ', $length);
+                        return $cell[$index] ?? str_repeat(' ', $length + $this->margin);
                     },
                     $cells
                 )
