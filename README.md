@@ -30,12 +30,15 @@
     * [Examples](#examples)
   * [API](#api)
     * [Appearance](#appearance)
+      * [Menu Title](#menu-title)
+      * [Colour](#colour)
       * [Width](#width)
       * [Padding](#padding)
       * [Margin](#margin)
       * [Borders](#borders)
       * [Exit Button Text](#exit-button-text)
       * [Remove Exit Button](#remove-exit-button)
+    * [Item Markers](#item-markers)
     * [Item Extra](#item-extra)
     * [Items](#appearance)
       * [Selectable Item](#selectable-item)
@@ -44,11 +47,10 @@
       * [Ascii Art Item](#ascii-art-item)
       * [Sub Menu Item](#sub-menu-item)
     * [Disabling Items & Sub Menus](#disabling-items--sub-menus)
-    * [Item Markers](#item-markers)
-    * [Menu Title](#menu-title)
-    * [Redrawing the Menu](#redrawing-the-menu)
-    * [Getting, Removing and Adding items](#getting-removing-and-adding-items)
-    * [Custom Control Mapping](#custom-control-mapping)
+    * [Menu Methods](#menu-methods)
+      * [Redrawing the Menu](#redrawing-the-menu)
+      * [Getting, Removing and Adding items](#getting-removing-and-adding-items)
+      * [Custom Control Mapping](#custom-control-mapping)
     * [Dialogues](#dialogues)
       * [Flash](#flash)
       * [Confirm](#confirm)
@@ -186,6 +188,18 @@ $menu->close();
 ```
 
 #### Appearance
+
+##### Menu Title
+
+You can give your menu a title and you can customise the separator, a line which displays under the title.
+Whatever string you pass to `setTitleSeparator` will be repeated for the width of the Menu.
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setTitle('One Menu to rule them all!')
+    ->setTitleSeparator('*-')
+    ->build();
+```
 
 ##### Colour
 
@@ -383,18 +397,6 @@ $menu = (new CliMenuBuilder)
     
     //disable unselected marker
     ->setUnselectedMarker(' ')
-    ->build();
-```
-
-##### Menu Title
-
-You can give your menu a title and you can customise the separator, a line which displays under the title.
-Whatever string you pass to `setTitleSeparator` will be repeated for the width of the Menu.
-
-```php
-$menu = (new CliMenuBuilder)
-    ->setTitle('One Menu to rule them all!')
-    ->setTitleSeparator('*-')
     ->build();
 ```
 
@@ -603,6 +605,11 @@ $menu = (new CliMenuBuilder)
 The third param on the `->addItem` call is what disables an item while the `->disableMenu()` call disables the relevent menu. 
 
 The outcome is a full menu with dimmed rows to denote them being disabled. When a user navigates these items are jumped over to the next available selectable item.
+
+### Menu Methods
+
+The next set of documentation applies to methods available directly on the `\PhpSchool\CliMenu\CliMenu` instance. Typically
+you will invoke these methods whilst your menu is open in you action callbacks.
 
 #### Redrawing the Menu
 
