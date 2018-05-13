@@ -19,7 +19,7 @@ class SplitItem implements MenuItemInterface
     private $items;
 
     /**
-     * @var int
+     * @var int|null
      */
     private $selectedItemIndex;
 
@@ -172,17 +172,16 @@ class SplitItem implements MenuItemInterface
         $this->selectedItemIndex = $index;
     }
 
-    public function getSelectedItemIndex() : int
+    public function getSelectedItemIndex()
     {
-        if ($this->selectedItemIndex === null) {
-            return 0;
-        }
         return $this->selectedItemIndex;
     }
 
     public function getSelectedItem() : MenuItemInterface
     {
-        return $this->items[$this->selectedItemIndex];
+        return $this->selectedItemIndex !== null
+            ? $this->items[$this->selectedItemIndex]
+            : $this;
     }
 
     public function getItems() : array
