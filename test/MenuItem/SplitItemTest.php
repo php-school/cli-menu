@@ -125,8 +125,10 @@ class SplitItemTest extends TestCase
 
         $item = new SplitItem(
             [
-                new SelectableItem('Item One', function () {}),
-                new SelectableItem('Item Two', function () {})
+                new SelectableItem('Item One', function () {
+                }),
+                new SelectableItem('Item Two', function () {
+                })
             ]
         );
 
@@ -170,10 +172,14 @@ class SplitItemTest extends TestCase
             ->with(false)
             ->will($this->returnValue('*'));
 
-        $item = new SplitItem([
-            new SelectableItem("Item\nOne", function () {}),
-            new SelectableItem("Item\nTwo", function () {})
-        ]);
+        $item = new SplitItem(
+            [
+                new SelectableItem("Item\nOne", function () {
+                }),
+                new SelectableItem("Item\nTwo", function () {
+                })
+            ]
+        );
 
         self::assertEquals(
             [
@@ -196,12 +202,16 @@ class SplitItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getMarker')
-            ->willReturnMap([[true, '='], [false, '*']]); 
+            ->willReturnMap([[true, '='], [false, '*']]);
 
-        $item = new SplitItem([
-            new SelectableItem("Item\nOne", function () {}),
-            new SelectableItem("Item\nTwo", function () {})
-        ]);
+        $item = new SplitItem(
+            [
+                new SelectableItem("Item\nOne", function () {
+                }),
+                new SelectableItem("Item\nTwo", function () {
+                })
+            ]
+        );
         
         $item->setSelectedItemIndex(0);
 
