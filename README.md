@@ -231,7 +231,8 @@ $menu = (new CliMenuBuilder)
 ##### Width
 
 Customise the width of the menu. Setting a value larger than the size of the terminal will result in
-the width being the same as the terminal size.
+the width being the same as the terminal size. The width will include the padding and the border. So with a width of 100
+and all around border of 5 and all around padding of 5 will leave for a content width of 80 (5 + 5 + 80 + 5 + 5).
 
 ```php
 $menu = (new CliMenuBuilder)
