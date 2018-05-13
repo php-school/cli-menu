@@ -70,6 +70,46 @@ class SplitItemTest extends TestCase
         ];
     }
 
+    public function testAddItem() : void
+    {
+        $item1 = new StaticItem('One');
+        $item2 = new StaticItem('Two');
+        $splitItem = new SplitItem();
+        $splitItem->addItem($item1);
+        
+        self::assertEquals([$item1], $splitItem->getItems());
+
+        $splitItem->addItem($item2);
+
+        self::assertEquals([$item1, $item2], $splitItem->getItems());
+
+    }
+
+    public function testAddItems() : void
+    {
+        $item1 = new StaticItem('One');
+        $item2 = new StaticItem('Two');
+        $splitItem = new SplitItem();
+        $splitItem->addItems([$item1]);
+
+        self::assertEquals([$item1], $splitItem->getItems());
+        
+        $splitItem->addItems([$item2]);
+
+        self::assertEquals([$item1, $item2], $splitItem->getItems());
+    }
+
+    public function testSetItems() : void
+    {
+        $item1 = new StaticItem('One');
+        $item2 = new StaticItem('Two');
+        $item3 = new StaticItem('Three');
+        $splitItem = new SplitItem([$item1]);
+        $splitItem->setItems([$item2, $item3]);
+
+        self::assertEquals([$item2, $item3], $splitItem->getItems());
+    }
+
     public function testGetItems() : void
     {
         $item = new StaticItem('test');
