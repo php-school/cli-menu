@@ -184,6 +184,10 @@ class SplitItem implements MenuItemInterface
 
     public function setSelectedItemIndex(int $index) : void
     {
+        if (!isset($this->items[$index])) {
+            throw new \InvalidArgumentException(sprintf('Index: "%s" does not exist', $index));
+        }
+        
         $this->selectedItemIndex = $index;
     }
 

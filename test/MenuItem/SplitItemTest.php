@@ -281,7 +281,7 @@ class SplitItemTest extends TestCase
 
     public function testCanBeSelectedReturnsTrueWhenItContainsSelectableItems() : void
     {
-        self::assertTrue((new SplitItem([new SelectableItem('One', function () {})]))->canSelect());
+        self::assertTrue((new SplitItem([new SelectableItem('One', 'strlen')]))->canSelect());
     }
 
     public function testCanBeSelectedReturnsFalseWhenItContainsNoSelectableItems() : void
@@ -289,4 +289,48 @@ class SplitItemTest extends TestCase
         self::assertFalse((new SplitItem([new StaticItem('One')]))->canSelect());
     }
 
+    public function testGetSelectedItemIndexWhenSelectableItemExists() : void
+    {
+        $item1 = new StaticItem('One');
+        $item2 = new SelectableItem('Two', function () {
+        });
+        
+        $splitItem = new SplitItem([$item1, $item2]);
+        
+        self::assertEquals(1, $splitItem->getSelectedItemIndex());
+    }
+
+    public function testGetSelectedItemIndexWhenNoSelectableItemExists() : void
+    {
+        $item1 = new StaticItem('One');
+        $splitItem = new SplitItem([$item1]);
+
+        self::assertNull($splitItem->getSelectedItemIndex());
+    }
+
+    public function testSetSelectedItemIndexThrowsExceptionIsIndexDoesNotExist() : void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('Index: "2" does not exist');
+        
+        (new SplitItem([]))->setSelectedItemIndex(2);
+    }
+
+    public function testGetSelectedItemReturnsItem() : void
+    {
+        $item1 = new StaticItem('One');
+        $item2 = new SelectableItem('Two', function () {
+        });
+
+        $splitItem = new SplitItem([$item1, $item2]);
+        self::assertSame($item2, $splitItem->getSelectedItem());
+    }
+
+    public function testGetSelectedItemReturnsSplitItemWhenNoSelectableItemExists() : void
+    {
+        $item1 = new StaticItem('One');
+
+        $splitItem = new SplitItem([$item1]);
+        self::assertSame($splitItem, $splitItem->getSelectedItem());
+    }
 }
