@@ -125,7 +125,8 @@ class MenuMenuItemTest extends TestCase
         $this->assertEquals(
             [
                 " LONG ",
-                " ITEM LINE"
+                " ITEM ",
+                " LINE"
             ],
             $item->getRows($menuStyle)
         );
