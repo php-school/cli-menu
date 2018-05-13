@@ -16,7 +16,7 @@ class SplitItem implements MenuItemInterface
     /**
      * @var array
      */
-    private $items;
+    private $items = [];
 
     /**
      * @var int|null
@@ -44,12 +44,11 @@ class SplitItem implements MenuItemInterface
 
     public function __construct(array $items = [])
     {
-        $this->items = $items;
-
+        $this->addItems($items);
         $this->setDefaultSelectedItem();
     }
 
-    public function addMenuItem(MenuItemInterface $item) : self
+    public function addItem(MenuItemInterface $item) : self
     {
         foreach (self::$blacklistedItems as $bl) {
             if ($item instanceof $bl) {
@@ -61,18 +60,19 @@ class SplitItem implements MenuItemInterface
         return $this;
     }
 
-    public function addMenuItems(array $items) : self
+    public function addItems(array $items) : self
     {
         foreach ($items as $item) {
-            $this->addMenuItem($item);
+            $this->addItem($item);
         }
+            
         return $this;
     }
-    
+
     public function setItems(array $items) : self
     {
         $this->items = [];
-        $this->addMenuItems($items);
+        $this->addItems($items);
         return $this;
     }
 
@@ -100,72 +100,90 @@ class SplitItem implements MenuItemInterface
     {
         $numberOfItems = count($this->items);
 
+        if ($numberOfItems === 0) {
+            throw new \RuntimeException(sprintf('There should be at least one item added to: %s', __CLASS__));
+        }
+        
         if (!$selected) {
             $this->setDefaultSelectedItem();
         }
 
-        $length = $style->getDisplaysExtra()
-            ? floor(($style->getContentWidth() - mb_strlen($style->getItemExtra()) + 2) / $numberOfItems)
-            : floor($style->getContentWidth() / $numberOfItems);
-            
-        $length -= $this->margin;
-        
+        $length        = floor($style->getContentWidth() / $numberOfItems) - $this->margin;
         $missingLength = $style->getContentWidth() % $numberOfItems;
-
-        $cells = array_map(function ($index, $item) use ($selected, $length, $style) {
-            $isSelected = $selected && $index === $this->selectedItemIndex;
-            $marker = $item->canSelect()
-                ? sprintf("%s ", $style->getMarker($isSelected))
-                : sprintf("%s ", str_repeat(' ', mb_strlen($style->getMarker(false))));
-            $content = StringUtil::wordwrap(
-                sprintf('%s%s', $marker, $item->getText()),
-                $length
-            );
-            return array_map(function ($row) use ($length, $style, $isSelected) {
-                $invertedColoursSetCode = $isSelected
-                    ? $style->getInvertedColoursSetCode()
-                    : '';
-                $invertedColoursUnsetCode = $isSelected
-                    ? $style->getInvertedColoursUnsetCode()
+        
+        return $this->buildRows(
+            array_map(function ($index, $item) use ($selected, $length, $style) {
+                $isSelected = $selected && $index === $this->selectedItemIndex;
+                $marker = $item->canSelect()
+                    ? sprintf('%s ', $style->getMarker($isSelected))
                     : '';
 
-                return sprintf(
-                    "%s%s%s%s%s",
-                    $invertedColoursSetCode,
-                    $row,
-                    str_repeat(' ', $length - mb_strlen($row)),
-                    $invertedColoursUnsetCode,
-                    str_repeat(' ', $this->margin)
+                return $this->buildCell(
+                    explode("\n", StringUtil::wordwrap(sprintf('%s%s', $marker, $item->getText()), $length)),
+                    $length,
+                    $style,
+                    $isSelected
                 );
-            }, explode("\n", $content));
-        }, array_keys($this->items), $this->items);
+            }, array_keys($this->items), $this->items),
+            $missingLength,
+            $length
+        );
+    }
 
-        $lines = max(array_map('count', $cells));
+    private function buildRows(array $cells, int $missingLength, int $length) : array
+    {
+        return array_map(
+            function ($i) use ($cells, $length, $missingLength) {
+                return $this->buildRow($cells, $i, $length, $missingLength);
+            },
+            range(0, max(array_map('count', $cells)) - 1)
+        );
+    }
 
-        $rows = [];
-        for ($i = 0; $i < $lines; $i++) {
-            $row = "";
-            if ($i > 0) {
-                $row .= str_repeat(' ', 2);
-            }
-            foreach ($cells as $cell) {
-                if (isset($cell[$i])) {
-                    $row .= $cell[$i];
-                } else {
-                    $row .= str_repeat(' ', $length);
-                }
-            }
-            if ($missingLength) {
-                $row .= str_repeat(' ', $missingLength);
-            }
-            $rows[] = $row;
-        }
+    private function buildRow(array $cells, int $index, int $length, int $missingLength) : string
+    {
+        return sprintf(
+            '%s%s',
+            implode(
+                '',
+                array_map(
+                    function ($cell) use ($index, $length) {
+                        return $cell[$index] ?? str_repeat(' ', $length + $this->margin);
+                    },
+                    $cells
+                )
+            ),
+            str_repeat(' ', $missingLength)
+        );
+    }
 
-        return $rows;
+    private function buildCell(array $content, int $length, MenuStyle $style, bool $isSelected) : array
+    {
+        return array_map(function ($row) use ($length, $style, $isSelected) {
+            $invertedColoursSetCode = $isSelected
+                ? $style->getInvertedColoursSetCode()
+                : '';
+            $invertedColoursUnsetCode = $isSelected
+                ? $style->getInvertedColoursUnsetCode()
+                : '';
+
+            return sprintf(
+                '%s%s%s%s%s',
+                $invertedColoursSetCode,
+                $row,
+                str_repeat(' ', $length - mb_strlen($row)),
+                $invertedColoursUnsetCode,
+                str_repeat(' ', $this->margin)
+            );
+        }, $content);
     }
 
     public function setSelectedItemIndex(int $index) : void
     {
+        if (!isset($this->items[$index])) {
+            throw new \InvalidArgumentException(sprintf('Index: "%s" does not exist', $index));
+        }
+        
         $this->selectedItemIndex = $index;
     }
 
@@ -232,6 +250,6 @@ class SplitItem implements MenuItemInterface
      */
     public function getText() : string
     {
-        throw new \BadMethodCallException(sprintf('Not supported on: %s', SplitItem::class));
+        throw new \BadMethodCallException(sprintf('Not supported on: %s', __CLASS__));
     }
 }
