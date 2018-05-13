@@ -325,10 +325,10 @@ class CliMenu
      * Can the currently selected item actually be selected?
      * 
      * For example:
-     *  selectable item -> no
+     *  selectable item -> yes
      *  static item -> no
-     *  split item with static items -> no
-     *  split item with selectable item -> yes
+     *  split item with only static items -> no
+     *  split item with at least one selectable item -> yes
      * 
      * @return bool
      */
