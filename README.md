@@ -259,6 +259,14 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
+Configure top/bottom and left/right padding using the shorthand method:
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setPadding(10, 5) //top/bottom = 10, left/right = 5
+    ->build();
+```
+
 ##### Margin
 
 The margin can be customised as one value. It is only applied to the left side of the menu. It can also be
