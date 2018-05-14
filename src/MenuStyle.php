@@ -517,7 +517,7 @@ class MenuStyle
 
     public function setSelectedMarker(string $marker) : self
     {
-        $this->selectedMarker = mb_substr($marker, 0, 1);
+        $this->selectedMarker = $marker;
 
         return $this;
     }
@@ -529,7 +529,7 @@ class MenuStyle
 
     public function setUnselectedMarker(string $marker) : self
     {
-        $this->unselectedMarker = mb_substr($marker, 0, 1);
+        $this->unselectedMarker = $marker;
 
         return $this;
     }
