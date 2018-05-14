@@ -14,12 +14,12 @@ $menu = (new CliMenuBuilder)
     ->addItem('First Item', $itemCallable)
     ->addItem('Second Item', $itemCallable)
     ->addLineBreak('-')
-    ->addSubMenu('Options')
+    ->addSubMenu('sub-menu-1', 'Options')
         ->setTitle('CLI Menu > Options')
         ->addItem('First option', function (CliMenu $menu) {
             echo sprintf('Executing option: %s', $menu->getSelectedItem()->getText());
         })
-        ->addSubMenu('Secret Options')
+        ->addSubMenu('sub-menu-nested-1', 'Secret Options')
             ->setTitle('CLI Menu > Options > Secret Options')
             ->addItem('First secret option', function (CliMenu $menu) {
                 echo sprintf('Executing secret option: %s', $menu->getSelectedItem()->getText());

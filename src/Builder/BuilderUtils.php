@@ -62,10 +62,20 @@ trait BuilderUtils
      * Add a submenu with a name. The name will be displayed as the item text
      * in the parent menu.
      */
-    public function addSubMenu(string $name, CliMenuBuilder $subMenuBuilder = null) : Builder
+    public function addSubMenu(string $id, string $text, CliMenuBuilder $subMenuBuilder = null) : Builder
     {
-        $this->menuItems[]  = $id = 'submenu-placeholder-' . $name;
-
+        if (isset($this->subMenuBuilders[$id])) {
+            throw new \InvalidArgumentException(
+                sprintf('SubMenu with id: "%s" already exists. $id must be unique', $id)
+            );
+        }
+        
+        $this->menuItems[] = [
+            'type' => 'submenu-placeholder',
+            'text' => $text,
+            'id'   => $id
+        ];
+        
         if (null === $subMenuBuilder) {
             $this->subMenuBuilders[$id] = new CliMenuBuilder($this);
             return $this->subMenuBuilders[$id];
@@ -78,16 +88,16 @@ trait BuilderUtils
     private function buildSubMenus(array $items) : array
     {
         return array_map(function ($item) {
-            if (!is_string($item) || 0 !== strpos($item, 'submenu-placeholder-')) {
+            if (!is_array($item) || $item['type'] !== 'submenu-placeholder') {
                 return $item;
             }
 
-            $menuBuilder           = $this->subMenuBuilders[$item];
-            $this->subMenus[$item] = $menuBuilder->build();
+            $menuBuilder                 = $this->subMenuBuilders[$item['id']];
+            $this->subMenus[$item['id']] = $menuBuilder->build();
 
             return new MenuMenuItem(
-                substr($item, \strlen('submenu-placeholder-')),
-                $this->subMenus[$item],
+                $item['text'],
+                $this->subMenus[$item['id']],
                 $menuBuilder->isMenuDisabled()
             );
         }, $items);

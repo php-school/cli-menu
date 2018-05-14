@@ -483,7 +483,7 @@ class CliMenuBuilderTest extends TestCase
     {
         $builder = new CliMenuBuilder;
         $builder->disableDefaultItems();
-        $subMenuBuilder = $builder->addSubMenu('sub-menu');
+        $subMenuBuilder = $builder->addSubMenu('sub-menu', 'My SubMenu');
         
         $menu = $builder->build();
         
@@ -504,7 +504,7 @@ class CliMenuBuilderTest extends TestCase
         
         $builder = new CliMenuBuilder;
         $builder->disableDefaultItems();
-        $builder->addSubMenu('sub-menu', $subMenuBuilder);
+        $builder->addSubMenu('sub-menu', 'My SubMenu', $subMenuBuilder);
 
         $menu = $builder->build();
 
@@ -515,11 +515,36 @@ class CliMenuBuilderTest extends TestCase
         ]);
     }
 
+    public function testAddSubMenuWithBuilderThrowsExceptionOnNonUniqueId() : void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('SubMenu with id: "sub-menu" already exists. $id must be unique');
+        
+        $subMenuBuilder = new CliMenuBuilder;
+
+        $builder = new CliMenuBuilder;
+        $builder->addSubMenu('sub-menu', 'My SubMenu', $subMenuBuilder);
+        $builder->addSubMenu('sub-menu', 'My Other SubMenu', $subMenuBuilder);
+    }
+
+    public function testAddSubMenuUsesTextParameterAsMenuItemText() : void
+    {
+        $subMenuBuilder = new CliMenuBuilder;
+
+        $builder = new CliMenuBuilder;
+        $builder->disableDefaultItems();
+        $builder->addSubMenu('sub-menu', 'My SubMenu', $subMenuBuilder);
+
+        $menu = $builder->build();
+
+        self::assertEquals('My SubMenu', $menu->getItems()[0]->getText());
+    }
+
     public function testSubMenuInheritsParentsStyle() : void
     {
         $builder = new CliMenuBuilder;
         $menu = $builder->setBackgroundColour('green')
-            ->addSubMenu('sub-menu')
+            ->addSubMenu('sub-menu', 'My SubMenu')
                 ->addItem('Some Item', function () {
                 })
                 ->end()
@@ -532,7 +557,7 @@ class CliMenuBuilderTest extends TestCase
     {
         $builder = new CliMenuBuilder;
         $menu = $builder->setBackgroundColour('green')
-            ->addSubMenu('sub-menu')
+            ->addSubMenu('sub-menu', 'My SubMenu')
                 ->addItem('Some Item', function () {
                 })
                 ->setBackgroundColour('red')
@@ -547,7 +572,7 @@ class CliMenuBuilderTest extends TestCase
     {
         $builder = (new CliMenuBuilder)
             ->disableDefaultItems()
-            ->addSubMenu('sub-menu')
+            ->addSubMenu('sub-menu', 'My SubMenu')
                 ->end();
         
         $this->expectException(RuntimeException::class);
@@ -560,7 +585,7 @@ class CliMenuBuilderTest extends TestCase
     {
         $builder = (new CliMenuBuilder)
             ->disableDefaultItems()
-            ->addSubMenu('sub-menu')
+            ->addSubMenu('sub-menu', 'My SubMenu')
                 ->end();
         
         $menu       = $builder->build();
@@ -575,7 +600,7 @@ class CliMenuBuilderTest extends TestCase
     {
         $builder = (new CliMenuBuilder)
             ->disableDefaultItems()
-            ->addSubMenu('sub-menu')
+            ->addSubMenu('sub-menu', 'My SubMenu')
             ->end();
 
         $menu       = $builder->build();
@@ -599,7 +624,7 @@ class CliMenuBuilderTest extends TestCase
     {
         $builder = (new CliMenuBuilder)
             ->disableDefaultItems()
-            ->addSubMenu('sub-menu')
+            ->addSubMenu('sub-menu', 'My SubMenu')
                 ->setExitButtonText("Won't you stay a little while longer?")
                 ->setGoBackButtonText("Don't click this - it's definitely not a go back button")
                 ->end();
@@ -625,7 +650,7 @@ class CliMenuBuilderTest extends TestCase
     {
         $builder = (new CliMenuBuilder)
             ->disableDefaultItems()
-            ->addSubMenu('sub-menu')
+            ->addSubMenu('sub-menu', 'My SubMenu')
                 ->disableDefaultItems()
                 ->end();
 

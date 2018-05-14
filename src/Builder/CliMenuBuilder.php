@@ -413,7 +413,7 @@ class CliMenuBuilder implements Builder
             throw new RuntimeException(sprintf('Menu: "%s" cannot be retrieved until menu has been built', $id));
         }
 
-        return $this->subMenus['submenu-placeholder-' . $id];
+        return $this->subMenus[$id];
     }
     
     private function buildSplitItems(array $items) : array

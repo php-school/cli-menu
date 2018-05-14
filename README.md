@@ -447,7 +447,7 @@ use PhpSchool\CliMenu\Action\GoBackAction;
 
 $menu = (new CliMenuBuilder)
     ->disableDefaultItems()
-    ->addSubMenu('Super Sub Menu')
+    ->addSubMenu('sub-menu-1', 'Super Sub Menu')
         ->setTitle('Behold the awesomeness')
         ->addItem('Return to parent menu', new GoBackAction) //add a go back button
         ->end()
@@ -589,7 +589,7 @@ $callable = function (CliMenu $menu) {
 
 $menu = (new CliMenuBuilder)
     ->addItem('Normal Item', $callable)
-    ->addSubMenu('Super Sub Menu')
+    ->addSubMenu('sub-menu-1', 'Super Sub Menu')
         ->setTitle('Behold the awesomeness')
         ->addItem(/** **/)
         ->end()
@@ -600,18 +600,19 @@ In this example a single sub menu will be created. Upon entering the sub menu, y
 or exit completely. A Go Back button will be automatically added, you can customise this text like so:
 
 ```php
-->addSubMenu('Super Sub Menu')
+->addSubMenu('sub-menu-1', 'Super Sub Menu')
     ->setTitle('Behold the awesomeness')
     ->setGoBackButtonText('Descend to chaos')
 ```    
 
 There are a few things to note about the syntax and builder process here
 
-1. `addSubMenu` returns an instance of `CliMenuBuilder` so you can can customise exactly the same way you would the parent.
-2. If you do not modify the styles of the sub menu (eg, colours) it will inherit styles from the parent!
-3. You can call `end()` on the sub menu `CliMenuBuilder` instance to get the parent `CliMenuBuilder` back again. This is useful for chaining.
+1. The first parameter to `addSubMenu` must be a unique id to reference the sub menu. The second parameter is the text to be displayed on the menu which you select to enter the submenu.
+2. `addSubMenu` returns an instance of `CliMenuBuilder` so you can can customise exactly the same way you would the parent.
+3. If you do not modify the styles of the sub menu (eg, colours) it will inherit styles from the parent!
+4. You can call `end()` on the sub menu `CliMenuBuilder` instance to get the parent `CliMenuBuilder` back again. This is useful for chaining.
 
-If you need the `CliMenu` instance of the Sub Menu you can grab it after the main menu has been built.
+If you need the `CliMenu` instance of the Sub Menu you can grab it after the main menu has been built using the unique id you passed to `addSubMenu.
 
 ```php
 <?php
@@ -619,10 +620,10 @@ If you need the `CliMenu` instance of the Sub Menu you can grab it after the mai
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 
 $mainMenuBuilder = new CliMenuBuilder;
-$subMenuBuilder = $mainMenuBuilder->addSubMenu('Super Sub Menu');
+$subMenuBuilder = $mainMenuBuilder->addSubMenu('sub-menu-1', 'Super Sub Menu');
 
 $menu = $mainMenuBuilder->build();
-$subMenu = $mainMenuBuilder->getSubMenu('Super Sub Menu');
+$subMenu = $mainMenuBuilder->getSubMenu('sub-menu-1');
 ```
 
 You can only do this after the main menu has been built, this is because the main menu builder takes care of building all sub menus.
@@ -639,7 +640,7 @@ $subMenuBuilder = (new CliMenuBuilder)
     ->addItem(/** **/);
 
 $menu = (new CliMenuBuilder)
-    ->addSubMenu('Super Sub Menu', $subMenuBuilder)
+    ->addSubMenu('sub-menu-1', 'Super Sub Menu', $subMenuBuilder)
     ->build();
 ```
 
@@ -650,7 +651,7 @@ you can get it via `$menuMenuItem->getSubMenu()`.
 
 ### Disabling Items & Sub Menus
 
-In this example we are disabling certain items and a submenu but still having them shown in the output. 
+In this example we are disabling certain items and a submenu but still having them shown in the menu. 
 
 ```php
 <?php
@@ -667,11 +668,11 @@ $menu = (new CliMenuBuilder)
     ->addItem('First Item', $itemCallable)
     ->addItem('Second Item', $itemCallable, false, true)
     ->addItem('Third Item', $itemCallable, false, true)
-    ->addSubMenu('Submenu')
+    ->addSubMenu('sub-menu-1', 'Submenu')
         ->setTitle('Basic CLI Menu Disabled Items > Submenu')
         ->addItem('You can go in here!', $itemCallable)
         ->end()
-    ->addSubMenu('Disabled Submenu')
+    ->addSubMenu('sub-menu-2', 'Disabled Submenu')
         ->setTitle('Basic CLI Menu Disabled Items > Disabled Submenu')
         ->addItem('Nope can\'t see this!', $itemCallable)
         ->disableMenu()
@@ -680,7 +681,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-The third param on the `->addItem` call is what disables an item while the `->disableMenu()` call disables the relevent menu. 
+The third param on the `->addItem` call is what disables an item while the `->disableMenu()` call disables the relevant menu. 
 
 The outcome is a full menu with dimmed rows to denote them being disabled. When a user navigates these items are jumped over to the next available selectable item.
 

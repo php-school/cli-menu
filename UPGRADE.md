@@ -12,3 +12,6 @@ or backwards compatibility (BC) breakages occur.
   `3.1`.
 * Removed `PhpSchool\CliMenu\Terminal` namespace, the code has been migrated to the `php-school/terminal` package and is 
   largely modified.
+* Method `addSubMenu` in '\PhpSchool\CliMenu\Builder\CliMenuBuilder' has an additional required parameter
+  added at the beginning of the parameter list. It must be a unique ID for the submenu. The method can be found in the trait
+  `\PhpSchool\CliMenu\Builder\BuilderUtils`.
