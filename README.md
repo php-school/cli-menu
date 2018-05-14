@@ -740,7 +740,7 @@ below we change the background color on the flash to green.
 
 ```php
 use PhpSchool\CliMenu\CliMenu;
-use PhpSchool\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
     
@@ -768,7 +768,7 @@ text can be customised.
 
 ```php
 use PhpSchool\CliMenu\CliMenu;
-use PhpSchool\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
@@ -808,7 +808,7 @@ placeholder text (the default is empty) and the validation failed text (the defa
 <?php
 
 use PhpSchool\CliMenu\CliMenu;
-use PhpSchool\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
@@ -844,7 +844,7 @@ When entering a number you can use the up/down keys to increment and decrement t
 <?php
 
 use PhpSchool\CliMenu\CliMenu;
-use PhpSchool\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
@@ -881,7 +881,7 @@ Ask for a password with the default validation:
 <?php
 
 use PhpSchool\CliMenu\CliMenu;
-use PhpSchool\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
@@ -918,7 +918,7 @@ password is longer than 20 characters.
 <?php
 
 use PhpSchool\CliMenu\CliMenu;
-use PhpSchool\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
@@ -951,7 +951,7 @@ Ask for a password with custom validation and set the validation failure message
 <?php
 
 use PhpSchool\CliMenu\CliMenu;
-use PhpSchool\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
@@ -997,7 +997,7 @@ your menu item actions like so:
 <?php
 
 use PhpSchool\CliMenu\CliMenu;
-use PhpSchool\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\Input\Text;
 use PhpSchool\CliMenu\Input\InputIO;
 
@@ -1041,7 +1041,7 @@ you can build up a `MenuStyle` object and pass it to the dialogue and input meth
 
 ```php
 use PhpSchool\CliMenu\CliMenu;
-use PhpSchool\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
