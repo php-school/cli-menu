@@ -27,7 +27,8 @@
     "autoload" : {
         "psr-4" : {
             "PhpSchool\\CliMenu\\": "src"
-        }
+        },
+        "files": ["src/deprecated.php"]
     },
     "autoload-dev": {
         "psr-4": { "PhpSchool\\CliMenuTest\\": "test/" }

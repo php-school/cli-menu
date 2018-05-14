@@ -1,7 +1,8 @@
 <?php
 
-namespace PhpSchool\CliMenu;
+namespace PhpSchool\CliMenu\Builder;
 
+use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\Terminal\Terminal;
 
 /**
