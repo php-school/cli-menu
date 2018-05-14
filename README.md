@@ -25,6 +25,7 @@
 
   * [Minimum Requirements](#minimum-requirements)
   * [Installation](#installation)
+  * [Upgrading](#upgrading)
   * [Usage](#usage)
     * [Quick Setup](#quick-setup)
     * [Examples](#examples)
@@ -74,6 +75,11 @@
 ```bash
 composer require php-school/cli-menu
 ```
+
+## Upgrading
+
+Please refer to the [Upgrade Documentation](UPGRADE.md) documentation to see what is required to upgrade your installed 
+`cli-menu` version.
 
 ## Usage
 
