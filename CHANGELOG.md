@@ -41,6 +41,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
  - Enable cursor when exiting menu (#110)
  - Fixed (#71) - changed padding calculation when row too long to stop php notices (#112)
  - Fixed wordwrap helper (#134)
+ - Fixed infinite loop when no selectable items exist in menu (#144, #148)
  
 ### Removed
  - Dropped PHP 5.x and PHP 7.0 support (#79)

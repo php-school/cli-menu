@@ -88,6 +88,11 @@ class CliMenu
      */
     private $currentFrame;
 
+    /**
+     * @var bool
+     */
+    private $hasSelectableItems = false;
+
     public function __construct(
         ?string $title,
         array $items,
@@ -277,6 +282,10 @@ class CliMenu
      */
     protected function moveSelectionVertically(string $direction) : void
     {
+        if (!$this->hasSelectableItems) {
+            return;
+        }
+        
         $itemKeys = array_keys($this->items);
 
         do {
@@ -493,6 +502,11 @@ class CliMenu
 
         $this->configureTerminal();
         $this->open = true;
+        
+        $this->hasSelectableItems = array_reduce($this->items, function (bool $carry, MenuItemInterface $item) {
+            return $carry || $item->canSelect();
+        }, false);
+        
         $this->display();
     }
 
