@@ -17,6 +17,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
  - Use parent menu terminal when creating sub menus to reduce object graph (#94)
  - Do not print right margin. Causes menu to wrap even when row fits in terminal (#116)
  - CliMenu throws a \RuntimeException if it is opened with no items added (#146, #130)
+ - Add $id parameter to CliMenuBuilder#addSubMenu to fix issue with adding multiple sub menus (#131, #147)
  
 ### Added
  - Added type hints everywhere (#79)
