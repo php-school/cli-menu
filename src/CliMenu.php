@@ -486,6 +486,10 @@ class CliMenu
         if ($this->isOpen()) {
             return;
         }
+        
+        if (count($this->items) === 0) {
+            throw new \RuntimeException('Menu must have at least 1 item before it can be opened');
+        }
 
         $this->configureTerminal();
         $this->open = true;

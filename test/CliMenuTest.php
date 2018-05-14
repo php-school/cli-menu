@@ -359,9 +359,17 @@ class CliMenuTest extends TestCase
             ->method('isInteractive')
             ->willReturn(false);
 
-        $menu = new CliMenu('PHP School FTW', [], $terminal);
+        $menu = new CliMenu('PHP School FTW', [new StaticItem('One')], $terminal);
 
         $menu->open();
+    }
+
+    public function testOpenThrowsExceptionIfNoItemsInMenu() : void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Menu must have at least 1 item before it can be opened');
+        
+        (new CliMenu('PHP School FTW', [], $this->terminal))->open();
     }
 
     public function testGetTerminal() : void
