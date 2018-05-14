@@ -16,6 +16,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
  - Optimise redrawing to reduce flickering (#83)
  - Use parent menu terminal when creating sub menus to reduce object graph (#94)
  - Do not print right margin. Causes menu to wrap even when row fits in terminal (#116)
+ - CliMenu throws a \RuntimeException if it is opened with no items added (#146, #130)
  
 ### Added
  - Added type hints everywhere (#79)
