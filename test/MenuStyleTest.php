@@ -2,11 +2,9 @@
 
 namespace PhpSchool\CliMenuTest;
 
-use PhpSchool\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\MenuStyle;
-use PhpSchool\CliMenu\Util\ColourUtil;
-use PhpSchool\Terminal\Terminal;
 use PhpSchool\Terminal\UnixTerminal;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
