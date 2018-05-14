@@ -200,6 +200,19 @@ class SplitItem implements MenuItemInterface
         }, $content, array_keys($content));
     }
 
+    /**
+     * Is there an item with this index and can it be
+     * selected?
+     */
+    public function canSelectIndex(int $index) : bool
+    {
+        return isset($this->items[$index]) && $this->items[$index]->canSelect();
+    }
+
+    /**
+     * Set the item index which should be selected. If the item does
+     * not exist then throw an exception.
+     */
     public function setSelectedItemIndex(int $index) : void
     {
         if (!isset($this->items[$index])) {
@@ -209,16 +222,26 @@ class SplitItem implements MenuItemInterface
         $this->selectedItemIndex = $index;
     }
 
+    /**
+     * Get the currently select item index.
+     * May be null in case of no selectable item.
+     */
     public function getSelectedItemIndex() : ?int
     {
         return $this->selectedItemIndex;
     }
 
+    /**
+     * Get the currently selected item - if no items are selectable
+     * then throw an exception.
+     */
     public function getSelectedItem() : MenuItemInterface
     {
-        return $this->selectedItemIndex !== null
-            ? $this->items[$this->selectedItemIndex]
-            : $this;
+        if (null === $this->selectedItemIndex) {
+            throw new \RuntimeException('No item is selected');
+        }
+        
+        return $this->items[$this->selectedItemIndex];
     }
 
     public function getItems() : array
