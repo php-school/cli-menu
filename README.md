@@ -30,13 +30,14 @@
     * [Examples](#examples)
   * [API](#api)
     * [Appearance](#appearance)
+      * [Menu Title](#menu-title)
+      * [Colour](#colour)
       * [Width](#width)
       * [Padding](#padding)
       * [Margin](#margin)
       * [Borders](#borders)
       * [Exit Button Text](#exit-button-text)
       * [Remove Exit Button](#remove-exit-button)
-    * [Item Extra](#item-extra)
     * [Items](#appearance)
       * [Selectable Item](#selectable-item)
       * [Line Break Item](#line-break-item)
@@ -44,9 +45,12 @@
       * [Ascii Art Item](#ascii-art-item)
       * [Sub Menu Item](#sub-menu-item)
     * [Disabling Items & Sub Menus](#disabling-items--sub-menus)
-    * [Redrawing the Menu](#redrawing-the-menu)
-    * [Getting, Removing and Adding items](#getting-removing-and-adding-items)
-    * [Custom Control Mapping](#custom-control-mapping)
+    * [Item Markers](#item-markers)
+    * [Item Extra](#item-extra)
+    * [Menu Methods](#menu-methods)
+      * [Redrawing the Menu](#redrawing-the-menu)
+      * [Getting, Removing and Adding items](#getting-removing-and-adding-items)
+      * [Custom Control Mapping](#custom-control-mapping)
     * [Dialogues](#dialogues)
       * [Flash](#flash)
       * [Confirm](#confirm)
@@ -59,21 +63,21 @@
   * [Docs Translations](#docs-translations)
   * [Integrations](#integrations)
 
-### Minimum Requirements
+## Minimum Requirements
 
  * PHP 7.1
  * Composer
  * ext-posix
 
-### Installation
+## Installation
 
 ```bash
 composer require php-school/cli-menu
 ```
 
-### Usage
+## Usage
 
-#### Quick Setup
+### Quick Setup
 Here is a super basic example menu which will echo out the text of the selected item to get you started.
 ```php
 <?php
@@ -102,7 +106,7 @@ $menu = (new CliMenuBuilder)
 $menu->open();
 ```
 
-#### Examples
+### Examples
 
 Check out the [examples](examples) directory and run them to see what is possible! The best way to run the examples is to git clone the repository:
 
@@ -114,57 +118,57 @@ cd examples
 php basic.php
 ```
 
-##### Basic Menu 
+#### Basic Menu 
 <img width="600" alt="basic" src="https://cloud.githubusercontent.com/assets/2817002/11442386/cb0e41a2-950c-11e5-8dd6-913aeab1632a.png">
 
-##### Basic Menu Auto Centered
+#### Basic Menu Auto Centered
 <img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39929334-1c68a450-5538-11e8-947a-e97b21c4fa1a.png">
 
-##### Basic Menu with separation
+#### Basic Menu with separation
 <img width="600" alt="basic-seperation" src="https://cloud.githubusercontent.com/assets/2817002/11442388/cdece950-950c-11e5-8128-4f849a1aea9f.png">
 
-##### Menu with crazy separation
+#### Menu with crazy separation
 <img width="600" alt="crazy-seperation" src="https://cloud.githubusercontent.com/assets/2817002/11442389/d04627fc-950c-11e5-8c80-f82b8fe3f5da.png">
 
-##### Custom Styles
+#### Custom Styles
 <img width="600" alt="custom-styles" src="https://cloud.githubusercontent.com/assets/2817002/11442391/d3d72d1c-950c-11e5-9698-c2aeec002b24.png">
 
-##### Borders and 256 colours
+#### Borders and 256 colours
 <img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39929340-1cee9fce-5538-11e8-91de-eccac734f2a5.png">
 
-##### Useful Separation
+#### Useful Separation
 <img width="600" alt="useful-seperation" src="https://cloud.githubusercontent.com/assets/2817002/11442393/d862c72e-950c-11e5-8cbc-d8c73899627a.png">
 
-##### Displaying Item Extra
+#### Displaying Item Extra
 <img width="600" alt="item-extra" src="https://cloud.githubusercontent.com/assets/2817002/11442395/dfe460f2-950c-11e5-9aed-9bc9c91b7ea6.png">
 
-##### Remove Defaults
+#### Remove Defaults
 <img width="600" alt="remove-defaults" src="https://cloud.githubusercontent.com/assets/2817002/11442399/e3e8b8a6-950c-11e5-8dad-fdd4db93b850.png">
 
-##### Submenu
+#### Submenu
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/11442401/e6f03ef2-950c-11e5-897a-6d55496a4105.png">
 <img width="600" alt="submenu-options" src="https://cloud.githubusercontent.com/assets/2817002/11442403/eaf4782e-950c-11e5-82c5-ab57f84cd6bc.png">
 
-##### Disabled Items & Submenus
+#### Disabled Items & Submenus
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2174476/19047849/868fa8c0-899b-11e6-9004-811c8da6d435.png">
 
-##### Flash Dialogue
+#### Flash Dialogue
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/19786090/1f07dad6-9c94-11e6-91b0-c20ab2e6e27d.png">
 
-##### Confirm Dialogue
+#### Confirm Dialogue
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/19786092/215d2dc2-9c94-11e6-910d-191b7b74f4d2.png">
 
-##### Number Input
+#### Number Input
 <img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39929969-bf45be46-5539-11e8-99f5-3dfdc0cf1fe3.png">
 <img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39930002-d2353dd8-5539-11e8-8dfb-e404201b7c42.png">
 
-##### Text Input
+#### Text Input
 <img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39929338-1cbc5a28-5538-11e8-9a68-b4e84e772251.png">
 
-##### Password Input
+#### Password Input
 <img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39929339-1cd4cd2e-5538-11e8-9330-335dd1b7ed1c.png">
 
-### API
+## API
 
 The `CliMenu` object is constructed via the Builder class
 
@@ -183,9 +187,21 @@ $menu->open();
 $menu->close();
 ```
 
-#### Appearance
+### Appearance
 
-##### Colour
+#### Menu Title
+
+You can give your menu a title and you can customise the separator, a line which displays under the title.
+Whatever string you pass to `setTitleSeparator` will be repeated for the width of the Menu.
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setTitle('One Menu to rule them all!')
+    ->setTitleSeparator('*-')
+    ->build();
+```
+
+#### Colour
 
 You can change the foreground and background colour of the menu to any of the following colours:
 
@@ -228,10 +244,11 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-##### Width
+#### Width
 
 Customise the width of the menu. Setting a value larger than the size of the terminal will result in
-the width being the same as the terminal size.
+the width being the same as the terminal size. The width will include the padding and the border. So with a width of 100
+and all around border of 5 and all around padding of 5 will leave for a content width of 80 (5 + 5 + 80 + 5 + 5).
 
 ```php
 $menu = (new CliMenuBuilder)
@@ -239,7 +256,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-##### Padding
+#### Padding
 
 The padding can be set for all sides with one value or can be set individually for top/bottom and left/right.
 
@@ -258,7 +275,15 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-##### Margin
+Configure top/bottom and left/right padding using the shorthand method:
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setPadding(10, 5) //top/bottom = 10, left/right = 5
+    ->build();
+```
+
+#### Margin
 
 The margin can be customised as one value. It is only applied to the left side of the menu. It can also be
 set automatically which will center the menu nicely in the terminal.
@@ -281,7 +306,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-##### Borders
+#### Borders
 
 Borders can be customised just like CSS borders. We can add any amount of border to either side, left, right top or 
 bottom and we can apply a colour to it.
@@ -319,7 +344,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-##### Exit Button Text
+#### Exit Button Text
 
 Modify the exit button text:
 
@@ -329,7 +354,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-##### Remove Exit Button
+#### Remove Exit Button
 
 You can remove the exit button altogether:
 
@@ -339,47 +364,28 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-Note: This will also disable the Go Back button for sub menus.
+Note: This will also disable the Go Back button for sub menus. 
 
-The marker displayed by the side of the currently active item can be modified, UTF-8 characters are supported.
-The marker for un-selected items can also be modified. If you want to disable it, just set it to a space character.
+You can manually add exit and go back buttons using the following:
 
 ```php
+use PhpSchool\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\Action\ExitAction;
+use \PhpSchool\CliMenu\Action\GoBackAction;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
 $menu = (new CliMenuBuilder)
-    ->setUnselectedMarker('❅')
-    ->setSelectedMarker('✏')
-    
-    //disable unselected marker
-    ->setUnselectedMarker(' ')
+    ->disableDefaultItems()
+    ->addSubMenu('Super Sub Menu')
+        ->setTitle('Behold the awesomeness')
+        ->addItem('Return to parent menu', new GoBackAction) //add a go back button
+        ->end()
+    ->addItem('Leave this place now !', new ExitAction) //add an exit button
     ->build();
 ```
 
-You can give your menu a title and you can customise the separator, a line which displays under the title.
-Whatever string you pass to `setTitleSeparator` will be repeated for the width of the Menu.
-
-```php
-$menu = (new CliMenuBuilder)
-    ->setTitle('One Menu to rule them all!')
-    ->setTitleSeparator('*-')
-    ->build();
-```
-
-#### Item Extra
-
-You can optionally display some arbitrary text on the right hand side of an item. You can customise this text and
-you indicate which items to display it on. We use it to display `[COMPLETED]` on completed exercises, where the menu lists
-exercises for a workshop application. 
-
-The third parameter to `addItem` is a boolean whether to show the item extra or not. It defaults to false.
-
-```php
-$menu = (new CliMenuBuilder)
-    ->setItemExtra('✔')
-    ->addItem('Exercise 1', function (CliMenu $menu) { echo 'I am complete!'; }, true)
-    ->build();
-```
-
-#### Items
+### Items
 
 There a few different types of items you can add to your menu
 
@@ -389,7 +395,7 @@ There a few different types of items you can add to your menu
 * Ascii Art Item - Special item which allows usage of Ascii art. It takes care of padding and alignment.
 * Sub Menu Item - Special item to allow an item to open another menu. Useful for an options menu.
 
-#### Selectable Item
+### Selectable Item
 
 ```php
 $menu = (new CliMenuBuilder)
@@ -418,7 +424,7 @@ $menu = (new CliMenuBuilder)
 Note: You can add as many items as you want and they can all have a different action. The action is the separate parameter
 and must be a valid PHP `callable`. Try using an `Invokable` class to keep your actions easily testable.
 
-#### Line Break Item
+### Line Break Item
 
 ```php
 $menu = (new CliMenuBuilder)
@@ -428,7 +434,7 @@ $menu = (new CliMenuBuilder)
 
 The above would repeat the character sequence `<3` across the Menu for 2 lines
 
-#### Static Item
+### Static Item
 
 Static items are similar to Line Breaks, however, they don't repeat and fill. It is output as is.
 If the text is longer than the width of the Menu, it will be continued on the next line.
@@ -444,7 +450,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-#### Ascii Art Item
+### Ascii Art Item
 
 The following will place the Ascii art in the centre of your menu. Use these constants to alter the 
 alignment:
@@ -473,7 +479,7 @@ The third optional parameter to `addAsciiArt` is alternate text. If the ascii ar
 it will not be displayed at all. However, if you pass a string to the third argument, in the case that the ascii art is too 
 wide for the terminal the alternate text will be displayed instead.    
 
-#### Sub Menu Item
+### Sub Menu Item
 
 Sub Menus are really powerful! You can add Menus to Menus, whattttt?? You can have your main menu and then an options menu.
 The options item will look like a normal item except when you hit it, you will enter to another menu, which
@@ -539,7 +545,7 @@ In this case `addSubMenu` will return the main menu builder, not the sub menu bu
 The submenu menu item will be an instance of `\PhpSchool\CliMenu\MenuItem\MenuMenuItem`. If you need access to the submenu,
 you can get it via `$menuMenuItem->getSubMenu()`.
 
-#### Disabling Items & Sub Menus
+### Disabling Items & Sub Menus
 
 In this example we are disabling certain items and a submenu but still having them shown in the output. 
 
@@ -570,7 +576,45 @@ The third param on the `->addItem` call is what disables an item while the `->di
 
 The outcome is a full menu with dimmed rows to denote them being disabled. When a user navigates these items are jumped over to the next available selectable item.
 
-#### Redrawing the Menu
+#### Item Markers
+
+The marker displayed by the side of the currently active item can be modified, UTF-8 characters are supported.
+The marker for un-selected items can also be modified. If you want to disable it, just set it to a space character. Item
+markers only display on *selectable* items, which are: `\PhpSchool\CliMenu\MenuItem\SelectableItem` & `\PhpSchool\CliMenu\MenuItem\MenuMenuItem`.
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setUnselectedMarker('❅')
+    ->setSelectedMarker('✏')
+    
+    //disable unselected marker
+    ->setUnselectedMarker(' ')
+    ->build();
+```
+
+### Item Extra
+
+You can optionally display some arbitrary text on the right hand side of an item. You can customise this text and
+you indicate which items to display it on. We use it to display `[COMPLETED]` on completed exercises, where the menu lists
+exercises for a workshop application.
+
+Item Extra is currently limited to only `\PhpSchool\CliMenu\MenuItem\SelectableItem`.
+
+The third parameter to `addItem` is a boolean whether to show the item extra or not. It defaults to false.
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setItemExtra('✔')
+    ->addItem('Exercise 1', function (CliMenu $menu) { echo 'I am complete!'; }, true)
+    ->build();
+```
+
+## Menu Methods
+
+The next set of documentation applies to methods available directly on the `\PhpSchool\CliMenu\CliMenu` instance. Typically
+you will invoke these methods whilst your menu is open in you action callbacks.
+
+### Redrawing the Menu
 
 You can modify the menu and its style when executing an action and then you can redraw it! In this example we will toggle the background
 colour in an action.
@@ -613,7 +657,7 @@ $menu = (new CliMenuBuilder)
 $menu->open();
 ```
 
-#### Getting, Removing and Adding items
+### Getting, Removing and Adding items
 
 You can also interact with the menu items in an action. You can add, remove and replace items. If you do this, you 
 will likely want to redraw the menu as well so the new list is rendered. 
@@ -651,7 +695,7 @@ $menu = (new CliMenuBuilder)
 $menu->open();
 ```
 
-#### Custom Control Mapping
+### Custom Control Mapping
 
 This functionality allows to map custom key presses to a callable. For example we can set the key press "x" to close the menu:
 
@@ -686,9 +730,9 @@ $menu->addCustomMapping('C', $myCallback);
 $menu->open();
 ```
 
-#### Dialogues
+### Dialogues
 
-##### Flash
+#### Flash
 
 Show a one line message over the top of the menu. It has a separate style object which is colored by default different
 to the menu. It can be modified to suit your own style. The dialogue is dismissed with any key press. In the example
@@ -717,7 +761,7 @@ $menu = (new CliMenuBuilder)
 $menu->open();
 ```
 
-##### Confirm
+#### Confirm
 
 Prompts are very similar to flashes except that a button is shown which has to be selected to dismiss them. The button
 text can be customised.
@@ -743,7 +787,7 @@ $menu = (new CliMenuBuilder)
 
 $menu->open();
 ```
-#### Inputs
+### Inputs
 
 Inputs - added in version 3.0 of `cli-menu` allow to prompt the user for input and validate it. The following types are supported:
 text, number and password. Inputs can be executed in any item callback. They have separate style objects which are colored by default different to the menu.
@@ -754,7 +798,7 @@ instance of the input you requested. To execute the prompt and wait for the inpu
 call `ask()` on the input. When the input has been received and validated, `ask()` will return
 an instance of `InputResult`. `InputResult` exposes the method `fetch` to grab the raw input.
 
-##### Text Input
+#### Text Input
 
 The text input will prompt for a string and when the enter key is hit it will validate that
 the string is not empty. As well as the style you can modify the prompt text (the default is 'Enter text:'), the 
@@ -788,7 +832,7 @@ $menu->open();
 
 ```
 
-##### Number Input
+#### Number Input
 
 The number input will prompt for an integer value (signed or not) and when the enter key is hit it will validate that
 the input is actually a number (`/^-?\d+$/`). As well as the style you can modify the prompt text (the default is 'Enter a number:'), the 
@@ -824,7 +868,7 @@ $menu->open();
 
 ```
 
-##### Password Input
+#### Password Input
 
 The password input will prompt for a text value and when the enter key is hit it will validate that the input is 16 characters or longer.
 As well as the style you can modify the prompt text (the default is 'Enter password:'), the 
@@ -942,7 +986,7 @@ $menu->open();
 
 ```
 
-##### Custom Input
+#### Custom Input
 
 If you need a new type of input which is not covered by the bundled selection then you can create your own by implementing
 `\PhpSchool\CliMenu\Input\Input` - take a look at existing implementations to see how they are built. If all you need is some custom
@@ -989,7 +1033,7 @@ $menu->open();
 ```
 
 
-#### Dialogues & Input Styling
+### Dialogues & Input Styling
 
 All of the dialogues and inputs expose a `getStyle()` method which you can use to customise the appearance of them. However, if
 you want to create a consistent style for all your dialogues and inputs without configuring it for each one
@@ -1031,12 +1075,12 @@ Once you get going you might just end up with something that looks a little like
 You can see the construction code here for more clarity on how to perform advanced configuration:
 [PHP School](https://github.com/php-school/php-workshop/blob/3240d3217bbf62b1063613fc13eb5adff2299bbe/src/Factory/MenuFactory.php)
 
-### Docs Translations 
+## Docs Translations 
 _(This might not be kept up-to-date since it's a community translation)_
 See this doc in [Brazilian Portuguese (pt_BR)](docs/pt_BR/README.md) 
 
 
-### Integrations
+## Integrations
 
  * [Symfony Console](https://github.com/RedAntNL/console)
  * [Laravel](https://github.com/nunomaduro/laravel-console-menu)
