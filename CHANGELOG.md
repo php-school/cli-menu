@@ -32,12 +32,14 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
  - Added support for 256 colours with automatic and manual fallback to 8 colours (#104)
  - Added clear option to CliMenu#redraw useful for when reducing the terminal width (#117)
  - Added ability to set top/bottom and left/right padding independently (#121)
+ - Added a new Split Item item type which allows displaying multiple items on one line (#127)
  
 ### Fixed
  - Fixed sub menu go back button freezing menu (#88)
  - Fixed centering ascii art items with trailing white space (#102)
  - Enable cursor when exiting menu (#110)
  - Fixed (#71) - changed padding calculation when row too long to stop php notices (#112)
+ - Fixed wordwrap helper (#134)
  
 ### Removed
  - Dropped PHP 5.x and PHP 7.0 support (#79)
