@@ -38,8 +38,6 @@
       * [Borders](#borders)
       * [Exit Button Text](#exit-button-text)
       * [Remove Exit Button](#remove-exit-button)
-    * [Item Markers](#item-markers)
-    * [Item Extra](#item-extra)
     * [Items](#appearance)
       * [Selectable Item](#selectable-item)
       * [Line Break Item](#line-break-item)
@@ -47,6 +45,8 @@
       * [Ascii Art Item](#ascii-art-item)
       * [Sub Menu Item](#sub-menu-item)
     * [Disabling Items & Sub Menus](#disabling-items--sub-menus)
+    * [Item Markers](#item-markers)
+    * [Item Extra](#item-extra)
     * [Menu Methods](#menu-methods)
       * [Redrawing the Menu](#redrawing-the-menu)
       * [Getting, Removing and Adding items](#getting-removing-and-adding-items)
@@ -385,36 +385,6 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-##### Item Markers
-
-The marker displayed by the side of the currently active item can be modified, UTF-8 characters are supported.
-The marker for un-selected items can also be modified. If you want to disable it, just set it to a space character.
-
-```php
-$menu = (new CliMenuBuilder)
-    ->setUnselectedMarker('❅')
-    ->setSelectedMarker('✏')
-    
-    //disable unselected marker
-    ->setUnselectedMarker(' ')
-    ->build();
-```
-
-#### Item Extra
-
-You can optionally display some arbitrary text on the right hand side of an item. You can customise this text and
-you indicate which items to display it on. We use it to display `[COMPLETED]` on completed exercises, where the menu lists
-exercises for a workshop application. 
-
-The third parameter to `addItem` is a boolean whether to show the item extra or not. It defaults to false.
-
-```php
-$menu = (new CliMenuBuilder)
-    ->setItemExtra('✔')
-    ->addItem('Exercise 1', function (CliMenu $menu) { echo 'I am complete!'; }, true)
-    ->build();
-```
-
 #### Items
 
 There a few different types of items you can add to your menu
@@ -605,6 +575,36 @@ $menu = (new CliMenuBuilder)
 The third param on the `->addItem` call is what disables an item while the `->disableMenu()` call disables the relevent menu. 
 
 The outcome is a full menu with dimmed rows to denote them being disabled. When a user navigates these items are jumped over to the next available selectable item.
+
+##### Item Markers
+
+The marker displayed by the side of the currently active item can be modified, UTF-8 characters are supported.
+The marker for un-selected items can also be modified. If you want to disable it, just set it to a space character.
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setUnselectedMarker('❅')
+    ->setSelectedMarker('✏')
+    
+    //disable unselected marker
+    ->setUnselectedMarker(' ')
+    ->build();
+```
+
+#### Item Extra
+
+You can optionally display some arbitrary text on the right hand side of an item. You can customise this text and
+you indicate which items to display it on. We use it to display `[COMPLETED]` on completed exercises, where the menu lists
+exercises for a workshop application. 
+
+The third parameter to `addItem` is a boolean whether to show the item extra or not. It defaults to false.
+
+```php
+$menu = (new CliMenuBuilder)
+    ->setItemExtra('✔')
+    ->addItem('Exercise 1', function (CliMenu $menu) { echo 'I am complete!'; }, true)
+    ->build();
+```
 
 ### Menu Methods
 
