@@ -579,7 +579,8 @@ The outcome is a full menu with dimmed rows to denote them being disabled. When 
 #### Item Markers
 
 The marker displayed by the side of the currently active item can be modified, UTF-8 characters are supported.
-The marker for un-selected items can also be modified. If you want to disable it, just set it to a space character.
+The marker for un-selected items can also be modified. If you want to disable it, just set it to a space character. Item
+markers only display on *selectable* items, which are: `\PhpSchool\CliMenu\MenuItem\SelectableItem` & `\PhpSchool\CliMenu\MenuItem\MenuMenuItem`.
 
 ```php
 $menu = (new CliMenuBuilder)
@@ -595,7 +596,9 @@ $menu = (new CliMenuBuilder)
 
 You can optionally display some arbitrary text on the right hand side of an item. You can customise this text and
 you indicate which items to display it on. We use it to display `[COMPLETED]` on completed exercises, where the menu lists
-exercises for a workshop application. 
+exercises for a workshop application.
+
+Item Extra is currently limited to only `\PhpSchool\CliMenu\MenuItem\SelectableItem`.
 
 The third parameter to `addItem` is a boolean whether to show the item extra or not. It defaults to false.
 
