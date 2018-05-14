@@ -11,19 +11,32 @@ class StringUtil
      * Minimal multi-byte wordwrap implementation
      * which also takes break length into consideration
      */
-    public static function wordwrap(string $str, int $width, string $break = "\n") : string
+    public static function wordwrap(string $string, int $width, string $break = "\n") : string
     {
-        $length = 0;
-        return implode(' ', array_map(function ($word) use (&$length, $width, $break) {
-            $length += (mb_strlen($word) + 1);
-
-            if ($length > $width) {
-                $length = mb_strlen($break);
-                return sprintf('%s%s', $break, $word);
-            }
-
-            return $word;
-        }, explode(' ', $str)));
+        return implode(
+            $break,
+            array_map(function (string $line) use ($width, $break) {
+                $line = rtrim($line);
+                if (mb_strlen($line) <= $width) {
+                    return $line;
+                }
+                
+                $words  = explode(' ', $line);
+                $line   = '';
+                $actual = '';
+                foreach ($words as $word) {
+                    if (mb_strlen($actual . $word) <= $width) {
+                        $actual .= $word . ' ';
+                    } else {
+                        if ($actual !== '') {
+                            $line .= rtrim($actual) . $break;
+                        }
+                        $actual = $word . ' ';
+                    }
+                }
+                return $line . trim($actual);
+            }, explode($break, $string))
+        );
     }
 
     public static function stripAnsiEscapeSequence(string $str) : string

@@ -12,50 +12,62 @@ class StringUtilTest extends TestCase
 {
     protected $dummyText;
 
+    protected function setup() : void
+    {
+        parent::setUp();
+
+        $this->dummyText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ' .
+            'incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud ' .
+            'exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor ' .
+            'in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' .
+            'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt ' .
+            'mollit anim id est laborum';
+    }
+
     public function testItWrapsAsExpectedTo80Length() : void
     {
 
         $result = StringUtil::wordwrap($this->dummyText, 80);
-        $expected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor \n" .
-            "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud \n" .
-            "exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor \n" .
-            "in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. \n" .
-            "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt \n" .
-            "mollit anim id est laborum";
+        $expected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\n" .
+            "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis\n" .
+            "nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n" .
+            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu\n" .
+            "fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in\n" .
+            "culpa qui officia deserunt mollit anim id est laborum";
 
-        $this->assertEquals($result, $expected);
+        self::assertEquals($expected, $result);
     }
 
     public function testItWrapsAsExpectedTo60Length() : void
     {
 
         $result = StringUtil::wordwrap($this->dummyText, 60);
-        $expected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, \n" .
-            "sed do eiusmod tempor incididunt ut labore et dolore magna \n" .
-            "aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco \n" .
-            "laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure \n" .
-            "dolor in reprehenderit in voluptate velit esse cillum dolore eu \n" .
-            "fugiat nulla pariatur. Excepteur sint occaecat cupidatat non \n" .
-            "proident, sunt in culpa qui officia deserunt mollit anim id est \n" .
-            "laborum";
+        $expected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed\n" .
+            "do eiusmod tempor incididunt ut labore et dolore magna\n" .
+            "aliqua. Ut enim ad minim veniam, quis nostrud exercitation\n" .
+            "ullamco laboris nisi ut aliquip ex ea commodo consequat.\n" .
+            "Duis aute irure dolor in reprehenderit in voluptate velit\n" .
+            "esse cillum dolore eu fugiat nulla pariatur. Excepteur sint\n" .
+            "occaecat cupidatat non proident, sunt in culpa qui officia\n" .
+            "deserunt mollit anim id est laborum";
 
-        $this->assertEquals($result, $expected);
+        self::assertEquals($expected, $result);
     }
 
     public function testItCanUseACustomBreakCharacter() : void
     {
-
         $result = StringUtil::wordwrap($this->dummyText, 60, 'H');
-        $expected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, H" .
-            "sed do eiusmod tempor incididunt ut labore et dolore magna H" .
-            "aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco H" .
-            "laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure H" .
-            "dolor in reprehenderit in voluptate velit esse cillum dolore eu H" .
-            "fugiat nulla pariatur. Excepteur sint occaecat cupidatat non H" .
-            "proident, sunt in culpa qui officia deserunt mollit anim id est H" .
-            "laborum";
+        
+        $expected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sedH" .
+            "do eiusmod tempor incididunt ut labore et dolore magnaH" .
+            "aliqua. Ut enim ad minim veniam, quis nostrud exercitationH" .
+            "ullamco laboris nisi ut aliquip ex ea commodo consequat.H" .
+            "Duis aute irure dolor in reprehenderit in voluptate velitH" .
+            "esse cillum dolore eu fugiat nulla pariatur. Excepteur sintH" .
+            "occaecat cupidatat non proident, sunt in culpa qui officiaH" .
+            "deserunt mollit anim id est laborum";
 
-        $this->assertEquals($result, $expected);
+        self::assertEquals($expected, $result);
     }
 
     public function testItCanStripAnsiEscapeSequence() : void
@@ -70,15 +82,13 @@ class StringUtilTest extends TestCase
         $this->assertEquals('foobarbaz!!!', $result);
     }
 
-    protected function setup() : void
+    public function testSplitItemBug() : void
     {
-        parent::setUp();
-
-        $this->dummyText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ' .
-            'incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud ' .
-            'exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor ' .
-            'in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' .
-            'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt ' .
-            'mollit anim id est laborum';
+        $test = 'Item three I guess it isn\'t that bad, is it ?';
+        
+        self::assertEquals(
+            "Item three\nI guess it\nisn't that\nbad, is it\n?",
+            StringUtil::wordwrap($test, 11)
+        );
     }
 }

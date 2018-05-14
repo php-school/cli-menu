@@ -64,7 +64,7 @@ class StaticItemTest extends TestCase
         $item = new StaticItem('CONTENT 1 LINE');
 
         $this->assertEquals(
-            ['CONTENT 1 ', 'LINE'],
+            ['CONTENT 1', 'LINE'],
             $item->getRows($menuStyle)
         );
     }

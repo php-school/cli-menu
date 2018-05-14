@@ -12,6 +12,7 @@ use PhpSchool\CliMenu\Input\Password;
 use PhpSchool\CliMenu\Input\Text;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
+use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Dialogue\Confirm;
 use PhpSchool\CliMenu\Dialogue\Flash;
@@ -256,7 +257,12 @@ class CliMenu
             switch ($char->getControl()) {
                 case InputCharacter::UP:
                 case InputCharacter::DOWN:
-                    $this->moveSelection($char->getControl());
+                    $this->moveSelectionVertically($char->getControl());
+                    $this->draw();
+                    break;
+                case InputCharacter::LEFT:
+                case InputCharacter::RIGHT:
+                    $this->moveSelectionHorizontally($char->getControl());
                     $this->draw();
                     break;
                 case InputCharacter::ENTER:
@@ -269,11 +275,11 @@ class CliMenu
     /**
      * Move the selection in a given direction, up / down
      */
-    protected function moveSelection(string $direction) : void
+    protected function moveSelectionVertically(string $direction) : void
     {
-        do {
-            $itemKeys = array_keys($this->items);
+        $itemKeys = array_keys($this->items);
 
+        do {
             $direction === 'UP'
                 ? $this->selectedItem--
                 : $this->selectedItem++;
@@ -282,15 +288,65 @@ class CliMenu
                 $this->selectedItem  = $direction === 'UP'
                     ? end($itemKeys)
                     : reset($itemKeys);
-            } elseif ($this->getSelectedItem()->canSelect()) {
-                return;
             }
-        } while (!$this->getSelectedItem()->canSelect());
+        } while (!$this->canSelect());
     }
 
+    /**
+     * Move the selection in a given direction, left / right
+     */
+    protected function moveSelectionHorizontally(string $direction) : void
+    {
+        if (!$this->items[$this->selectedItem] instanceof SplitItem) {
+            return;
+        }
+
+        /** @var SplitItem $item */
+        $item = $this->items[$this->selectedItem];
+        $itemKeys = array_keys($item->getItems());
+        $selectedItemIndex = $item->getSelectedItemIndex();
+
+        do {
+            $direction === 'LEFT'
+                ? $selectedItemIndex--
+                : $selectedItemIndex++;
+
+            if (!array_key_exists($selectedItemIndex, $item->getItems())) {
+                $selectedItemIndex = $direction === 'LEFT'
+                    ? end($itemKeys)
+                    : reset($itemKeys);
+            }
+        } while (!$item->canSelectIndex($selectedItemIndex));
+        
+        $item->setSelectedItemIndex($selectedItemIndex);
+    }
+
+    /**
+     * Can the currently selected item actually be selected?
+     *
+     * For example:
+     *  selectable item -> yes
+     *  static item -> no
+     *  split item with only static items -> no
+     *  split item with at least one selectable item -> yes
+     *
+     * @return bool
+     */
+    private function canSelect() : bool
+    {
+        return $this->items[$this->selectedItem]->canSelect();
+    }
+
+    /**
+     * Retrieve the item the user actually selected
+     *
+     */
     public function getSelectedItem() : MenuItemInterface
     {
-        return $this->items[$this->selectedItem];
+        $item = $this->items[$this->selectedItem];
+        return $item instanceof SplitItem
+            ? $item->getSelectedItem()
+            : $item;
     }
 
     /**
@@ -385,6 +441,10 @@ class CliMenu
     protected function drawMenuItem(MenuItemInterface $item, bool $selected = false) : array
     {
         $rows = $item->getRows($this->style, $selected);
+        
+        if ($item instanceof SplitItem) {
+            $selected = false;
+        }
 
         $invertedColoursSetCode = $selected
             ? $this->style->getInvertedColoursSetCode()
