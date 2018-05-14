@@ -117,8 +117,11 @@ class CliMenuBuilder implements Builder
      */
     public function addSplitItem() : SplitItemBuilder
     {
-        $this->menuItems[] = $id = uniqid('splititem-placeholder-', true);
-        
+        $this->menuItems[] = [
+            'type' => 'splititem-placeholder',
+            'id'   => $id = uniqid('', true),
+        ];
+                
         $this->splitItemBuilders[$id] = new SplitItemBuilder($this);
         return $this->splitItemBuilders[$id];
     }
@@ -419,14 +422,14 @@ class CliMenuBuilder implements Builder
     private function buildSplitItems(array $items) : array
     {
         return array_map(function ($item) {
-            if (!is_string($item) || 0 !== strpos($item, 'splititem-placeholder-')) {
+            if (!is_array($item) || $item['type'] !== 'splititem-placeholder') {
                 return $item;
             }
 
-            $splitItemBuilder        = $this->splitItemBuilders[$item];
-            $this->splitItems[$item] = $splitItemBuilder->build();
+            $splitItemBuilder        = $this->splitItemBuilders[$item['id']];
+            $this->splitItems[$item['id']] = $splitItemBuilder->build();
 
-            return $this->splitItems[$item];
+            return $this->splitItems[$item['id']];
         }, $items);
     }
 
