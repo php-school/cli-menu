@@ -148,6 +148,38 @@ class SplitItemTest extends TestCase
         self::assertEquals(['One            Two            '], $item->getRows($menuStyle));
     }
 
+    public function testSetGutter() : void
+    {
+        $menuStyle = $this->createMock(MenuStyle::class);
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getContentWidth')
+            ->will($this->returnValue(20));
+
+        $item = new SplitItem([new StaticItem('One Two'), new StaticItem('Three')]);
+
+        self::assertEquals(['One Two   Three     '], $item->getRows($menuStyle));
+
+        $item->setGutter(5);
+
+        self::assertEquals(['One       Three     ', 'Two                 '], $item->getRows($menuStyle));
+    }
+
+    /**
+     * @dataProvider belowZeroProvider
+     */
+    public function testSetGutterThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
+    {
+        self::expectException(\Assert\InvalidArgumentException::class);
+        $item = new SplitItem();
+        $item->setGutter($value);
+    }
+    public function belowZeroProvider() : array
+    {
+        return [[-1], [-2], [-10]];
+    }
+
     public function testGetRowsWithOneItemSelected() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
