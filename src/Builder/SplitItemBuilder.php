@@ -14,6 +14,11 @@ class SplitItemBuilder implements Builder
 {
     use BuilderUtils;
 
+    /**
+     * @var int
+     */
+    private $gutter = 2;
+
     public function __construct(Builder $parent)
     {
         $this->parent = $parent;
@@ -23,7 +28,10 @@ class SplitItemBuilder implements Builder
     {
         $items = $this->buildSubMenus($this->menuItems);
         
-        return new SplitItem($items);
+        $splitItem = new SplitItem($items);
+        $splitItem->setGutter($this->gutter);
+
+        return $splitItem;
     }
 
     public function setSubMenuParents(CliMenu $menu) : void
@@ -46,5 +54,10 @@ class SplitItemBuilder implements Builder
     public function end() : CliMenuBuilder
     {
         return $this->parent;
+    }
+
+    public function setGutter(int $gutter) : SplitItemBuilder
+    {
+        $this->gutter = $gutter;
     }
 }
