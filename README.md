@@ -156,6 +156,9 @@ php basic.php
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/11442401/e6f03ef2-950c-11e5-897a-6d55496a4105.png">
 <img width="600" alt="submenu-options" src="https://cloud.githubusercontent.com/assets/2817002/11442403/eaf4782e-950c-11e5-82c5-ab57f84cd6bc.png">
 
+#### Split Item
+<img width="600" alt="split-item" src="https://user-images.githubusercontent.com/5318258/40056391-0b3383c8-5897-11e8-852c-f0df820a040f.png">
+
 #### Disabled Items & Submenus
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2174476/19047849/868fa8c0-899b-11e6-9004-811c8da6d435.png">
 
@@ -654,6 +657,9 @@ you can get it via `$menuMenuItem->getSubMenu()`.
 ### Split Item
 
 Split Items allows you to add multiple items on the same row. The full width of the menu will be split evenly between all items. You can move between those items using left/right arrows.
+
+You can set the number of spaces separating items using `->setGutter()` (defaults to 2).
+
 Only Selectable, Static and SubMenu items are currently allowed inside a Split Item.
 
 ```php
@@ -670,6 +676,7 @@ $menu = (new CliMenuBuilder)
     ->setWidth(150)
     ->addStaticItem('Below is a SplitItem')
     ->addSplitItem()
+        ->setGutter(5)
         ->addSubMenu('Sub Menu on a split item')
             ->setTitle('Behold the awesomeness')
             ->addItem('This is awesome', function() { print 'Yes!'; })
