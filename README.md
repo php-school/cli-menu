@@ -45,6 +45,7 @@
       * [Static Item](#static-item)
       * [Ascii Art Item](#ascii-art-item)
       * [Sub Menu Item](#sub-menu-item)
+      * [Split Item](#split-item)
     * [Disabling Items & Sub Menus](#disabling-items--sub-menus)
     * [Item Markers](#item-markers)
     * [Item Extra](#item-extra)
@@ -154,6 +155,9 @@ php basic.php
 #### Submenu
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/11442401/e6f03ef2-950c-11e5-897a-6d55496a4105.png">
 <img width="600" alt="submenu-options" src="https://cloud.githubusercontent.com/assets/2817002/11442403/eaf4782e-950c-11e5-82c5-ab57f84cd6bc.png">
+
+#### Split Item
+<img width="600" alt="split-item" src="https://user-images.githubusercontent.com/5318258/40056391-0b3383c8-5897-11e8-852c-f0df820a040f.png">
 
 #### Disabled Items & Submenus
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2174476/19047849/868fa8c0-899b-11e6-9004-811c8da6d435.png">
@@ -464,6 +468,7 @@ There a few different types of items you can add to your menu
 * Static Item - This will print whatever text is passed, useful for headings.
 * Ascii Art Item - Special item which allows usage of Ascii art. It takes care of padding and alignment.
 * Sub Menu Item - Special item to allow an item to open another menu. Useful for an options menu.
+* Split Item - Special item to fit multiple items on the same row.
 
 ### Selectable Item
 
@@ -569,7 +574,7 @@ $menu = (new CliMenuBuilder)
 
 The third optional parameter to `addAsciiArt` is alternate text. If the ascii art is too wide for the terminal, then 
 it will not be displayed at all. However, if you pass a string to the third argument, in the case that the ascii art is too 
-wide for the terminal the alternate text will be displayed instead.    
+wide for the terminal the alternate text will be displayed instead.
 
 ### Sub Menu Item
 
@@ -610,7 +615,7 @@ There are a few things to note about the syntax and builder process here
 1. The first parameter to `addSubMenu` must be a unique id to reference the sub menu. The second parameter is the text to be displayed on the menu which you select to enter the submenu.
 2. `addSubMenu` returns an instance of `CliMenuBuilder` so you can can customise exactly the same way you would the parent.
 3. If you do not modify the styles of the sub menu (eg, colours) it will inherit styles from the parent!
-4. You can call `end()` on the sub menu `CliMenuBuilder` instance to get the parent `CliMenuBuilder` back again. This is useful for chaining.
+4. You can call `end()` on the sub menu `CliMenuBuilder` instance to get the parent `Builder` back again. This is useful for chaining.
 
 If you need the `CliMenu` instance of the Sub Menu you can grab it after the main menu has been built using the unique id you passed to `addSubMenu.
 
@@ -649,6 +654,48 @@ In this case `addSubMenu` will return the main menu builder, not the sub menu bu
 The submenu menu item will be an instance of `\PhpSchool\CliMenu\MenuItem\MenuMenuItem`. If you need access to the submenu,
 you can get it via `$menuMenuItem->getSubMenu()`.
 
+### Split Item
+
+Split Items allows you to add multiple items on the same row. The full width of the menu will be split evenly between all items. You can move between those items using left/right arrows.
+
+You can set the number of spaces separating items using `->setGutter()` (defaults to 2).
+
+Only Selectable, Static and SubMenu items are currently allowed inside a Split Item.
+
+```php
+<?php
+
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\CliMenu;
+
+$itemCallable = function (CliMenu $menu) {
+    echo $menu->getSelectedItem()->getText();
+};
+
+$menu = (new CliMenuBuilder)
+    ->setWidth(150)
+    ->addStaticItem('Below is a SplitItem')
+    ->addSplitItem()
+        ->setGutter(5)
+        ->addSubMenu('Sub Menu on a split item')
+            ->setTitle('Behold the awesomeness')
+            ->addItem('This is awesome', function() { print 'Yes!'; })
+            ->end()
+        ->addItem('Item 2', $itemCallable)
+        ->addStaticItem('Item 3 - Static')
+        ->end()
+    ->build();
+
+$menu->open();
+```
+
+There are a few things to note about the syntax and builder process here:
+
+1. There is no argument to `addSplitItem`.
+2. `addSplitItem` returns an instance of `SplitItemBuilder`, the main menu will take care of building all split items (and any submenu they might contain).
+3. You can call `addItem`, `addSubMenu` and `addStaticItem` on the `SplitItemBuilder`.
+4. Like when building submenus, you can call `end()` on the Split Item `SplitItemBuilder` instance to get the parent `CliMenuBuilder` back again. This is useful for chaining.
+
 ### Disabling Items & Sub Menus
 
 In this example we are disabling certain items and a submenu but still having them shown in the menu. 
@@ -685,7 +732,7 @@ The third param on the `->addItem` call is what disables an item while the `->di
 
 The outcome is a full menu with dimmed rows to denote them being disabled. When a user navigates these items are jumped over to the next available selectable item.
 
-#### Item Markers
+### Item Markers
 
 The marker displayed by the side of the currently active item can be modified, UTF-8 characters are supported.
 The marker for un-selected items can also be modified. If you want to disable it, just set it to a space character. Item
