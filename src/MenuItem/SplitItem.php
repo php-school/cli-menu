@@ -31,7 +31,7 @@ class SplitItem implements MenuItemInterface
     /**
      * @var int
      */
-    private $margin = 2;
+    private $gutter = 2;
 
     /**
      * @var array
@@ -46,6 +46,12 @@ class SplitItem implements MenuItemInterface
     {
         $this->addItems($items);
         $this->setDefaultSelectedItem();
+    }
+
+    public function setGutter(int $gutter) : void
+    {
+        Assertion::greaterOrEqualThan($gutter, 0);
+        $this->gutter = $gutter;
     }
 
     public function addItem(MenuItemInterface $item) : self
@@ -112,7 +118,7 @@ class SplitItem implements MenuItemInterface
             ? floor($style->getContentWidth() / $numberOfItems) - (mb_strlen($style->getItemExtra()) + 2)
             : floor($style->getContentWidth() / $numberOfItems);
         
-        $length -= $this->margin;
+        $length -= $this->gutter;
         
         $missingLength = $style->getContentWidth() % $numberOfItems;
         
@@ -164,7 +170,7 @@ class SplitItem implements MenuItemInterface
                 '',
                 array_map(
                     function ($cell) use ($index, $length, $extraPadLength) {
-                        return $cell[$index] ?? str_repeat(' ', $length + $this->margin + $extraPadLength);
+                        return $cell[$index] ?? str_repeat(' ', $length + $this->gutter + $extraPadLength);
                     },
                     $cells
                 )
@@ -195,7 +201,7 @@ class SplitItem implements MenuItemInterface
                 str_repeat(' ', $length - mb_strlen($row)),
                 $index === 0 ? $itemExtra : str_repeat(' ', mb_strlen($itemExtra)),
                 $invertedColoursUnsetCode,
-                str_repeat(' ', $this->margin)
+                str_repeat(' ', $this->gutter)
             );
         }, $content, array_keys($content));
     }
