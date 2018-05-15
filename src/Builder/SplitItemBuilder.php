@@ -65,10 +65,10 @@ class SplitItemBuilder
         $menu->setParent($this->menu);
 
         $this->splitItem->addItem(new MenuMenuItem(
-             $text,
-             $menu,
-             $builder->isMenuDisabled()
-         ));
+            $text,
+            $menu,
+            $builder->isMenuDisabled()
+        ));
         
         return $this;
     }

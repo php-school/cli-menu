@@ -468,7 +468,6 @@ class CliMenuBuilderTest extends TestCase
         $builder = new CliMenuBuilder;
         $builder->disableDefaultItems();
         $builder->addSubMenu('My SubMenu', function () {
-            
         });
         
         $menu = $builder->build();
@@ -550,7 +549,6 @@ class CliMenuBuilderTest extends TestCase
         $menu = (new CliMenuBuilder)
             ->disableDefaultItems()
             ->addSubMenu('My SubMenu', function () {
-                
             })
             ->build();
 

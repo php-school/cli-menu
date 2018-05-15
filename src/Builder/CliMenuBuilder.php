@@ -57,7 +57,7 @@ class CliMenuBuilder
     private $disabled = false;
 
     /**
-     * @var bool 
+     * @var bool
      */
     private $subMenu = false;
 
