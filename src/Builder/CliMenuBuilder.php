@@ -22,6 +22,11 @@ use RuntimeException;
 class CliMenuBuilder implements Builder
 {
     use BuilderUtils;
+
+    /**
+     * @var null|Builder
+     */
+    private $parent;
     
     /**
      * @var bool
@@ -463,5 +468,19 @@ class CliMenuBuilder implements Builder
         }
 
         return $menu;
+    }
+
+    /**
+     * Return to parent builder
+     *
+     * @return CliMenuBuilder|SplitItemBuilder
+     */
+    public function end() : ?Builder
+    {
+        if (null === $this->parent) {
+            throw new RuntimeException('No parent builder to return to');
+        }
+
+        return $this->parent;
     }
 }
