@@ -14,11 +14,6 @@ use RuntimeException;
 trait BuilderUtils
 {
     /**
-     * @var null|Builder
-     */
-    private $parent;
-
-    /**
      * @var self[]
      */
     private $subMenuBuilders = [];
@@ -81,7 +76,7 @@ trait BuilderUtils
     }
 
     /**
-     * Add a submenu from an existing builder. Required a unique ID and the text. The text will be displayed as the 
+     * Add a submenu from an existing builder. Required a unique ID and the text. The text will be displayed as the
      * item text in the parent menu.
      */
     public function addSubMenuFromExistingBuilder(string $id, string $text, CliMenuBuilder $subMenuBuilder) : self
@@ -118,19 +113,5 @@ trait BuilderUtils
                 $menuBuilder->isMenuDisabled()
             );
         }, $items);
-    }
-
-    /**
-     * Return to parent builder
-     *
-     * @throws RuntimeException
-     */
-    public function end() : ?Builder
-    {
-        if (null === $this->parent) {
-            throw new RuntimeException('No parent builder to return to');
-        }
-
-        return $this->parent;
     }
 }
