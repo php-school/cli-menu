@@ -39,6 +39,14 @@ class MenuMenuItem implements MenuItemInterface
     {
         return $this->text;
     }
+
+    /**
+     * Set the raw string of text
+     */
+    public function setText(string $text) : void
+    {
+        $this->text = $text;
+    }
     
     /**
      * Returns the sub menu
