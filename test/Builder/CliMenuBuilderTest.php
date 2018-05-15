@@ -536,7 +536,13 @@ class CliMenuBuilderTest extends TestCase
 
     public function testSubMenuInheritsParentsStyle() : void
     {
-        $builder = new CliMenuBuilder;
+        $terminal = self::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getWidth')
+            ->will($this->returnValue(200));
+        
+        $builder = new CliMenuBuilder($terminal);
         $menu = $builder->setBackgroundColour('green')
             ->addSubMenu('sub-menu', 'My SubMenu')
                 ->addItem('Some Item', function () {

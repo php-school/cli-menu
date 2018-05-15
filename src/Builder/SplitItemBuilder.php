@@ -20,7 +20,7 @@ class SplitItemBuilder implements Builder
     private $gutter = 2;
 
     /**
-     * @var CliMenuBuilder 
+     * @var CliMenuBuilder
      */
     private $parent;
 
