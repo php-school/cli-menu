@@ -12,7 +12,5 @@ interface Builder
 {
     public function getTerminal() : Terminal;
     
-    public function end() : ?Builder;
-
     public function getMenuStyle() : MenuStyle;
 }

@@ -42,4 +42,9 @@ class SplitItemBuilder implements Builder
     {
         return $this->parent->getMenuStyle();
     }
+
+    public function end() : CliMenuBuilder
+    {
+        return $this->parent;
+    }
 }
