@@ -65,6 +65,14 @@ class LineBreakItem implements MenuItemInterface
     }
 
     /**
+     * Set the raw string of text
+     */
+    public function setText(string $text) : void
+    {
+        $this->breakChar = $text;
+    }
+
+    /**
      * Whether or not the menu item is showing the menustyle extra value
      */
     public function showsItemExtra() : bool
