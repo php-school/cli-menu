@@ -77,7 +77,7 @@ class MenuMenuItemTest extends TestCase
             ->expects($this->exactly(2))
             ->method('getMarker')
             ->with(false)
-            ->will($this->returnValue('*'));
+            ->will($this->returnValue('* '));
 
         $subMenu = $this->createMock(CliMenu::class);
 
@@ -99,7 +99,7 @@ class MenuMenuItemTest extends TestCase
             ->expects($this->once())
             ->method('getMarker')
             ->with(true)
-            ->will($this->returnValue('='));
+            ->will($this->returnValue('= '));
 
         $subMenu = $this->getMockBuilder(CliMenu::class)
             ->disableOriginalConstructor()
