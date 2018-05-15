@@ -60,6 +60,23 @@ class SelectableItemTest extends TestCase
         $this->assertEquals([' Item'], $item->getRows($menuStyle, true));
     }
 
+    public function testSetText() : void
+    {
+        $menuStyle = $this->createMock(MenuStyle::class);
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getContentWidth')
+            ->will($this->returnValue(10));
+        
+        $item = new SelectableItem('Item', function () {
+        });
+        $item->setText('New Text');
+        $this->assertEquals([' New Text'], $item->getRows($menuStyle));
+        $this->assertEquals([' New Text'], $item->getRows($menuStyle, false));
+        $this->assertEquals([' New Text'], $item->getRows($menuStyle, true));
+    }
+
     public function testGetRowsWithUnSelectedMarker() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);

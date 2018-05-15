@@ -142,6 +142,20 @@ class AsciiArtItemTest extends TestCase
         self::assertSame(['my alt'], $item->getRows($menuStyle));
     }
 
+    public function testGetRowsDoesNotReturnsStaticAltItemWhenOnlySpacesOverflow() : void
+    {
+        $menuStyle = $this->createMock(MenuStyle::class);
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getContentWidth')
+            ->will($this->returnValue(15));
+        
+        $item = new AsciiArtItem('NOT TOO LONG            ', AsciiArtItem::POSITION_LEFT, 'my alt');
+        
+        self::assertSame(['NOT TOO LONG'], $item->getRows($menuStyle));
+    }
+
     public function testWithRealAsciiArtCenterAligned() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
@@ -224,6 +238,39 @@ ART;
 LEARNING FOR ELEPHANTS
 ART;
         $item = new AsciiArtItem($art, AsciiArtItem::POSITION_CENTER);
+        $this->assertEquals(
+            [
+                '            _ __ _',
+                '           / |..| \\',
+                '           \/ || \/',
+                "            |_''_|",
+                '          PHP SCHOOL',
+                '    LEARNING FOR ELEPHANTS'
+            ],
+            $item->getRows($menuStyle)
+        );
+    }
+
+    public function testSetText() : void
+    {
+        $menuStyle = $this->createMock(MenuStyle::class);
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getContentWidth')
+            ->will($this->returnValue(30));
+        
+        $art = <<<ART
+        _ __ _        
+       / |..| \       
+       \/ || \/       
+        |_''_|        
+      PHP SCHOOL      
+LEARNING FOR ELEPHANTS
+ART;
+        $item = new AsciiArtItem("//", AsciiArtItem::POSITION_CENTER);
+        $item->setText($art);
+
         $this->assertEquals(
             [
                 '            _ __ _',
