@@ -303,12 +303,4 @@ class SplitItem implements MenuItemInterface
     {
         throw new \BadMethodCallException(sprintf('Not supported on: %s', __CLASS__));
     }
-
-    /**
-     * Nothing to set with SplitItem
-     */
-    public function setText(string $text) : void
-    {
-        throw new \BadMethodCallException(sprintf('Not supported on: %s', __CLASS__));
-    }
 }
