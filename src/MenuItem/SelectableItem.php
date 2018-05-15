@@ -41,4 +41,12 @@ class SelectableItem implements MenuItemInterface
     {
         return $this->text;
     }
+
+    /**
+     * Set the raw string of text
+     */
+    public function setText(string $text) : void
+    {
+        $this->text = $text;
+    }
 }
