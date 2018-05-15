@@ -69,6 +69,24 @@ class StaticItemTest extends TestCase
         );
     }
 
+    public function testSetText() : void
+    {
+        $menuStyle = $this->createMock(MenuStyle::class);
+        
+        $menuStyle
+            ->expects($this->once())
+            ->method('getContentWidth')
+            ->will($this->returnValue(10));
+
+        $item = new StaticItem('CONTENT');
+        $item->setText('CONTENT 2 LINES');
+        
+        $this->assertEquals(
+            ['CONTENT 2', 'LINES'],
+            $item->getRows($menuStyle)
+        );
+    }
+
     public function testHideAndShowItemExtraHasNoEffect() : void
     {
         $item = new StaticItem('CONTENT 1 LINE');
