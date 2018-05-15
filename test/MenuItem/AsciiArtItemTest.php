@@ -236,4 +236,37 @@ ART;
             $item->getRows($menuStyle)
         );
     }
+
+    public function testSetText() : void
+    {
+        $menuStyle = $this->createMock(MenuStyle::class);
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getContentWidth')
+            ->will($this->returnValue(30));
+        
+        $art = <<<ART
+        _ __ _        
+       / |..| \       
+       \/ || \/       
+        |_''_|        
+      PHP SCHOOL      
+LEARNING FOR ELEPHANTS
+ART;
+        $item = new AsciiArtItem("//", AsciiArtItem::POSITION_CENTER);
+        $item->setText($art);
+
+        $this->assertEquals(
+            [
+                '            _ __ _',
+                '           / |..| \\',
+                '           \/ || \/',
+                "            |_''_|",
+                '          PHP SCHOOL',
+                '    LEARNING FOR ELEPHANTS'
+            ],
+            $item->getRows($menuStyle)
+        );
+    }
 }
