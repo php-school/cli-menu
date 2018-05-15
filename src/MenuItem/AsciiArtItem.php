@@ -44,7 +44,6 @@ class AsciiArtItem implements MenuItemInterface
         $this->setText($text);
         $this->position  = $position;
         $this->alternateText = $alt;
-        $this->calculateArtLength();
     }
 
     /**
@@ -109,6 +108,8 @@ class AsciiArtItem implements MenuItemInterface
         $this->text = implode("\n", array_map(function (string $line) {
             return rtrim($line, ' ');
         }, explode("\n", $text)));
+
+        $this->calculateArtLength();
     }
 
     /**
