@@ -192,7 +192,7 @@ class SplitItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getMarker')
-            ->willReturnMap([[true, '='], [false, '*']]);
+            ->willReturnMap([[true, '= '], [false, '* ']]);
 
         $item = new SplitItem(
             [
@@ -241,7 +241,7 @@ class SplitItemTest extends TestCase
             ->expects($this->any())
             ->method('getMarker')
             ->with(false)
-            ->will($this->returnValue('*'));
+            ->will($this->returnValue('* '));
 
         $item = new SplitItem(
             [
@@ -273,7 +273,7 @@ class SplitItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getMarker')
-            ->willReturnMap([[true, '='], [false, '*']]);
+            ->willReturnMap([[true, '= '], [false, '* ']]);
 
         $item = new SplitItem(
             [
