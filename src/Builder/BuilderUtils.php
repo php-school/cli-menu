@@ -59,10 +59,10 @@ trait BuilderUtils
     }
     
     /**
-     * Add a submenu with a name. The name will be displayed as the item text
+     * Add a submenu with a unique ID and the text. The text will be displayed as the item text
      * in the parent menu.
      */
-    public function addSubMenu(string $id, string $text, CliMenuBuilder $subMenuBuilder = null) : Builder
+    public function addSubMenu(string $id, string $text) : CliMenuBuilder
     {
         if (isset($this->subMenuBuilders[$id])) {
             throw new \InvalidArgumentException(
@@ -76,10 +76,27 @@ trait BuilderUtils
             'id'   => $id
         ];
         
-        if (null === $subMenuBuilder) {
-            $this->subMenuBuilders[$id] = new CliMenuBuilder($this);
-            return $this->subMenuBuilders[$id];
+        $this->subMenuBuilders[$id] = new CliMenuBuilder($this);
+        return $this->subMenuBuilders[$id];
+    }
+
+    /**
+     * Add a submenu from an existing builder. Required a unique ID and the text. The text will be displayed as the 
+     * item text in the parent menu.
+     */
+    public function addSubMenuFromExistingBuilder(string $id, string $text, CliMenuBuilder $subMenuBuilder) : self
+    {
+        if (isset($this->subMenuBuilders[$id])) {
+            throw new \InvalidArgumentException(
+                sprintf('SubMenu with id: "%s" already exists. $id must be unique', $id)
+            );
         }
+
+        $this->menuItems[] = [
+            'type' => 'submenu-placeholder',
+            'text' => $text,
+            'id'   => $id
+        ];
 
         $this->subMenuBuilders[$id] = $subMenuBuilder;
         return $this;
