@@ -90,7 +90,7 @@ class SelectableItemTest extends TestCase
             ->expects($this->exactly(2))
             ->method('getMarker')
             ->with(false)
-            ->will($this->returnValue('*'));
+            ->will($this->returnValue('* '));
 
         $item = new SelectableItem('Item', function () {
         });
@@ -111,7 +111,7 @@ class SelectableItemTest extends TestCase
             ->expects($this->once())
             ->method('getMarker')
             ->with(true)
-            ->will($this->returnValue('='));
+            ->will($this->returnValue('= '));
 
         $item = new SelectableItem('Item', function () {
         });
