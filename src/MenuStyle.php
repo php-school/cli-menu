@@ -167,14 +167,8 @@ class MenuStyle
         'borderBottomWidth' => 0,
         'borderLeftWidth' => 0,
         'borderColour' => 'white',
-        'borderColourFallback' => null,
         'marginAuto' => false,
     ];
-
-    public static function getDefaultStyleValues() : array
-    {
-        return static::$defaultStyleValues;
-    }
 
     /**
      * @var array
@@ -243,10 +237,32 @@ class MenuStyle
         $this->setBorderRightWidth(static::$defaultStyleValues['borderRightWidth']);
         $this->setBorderBottomWidth(static::$defaultStyleValues['borderBottomWidth']);
         $this->setBorderLeftWidth(static::$defaultStyleValues['borderLeftWidth']);
-        $this->setBorderColour(
-            static::$defaultStyleValues['borderColour'],
-            static::$defaultStyleValues['borderColourFallback']
-        );
+        $this->setBorderColour(static::$defaultStyleValues['borderColour']);
+    }
+
+    public function hasChangedFromDefaults() : bool
+    {
+        $currentValues = [
+            $this->fg,
+            $this->bg,
+            $this->width,
+            $this->paddingTopBottom,
+            $this->paddingLeftRight,
+            $this->margin,
+            $this->selectedMarker,
+            $this->unselectedMarker,
+            $this->itemExtra,
+            $this->displaysExtra,
+            $this->titleSeparator,
+            $this->borderTopWidth,
+            $this->borderRightWidth,
+            $this->borderBottomWidth,
+            $this->borderLeftWidth,
+            $this->borderColour,
+            $this->marginAuto,
+        ];
+                
+        return $currentValues !== array_values(static::$defaultStyleValues);
     }
 
     public function getDisabledItemText(string $text) : string

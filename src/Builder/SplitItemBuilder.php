@@ -19,7 +19,12 @@ class SplitItemBuilder implements Builder
      */
     private $gutter = 2;
 
-    public function __construct(Builder $parent)
+    /**
+     * @var CliMenuBuilder 
+     */
+    private $parent;
+
+    public function __construct(CliMenuBuilder $parent)
     {
         $this->parent = $parent;
     }

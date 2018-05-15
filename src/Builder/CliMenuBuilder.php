@@ -11,7 +11,6 @@ use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
-use PhpSchool\CliMenu\Util\ColourUtil;
 use PhpSchool\Terminal\Terminal;
 use RuntimeException;
 
@@ -54,7 +53,7 @@ class CliMenuBuilder implements Builder
     private $exitButtonText = 'Exit';
 
     /**
-     * @var array
+     * @var MenuStyle
      */
     private $style;
 
@@ -78,13 +77,16 @@ class CliMenuBuilder implements Builder
      */
     private $disabled = false;
 
-    public function __construct(Builder $parent = null)
+    public function __construct(Terminal $terminal = null, Builder $parent = null)
     {
+        $this->terminal = $terminal ?? TerminalFactory::fromSystem();
         $this->parent   = $parent;
-        $this->terminal = $this->parent !== null
-            ? $this->parent->getTerminal()
-            : TerminalFactory::fromSystem();
-        $this->style = MenuStyle::getDefaultStyleValues();
+        $this->style = new MenuStyle($this->terminal);
+    }
+    
+    public static function newFromParent(Builder $parent) : self
+    {
+        return new self($parent->getTerminal(), $parent);
     }
 
     public function setTitle(string $title) : self
@@ -170,174 +172,127 @@ class CliMenuBuilder implements Builder
 
     public function setBackgroundColour(string $colour, string $fallback = null) : self
     {
-        $this->style['bg'] = ColourUtil::validateColour(
-            $this->terminal,
-            $colour,
-            $fallback
-        );
+        $this->style->setBg($colour, $fallback);
 
         return $this;
     }
 
     public function setForegroundColour(string $colour, string $fallback = null) : self
     {
-        $this->style['fg'] = ColourUtil::validateColour(
-            $this->terminal,
-            $colour,
-            $fallback
-        );
+        $this->style->setFg($colour, $fallback);
 
         return $this;
     }
 
     public function setWidth(int $width) : self
     {
-        $this->style['width'] = $width;
+        $this->style->setWidth($width);
 
         return $this;
     }
 
     public function setPadding(int $topBottom, int $leftRight = null) : self
     {
-        if ($leftRight === null) {
-            $leftRight = $topBottom;
-        }
-
-        $this->setPaddingTopBottom($topBottom);
-        $this->setPaddingLeftRight($leftRight);
+        $this->style->setPadding($topBottom, $leftRight);
 
         return $this;
     }
 
     public function setPaddingTopBottom(int $topBottom) : self
     {
-        $this->style['paddingTopBottom'] = $topBottom;
+        $this->style->setPaddingTopBottom($topBottom);
 
         return $this;
     }
 
     public function setPaddingLeftRight(int $leftRight) : self
     {
-        $this->style['paddingLeftRight'] = $leftRight;
+        $this->style->setPaddingLeftRight($leftRight);
 
         return $this;
     }
 
     public function setMarginAuto() : self
     {
-        $this->style['marginAuto'] = true;
+        $this->style->setMarginAuto();
 
         return $this;
     }
 
     public function setMargin(int $margin) : self
     {
-        $this->style['marginAuto'] = false;
-        $this->style['margin'] = $margin;
+        $this->style->setMargin($margin);
 
         return $this;
     }
 
     public function setUnselectedMarker(string $marker) : self
     {
-        $this->style['unselectedMarker'] = $marker;
+        $this->style->setUnselectedMarker($marker);
 
         return $this;
     }
 
     public function setSelectedMarker(string $marker) : self
     {
-        $this->style['selectedMarker'] = $marker;
+        $this->style->setSelectedMarker($marker);
 
         return $this;
     }
 
     public function setItemExtra(string $extra) : self
     {
-        $this->style['itemExtra'] = $extra;
+        $this->style->setItemExtra($extra);
 
         return $this;
     }
 
     public function setTitleSeparator(string $separator) : self
     {
-        $this->style['titleSeparator'] = $separator;
+        $this->style->setTitleSeparator($separator);
 
         return $this;
     }
 
-    public function setBorder(
-        int $topWidth,
-        $rightWidth = null,
-        $bottomWidth = null,
-        $leftWidth = null,
-        string $colour = null
-    ) : self {
-        if (!is_int($rightWidth)) {
-            $colour = $rightWidth;
-            $rightWidth = $bottomWidth = $leftWidth = $topWidth;
-        } elseif (!is_int($bottomWidth)) {
-            $colour = $bottomWidth;
-            $bottomWidth = $topWidth;
-            $leftWidth = $rightWidth;
-        } elseif (!is_int($leftWidth)) {
-            $colour = $leftWidth;
-            $leftWidth = $rightWidth;
-        }
-
-        $this->style['borderTopWidth'] = $topWidth;
-        $this->style['borderRightWidth'] = $rightWidth;
-        $this->style['borderBottomWidth'] = $bottomWidth;
-        $this->style['borderLeftWidth'] = $leftWidth;
-
-        if (is_string($colour)) {
-            $this->style['borderColour'] = $colour;
-        } elseif ($colour !== null) {
-            throw new \InvalidArgumentException('Invalid colour');
-        }
+    public function setBorder(int $top, $right = null, $bottom = null, $left = null, string $colour = null) : self
+    {
+        $this->style->setBorder($top, $right, $bottom, $left, $colour);
 
         return $this;
     }
 
     public function setBorderTopWidth(int $width) : self
     {
-        $this->style['borderTopWidth'] = $width;
+        $this->style->setBorderTopWidth($width);
         
         return $this;
     }
 
     public function setBorderRightWidth(int $width) : self
     {
-        $this->style['borderRightWidth'] = $width;
+        $this->style->setBorderRightWidth($width);
 
         return $this;
     }
 
     public function setBorderBottomWidth(int $width) : self
     {
-        $this->style['borderBottomWidth'] = $width;
+        $this->style->setBorderBottomWidth($width);
 
         return $this;
     }
 
     public function setBorderLeftWidth(int $width) : self
     {
-        $this->style['borderLeftWidth'] = $width;
+        $this->style->setBorderLeftWidth($width);
 
         return $this;
     }
 
     public function setBorderColour(string $colour, $fallback = null) : self
     {
-        $this->style['borderColour'] = $colour;
-        $this->style['borderColourFallback'] = $fallback;
+        $this->style->setBorderColour($colour, $fallback);
 
-        return $this;
-    }
-
-    public function setTerminal(Terminal $terminal) : self
-    {
-        $this->terminal = $terminal;
         return $this;
     }
 
@@ -378,38 +333,14 @@ class CliMenuBuilder implements Builder
     public function getMenuStyle() : MenuStyle
     {
         if (null === $this->parent) {
-            return $this->buildStyle();
+            return $this->style;
         }
 
-        if ($this->style !== MenuStyle::getDefaultStyleValues()) {
-            return $this->buildStyle();
+        if ($this->style->hasChangedFromDefaults()) {
+            return $this->style;
         }
 
         return $this->parent->getMenuStyle();
-    }
-
-    private function buildStyle() : MenuStyle
-    {
-        $style = (new MenuStyle($this->terminal))
-            ->setFg($this->style['fg'])
-            ->setBg($this->style['bg'])
-            ->setWidth($this->style['width'])
-            ->setPaddingTopBottom($this->style['paddingTopBottom'])
-            ->setPaddingLeftRight($this->style['paddingLeftRight'])
-            ->setSelectedMarker($this->style['selectedMarker'])
-            ->setUnselectedMarker($this->style['unselectedMarker'])
-            ->setItemExtra($this->style['itemExtra'])
-            ->setDisplaysExtra($this->style['displaysExtra'])
-            ->setTitleSeparator($this->style['titleSeparator'])
-            ->setBorderTopWidth($this->style['borderTopWidth'])
-            ->setBorderRightWidth($this->style['borderRightWidth'])
-            ->setBorderBottomWidth($this->style['borderBottomWidth'])
-            ->setBorderLeftWidth($this->style['borderLeftWidth'])
-            ->setBorderColour($this->style['borderColour'], $this->style['borderColourFallback']);
-
-        $this->style['marginAuto'] ? $style->setMarginAuto() : $style->setMargin($this->style['margin']);
-
-        return $style;
     }
 
     /**
@@ -450,7 +381,7 @@ class CliMenuBuilder implements Builder
         $menuItems = $this->buildSplitItems($mergedItems);
         $menuItems = $this->buildSubMenus($menuItems);
 
-        $this->style['displaysExtra'] = $this->itemsHaveExtra($menuItems);
+        $this->style->setDisplaysExtra($this->itemsHaveExtra($menuItems));
 
         $menu = new CliMenu(
             $this->menuTitle,

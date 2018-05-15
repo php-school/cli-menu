@@ -51,7 +51,13 @@ class CliMenuBuilderTest extends TestCase
 
     public function testModifyStyles() : void
     {
-        $builder = new CliMenuBuilder;
+        $terminal = static::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getWidth')
+            ->will($this->returnValue(200));
+        
+        $builder = new CliMenuBuilder($terminal);
         $builder->setBackgroundColour('red');
         $builder->setForegroundColour('red');
         $builder->setWidth(40);
@@ -61,14 +67,6 @@ class CliMenuBuilderTest extends TestCase
         $builder->setSelectedMarker('x');
         $builder->setItemExtra('*');
         $builder->setTitleSeparator('-');
-
-        $terminal = static::createMock(Terminal::class);
-        $terminal
-            ->expects($this->any())
-            ->method('getWidth')
-            ->will($this->returnValue(200));
-
-        $builder->setTerminal($terminal);
 
         $menu = $builder->build();
 
@@ -92,80 +90,80 @@ class CliMenuBuilderTest extends TestCase
             ->method('getWidth')
             ->will($this->returnValue(200));
 
-        $menu = (new CliMenuBuilder)
-            ->setTerminal($terminal)
+        $menu = (new CliMenuBuilder($terminal))
             ->setBorder(2)
             ->build();
+        
         $this->checkStyleVariable($menu, 'borderTopWidth', 2);
         $this->checkStyleVariable($menu, 'borderRightWidth', 2);
         $this->checkStyleVariable($menu, 'borderBottomWidth', 2);
         $this->checkStyleVariable($menu, 'borderLeftWidth', 2);
         $this->checkStyleVariable($menu, 'borderColour', 'white');
 
-        $menu = (new CliMenuBuilder)
-            ->setTerminal($terminal)
+        $menu = (new CliMenuBuilder($terminal))
             ->setBorder(2, 4)
             ->build();
+        
         $this->checkStyleVariable($menu, 'borderTopWidth', 2);
         $this->checkStyleVariable($menu, 'borderRightWidth', 4);
         $this->checkStyleVariable($menu, 'borderBottomWidth', 2);
         $this->checkStyleVariable($menu, 'borderLeftWidth', 4);
         $this->checkStyleVariable($menu, 'borderColour', 'white');
 
-        $menu = (new CliMenuBuilder)
-            ->setTerminal($terminal)
+        $menu = (new CliMenuBuilder($terminal))
             ->setBorder(2, 4, 6)
             ->build();
+        
         $this->checkStyleVariable($menu, 'borderTopWidth', 2);
         $this->checkStyleVariable($menu, 'borderRightWidth', 4);
         $this->checkStyleVariable($menu, 'borderBottomWidth', 6);
         $this->checkStyleVariable($menu, 'borderLeftWidth', 4);
         $this->checkStyleVariable($menu, 'borderColour', 'white');
 
-        $menu = (new CliMenuBuilder)
-            ->setTerminal($terminal)
+        $menu = (new CliMenuBuilder($terminal))
             ->setBorder(2, 4, 6, 8)
             ->build();
+        
         $this->checkStyleVariable($menu, 'borderTopWidth', 2);
         $this->checkStyleVariable($menu, 'borderRightWidth', 4);
         $this->checkStyleVariable($menu, 'borderBottomWidth', 6);
         $this->checkStyleVariable($menu, 'borderLeftWidth', 8);
         $this->checkStyleVariable($menu, 'borderColour', 'white');
 
-        $menu = (new CliMenuBuilder)
-            ->setTerminal($terminal)
+        $menu = (new CliMenuBuilder($terminal))
             ->setBorder(2, 4, 6, 8, 'green')
             ->build();
+        
         $this->checkStyleVariable($menu, 'borderTopWidth', 2);
         $this->checkStyleVariable($menu, 'borderRightWidth', 4);
         $this->checkStyleVariable($menu, 'borderBottomWidth', 6);
         $this->checkStyleVariable($menu, 'borderLeftWidth', 8);
         $this->checkStyleVariable($menu, 'borderColour', 'green');
 
-        $menu = (new CliMenuBuilder)
-            ->setTerminal($terminal)
+        $menu = (new CliMenuBuilder($terminal))
             ->setBorder(2, 4, 6, 'green')
             ->build();
+        
         $this->checkStyleVariable($menu, 'borderTopWidth', 2);
         $this->checkStyleVariable($menu, 'borderRightWidth', 4);
         $this->checkStyleVariable($menu, 'borderBottomWidth', 6);
         $this->checkStyleVariable($menu, 'borderLeftWidth', 4);
         $this->checkStyleVariable($menu, 'borderColour', 'green');
 
-        $menu = (new CliMenuBuilder)
-            ->setTerminal($terminal)
+        $menu = (new CliMenuBuilder($terminal))
             ->setBorder(2, 4, 'green')
             ->build();
+        
         $this->checkStyleVariable($menu, 'borderTopWidth', 2);
         $this->checkStyleVariable($menu, 'borderRightWidth', 4);
         $this->checkStyleVariable($menu, 'borderBottomWidth', 2);
         $this->checkStyleVariable($menu, 'borderLeftWidth', 4);
         $this->checkStyleVariable($menu, 'borderColour', 'green');
 
-        $menu = (new CliMenuBuilder)
-            ->setTerminal($terminal)
+        $menu = (new CliMenuBuilder($terminal))
             ->setBorder(2, 'green')
             ->build();
+        
         $this->checkStyleVariable($menu, 'borderTopWidth', 2);
         $this->checkStyleVariable($menu, 'borderRightWidth', 2);
         $this->checkStyleVariable($menu, 'borderBottomWidth', 2);
@@ -231,8 +229,7 @@ class CliMenuBuilderTest extends TestCase
             ->method('getColourSupport')
             ->will($this->returnValue(256));
 
-        $builder = new CliMenuBuilder;
-        $builder->setTerminal($terminal);
+        $builder = new CliMenuBuilder($terminal);
         $builder->setBackgroundColour(16, 'white');
         $builder->setForegroundColour(206, 'red');
         $menu = $builder->build();
@@ -246,8 +243,7 @@ class CliMenuBuilderTest extends TestCase
             ->method('getColourSupport')
             ->will($this->returnValue(8));
 
-        $builder = new CliMenuBuilder;
-        $builder->setTerminal($terminal);
+        $builder = new CliMenuBuilder($terminal);
         $builder->setBackgroundColour(16, 'white');
         $builder->setForegroundColour(206, 'red');
         $menu = $builder->build();
@@ -267,8 +263,7 @@ class CliMenuBuilderTest extends TestCase
             ->method('getColourSupport')
             ->will($this->returnValue(256));
 
-        $builder = new CliMenuBuilder;
-        $builder->setTerminal($terminal);
+        $builder = new CliMenuBuilder($terminal);
         $builder->setForegroundColour(512, 'white');
     }
 
@@ -283,8 +278,7 @@ class CliMenuBuilderTest extends TestCase
             ->method('getColourSupport')
             ->will($this->returnValue(256));
 
-        $builder = new CliMenuBuilder;
-        $builder->setTerminal($terminal);
+        $builder = new CliMenuBuilder($terminal);
         $builder->setBackgroundColour(257, 'white');
     }
 
@@ -523,8 +517,8 @@ class CliMenuBuilderTest extends TestCase
         $subMenuBuilder = new CliMenuBuilder;
 
         $builder = new CliMenuBuilder;
-        $builder->addSubMenu('sub-menu', 'My SubMenu', $subMenuBuilder);
-        $builder->addSubMenu('sub-menu', 'My Other SubMenu', $subMenuBuilder);
+        $builder->addSubMenuFromExistingBuilder('sub-menu', 'My SubMenu', $subMenuBuilder);
+        $builder->addSubMenuFromExistingBuilder('sub-menu', 'My Other SubMenu', $subMenuBuilder);
     }
 
     public function testAddSubMenuUsesTextParameterAsMenuItemText() : void
@@ -551,6 +545,7 @@ class CliMenuBuilderTest extends TestCase
             ->build();
 
         $this->assertSame('green', $builder->getSubMenu('sub-menu')->getStyle()->getBg());
+        self::assertSame($menu->getStyle(), $builder->getSubMenu('sub-menu')->getStyle());
     }
 
     public function testSubMenuDoesNotInheritsParentsStyleWhenSubMenuStyleHasAlterations() : void
@@ -707,9 +702,8 @@ class CliMenuBuilderTest extends TestCase
             ->method('getWidth')
             ->will($this->returnValue(200));
 
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder($terminal);
         $menu = $builder
-            ->setTerminal($terminal)
             ->setMarginAuto()
             ->setWidth(100)
             ->build();
@@ -725,9 +719,8 @@ class CliMenuBuilderTest extends TestCase
             ->method('getWidth')
             ->will($this->returnValue(200));
 
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder($terminal);
         $menu = $builder
-            ->setTerminal($terminal)
             ->setMargin(10)
             ->setMarginAuto()
             ->setWidth(100)
@@ -744,9 +737,8 @@ class CliMenuBuilderTest extends TestCase
             ->method('getWidth')
             ->will($this->returnValue(200));
 
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder($terminal);
         $menu = $builder
-            ->setTerminal($terminal)
             ->setMarginAuto()
             ->setMargin(10)
             ->setWidth(100)
