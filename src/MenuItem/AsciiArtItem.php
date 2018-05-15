@@ -41,9 +41,7 @@ class AsciiArtItem implements MenuItemInterface
     {
         Assertion::inArray($position, [self::POSITION_CENTER, self::POSITION_RIGHT, self::POSITION_LEFT]);
 
-        $this->text = implode("\n", array_map(function (string $line) {
-            return rtrim($line, ' ');
-        }, explode("\n", $text)));
+        $this->setText($text);
         $this->position  = $position;
         $this->alternateText = $alt;
         $this->artLength = max(array_map('mb_strlen', explode("\n", $text)));
@@ -101,6 +99,16 @@ class AsciiArtItem implements MenuItemInterface
     public function getText() : string
     {
         return $this->text;
+    }
+
+    /**
+     * Set the raw string of text
+     */
+    public function setText(string $text) : void
+    {
+        $this->text = implode("\n", array_map(function (string $line) {
+            return rtrim($line, ' ');
+        }, explode("\n", $text)));
     }
 
     /**
