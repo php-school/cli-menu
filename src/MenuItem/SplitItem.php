@@ -126,7 +126,7 @@ class SplitItem implements MenuItemInterface
             array_map(function ($index, $item) use ($selected, $length, $style) {
                 $isSelected = $selected && $index === $this->selectedItemIndex;
                 $marker = $item->canSelect()
-                    ? sprintf('%s ', $style->getMarker($isSelected))
+                    ? sprintf('%s', $style->getMarker($isSelected))
                     : '';
 
                 $itemExtra = '';
