@@ -463,21 +463,13 @@ class CliMenuBuilderTest extends TestCase
         $this->checkItems($menu, $expected);
     }
 
-    public function testEndThrowsExceptionIfNoParentBuilder() : void
-    {
-        $builder = new CliMenuBuilder;
-
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('No parent builder to return to');
-        
-        $builder->end();
-    }
-
     public function testAddSubMenu() : void
     {
         $builder = new CliMenuBuilder;
         $builder->disableDefaultItems();
-        $subMenuBuilder = $builder->addSubMenu('sub-menu', 'My SubMenu');
+        $builder->addSubMenu('My SubMenu', function () {
+            
+        });
         
         $menu = $builder->build();
         
@@ -486,10 +478,6 @@ class CliMenuBuilderTest extends TestCase
                 'class' => MenuMenuItem::class
             ]
         ]);
-        
-        $this->assertInstanceOf(CliMenuBuilder::class, $subMenuBuilder);
-        $this->assertNotSame($subMenuBuilder, $builder);
-        $this->assertSame($builder, $subMenuBuilder->end());
     }
 
     public function testAddSubMenuWithBuilder() : void
@@ -498,7 +486,7 @@ class CliMenuBuilderTest extends TestCase
         
         $builder = new CliMenuBuilder;
         $builder->disableDefaultItems();
-        $builder->addSubMenu('sub-menu', 'My SubMenu', $subMenuBuilder);
+        $builder->addSubMenuFromBuilder('My SubMenu', $subMenuBuilder);
 
         $menu = $builder->build();
 
@@ -509,25 +497,13 @@ class CliMenuBuilderTest extends TestCase
         ]);
     }
 
-    public function testAddSubMenuWithBuilderThrowsExceptionOnNonUniqueId() : void
-    {
-        self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('SubMenu with id: "sub-menu" already exists. $id must be unique');
-        
-        $subMenuBuilder = new CliMenuBuilder;
-
-        $builder = new CliMenuBuilder;
-        $builder->addSubMenuFromExistingBuilder('sub-menu', 'My SubMenu', $subMenuBuilder);
-        $builder->addSubMenuFromExistingBuilder('sub-menu', 'My Other SubMenu', $subMenuBuilder);
-    }
-
     public function testAddSubMenuUsesTextParameterAsMenuItemText() : void
     {
         $subMenuBuilder = new CliMenuBuilder;
 
         $builder = new CliMenuBuilder;
         $builder->disableDefaultItems();
-        $builder->addSubMenu('sub-menu', 'My SubMenu', $subMenuBuilder);
+        $builder->addSubMenuFromBuilder('My SubMenu', $subMenuBuilder);
 
         $menu = $builder->build();
 
@@ -542,70 +518,41 @@ class CliMenuBuilderTest extends TestCase
             ->method('getWidth')
             ->will($this->returnValue(200));
         
-        $builder = new CliMenuBuilder($terminal);
-        $menu = $builder->setBackgroundColour('green')
-            ->addSubMenu('sub-menu', 'My SubMenu')
-                ->addItem('Some Item', function () {
-                })
-                ->end()
+        $menu = (new CliMenuBuilder($terminal))
+            ->setBackgroundColour('green')
+            ->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
+                $b->addItem('Some Item', function () {
+                });
+            })
             ->build();
 
-        $this->assertSame('green', $builder->getSubMenu('sub-menu')->getStyle()->getBg());
-        self::assertSame($menu->getStyle(), $builder->getSubMenu('sub-menu')->getStyle());
+        self::assertSame('green', $menu->getItems()[0]->getSubMenu()->getStyle()->getBg());
+        self::assertSame($menu->getStyle(), $menu->getItems()[0]->getSubMenu()->getStyle());
     }
 
     public function testSubMenuDoesNotInheritsParentsStyleWhenSubMenuStyleHasAlterations() : void
     {
-        $builder = new CliMenuBuilder;
-        $menu = $builder->setBackgroundColour('green')
-            ->addSubMenu('sub-menu', 'My SubMenu')
-                ->addItem('Some Item', function () {
+        $menu = (new CliMenuBuilder)
+            ->setBackgroundColour('green')
+            ->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
+                $b->addItem('Some Item', function () {
                 })
-                ->setBackgroundColour('red')
-                ->end()
+                ->setBackgroundColour('red');
+            })
             ->build();
 
-        $this->assertSame('red', $builder->getSubMenu('sub-menu')->getStyle()->getBg());
-        $this->assertSame('green', $menu->getStyle()->getBg());
-    }
-
-    public function testGetSubMenuThrowsExceptionIfNotBuiltYet() : void
-    {
-        $builder = (new CliMenuBuilder)
-            ->disableDefaultItems()
-            ->addSubMenu('sub-menu', 'My SubMenu')
-                ->end();
-        
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Menu: "sub-menu" cannot be retrieved until menu has been built');
-        
-        $builder->getSubMenu('sub-menu');
-    }
-
-    public function testGetSubMenuReturnsInstanceOfBuiltSubMenu() : void
-    {
-        $builder = (new CliMenuBuilder)
-            ->disableDefaultItems()
-            ->addSubMenu('sub-menu', 'My SubMenu')
-                ->end();
-        
-        $menu       = $builder->build();
-        $subMenu    = $builder->getSubMenu('sub-menu');
-        
-        $this->assertInstanceOf(CliMenu::class, $menu);
-        $this->assertInstanceOf(CliMenu::class, $subMenu);
-        $this->assertNotSame($subMenu, $menu);
+        self::assertSame('red', $menu->getItems()[0]->getSubMenu()->getStyle()->getBg());
+        self::assertSame('green', $menu->getStyle()->getBg());
     }
 
     public function testSubMenuDefaultItems() : void
     {
-        $builder = (new CliMenuBuilder)
+        $menu = (new CliMenuBuilder)
             ->disableDefaultItems()
-            ->addSubMenu('sub-menu', 'My SubMenu')
-            ->end();
-
-        $menu       = $builder->build();
-        $subMenu    = $builder->getSubMenu('sub-menu');
+            ->addSubMenu('My SubMenu', function () {
+                
+            })
+            ->build();
 
         $expected = [
             [
@@ -618,20 +565,19 @@ class CliMenuBuilderTest extends TestCase
             ],
         ];
 
-        $this->checkItems($subMenu, $expected);
+        $this->checkItems($menu->getItems()[0]->getSubMenu(), $expected);
     }
 
     public function testModifyExitAndGoBackTextOnSubMenu() : void
     {
-        $builder = (new CliMenuBuilder)
+        $menu = (new CliMenuBuilder)
             ->disableDefaultItems()
-            ->addSubMenu('sub-menu', 'My SubMenu')
-                ->setExitButtonText("Won't you stay a little while longer?")
-                ->setGoBackButtonText("Don't click this - it's definitely not a go back button")
-                ->end();
-
-        $menu       = $builder->build();
-        $subMenu    = $builder->getSubMenu('sub-menu');
+            ->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
+                $b->setExitButtonText("Won't you stay a little while longer?")
+                    ->setGoBackButtonText("Don't click this - it's definitely not a go back button");
+            })
+            ->build();
+                
 
         $expected = [
             [
@@ -644,21 +590,19 @@ class CliMenuBuilderTest extends TestCase
             ],
         ];
 
-        $this->checkItems($subMenu, $expected);
+        $this->checkItems($menu->getItems()[0]->getSubMenu(), $expected);
     }
 
     public function testDisableDefaultItemsDisablesExitAndGoBackOnSubMenu() : void
     {
-        $builder = (new CliMenuBuilder)
+        $menu = (new CliMenuBuilder)
             ->disableDefaultItems()
-            ->addSubMenu('sub-menu', 'My SubMenu')
-                ->disableDefaultItems()
-                ->end();
-
-        $menu       = $builder->build();
-        $subMenu    = $builder->getSubMenu('sub-menu');
-
-        $this->checkVariable($subMenu, 'items', []);
+            ->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
+                $b->disableDefaultItems();
+            })
+            ->build();
+                
+        self::assertEquals($menu->getItems()[0]->getSubMenu()->getItems(), []);
     }
 
     public function testThrowsExceptionWhenDisablingRootMenu() : void
@@ -798,16 +742,16 @@ class CliMenuBuilderTest extends TestCase
     private function checkItems(CliMenu $menu, array $expected) : void
     {
         $actualItems = $this->readAttribute($menu, 'items');
-        $this->assertCount(count($expected), $actualItems);
+        self::assertCount(count($expected), $actualItems);
         
         foreach ($expected as $expectedItem) {
             $actualItem = array_shift($actualItems);
             
-            $this->assertInstanceOf($expectedItem['class'], $actualItem);
+            self::assertInstanceOf($expectedItem['class'], $actualItem);
             unset($expectedItem['class']);
             
             foreach ($expectedItem as $property => $value) {
-                $this->assertEquals($this->readAttribute($actualItem, $property), $value);
+                self::assertEquals($this->readAttribute($actualItem, $property), $value);
             }
         }
     }
@@ -815,12 +759,12 @@ class CliMenuBuilderTest extends TestCase
     private function checkVariable(CliMenu $menu, string $property, $expected) : void
     {
         $actual = $this->readAttribute($menu, $property);
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     private function checkStyleVariable(CliMenu $menu, string $property, $expected) : void
     {
         $style = $this->readAttribute($menu, 'style');
-        $this->assertEquals($this->readAttribute($style, $property), $expected);
+        self::assertEquals($this->readAttribute($style, $property), $expected);
     }
 }
