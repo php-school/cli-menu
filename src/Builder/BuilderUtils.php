@@ -71,7 +71,7 @@ trait BuilderUtils
             'id'   => $id
         ];
         
-        $this->subMenuBuilders[$id] = new CliMenuBuilder($this);
+        $this->subMenuBuilders[$id] = CliMenuBuilder::newFromParent($this);
         return $this->subMenuBuilders[$id];
     }
 

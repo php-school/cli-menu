@@ -16,24 +16,7 @@ class MenuStyleTest extends TestCase
 {
     private function getMenuStyle(int $colours = 8) : MenuStyle
     {
-        // Use the CliMenuBuilder & reflection to get the style Obj
-        $builder = new CliMenuBuilder();
-        $menu    = $builder->build();
-
-        $reflectionMenu = new \ReflectionObject($menu);
-        $styleProperty  = $reflectionMenu->getProperty('style');
-        $styleProperty->setAccessible(true);
-        $style = $styleProperty->getValue($menu);
-
-        $reflectionStyle  = new \ReflectionObject($style);
-        $terminalProperty = $reflectionStyle->getProperty('terminal');
-        $terminalProperty->setAccessible(true);
-        $terminalProperty->setValue($style, $this->getMockTerminal($colours));
-
-        // Force recalculate terminal widths now terminal is set
-        $style->setWidth(100);
-
-        return $style;
+        return new MenuStyle($this->getMockTerminal($colours));
     }
 
     private function getMockTerminal(int $colours = 8) : MockObject
