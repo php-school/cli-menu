@@ -90,6 +90,20 @@ class LineBreakItemTest extends TestCase
         $this->assertEquals(['❅❅❅❅❅', '❅❅❅❅❅'], $item->getRows($menuStyle));
     }
 
+    public function testSetText() : void
+    {
+        $menuStyle = $this->createMock(MenuStyle::class);
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getContentWidth')
+            ->will($this->returnValue(5));
+
+        $item = new LineBreakItem('ABC', 2);
+        $item->setText('❅-');
+        $this->assertEquals(['❅-❅-❅', '❅-❅-❅'], $item->getRows($menuStyle));
+    }
+
     public function testHideAndShowItemExtraHasNoEffect() : void
     {
         $item = new LineBreakItem('*');
