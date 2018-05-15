@@ -22,7 +22,7 @@ interface MenuItemInterface
     /**
      * Set the raw string of text
      */
-    public function setText() : void;
+    public function setText(string $text) : void;
 
     /**
      * Can the item be selected
