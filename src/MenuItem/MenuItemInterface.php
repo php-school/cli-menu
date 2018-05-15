@@ -20,11 +20,6 @@ interface MenuItemInterface
     public function getText() : string;
 
     /**
-     * Set the raw string of text
-     */
-    public function setText(string $text) : void;
-
-    /**
      * Can the item be selected
      */
     public function canSelect() : bool;
