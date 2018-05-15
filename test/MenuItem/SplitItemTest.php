@@ -148,7 +148,7 @@ class SplitItemTest extends TestCase
         self::assertEquals(['One            Two            '], $item->getRows($menuStyle));
     }
 
-    public function testsetGutter() : void
+    public function testSetGutter() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
