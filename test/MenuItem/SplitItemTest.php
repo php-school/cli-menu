@@ -375,6 +375,14 @@ class SplitItemTest extends TestCase
         
         (new SplitItem([]))->getText();
     }
+    
+    public function testSetTextThrowsAnException() : void
+    {
+        self::expectException(\BadMethodCallException::class);
+        self::expectExceptionMessage(sprintf('Not supported on: %s', SplitItem::class));
+        
+        (new SplitItem([]))->setText('test');
+    }
 
     public function testGetRowsThrowsAnExceptionIfNoItemsWereAdded() : void
     {
