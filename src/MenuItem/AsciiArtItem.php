@@ -44,7 +44,7 @@ class AsciiArtItem implements MenuItemInterface
         $this->setText($text);
         $this->position  = $position;
         $this->alternateText = $alt;
-        $this->artLength = max(array_map('mb_strlen', explode("\n", $text)));
+        $this->calculateArtLength();
     }
 
     /**
@@ -109,6 +109,14 @@ class AsciiArtItem implements MenuItemInterface
         $this->text = implode("\n", array_map(function (string $line) {
             return rtrim($line, ' ');
         }, explode("\n", $text)));
+    }
+
+    /**
+     * Calculate the length of the art
+     */
+    private function calculateArtLength() : void
+    {
+        $this->artLength = max(array_map('mb_strlen', explode("\n", $this->text)));
     }
 
     /**
