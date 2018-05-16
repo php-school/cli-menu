@@ -678,9 +678,12 @@ $menu->open();
 
 There are a few things to note about the syntax and builder process here:
 
-1. The first parameter to `addSubMenu` is a closure, which will be invoked with a new instance of `SplitItemBuilder` which you can use to add items to the split item.
+1. The first parameter to `addSplitItem` is a closure, which will be invoked with a new instance of `SplitItemBuilder` which you can use to add items to the split item.
 2. You can call `addItem`, `addSubMenu` and `addStaticItem` on the `SplitItemBuilder`. 
 3. `SplitItemBuilder` has a fluent interface so you can chain method calls.
+
+Note: The closure used to build the split item is also binded with the `SplitItemBuilder` instance so you can add items and such using `$this->addItem()` rather than using the function
+parameter, this method is slightly more concise, but if you are using an IDE it may be that code completion does not work when referring to `$this`.
 
 ### Disabling Items & Sub Menus
 
