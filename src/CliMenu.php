@@ -283,7 +283,17 @@ class CliMenu
     {
         $itemKeys = array_keys($this->items);
 
+        $increments = 0;
+
         do {
+            $increments++;
+
+            if ($increments > count($itemKeys)) {
+                //full cycle detected, there must be no selected items
+                //in the menu, so stop trying to select one.
+                return;
+            }
+
             $direction === 'UP'
                 ? $this->selectedItem--
                 : $this->selectedItem++;

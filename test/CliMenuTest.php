@@ -920,6 +920,20 @@ class CliMenuTest extends TestCase
         $menu->getSelectedItem();
     }
 
+    public function testMenuCanOpenAndFunctionWithoutAnySelectableItems() : void
+    {
+        $this->terminal->expects($this->exactly(3))
+            ->method('read')
+            ->willReturn("\033[B", "\033[B", 'Q');
+        $menu = new CliMenu('PHP School FTW', [new StaticItem('One')], $this->terminal);
+        $menu->addCustomControlMapping('Q', function (CliMenu $menu) {
+            $menu->close();
+        });
+        $menu->open();
+
+        self::assertCount(1, $menu->getItems());
+    }
+
     private function getTestFile() : string
     {
         return sprintf('%s/res/%s.txt', __DIR__, $this->getName());
