@@ -842,6 +842,84 @@ class CliMenuTest extends TestCase
         self::assertSame($expectedSelectedItem, $actualSelectedItem);
     }
 
+    public function testAddItemSelectsFirstSelectableItemWhenItemsExistButNoneAreSelectable() : void
+    {
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+        $menu->addItem(new StaticItem('No Selectable'));
+
+        self::assertNull(self::readAttribute($menu, 'selectedItem'));
+
+        $menu->addItem($item = new SelectableItem('Selectable', function () {
+        }));
+
+        self::assertEquals($item, $menu->getSelectedItem());
+    }
+
+    public function testAddItemsSelectsFirstSelectableItemWhenItemsExistButNoneAreSelectable() : void
+    {
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+        $menu->addItem(new StaticItem('No Selectable'));
+
+        self::assertNull(self::readAttribute($menu, 'selectedItem'));
+
+        $menu->addItems([$item = new SelectableItem('Selectable', function () {
+        })]);
+
+        self::assertEquals($item, $menu->getSelectedItem());
+    }
+
+    public function testSetItemsReSelectsFirstSelectableItem() : void
+    {
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+        $menu->addItem(new StaticItem('No Selectable'));
+        $menu->addItem($item = new SelectableItem('Selectable', function () {
+        }));
+
+        self::assertEquals($item, $menu->getSelectedItem());
+
+        $menu->setItems([$item2 = new SelectableItem('Selectable', function () {
+        })]);
+
+        self::assertEquals($item2, $menu->getSelectedItem());
+    }
+
+    public function testRemoveItemReSelectsFirstSelectableItemIfSelectedItemRemoved() : void
+    {
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+        $menu->addItem(new StaticItem('No Selectable'));
+        $menu->addItem($item = new SelectableItem('Selectable', function () {
+        }));
+
+        self::assertEquals($item, $menu->getSelectedItem());
+
+        $menu->removeItem($item);
+
+        self::assertNull(self::readAttribute($menu, 'selectedItem'));
+
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+        $menu->addItem(new StaticItem('No Selectable'));
+        $menu->addItem($item1 = new SelectableItem('Selectable', function () {
+        }));
+        $menu->addItem($item2 = new SelectableItem('Selectable', function () {
+        }));
+
+        self::assertEquals($item1, $menu->getSelectedItem());
+
+        $menu->removeItem($item1);
+
+        self::assertEquals($item2, $menu->getSelectedItem());
+    }
+
+    public function testGetSelectedItemThrowsExceptionIfNoSelectedItem() : void
+    {
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionMessage('No selected item');
+
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+        $menu->addItem(new StaticItem('No Selectable'));
+        $menu->getSelectedItem();
+    }
+
     private function getTestFile() : string
     {
         return sprintf('%s/res/%s.txt', __DIR__, $this->getName());
