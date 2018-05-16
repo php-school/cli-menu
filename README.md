@@ -603,14 +603,8 @@ $menu = (new CliMenuBuilder)
 ```
 
 In this example a single sub menu will be created. Upon entering the sub menu, you will be able to return to the main menu
-or exit completely. A Go Back button will be automatically added, you can customise this text like so:
-
-```php
-->addSubMenu('Super Sub Menu', function (CliMenuBuilder $b) {
-        $b->setTitle('Behold the awesomeness')
-            ->setGoBackButtonText('Descend to chaos');
-    })
-```    
+or exit completely. A Go Back button will be automatically added. You can customise this text using the `->setGoBackButtonText()` method on the `CliMenuBuilder` 
+instance for the sub menu.
 
 There are a few things to note about the syntax and builder process here
 
