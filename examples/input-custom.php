@@ -28,7 +28,7 @@ $itemCallable = function (CliMenu $menu) {
 
 $menu = (new CliMenuBuilder)
     ->setTitle('Basic CLI Menu')
-    ->addItem('Enter password', $itemCallable)
+    ->addItem('Enter text', $itemCallable)
     ->addLineBreak('-')
     ->setMarginAuto()
     ->build();
