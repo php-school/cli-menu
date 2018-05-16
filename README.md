@@ -80,7 +80,7 @@ composer require php-school/cli-menu
 ## Upgrading
 
 Please refer to the [Upgrade Documentation](UPGRADE.md) documentation to see what is required to upgrade your installed 
-`cli-menu` version.
+`cli-menu` version. Especially from 2.* to 3.0, much has changed.
 
 ## Usage
 
@@ -90,7 +90,7 @@ Here is a super basic example menu which will echo out the text of the selected 
 <?php
 
 use PhpSchool\CliMenu\CliMenu;
-use PhpSchool\CliMenu\CliMenuBuilder;
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
@@ -451,10 +451,11 @@ use PhpSchool\CliMenu\Action\GoBackAction;
 
 $menu = (new CliMenuBuilder)
     ->disableDefaultItems()
-    ->addSubMenu('sub-menu-1', 'Super Sub Menu')
-        ->setTitle('Behold the awesomeness')
-        ->addItem('Return to parent menu', new GoBackAction) //add a go back button
-        ->end()
+    ->addSubMenu('Super Sub Menu', function (CliMenuBuilder $b) {
+        $b->disableDefaultItems()
+            ->setTitle('Behold the awesomeness')
+            ->addItem('Return to parent menu', new GoBackAction); //add a go back button
+    })
     ->addItem('Leave this place now !', new ExitAction) //add an exit button
     ->build();
 ```
@@ -463,7 +464,7 @@ $menu = (new CliMenuBuilder)
 
 There a few different types of items you can add to your menu
 
-* Selectable Item - This is the type of item you need for something to be selectable (you can hit enter and it will call your invokable) 
+* Selectable Item - This is the type of item you need for something to be selectable (you can hit enter and it will invoke your callable) 
 * Line Break Item - This is used to break up areas, it can span multiple lines and will be the width of Menu. Whatever string is passed will be repeated.
 * Static Item - This will print whatever text is passed, useful for headings.
 * Ascii Art Item - Special item which allows usage of Ascii art. It takes care of padding and alignment.
@@ -506,7 +507,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-Note: You can add as many items as you want and they can all have a different action. The action is the separate parameter
+Note: You can add as many items as you want and they can all have a different action. The action is the second parameter
 and must be a valid PHP `callable`. Try using an `Invokable` class to keep your actions easily testable.
 
 ### Line Break Item
@@ -594,46 +595,24 @@ $callable = function (CliMenu $menu) {
 
 $menu = (new CliMenuBuilder)
     ->addItem('Normal Item', $callable)
-    ->addSubMenu('sub-menu-1', 'Super Sub Menu')
-        ->setTitle('Behold the awesomeness')
-        ->addItem(/** **/)
-        ->end()
+    ->addSubMenu('Super Sub Menu', function (CliMenuBuilder $b) {
+        $b->setTitle('Behold the awesomeness')
+            ->addItem(/** **/);
+    })
     ->build();
 ```
 
 In this example a single sub menu will be created. Upon entering the sub menu, you will be able to return to the main menu
-or exit completely. A Go Back button will be automatically added, you can customise this text like so:
-
-```php
-->addSubMenu('sub-menu-1', 'Super Sub Menu')
-    ->setTitle('Behold the awesomeness')
-    ->setGoBackButtonText('Descend to chaos')
-```    
+or exit completely. A Go Back button will be automatically added. You can customise this text using the `->setGoBackButtonText()` method on the `CliMenuBuilder` 
+instance for the sub menu.
 
 There are a few things to note about the syntax and builder process here
 
-1. The first parameter to `addSubMenu` must be a unique id to reference the sub menu. The second parameter is the text to be displayed on the menu which you select to enter the submenu.
-2. `addSubMenu` returns an instance of `CliMenuBuilder` so you can can customise exactly the same way you would the parent.
+1. The first parameter to `addSubMenu` is the text to be displayed on the menu which you select to enter the submenu. 
+2. The second parameter is a closure, which will be invoked with a new instance of `CliMenuBuilder` which you can use to customise the sub menu exactly the same way you would the parent
 3. If you do not modify the styles of the sub menu (eg, colours) it will inherit styles from the parent!
-4. You can call `end()` on the sub menu `CliMenuBuilder` instance to get the parent `Builder` back again. This is useful for chaining.
 
-If you need the `CliMenu` instance of the Sub Menu you can grab it after the main menu has been built using the unique id you passed to `addSubMenu.
-
-```php
-<?php
-
-use PhpSchool\CliMenu\Builder\CliMenuBuilder;
-
-$mainMenuBuilder = new CliMenuBuilder;
-$subMenuBuilder = $mainMenuBuilder->addSubMenu('sub-menu-1', 'Super Sub Menu');
-
-$menu = $mainMenuBuilder->build();
-$subMenu = $mainMenuBuilder->getSubMenu('sub-menu-1');
-```
-
-You can only do this after the main menu has been built, this is because the main menu builder takes care of building all sub menus.
-
-If you have already have a configured menu builder you can just pass that to `addSubMenu` and be done:
+If you have already have a configured menu builder you can just pass that to `addSubMenuFromBuilder` and be done:
 
 ```php
 <?php
@@ -645,14 +624,15 @@ $subMenuBuilder = (new CliMenuBuilder)
     ->addItem(/** **/);
 
 $menu = (new CliMenuBuilder)
-    ->addSubMenu('sub-menu-1', 'Super Sub Menu', $subMenuBuilder)
+    ->addSubMenuFromBuilder('Super Sub Menu', $subMenuBuilder)
     ->build();
 ```
 
-In this case `addSubMenu` will return the main menu builder, not the sub menu builder.
-
-The submenu menu item will be an instance of `\PhpSchool\CliMenu\MenuItem\MenuMenuItem`. If you need access to the submenu,
+Note: The submenu menu item will be an instance of `\PhpSchool\CliMenu\MenuItem\MenuMenuItem`. If you need access to the submenu,
 you can get it via `$menuMenuItem->getSubMenu()`.
+
+Note: The closure used to build the sub menu is also binded with the `CliMenuBuilder` instance so you can add items and such using `$this->addItem()` rather than using the function
+parameter, this method is slightly more concise, but if you are using an IDE it may be that code completion does not work when referring to `$this`.
 
 ### Split Item
 
@@ -666,6 +646,7 @@ Only Selectable, Static and SubMenu items are currently allowed inside a Split I
 <?php
 
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\Builder\SplitItemBuilder;
 use PhpSchool\CliMenu\CliMenu;
 
 $itemCallable = function (CliMenu $menu) {
@@ -675,15 +656,15 @@ $itemCallable = function (CliMenu $menu) {
 $menu = (new CliMenuBuilder)
     ->setWidth(150)
     ->addStaticItem('Below is a SplitItem')
-    ->addSplitItem()
-        ->setGutter(5)
-        ->addSubMenu('Sub Menu on a split item')
-            ->setTitle('Behold the awesomeness')
-            ->addItem('This is awesome', function() { print 'Yes!'; })
-            ->end()
-        ->addItem('Item 2', $itemCallable)
-        ->addStaticItem('Item 3 - Static')
-        ->end()
+    ->addSplitItem(function (SplitItemBuilder $b) use ($itemCallable) {
+        $b->setGutter(5)
+            ->addSubMenu('Sub Menu on a split item', function (CliMenuBuilder $b) {
+                $b->setTitle('Behold the awesomeness')
+                    ->addItem('This is awesome', function() { print 'Yes!'; });
+            })
+            ->addItem('Item 2', $itemCallable)
+            ->addStaticItem('Item 3 - Static');
+    })
     ->build();
 
 $menu->open();
@@ -691,10 +672,12 @@ $menu->open();
 
 There are a few things to note about the syntax and builder process here:
 
-1. There is no argument to `addSplitItem`.
-2. `addSplitItem` returns an instance of `SplitItemBuilder`, the main menu will take care of building all split items (and any submenu they might contain).
-3. You can call `addItem`, `addSubMenu` and `addStaticItem` on the `SplitItemBuilder`.
-4. Like when building submenus, you can call `end()` on the Split Item `SplitItemBuilder` instance to get the parent `CliMenuBuilder` back again. This is useful for chaining.
+1. The first parameter to `addSplitItem` is a closure, which will be invoked with a new instance of `SplitItemBuilder` which you can use to add items to the split item.
+2. You can call `addItem`, `addSubMenu` and `addStaticItem` on the `SplitItemBuilder`. 
+3. `SplitItemBuilder` has a fluent interface so you can chain method calls.
+
+Note: The closure used to build the split item is also binded with the `SplitItemBuilder` instance so you can add items and such using `$this->addItem()` rather than using the function
+parameter, this method is slightly more concise, but if you are using an IDE it may be that code completion does not work when referring to `$this`.
 
 ### Disabling Items & Sub Menus
 
@@ -715,22 +698,22 @@ $menu = (new CliMenuBuilder)
     ->addItem('First Item', $itemCallable)
     ->addItem('Second Item', $itemCallable, false, true)
     ->addItem('Third Item', $itemCallable, false, true)
-    ->addSubMenu('sub-menu-1', 'Submenu')
-        ->setTitle('Basic CLI Menu Disabled Items > Submenu')
-        ->addItem('You can go in here!', $itemCallable)
-        ->end()
-    ->addSubMenu('sub-menu-2', 'Disabled Submenu')
-        ->setTitle('Basic CLI Menu Disabled Items > Disabled Submenu')
-        ->addItem('Nope can\'t see this!', $itemCallable)
-        ->disableMenu()
-        ->end()
+    ->addSubMenu('Submenu', function (CliMenuBuilder $b) use ($itemCallable) {
+        $b->setTitle('Basic CLI Menu Disabled Items > Submenu')
+            ->addItem('You can go in here!', $itemCallable);
+    })
+    ->addSubMenu('Disabled Submenu', function (CliMenuBuilder $b) use ($itemCallable) {
+        $b->setTitle('Basic CLI Menu Disabled Items > Disabled Submenu')
+            ->addItem('Nope can\'t see this!', $itemCallable)
+            ->disableMenu();
+    })
     ->addLineBreak('-')
     ->build();
 ```
 
 The third param on the `->addItem` call is what disables an item while the `->disableMenu()` call disables the relevant menu. 
 
-The outcome is a full menu with dimmed rows to denote them being disabled. When a user navigates these items are jumped over to the next available selectable item.
+The outcome is a full menu with dimmed rows to denote them being disabled. When a user navigates the menu these items are jumped over to the next available selectable item.
 
 ### Item Markers
 
@@ -1209,7 +1192,6 @@ $menu = (new CliMenuBuilder)
 $menu->open();
 
 ```
-
 
 ### Dialogues & Input Styling
 
