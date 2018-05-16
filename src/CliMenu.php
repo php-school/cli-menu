@@ -51,7 +51,7 @@ class CliMenu
     protected $items = [];
 
     /**
-     * @var int
+     * @var int|null
      */
     protected $selectedItem;
 
@@ -164,9 +164,7 @@ class CliMenu
     {
         $this->items[] = $item;
 
-        if (count($this->items) === 1) {
-            $this->selectFirstItem();
-        }
+        $this->selectFirstItem();
     }
 
     /**
@@ -178,9 +176,7 @@ class CliMenu
             $this->items[] = $item;
         }
 
-        if (count($this->items) === count($items)) {
-            $this->selectFirstItem();
-        }
+        $this->selectFirstItem();
     }
 
     /**
@@ -188,6 +184,7 @@ class CliMenu
      */
     public function setItems(array $items) : void
     {
+        $this->selectedItem = null;
         $this->items = $items;
 
         $this->selectFirstItem();
@@ -198,10 +195,12 @@ class CliMenu
      */
     private function selectFirstItem() : void
     {
-        foreach ($this->items as $key => $item) {
-            if ($item->canSelect()) {
-                $this->selectedItem = $key;
-                break;
+        if (null === $this->selectedItem) {
+            foreach ($this->items as $key => $item) {
+                if ($item->canSelect()) {
+                    $this->selectedItem = $key;
+                    break;
+                }
             }
         }
     }
@@ -348,6 +347,10 @@ class CliMenu
      */
     public function getSelectedItem() : MenuItemInterface
     {
+        if (null === $this->selectedItem) {
+            throw new \RuntimeException('No selected item');
+        }
+
         $item = $this->items[$this->selectedItem];
         return $item instanceof SplitItem
             ? $item->getSelectedItem()
@@ -543,6 +546,11 @@ class CliMenu
 
         unset($this->items[$key]);
         $this->items = array_values($this->items);
+
+        if ($this->selectedItem === $key) {
+            $this->selectedItem = null;
+            $this->selectFirstItem();
+        }
     }
 
     public function getStyle() : MenuStyle
