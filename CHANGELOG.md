@@ -39,6 +39,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
  - Added setText methods to various items so they can be modified at runtime (#153)
  - Added MenuStyle#hasChangedFromDefaults to check if a MenuStyle has been modified (#149)
  - Added CliMenu#setTitle and CliMenu#setStyle (#155)
+ - Added CliMenuBuilder#getStyle to get the current style object for the menu
  
 ### Fixed
  - Fixed sub menu go back button freezing menu (#88)
@@ -47,6 +48,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
  - Fixed (#71) - changed padding calculation when row too long to stop php notices (#112)
  - Fixed wordwrap helper (#134)
  - Fixed selected item issues when adding/setting/removing items (#156)
+ - Fix infinite loop when no selectable items in menu (#159, #144)
  
 ### Removed
  - Dropped PHP 5.x and PHP 7.0 support (#79)
