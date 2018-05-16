@@ -8,8 +8,7 @@ or backwards compatibility (BC) breakages occur.
 ### BC breaks
 
 * Class `PhpSchool\CliMenu\CliMenuBuilder` has been moved, use 
-  `PhpSchool\CliMenu\Builder\CliMenuBuilder` instead. The old class has been aliased for now, but will be removed in 
-  `3.1`.
+  `PhpSchool\CliMenu\Builder\CliMenuBuilder` instead. Please migrate to the new namespace.
 * Removed `PhpSchool\CliMenu\Terminal` namespace, the code has been migrated to the `php-school/terminal` package and is 
   largely modified.
 * Method `addSubMenu` in '\PhpSchool\CliMenu\Builder\CliMenuBuilder' has an additional required parameter

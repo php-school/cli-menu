@@ -12,6 +12,7 @@ use PhpSchool\CliMenu\Input\Password;
 use PhpSchool\CliMenu\Input\Text;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
+use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Dialogue\Confirm;
@@ -131,6 +132,10 @@ class CliMenu
         }
     }
 
+    public function setTitle(string $title) : void
+    {
+        $this->title = $title;
+    }
 
     public function setParent(CliMenu $parent) : void
     {
@@ -543,6 +548,11 @@ class CliMenu
     public function getStyle() : MenuStyle
     {
         return $this->style;
+    }
+
+    public function setStyle(MenuStyle $style) : void
+    {
+        $this->style = $style;
     }
 
     public function getCurrentFrame() : Frame

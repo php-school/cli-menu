@@ -3,66 +3,86 @@
 namespace PhpSchool\CliMenu\Builder;
 
 use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\MenuItem\LineBreakItem;
+use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
+use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
-use PhpSchool\CliMenu\MenuStyle;
-use PhpSchool\Terminal\Terminal;
+use PhpSchool\CliMenu\MenuItem\StaticItem;
 
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class SplitItemBuilder implements Builder
+class SplitItemBuilder
 {
-    use BuilderUtils;
+    /**
+     * @var CliMenu
+     */
+    private $menu;
 
     /**
-     * @var int
+     * @var SplitItem
      */
-    private $gutter = 2;
+    private $splitItem;
 
-    /**
-     * @var CliMenuBuilder
-     */
-    private $parent;
-
-    public function __construct(CliMenuBuilder $parent)
+    public function __construct(CliMenu $menu)
     {
-        $this->parent = $parent;
+        $this->menu = $menu;
+        $this->splitItem = new SplitItem();
     }
 
+    public function addItem(
+        string $text,
+        callable $itemCallable,
+        bool $showItemExtra = false,
+        bool $disabled = false
+    ) : self {
+        $this->splitItem->addItem(new SelectableItem($text, $itemCallable, $showItemExtra, $disabled));
+
+        return $this;
+    }
+
+    public function addStaticItem(string $text) : self
+    {
+        $this->splitItem->addItem(new StaticItem($text));
+
+        return $this;
+    }
+
+    public function addLineBreak(string $breakChar = ' ', int $lines = 1) : self
+    {
+        $this->splitItem->addItem(new LineBreakItem($breakChar, $lines));
+
+        return $this;
+    }
+
+    public function addSubMenu(string $text, \Closure $callback) : self
+    {
+        $builder = CliMenuBuilder::newSubMenu($this->menu->getTerminal());
+
+        $callback = $callback->bindTo($builder);
+        $callback($builder);
+
+        $menu = $builder->build();
+        $menu->setParent($this->menu);
+
+        $this->splitItem->addItem(new MenuMenuItem(
+            $text,
+            $menu,
+            $builder->isMenuDisabled()
+        ));
+        
+        return $this;
+    }
+
+    public function setGutter(int $gutter) : self
+    {
+        $this->splitItem->setGutter($gutter);
+        
+        return $this;
+    }
+    
     public function build() : SplitItem
     {
-        $items = $this->buildSubMenus($this->menuItems);
-        
-        $splitItem = new SplitItem($items);
-        $splitItem->setGutter($this->gutter);
-
-        return $splitItem;
-    }
-
-    public function setSubMenuParents(CliMenu $menu) : void
-    {
-        foreach ($this->subMenus as $subMenu) {
-            $subMenu->setParent($menu);
-        }
-    }
-
-    public function getTerminal() : Terminal
-    {
-        return $this->parent->getTerminal();
-    }
-
-    public function getMenuStyle() : MenuStyle
-    {
-        return $this->parent->getMenuStyle();
-    }
-
-    public function end() : CliMenuBuilder
-    {
-        return $this->parent;
-    }
-
-    public function setGutter(int $gutter) : SplitItemBuilder
-    {
-        $this->gutter = $gutter;
+        return $this->splitItem;
     }
 }

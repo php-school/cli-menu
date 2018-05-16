@@ -14,13 +14,13 @@ $menu = (new CliMenuBuilder)
     ->addItem('First Item', $itemCallable)
     ->addItem('Second Item', $itemCallable)
     ->addLineBreak('-')
-    ->addSubMenu('sub-menu-1', 'Options')
-        ->setTitle('CLI Menu > Options')
-        ->addItem('First option', function (CliMenu $menu) {
-            echo sprintf('Executing option: %s', $menu->getSelectedItem()->getText());
-        })
-        ->addLineBreak('-')
-        ->end()
+    ->addSubMenu('Options', function (CliMenuBuilder $b) {
+        $b->setTitle('CLI Menu > Options')
+            ->addItem('First option', function (CliMenu $menu) {
+                echo sprintf('Executing option: %s', $menu->getSelectedItem()->getText());
+            })
+            ->addLineBreak('-');
+    })
     ->setWidth(70)
     ->setBackgroundColour('yellow')
     ->build();
