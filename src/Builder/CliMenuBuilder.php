@@ -351,6 +351,11 @@ class CliMenuBuilder
         return $this;
     }
 
+    public function getStyle() : MenuStyle
+    {
+        return $this->style;
+    }
+
     public function getTerminal() : Terminal
     {
         return $this->terminal;
