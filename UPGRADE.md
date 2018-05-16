@@ -9,8 +9,73 @@ or backwards compatibility (BC) breakages occur.
 
 * Class `PhpSchool\CliMenu\CliMenuBuilder` has been moved, use 
   `PhpSchool\CliMenu\Builder\CliMenuBuilder` instead. Please migrate to the new namespace.
+* `PhpSchool\CliMenu\Builder\CliMenuBuilder#addSubMenu` now takes a text and a closure used to configure the submenu. The callback
+  invoked with a new instance of `PhpSchool\CliMenu\Builder\CliMenuBuilder` as a parameter. `addSubMenu` now returns itself instead of
+  the sub menu `PhpSchool\CliMenu\Builder\CliMenuBuilder`. See below for upgrade example.
 * Removed `PhpSchool\CliMenu\Terminal` namespace, the code has been migrated to the `php-school/terminal` package and is 
   largely modified.
-* Method `addSubMenu` in '\PhpSchool\CliMenu\Builder\CliMenuBuilder' has an additional required parameter
-  added at the beginning of the parameter list. It must be a unique ID for the submenu. The method can be found in the trait
-  `\PhpSchool\CliMenu\Builder\BuilderUtils`.
+* Removed methods `setTerminal`, `getSubMenu`, `getMenuStyle` and `end` from `PhpSchool\CliMenu\CliMenuBuilder`.
+* Removed static method `getDefaultStyleValues` on `PhpSchool\CliMenu\MenuStyle`.
+
+
+#### Migrating to new `addSubMenu` method in `CliMenuBuilder`
+
+Previous code:
+
+```php
+<?php
+
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\CliMenuBuilder;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$itemCallable = function (CliMenu $menu) {
+    echo $menu->getSelectedItem()->getText();
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('CLI Menu')
+    ->addItem('First Item', $itemCallable)
+    ->addLineBreak('-')
+    ->addSubMenu('Options')
+        ->setTitle('CLI Menu > Options')
+        ->addItem('First option', function (CliMenu $menu) {
+            echo sprintf('Executing option: %s', $menu->getSelectedItem()->getText());
+        })
+        ->addLineBreak('-')
+        ->end()
+    ->build();
+
+$menu->open();
+```
+
+Would now become:
+
+```php
+<?php
+
+use PhpSchool\CliMenu\CliMenu;
+use \PhpSchool\CliMenu\Builder\CliMenuBuilder;
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+$itemCallable = function (CliMenu $menu) {
+    echo $menu->getSelectedItem()->getText();
+};
+
+$menu = (new CliMenuBuilder)
+    ->setTitle('CLI Menu')
+    ->addItem('First Item', $itemCallable)
+    ->addLineBreak('-')
+    ->addSubMenu('Options', function (CliMenuBuilder $b) {
+        $b->setTitle('CLI Menu > Options')
+            ->addItem('First option', function (CliMenu $menu) {
+                echo sprintf('Executing option: %s', $menu->getSelectedItem()->getText());
+            })
+            ->addLineBreak('-');
+    })
+    ->build();
+
+$menu->open();
+```
