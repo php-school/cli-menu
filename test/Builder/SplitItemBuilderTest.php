@@ -34,7 +34,7 @@ class SplitItemBuilderTest extends TestCase
             ],
         ];
 
-        $this->checkItems($item, $expected);
+        $this->checkItemItems($item, $expected);
     }
 
     public function testAddStaticItem() : void
@@ -52,7 +52,7 @@ class SplitItemBuilderTest extends TestCase
             ]
         ];
 
-        $this->checkItems($item, $expected);
+        $this->checkItemItems($item, $expected);
     }
 
     public function testAddSubMenu() : void
@@ -64,7 +64,7 @@ class SplitItemBuilderTest extends TestCase
 
         $item = $builder->build();
 
-        $this->checkItems($item, [
+        $this->checkItemItems($item, [
             [
                 'class' => MenuMenuItem::class
             ]
@@ -93,9 +93,38 @@ class SplitItemBuilderTest extends TestCase
         self::assertEquals(4, self::readAttribute($item, 'gutter'));
     }
 
-    private function checkItems(SplitItem $item, array $expected) : void
+    public function testAddSubMenuWithClosureBinding() : void
     {
-        $actualItems = $this->readAttribute($item, 'items');
+        $menu = new CliMenu(null, []);
+        $builder = new SplitItemBuilder($menu);
+        $builder->addSubMenu('My SubMenu', function () {
+            $this->disableDefaultItems();
+            $this->addItem('My Item', function () {
+            });
+        });
+
+        $item = $builder->build();
+
+        $expected = [
+            [
+                'class' => SelectableItem::class,
+                'text'  => 'My Item',
+            ]
+        ];
+
+        $this->checkItems(
+            $item->getItems()[0]->getSubMenu()->getItems(),
+            $expected
+        );
+    }
+
+    private function checkItemItems(SplitItem $item, array $expected) : void
+    {
+        $this->checkItems($item->getItems(), $expected);
+    }
+
+    private function checkItems(array $actualItems, array $expected) : void
+    {
         self::assertCount(count($expected), $actualItems);
 
         foreach ($expected as $expectedItem) {

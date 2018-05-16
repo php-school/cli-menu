@@ -55,10 +55,11 @@ class SplitItemBuilder
         return $this;
     }
 
-    public function addSubMenu(string $text, callable $callback) : self
+    public function addSubMenu(string $text, \Closure $callback) : self
     {
         $builder = CliMenuBuilder::newSubMenu($this->menu->getTerminal());
 
+        $callback = $callback->bindTo($builder);
         $callback($builder);
 
         $menu = $builder->build();

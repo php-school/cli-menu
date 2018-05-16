@@ -131,10 +131,11 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function addSubMenu(string $text, callable $callback) : self
+    public function addSubMenu(string $text, \Closure $callback) : self
     {
         $builder = self::newSubMenu($this->terminal);
 
+        $callback = $callback->bindTo($builder);
         $callback($builder);
 
         $menu = $builder->build();
@@ -175,10 +176,11 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function addSplitItem(callable $callback) : self
+    public function addSplitItem(\Closure $callback) : self
     {
         $builder = new SplitItemBuilder($this->menu);
-        
+
+        $callback = $callback->bindTo($builder);
         $callback($builder);
         
         $this->menu->addItem($builder->build());

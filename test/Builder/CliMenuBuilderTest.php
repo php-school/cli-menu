@@ -30,7 +30,7 @@ class CliMenuBuilderTest extends TestCase
             ],
         ];
         
-        $this->checkItems($menu, $expected);
+        $this->checkMenuItems($menu, $expected);
     }
 
     public function testModifyExitButtonText() : void
@@ -46,7 +46,7 @@ class CliMenuBuilderTest extends TestCase
             ],
         ];
 
-        $this->checkItems($menu, $expected);
+        $this->checkMenuItems($menu, $expected);
     }
 
     public function testModifyStyles() : void
@@ -324,7 +324,7 @@ class CliMenuBuilderTest extends TestCase
             ],
         ];
         
-        $this->checkItems($menu, $expected);
+        $this->checkMenuItems($menu, $expected);
     }
 
     public function testAddMultipleItems() : void
@@ -351,7 +351,7 @@ class CliMenuBuilderTest extends TestCase
             ],
         ];
 
-        $this->checkItems($menu, $expected);
+        $this->checkMenuItems($menu, $expected);
     }
 
     public function testAddStaticItem() : void
@@ -369,7 +369,7 @@ class CliMenuBuilderTest extends TestCase
             ]
         ];
         
-        $this->checkItems($menu, $expected);
+        $this->checkMenuItems($menu, $expected);
     }
 
     public function testAddLineBreakItem() : void
@@ -387,7 +387,7 @@ class CliMenuBuilderTest extends TestCase
             ]
         ];
 
-        $this->checkItems($menu, $expected);
+        $this->checkMenuItems($menu, $expected);
     }
 
     public function testAddLineBreakItemWithNumLines() : void
@@ -405,7 +405,7 @@ class CliMenuBuilderTest extends TestCase
             ]
         ];
 
-        $this->checkItems($menu, $expected);
+        $this->checkMenuItems($menu, $expected);
     }
 
     public function testAsciiArtWithDefaultPosition() : void
@@ -423,7 +423,7 @@ class CliMenuBuilderTest extends TestCase
             ]
         ];
 
-        $this->checkItems($menu, $expected);
+        $this->checkMenuItems($menu, $expected);
     }
 
     public function testAsciiArtWithSpecificPosition() : void
@@ -441,7 +441,7 @@ class CliMenuBuilderTest extends TestCase
             ]
         ];
 
-        $this->checkItems($menu, $expected);
+        $this->checkMenuItems($menu, $expected);
     }
 
     public function testAsciiArtWithAlt() : void
@@ -460,7 +460,7 @@ class CliMenuBuilderTest extends TestCase
             ]
         ];
 
-        $this->checkItems($menu, $expected);
+        $this->checkMenuItems($menu, $expected);
     }
 
     public function testAddSubMenu() : void
@@ -472,7 +472,7 @@ class CliMenuBuilderTest extends TestCase
         
         $menu = $builder->build();
         
-        $this->checkItems($menu, [
+        $this->checkMenuItems($menu, [
             [
                 'class' => MenuMenuItem::class
             ]
@@ -489,7 +489,7 @@ class CliMenuBuilderTest extends TestCase
 
         $menu = $builder->build();
 
-        $this->checkItems($menu, [
+        $this->checkMenuItems($menu, [
             [
                 'class' => MenuMenuItem::class
             ]
@@ -563,7 +563,7 @@ class CliMenuBuilderTest extends TestCase
             ],
         ];
 
-        $this->checkItems($menu->getItems()[0]->getSubMenu(), $expected);
+        $this->checkMenuItems($menu->getItems()[0]->getSubMenu(), $expected);
     }
 
     public function testModifyExitAndGoBackTextOnSubMenu() : void
@@ -588,7 +588,7 @@ class CliMenuBuilderTest extends TestCase
             ],
         ];
 
-        $this->checkItems($menu->getItems()[0]->getSubMenu(), $expected);
+        $this->checkMenuItems($menu->getItems()[0]->getSubMenu(), $expected);
     }
 
     public function testDisableDefaultItemsDisablesExitAndGoBackOnSubMenu() : void
@@ -736,23 +736,71 @@ class CliMenuBuilderTest extends TestCase
 
         self::assertEquals(3, $style->getPaddingLeftRight());
     }
-    
-    private function checkItems(CliMenu $menu, array $expected) : void
+
+    public function testAddSubMenuWithClosureBinding() : void
     {
-        $actualItems = $this->readAttribute($menu, 'items');
+        $builder = new CliMenuBuilder;
+        $builder->disableDefaultItems();
+        $builder->addSubMenu('My SubMenu', function () {
+            $this->disableDefaultItems();
+            $this->addItem('My Item', function () {
+            });
+        });
+
+        $menu = $builder->build();
+
+        $expected = [
+            [
+                'class' => SelectableItem::class,
+                'text'  => 'My Item',
+            ]
+        ];
+
+        $this->checkMenuItems($menu->getItems()[0]->getSubMenu(), $expected);
+    }
+
+    public function testAddSplitItemWithClosureBinding() : void
+    {
+        $builder = new CliMenuBuilder;
+        $builder->disableDefaultItems();
+        $builder->addSplitItem(function () {
+            $this->addItem('My Item', function () {
+            });
+        });
+
+        $menu = $builder->build();
+
+        $expected = [
+            [
+                'class' => SelectableItem::class,
+                'text'  => 'My Item',
+            ]
+        ];
+
+        $this->checkItems($menu->getItems()[0]->getItems(), $expected);
+    }
+    
+    private function checkMenuItems(CliMenu $menu, array $expected) : void
+    {
+        $this->checkItems($this->readAttribute($menu, 'items'), $expected);
+    }
+
+    private function checkItems(array $actualItems, array $expected) : void
+    {
         self::assertCount(count($expected), $actualItems);
-        
+
         foreach ($expected as $expectedItem) {
             $actualItem = array_shift($actualItems);
-            
+
             self::assertInstanceOf($expectedItem['class'], $actualItem);
             unset($expectedItem['class']);
-            
+
             foreach ($expectedItem as $property => $value) {
                 self::assertEquals($this->readAttribute($actualItem, $property), $value);
             }
         }
     }
+
     
     private function checkVariable(CliMenu $menu, string $property, $expected) : void
     {
