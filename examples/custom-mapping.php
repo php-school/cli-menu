@@ -10,7 +10,7 @@ $exit = function (CliMenu $menu) {
 };
 
 $menu = (new CliMenuBuilder)
-    ->setTitle('Basic CLI Menu')
+    ->setTitle('Basic CLI Menu - Press x to exit')
     ->addItem('First Item', $exit)
     ->addItem('Second Item', $exit)
     ->addLineBreak('-')

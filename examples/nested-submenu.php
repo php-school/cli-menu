@@ -14,20 +14,20 @@ $menu = (new CliMenuBuilder)
     ->addItem('First Item', $itemCallable)
     ->addItem('Second Item', $itemCallable)
     ->addLineBreak('-')
-    ->addSubMenu('sub-menu-1', 'Options')
-        ->setTitle('CLI Menu > Options')
-        ->addItem('First option', function (CliMenu $menu) {
-            echo sprintf('Executing option: %s', $menu->getSelectedItem()->getText());
-        })
-        ->addSubMenu('sub-menu-nested-1', 'Secret Options')
-            ->setTitle('CLI Menu > Options > Secret Options')
-            ->addItem('First secret option', function (CliMenu $menu) {
-                echo sprintf('Executing secret option: %s', $menu->getSelectedItem()->getText());
+    ->addSubMenu('Options', function (CliMenuBuilder $b) {
+        $b->setTitle('CLI Menu > Options')
+            ->addItem('First option', function (CliMenu $menu) {
+                echo sprintf('Executing option: %s', $menu->getSelectedItem()->getText());
             })
-            ->addLineBreak('-')
-            ->end()
-        ->addLineBreak('-')
-        ->end()
+            ->addSubMenu('Secret Options', function (CliMenuBuilder $b) {
+                $b->setTitle('CLI Menu > Options > Secret Options')
+                    ->addItem('First secret option', function (CliMenu $menu) {
+                        echo sprintf('Executing secret option: %s', $menu->getSelectedItem()->getText());
+                    })
+                    ->addLineBreak('-');
+            })
+        ->addLineBreak('-');
+    })
     ->setWidth(70)
     ->setBackgroundColour('yellow')
     ->build();
