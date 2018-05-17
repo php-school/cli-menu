@@ -18,6 +18,8 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
  - Do not print right margin. Causes menu to wrap even when row fits in terminal (#116)
  - CliMenu throws a \RuntimeException if it is opened with no items added (#146, #130)
  - Sub Menus are configured via closures (#155)
+ - Remove restriction of 1 character length for markers (#141)
+ - Remove the mandatory space after markers for now they can be of any length (#154)
  
 ### Added
  - Added type hints everywhere (#79)
