@@ -35,7 +35,7 @@ class StringUtil
                     }
                 }
                 return $line . trim($actual);
-            }, explode($break, $string))
+            }, explode("\n", $string))
         );
     }
 
