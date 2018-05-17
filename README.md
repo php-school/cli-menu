@@ -178,6 +178,12 @@ php basic.php
 #### Password Input
 <img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/39929339-1cd4cd2e-5538-11e8-9330-335dd1b7ed1c.png">
 
+#### Using cli-menu to create art
+
+Want to see something really cool? Well you can use cli-menu to create a drawing canvas on your terminal. Check it out!:
+
+<img width="600" alt="submenu" src="https://user-images.githubusercontent.com/2817002/40175009-15e1e6c0-59d7-11e8-914f-c9136fd417b4.png">
+
 ## API
 
 The `CliMenu` object is constructed via the Builder class
