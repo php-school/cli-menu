@@ -118,7 +118,7 @@ $menu->open();
 Check out the [examples](examples) directory and run them to see what is possible! The best way to run the examples is to git clone the repository:
 
 ```shell
-git clone git@github.com:php-school/cli-menu.git
+git clone https://github.com/php-school/cli-menu.git
 cd cli-menu
 composer install --no-dev
 cd examples
