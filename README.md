@@ -718,7 +718,7 @@ The outcome is a full menu with dimmed rows to denote them being disabled. When 
 ### Item Markers
 
 The marker displayed by the side of the currently active item can be modified, UTF-8 characters are supported.
-The marker for un-selected items can also be modified. If you want to disable it, just set it to a space character. Item
+The marker for un-selected items can also be modified. If you want to disable it, just set it to an empty string. Item
 markers only display on *selectable* items, which are: `\PhpSchool\CliMenu\MenuItem\SelectableItem` & `\PhpSchool\CliMenu\MenuItem\MenuMenuItem`.
 
 ```php
@@ -727,11 +727,11 @@ markers only display on *selectable* items, which are: `\PhpSchool\CliMenu\MenuI
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 
 $menu = (new CliMenuBuilder)
-    ->setUnselectedMarker('❅')
-    ->setSelectedMarker('✏')
+    ->setUnselectedMarker('❅ ')
+    ->setSelectedMarker('✏ ')
     
     //disable unselected marker
-    ->setUnselectedMarker(' ')
+    ->setUnselectedMarker('')
     ->build();
 ```
 
