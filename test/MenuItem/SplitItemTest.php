@@ -256,7 +256,7 @@ class SplitItemTest extends TestCase
         self::assertEquals(
             [
                 '* Item         * Item         ',
-                'One            Two            ',
+                '  One            Two          ',
             ],
             $item->getRows($menuStyle)
         );
@@ -290,7 +290,7 @@ class SplitItemTest extends TestCase
         self::assertEquals(
             [
                 '= Item         * Item         ',
-                'One            Two            ',
+                '  One            Two          ',
             ],
             $item->getRows($menuStyle, true)
         );
@@ -328,7 +328,7 @@ class SplitItemTest extends TestCase
         $menuStyle = new MenuStyle($terminal);
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(50);
-        $menuStyle->setItemExtra(' [EXTRA] ');
+        $menuStyle->setItemExtra(' [EXTRA]');
         $menuStyle->setDisplaysExtra(true);
         $menuStyle->setUnselectedMarker('* ');
 
@@ -343,8 +343,8 @@ class SplitItemTest extends TestCase
 
         self::assertEquals(
             [
-                '* Item 1       [EXTRA]   * Item 2       [EXTRA]   ',
-                'Item 1                   Item 2                   ',
+                '* Item 1        [EXTRA]  * Item 2        [EXTRA]  ',
+                '  Item 1                   Item 2                 ',
             ],
             $item->getRows($menuStyle)
         );
@@ -374,7 +374,7 @@ class SplitItemTest extends TestCase
         self::assertEquals(
             [
                 '* Item 1                 * Item 2       [EXTRA]   ',
-                'Item 1                   Item 2                   ',
+                '  Item 1                   Item 2                 ',
             ],
             $item->getRows($menuStyle)
         );

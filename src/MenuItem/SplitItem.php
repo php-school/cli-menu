@@ -137,7 +137,14 @@ class SplitItem implements MenuItemInterface
                 }
 
                 return $this->buildCell(
-                    explode("\n", StringUtil::wordwrap(sprintf('%s%s', $marker, $item->getText()), $length)),
+                    explode(
+                        "\n",
+                        StringUtil::wordwrap(
+                            sprintf('%s%s', $marker, $item->getText()),
+                            $length,
+                            sprintf("\n%s", str_repeat(' ', mb_strlen($marker)))
+                        )
+                    ),
                     $length,
                     $style,
                     $isSelected,
