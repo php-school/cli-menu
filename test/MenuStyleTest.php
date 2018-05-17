@@ -81,8 +81,8 @@ class MenuStyleTest extends TestCase
 
         self::assertSame('blue', $style->getBg());
         self::assertSame('white', $style->getFg());
-        self::assertSame('○', $style->getUnselectedMarker());
-        self::assertSame('●', $style->getSelectedMarker());
+        self::assertSame('○ ', $style->getUnselectedMarker());
+        self::assertSame('● ', $style->getSelectedMarker());
         self::assertSame('✔', $style->getItemExtra());
         self::assertFalse($style->getDisplaysExtra());
         self::assertSame('=', $style->getTitleSeparator());

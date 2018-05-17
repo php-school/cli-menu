@@ -30,7 +30,7 @@ trait SelectableTrait
      */
     public function getRows(MenuStyle $style, bool $selected = false) : array
     {
-        $marker = sprintf("%s ", $style->getMarker($selected));
+        $marker = sprintf("%s", $style->getMarker($selected));
 
         $length = $style->getDisplaysExtra()
             ? $style->getContentWidth() - (mb_strlen($style->getItemExtra()) + 2)

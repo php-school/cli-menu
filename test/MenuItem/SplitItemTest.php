@@ -9,6 +9,7 @@ use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -192,7 +193,7 @@ class SplitItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getMarker')
-            ->willReturnMap([[true, '='], [false, '*']]);
+            ->willReturnMap([[true, '= '], [false, '* ']]);
 
         $item = new SplitItem(
             [
@@ -241,7 +242,7 @@ class SplitItemTest extends TestCase
             ->expects($this->any())
             ->method('getMarker')
             ->with(false)
-            ->will($this->returnValue('*'));
+            ->will($this->returnValue('* '));
 
         $item = new SplitItem(
             [
@@ -273,7 +274,7 @@ class SplitItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getMarker')
-            ->willReturnMap([[true, '='], [false, '*']]);
+            ->willReturnMap([[true, '= '], [false, '* ']]);
 
         $item = new SplitItem(
             [
@@ -297,22 +298,15 @@ class SplitItemTest extends TestCase
 
     public function testGetRowsWithItemExtra() : void
     {
-        $menuStyle = $this->createMock(MenuStyle::class);
+        $terminal = $this->createMock(Terminal::class);
+        $terminal->expects($this->any())->method('getWidth')->willReturn(100);
 
-        $menuStyle
-            ->expects($this->any())
-            ->method('getContentWidth')
-            ->will($this->returnValue(50));
-
-        $menuStyle
-            ->expects($this->any())
-            ->method('getItemExtra')
-            ->will($this->returnValue('[EXTRA]'));
-        
-        $menuStyle
-            ->expects($this->any())
-            ->method('getDisplaysExtra')
-            ->willReturn(true);
+        $menuStyle = new MenuStyle($terminal);
+        $menuStyle->setPaddingLeftRight(0);
+        $menuStyle->setWidth(50);
+        $menuStyle->setItemExtra('[EXTRA]');
+        $menuStyle->setDisplaysExtra(true);
+        $menuStyle->setUnselectedMarker('* ');
 
         $item = new SplitItem(
             [
@@ -323,27 +317,20 @@ class SplitItemTest extends TestCase
             ]
         );
         
-        self::assertEquals([' Item 1         [EXTRA]   Item 2         [EXTRA]  '], $item->getRows($menuStyle));
+        self::assertEquals(['* Item 1        [EXTRA]  * Item 2        [EXTRA]  '], $item->getRows($menuStyle));
     }
 
     public function testGetRowsWithMultipleLinesWithItemExtra() : void
     {
-        $menuStyle = $this->createMock(MenuStyle::class);
+        $terminal = $this->createMock(Terminal::class);
+        $terminal->expects($this->any())->method('getWidth')->willReturn(100);
 
-        $menuStyle
-            ->expects($this->any())
-            ->method('getContentWidth')
-            ->will($this->returnValue(50));
-
-        $menuStyle
-            ->expects($this->any())
-            ->method('getItemExtra')
-            ->will($this->returnValue('[EXTRA]'));
-
-        $menuStyle
-            ->expects($this->any())
-            ->method('getDisplaysExtra')
-            ->willReturn(true);
+        $menuStyle = new MenuStyle($terminal);
+        $menuStyle->setPaddingLeftRight(0);
+        $menuStyle->setWidth(50);
+        $menuStyle->setItemExtra(' [EXTRA] ');
+        $menuStyle->setDisplaysExtra(true);
+        $menuStyle->setUnselectedMarker('* ');
 
         $item = new SplitItem(
             [
@@ -356,7 +343,7 @@ class SplitItemTest extends TestCase
 
         self::assertEquals(
             [
-                ' Item 1         [EXTRA]   Item 2         [EXTRA]  ',
+                '* Item 1       [EXTRA]   * Item 2       [EXTRA]   ',
                 'Item 1                   Item 2                   ',
             ],
             $item->getRows($menuStyle)
@@ -365,22 +352,15 @@ class SplitItemTest extends TestCase
 
     public function testGetRowsWithMultipleLinesWithItemExtraOnOne() : void
     {
-        $menuStyle = $this->createMock(MenuStyle::class);
+        $terminal = $this->createMock(Terminal::class);
+        $terminal->expects($this->any())->method('getWidth')->willReturn(100);
 
-        $menuStyle
-            ->expects($this->any())
-            ->method('getContentWidth')
-            ->will($this->returnValue(50));
-
-        $menuStyle
-            ->expects($this->any())
-            ->method('getItemExtra')
-            ->will($this->returnValue('[EXTRA]'));
-
-        $menuStyle
-            ->expects($this->any())
-            ->method('getDisplaysExtra')
-            ->willReturn(true);
+        $menuStyle = new MenuStyle($terminal);
+        $menuStyle->setPaddingLeftRight(0);
+        $menuStyle->setWidth(50);
+        $menuStyle->setItemExtra(' [EXTRA] ');
+        $menuStyle->setDisplaysExtra(true);
+        $menuStyle->setUnselectedMarker('* ');
 
         $item = new SplitItem(
             [
@@ -393,7 +373,7 @@ class SplitItemTest extends TestCase
 
         self::assertEquals(
             [
-                ' Item 1                   Item 2         [EXTRA]  ',
+                '* Item 1                 * Item 2       [EXTRA]   ',
                 'Item 1                   Item 2                   ',
             ],
             $item->getRows($menuStyle)
