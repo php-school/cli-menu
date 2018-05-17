@@ -5,6 +5,7 @@ namespace PhpSchool\CliMenuTest\MenuItem;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -51,33 +52,29 @@ class MenuMenuItemTest extends TestCase
 
     public function testGetRows() : void
     {
-        $menuStyle = $this->createMock(MenuStyle::class);
+        $terminal = $this->createMock(Terminal::class);
+        $terminal->expects($this->any())->method('getWidth')->willReturn(100);
 
-        $menuStyle
-            ->expects($this->any())
-            ->method('getContentWidth')
-            ->will($this->returnValue(10));
+        $menuStyle = new MenuStyle($terminal);
+        $menuStyle->setPaddingLeftRight(0);
+        $menuStyle->setWidth(10);
+        $menuStyle->setUnselectedMarker('* ');
 
         $subMenu = $this->createMock(CliMenu::class);
 
         $item = new MenuMenuItem('Item', $subMenu);
-        $this->assertEquals([' Item'], $item->getRows($menuStyle));
+        $this->assertEquals(['* Item'], $item->getRows($menuStyle));
     }
 
     public function testGetRowsWithUnSelectedMarker() : void
     {
-        $menuStyle = $this->createMock(MenuStyle::class);
+        $terminal = $this->createMock(Terminal::class);
+        $terminal->expects($this->any())->method('getWidth')->willReturn(100);
 
-        $menuStyle
-            ->expects($this->any())
-            ->method('getContentWidth')
-            ->will($this->returnValue(10));
-
-        $menuStyle
-            ->expects($this->exactly(2))
-            ->method('getMarker')
-            ->with(false)
-            ->will($this->returnValue('* '));
+        $menuStyle = new MenuStyle($terminal);
+        $menuStyle->setPaddingLeftRight(0);
+        $menuStyle->setWidth(10);
+        $menuStyle->setUnselectedMarker('* ');
 
         $subMenu = $this->createMock(CliMenu::class);
 
@@ -112,20 +109,21 @@ class MenuMenuItemTest extends TestCase
 
     public function testGetRowsWithMultipleLines() : void
     {
-        $menuStyle = $this->createMock(MenuStyle::class);
+        $terminal = $this->createMock(Terminal::class);
+        $terminal->expects($this->any())->method('getWidth')->willReturn(100);
 
-        $menuStyle
-            ->expects($this->any())
-            ->method('getContentWidth')
-            ->will($this->returnValue(10));
+        $menuStyle = new MenuStyle($terminal);
+        $menuStyle->setPaddingLeftRight(0);
+        $menuStyle->setWidth(10);
+        $menuStyle->setUnselectedMarker('* ');
 
         $subMenu = $this->createMock(CliMenu::class);
 
         $item = new MenuMenuItem('LONG ITEM LINE', $subMenu);
         $this->assertEquals(
             [
-                " LONG ITEM",
-                " LINE",
+                "* LONG",
+                "  ITEM LINE",
             ],
             $item->getRows($menuStyle)
         );
