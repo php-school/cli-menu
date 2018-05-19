@@ -2,7 +2,6 @@
 
 namespace PhpSchool\CliMenu;
 
-use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\CliMenu\Util\ColourUtil;
 use PhpSchool\Terminal\Terminal;
@@ -219,25 +218,25 @@ class MenuStyle
     {
         $this->terminal = $terminal ?: TerminalFactory::fromSystem();
 
-        $this->fg = static::$defaultStyleValues['fg'];
-        $this->bg = static::$defaultStyleValues['bg'];
+        $this->fg = self::$defaultStyleValues['fg'];
+        $this->bg = self::$defaultStyleValues['bg'];
 
         $this->generateColoursSetCode();
 
-        $this->setWidth(static::$defaultStyleValues['width']);
-        $this->setPaddingTopBottom(static::$defaultStyleValues['paddingTopBottom']);
-        $this->setPaddingLeftRight(static::$defaultStyleValues['paddingLeftRight']);
-        $this->setMargin(static::$defaultStyleValues['margin']);
-        $this->setSelectedMarker(static::$defaultStyleValues['selectedMarker']);
-        $this->setUnselectedMarker(static::$defaultStyleValues['unselectedMarker']);
-        $this->setItemExtra(static::$defaultStyleValues['itemExtra']);
-        $this->setDisplaysExtra(static::$defaultStyleValues['displaysExtra']);
-        $this->setTitleSeparator(static::$defaultStyleValues['titleSeparator']);
-        $this->setBorderTopWidth(static::$defaultStyleValues['borderTopWidth']);
-        $this->setBorderRightWidth(static::$defaultStyleValues['borderRightWidth']);
-        $this->setBorderBottomWidth(static::$defaultStyleValues['borderBottomWidth']);
-        $this->setBorderLeftWidth(static::$defaultStyleValues['borderLeftWidth']);
-        $this->setBorderColour(static::$defaultStyleValues['borderColour']);
+        $this->setWidth(self::$defaultStyleValues['width']);
+        $this->setPaddingTopBottom(self::$defaultStyleValues['paddingTopBottom']);
+        $this->setPaddingLeftRight(self::$defaultStyleValues['paddingLeftRight']);
+        $this->setMargin(self::$defaultStyleValues['margin']);
+        $this->setSelectedMarker(self::$defaultStyleValues['selectedMarker']);
+        $this->setUnselectedMarker(self::$defaultStyleValues['unselectedMarker']);
+        $this->setItemExtra(self::$defaultStyleValues['itemExtra']);
+        $this->setDisplaysExtra(self::$defaultStyleValues['displaysExtra']);
+        $this->setTitleSeparator(self::$defaultStyleValues['titleSeparator']);
+        $this->setBorderTopWidth(self::$defaultStyleValues['borderTopWidth']);
+        $this->setBorderRightWidth(self::$defaultStyleValues['borderRightWidth']);
+        $this->setBorderBottomWidth(self::$defaultStyleValues['borderBottomWidth']);
+        $this->setBorderLeftWidth(self::$defaultStyleValues['borderLeftWidth']);
+        $this->setBorderColour(self::$defaultStyleValues['borderColour']);
     }
 
     public function hasChangedFromDefaults() : bool
@@ -262,7 +261,7 @@ class MenuStyle
             $this->marginAuto,
         ];
                 
-        return $currentValues !== array_values(static::$defaultStyleValues);
+        return $currentValues !== array_values(self::$defaultStyleValues);
     }
 
     public function getDisabledItemText(string $text) : string

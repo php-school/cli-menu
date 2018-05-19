@@ -29,7 +29,9 @@ class MenuMenuItem implements MenuItemInterface
      */
     public function getSelectAction() : ?callable
     {
-        return [$this, 'showSubMenu'];
+        return function (CliMenu $menu) {
+            $this->showSubMenu($menu);
+        };
     }
 
     /**

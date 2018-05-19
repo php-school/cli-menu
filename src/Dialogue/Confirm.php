@@ -45,7 +45,7 @@ class Confirm extends Dialogue
             $this->style->getInvertedColoursSetCode(),
             $confirmText,
             $this->style->getInvertedColoursUnsetCode(),
-            str_repeat(' ', ceil($promptWidth - $leftFill - mb_strlen($confirmText))),
+            str_repeat(' ', (int) ceil($promptWidth - $leftFill - mb_strlen($confirmText))),
             $this->style->getColoursResetCode()
         ));
 

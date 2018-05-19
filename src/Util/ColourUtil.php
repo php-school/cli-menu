@@ -286,7 +286,7 @@ class ColourUtil
 
     public static function getDefaultColourNames() : array
     {
-        return static::$defaultColoursNames;
+        return self::$defaultColoursNames;
     }
 
     /**
@@ -295,11 +295,11 @@ class ColourUtil
      */
     public static function map256To8(int $colourCode) : string
     {
-        if (!isset(static::$coloursMap[$colourCode])) {
+        if (!isset(self::$coloursMap[$colourCode])) {
             throw new \InvalidArgumentException('Invalid colour code');
         }
 
-        return static::$coloursMap[$colourCode];
+        return self::$coloursMap[$colourCode];
     }
 
     /**

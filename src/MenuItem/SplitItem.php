@@ -3,8 +3,6 @@
 namespace PhpSchool\CliMenu\MenuItem;
 
 use Assert\Assertion;
-use PhpSchool\CliMenu\CliMenu;
-use PhpSchool\CliMenu\CliMenuBuilder;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
 
