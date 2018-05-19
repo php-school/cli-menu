@@ -2,8 +2,6 @@
 
 namespace PhpSchool\CliMenu;
 
-use PhpSchool\CliMenu\Dialogue\NumberInput;
-use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\Exception\InvalidTerminalException;
 use PhpSchool\CliMenu\Exception\MenuNotOpenException;
 use PhpSchool\CliMenu\Input\InputIO;
@@ -12,18 +10,15 @@ use PhpSchool\CliMenu\Input\Password;
 use PhpSchool\CliMenu\Input\Text;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
-use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Dialogue\Confirm;
 use PhpSchool\CliMenu\Dialogue\Flash;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\CliMenu\Util\StringUtil as s;
-use PhpSchool\Terminal\Exception\NotInteractiveTerminal;
 use PhpSchool\Terminal\InputCharacter;
 use PhpSchool\Terminal\NonCanonicalReader;
 use PhpSchool\Terminal\Terminal;
-use PhpSchool\Terminal\TerminalReader;
 
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
