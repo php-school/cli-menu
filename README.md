@@ -296,6 +296,33 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
+If you want to use the full width of the terminal, you can grab the terminal object and ask/set it from there like so:
+
+```php
+<?php
+
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+
+$menu = ($builder = new CliMenuBuilder)
+    ->setWidth($builder->getTerminal()->getWidth())
+    ->build();
+```
+
+If you want to use the full width of the terminal and apply a margin you will need to perform a little calculation yourself
+since we use a box model like the `box-sizing: border-box;` in CSS. The example below will use the full width of the terminal plus a margin of 2 on the 
+left and right sides:
+
+```php
+<?php
+
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+
+$menu = ($builder = new CliMenuBuilder)
+    ->setWidth($builder->getTerminal()->getWidth() - 2 * 2)
+    ->setMargin(2)
+    ->build();
+```
+
 #### Padding
 
 The padding can be set for all sides with one value or can be set individually for top/bottom and left/right.
