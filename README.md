@@ -309,7 +309,7 @@ $menu = ($builder = new CliMenuBuilder)
 ```
 
 If you want to use the full width of the terminal and apply a margin you will need to perform a little calculation yourself
-since we use a box model similar to CSS. The example below will use the full width of the terminal plus a margin of 2 on the 
+since we use a box model like the `box-sizing: border-box;` in CSS. The example below will use the full width of the terminal plus a margin of 2 on the 
 left and right sides:
 
 ```php
