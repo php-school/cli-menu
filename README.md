@@ -906,7 +906,7 @@ $menu = (new CliMenuBuilder)
     ->addItem('Item 1')
     ->build();
 
-$menu->addCustomMapping("x", $exit);
+$menu->addCustomControlMapping("x", $exit);
 
 $menu->open();
 ```
@@ -928,7 +928,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 
 // Now, pressing Uppercase C (it's case sensitive) will call $myCallback
-$menu->addCustomMapping('C', $myCallback);
+$menu->addCustomControlMapping('C', $myCallback);
 
 $menu->open();
 ```
