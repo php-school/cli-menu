@@ -11,6 +11,10 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ### Removed
 
+## [3.1.0]
+### Changed
+ - Update dependencies + fix some static analysis issues
+
 ## [3.0.0]
 ### Changed
  - Optimise redrawing to reduce flickering (#83)
