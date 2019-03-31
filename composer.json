@@ -20,7 +20,7 @@
     },
     "require": {
         "php" : ">=7.1",
-        "beberlei/assert": "^2.4",
+        "beberlei/assert": "^2.4 | ^3",
         "php-school/terminal": "^0.1",
         "ext-posix": "*"
     },
