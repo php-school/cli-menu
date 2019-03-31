@@ -110,14 +110,14 @@ class InputIO
     {
         $lines = 5; //1. empty 2. prompt text 3. empty 4. input 5. empty
 
-        return ceil($this->parentMenu->getCurrentFrame()->count() / 2) - ceil($lines /2) + 1;
+        return (int) (ceil($this->parentMenu->getCurrentFrame()->count() / 2) - ceil($lines /2) + 1);
     }
 
     private function calculateYPositionWithError() : int
     {
         $lines = 7; //1. empty 2. prompt text 3. empty 4. input 5. empty 6. error 7. empty
 
-        return ceil($this->parentMenu->getCurrentFrame()->count() / 2) - ceil($lines /2) + 1;
+        return (int) (ceil($this->parentMenu->getCurrentFrame()->count() / 2) - ceil($lines /2) + 1);
     }
 
     private function calculateXPosition(Input $input, string $userInput) : int
@@ -134,7 +134,7 @@ class InputIO
         $halfWidth       = ($width + ($input->getStyle()->getPaddingLeftRight() * 2)) / 2;
         $parentHalfWidth = ceil($parentStyle->getWidth() / 2 + $parentStyle->getMargin());
 
-        return $parentHalfWidth - $halfWidth;
+        return (int) ($parentHalfWidth - $halfWidth);
     }
 
     private function drawLine(Input $input, string $userInput, string $text) : void
@@ -164,8 +164,8 @@ class InputIO
         );
 
         $textLength = mb_strlen(StringUtil::stripAnsiEscapeSequence($text));
-        $leftFill   = ($width / 2) - ($textLength / 2);
-        $rightFill  = ceil($width - $leftFill - $textLength);
+        $leftFill   = (int) (($width / 2) - ($textLength / 2));
+        $rightFill  = (int) ceil($width - $leftFill - $textLength);
 
         $this->drawLine(
             $input,

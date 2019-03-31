@@ -68,14 +68,14 @@ abstract class Dialogue
     protected function calculateCoordinates() : void
     {
         //y
-        $textLines          = count(explode("\n", $this->text)) + 2;
-        $this->y            = ceil($this->parentMenu->getCurrentFrame()->count() / 2) - ceil($textLines / 2) + 1;
+        $textLines = count(explode("\n", $this->text)) + 2;
+        $this->y = (int) (ceil($this->parentMenu->getCurrentFrame()->count() / 2) - ceil($textLines / 2) + 1);
 
         //x
-        $parentStyle        = $this->parentMenu->getStyle();
-        $dialogueHalfLength = (mb_strlen($this->text) + ($this->style->getPaddingLeftRight() * 2)) / 2;
-        $widthHalfLength    = ceil($parentStyle->getWidth() / 2 + $parentStyle->getMargin());
-        $this->x            = $widthHalfLength - $dialogueHalfLength;
+        $parentStyle = $this->parentMenu->getStyle();
+        $dialogueHalfLength = (int) ((mb_strlen($this->text) + ($this->style->getPaddingLeftRight() * 2)) / 2);
+        $widthHalfLength = (int) ceil($parentStyle->getWidth() / 2 + $parentStyle->getMargin());
+        $this->x = $widthHalfLength - $dialogueHalfLength;
     }
 
     /**

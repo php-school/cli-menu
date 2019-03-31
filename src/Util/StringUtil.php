@@ -41,6 +41,6 @@ class StringUtil
 
     public static function stripAnsiEscapeSequence(string $str) : string
     {
-        return preg_replace('/\x1b[^m]*m/', '', $str);
+        return (string) preg_replace('/\x1b[^m]*m/', '', $str);
     }
 }

@@ -485,7 +485,7 @@ class MenuStyle
     public function setMarginAuto() : self
     {
         $this->marginAuto = true;
-        $this->margin = floor(($this->terminal->getWidth() - $this->width) / 2);
+        $this->margin = (int) floor(($this->terminal->getWidth() - $this->width) / 2);
 
         $this->generateBorderRows();
         $this->generatePaddingTopBottomRows();

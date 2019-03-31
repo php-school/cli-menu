@@ -244,7 +244,8 @@ class CliMenu
         $reader = new NonCanonicalReader($this->terminal);
         $reader->addControlMappings($this->defaultControlMappings);
 
-        while ($this->isOpen() && $char = $reader->readCharacter()) {
+        while ($this->isOpen()) {
+            $char = $reader->readCharacter();
             if (!$char->isHandledControl()) {
                 $rawChar = $char->get();
                 if (isset($this->customControlMappings[$rawChar])) {
@@ -293,7 +294,7 @@ class CliMenu
                 ? $this->selectedItem--
                 : $this->selectedItem++;
 
-            if (!array_key_exists($this->selectedItem, $this->items)) {
+            if ($this->selectedItem !== null && !array_key_exists($this->selectedItem, $this->items)) {
                 $this->selectedItem  = $direction === 'UP'
                     ? end($itemKeys)
                     : reset($itemKeys);
@@ -371,7 +372,9 @@ class CliMenu
 
         if ($item->canSelect()) {
             $callable = $item->getSelectAction();
-            $callable($this);
+            if ($callable) {
+                $callable($this);
+            }
         }
     }
 

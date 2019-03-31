@@ -117,6 +117,7 @@ class SplitItem implements MenuItemInterface
             : floor($style->getContentWidth() / $numberOfItems);
         
         $length -= $this->gutter;
+        $length = (int) $length;
         
         $missingLength = $style->getContentWidth() % $numberOfItems;
         

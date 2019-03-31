@@ -36,7 +36,7 @@ class Confirm extends Dialogue
         $this->emptyRow();
 
         $confirmText = sprintf(' < %s > ', $confirmText);
-        $leftFill    = ($promptWidth / 2) - (mb_strlen($confirmText) / 2);
+        $leftFill    = (int) (($promptWidth / 2) - (mb_strlen($confirmText) / 2));
 
         $this->write(sprintf(
             "%s%s%s%s%s%s%s\n",

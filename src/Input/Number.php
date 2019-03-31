@@ -80,11 +80,11 @@ class Number implements Input
     public function ask() : InputResult
     {
         $this->inputIO->registerControlCallback(InputCharacter::UP, function (string $input) {
-            return $this->validate($input) ? $input + 1 : $input;
+            return $this->validate($input) ? (int) $input + 1 : $input;
         });
 
         $this->inputIO->registerControlCallback(InputCharacter::DOWN, function (string $input) {
-            return $this->validate($input) ? $input - 1 : $input;
+            return $this->validate($input) ? (int) $input - 1 : $input;
         });
 
         return $this->inputIO->collect($this);

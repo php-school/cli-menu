@@ -67,7 +67,7 @@ class AsciiArtItem implements MenuItemInterface
                     break;
                 case self::POSITION_CENTER:
                 default:
-                    $left = ceil($padding / 2);
+                    $left = (int) ceil($padding / 2);
                     $row = sprintf('%s%s', str_repeat(' ', $left), $row);
                     break;
             }
@@ -117,7 +117,7 @@ class AsciiArtItem implements MenuItemInterface
      */
     private function calculateArtLength() : void
     {
-        $this->artLength = max(array_map('mb_strlen', explode("\n", $this->text)));
+        $this->artLength = (int) max(array_map('mb_strlen', explode("\n", $this->text)));
     }
 
     /**
