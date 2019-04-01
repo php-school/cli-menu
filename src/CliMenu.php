@@ -201,6 +201,22 @@ class CliMenu
     }
 
     /**
+     * Disables the built-in VIM control mappings
+     */
+    public function disableDefaultControlMappings() : void
+    {
+        $this->defaultControlMappings = [];
+    }
+
+    /**
+     * Set default control mappings
+     */
+    public function setDefaultControlMappings(array $defaultControlMappings) : void
+    {
+        $this->defaultControlMappings = $defaultControlMappings;
+    }    
+
+    /**
      * Adds a custom control mapping
      */
     public function addCustomControlMapping(string $input, callable $callable) : void
