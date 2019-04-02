@@ -63,7 +63,7 @@ class CliMenu
     /**
      * @var array
      */
-    protected $defaultControlMappings = [
+    protected static $defaultControlMappings = [
         '^P' => InputCharacter::UP,
         'k'  => InputCharacter::UP,
         '^K' => InputCharacter::DOWN,
@@ -202,18 +202,19 @@ class CliMenu
 
     /**
      * Disables the built-in VIM control mappings
+     * Does not remove Arrow keys, Enter, etc used for navigation
      */
-    public function disableDefaultControlMappings() : void
+    public static function disableDefaultControlMappings() : void
     {
-        $this->defaultControlMappings = [];
+        self::$defaultControlMappings = [];
     }
 
     /**
      * Set default control mappings
      */
-    public function setDefaultControlMappings(array $defaultControlMappings) : void
+    public static function setDefaultControlMappings(array $defaultControlMappings) : void
     {
-        $this->defaultControlMappings = $defaultControlMappings;
+        self::$defaultControlMappings = $defaultControlMappings;
     }
 
     /**
@@ -221,7 +222,7 @@ class CliMenu
      */
     public function addCustomControlMapping(string $input, callable $callable) : void
     {
-        if (isset($this->defaultControlMappings[$input]) || isset($this->customControlMappings[$input])) {
+        if (isset(self::$defaultControlMappings[$input]) || isset($this->customControlMappings[$input])) {
             throw new \InvalidArgumentException('Cannot rebind this input');
         }
 
@@ -258,7 +259,7 @@ class CliMenu
         $this->draw();
 
         $reader = new NonCanonicalReader($this->terminal);
-        $reader->addControlMappings($this->defaultControlMappings);
+        $reader->addControlMappings(self::$defaultControlMappings);
 
         while ($this->isOpen()) {
             $char = $reader->readCharacter();
