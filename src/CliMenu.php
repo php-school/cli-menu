@@ -214,7 +214,7 @@ class CliMenu
     public function setDefaultControlMappings(array $defaultControlMappings) : void
     {
         $this->defaultControlMappings = $defaultControlMappings;
-    }    
+    }
 
     /**
      * Adds a custom control mapping

@@ -40,6 +40,8 @@ class InputIO
 
         $inputValue = $input->getPlaceholderText();
         $havePlaceHolderValue = !empty($inputValue);
+        
+        $originalValue = $inputValue;
 
         $reader = new NonCanonicalReader($this->terminal);
 
@@ -59,6 +61,9 @@ class InputIO
 
             if ($char->isHandledControl()) {
                 switch ($char->getControl()) {
+                    case InputCharacter::ESC:
+                        $this->parentMenu->redraw();
+                        return new InputResult($originalValue);
                     case InputCharacter::ENTER:
                         if ($input->validate($inputValue)) {
                             $this->parentMenu->redraw();
