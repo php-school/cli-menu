@@ -10,6 +10,7 @@ use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
@@ -87,6 +88,8 @@ class CliMenuBuilder
     {
         $this->menu->addItem($item);
 
+        $this->processItemShortcut($item);
+
         return $this;
     }
 
@@ -147,12 +150,14 @@ class CliMenuBuilder
             $menu->setStyle($this->menu->getStyle());
         }
 
-        $this->menu->addItem(new MenuMenuItem(
+        $this->menu->addItem($item = new MenuMenuItem(
             $text,
             $menu,
             $builder->isMenuDisabled()
         ));
-        
+
+        $this->processItemShortcut($item);
+
         return $this;
     }
 
@@ -167,13 +172,55 @@ class CliMenuBuilder
             $menu->setStyle($this->menu->getStyle());
         }
 
-        $this->menu->addItem(new MenuMenuItem(
+        $this->menu->addItem($item = new MenuMenuItem(
             $text,
             $menu,
             $builder->isMenuDisabled()
         ));
 
+        $this->processItemShortcut($item);
+
         return $this;
+    }
+
+    private function extractShortcut(string $title) : ?string
+    {
+        preg_match('/\[(.)\]/', $title, $match);
+        return isset($match[1]) ? strtolower($match[1]) : null;
+    }
+
+    private function processItemShortcut(MenuItemInterface $item) : void
+    {
+        $this->processIndividualShortcut($item, function (CliMenu $menu) use ($item) {
+            $menu->executeAsSelected($item);
+        });
+    }
+
+    private function processSplitItemShortcuts(SplitItem $splitItem) : void
+    {
+        foreach ($splitItem->getItems() as $item) {
+            $this->processIndividualShortcut($item, function (CliMenu $menu) use ($splitItem, $item) {
+                $current = $splitItem->getSelectedItemIndex();
+
+                $splitItem->setSelectedItemIndex(
+                    array_search($item, $splitItem->getItems(), true)
+                );
+
+                $menu->executeAsSelected($splitItem);
+
+                $splitItem->setSelectedItemIndex($current);
+            });
+        }
+    }
+
+    private function processIndividualShortcut(MenuItemInterface $item, callable $callback) : void
+    {
+        if ($shortcut = $this->extractShortcut($item->getText())) {
+            $this->menu->addCustomControlMapping(
+                $shortcut,
+                $callback
+            );
+        }
     }
 
     public function addSplitItem(\Closure $callback) : self
@@ -183,8 +230,10 @@ class CliMenuBuilder
         $callback = $callback->bindTo($builder);
         $callback($builder);
         
-        $this->menu->addItem($builder->build());
-        
+        $this->menu->addItem($splitItem = $builder->build());
+
+        $this->processSplitItemShortcuts($splitItem);
+
         return $this;
     }
 
