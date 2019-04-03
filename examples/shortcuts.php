@@ -17,7 +17,7 @@ $menu = (new CliMenuBuilder)
     ->addItem('Third [I]tem', $itemCallable)
     ->addSubMenu('[O]ptions', function (CliMenuBuilder $b) {
         $b->setTitle('CLI Menu > Options')
-            ->addItem('First option', function (CliMenu $menu) {
+            ->addItem('[F]irst option', function (CliMenu $menu) {
                 echo sprintf('Executing option: %s', $menu->getSelectedItem()->getText());
             })
             ->addLineBreak('-');
