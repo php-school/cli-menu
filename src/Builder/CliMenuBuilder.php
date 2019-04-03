@@ -208,7 +208,9 @@ class CliMenuBuilder
 
                 $menu->executeAsSelected($splitItem);
 
-                $splitItem->setSelectedItemIndex($current);
+                if ($current !== null) {
+                    $splitItem->setSelectedItemIndex($current);
+                }
             });
         }
     }
