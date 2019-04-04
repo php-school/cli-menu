@@ -58,6 +58,14 @@ class CliMenuBuilder
     private $disabled = false;
 
     /**
+     * Whether or not to auto create keyboard shortcuts for items
+     * when they contain square brackets. Eg: [M]y item
+     *
+     * @var bool
+     */
+    private $autoShortcuts = true;
+
+    /**
      * @var bool
      */
     private $subMenu = false;
@@ -183,6 +191,13 @@ class CliMenuBuilder
         return $this;
     }
 
+    public function disableAutoShortcuts() : self
+    {
+        $this->autoShortcuts = false;
+
+        return $this;
+    }
+
     private function extractShortcut(string $title) : ?string
     {
         preg_match('/\[(.)\]/', $title, $match);
@@ -217,6 +232,10 @@ class CliMenuBuilder
 
     private function processIndividualShortcut(MenuItemInterface $item, callable $callback) : void
     {
+        if (!$this->autoShortcuts) {
+            return;
+        }
+
         if ($shortcut = $this->extractShortcut($item->getText())) {
             $this->menu->addCustomControlMapping(
                 $shortcut,

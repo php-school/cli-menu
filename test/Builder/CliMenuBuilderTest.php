@@ -779,7 +779,7 @@ class CliMenuBuilderTest extends TestCase
 
         $this->checkItems($menu->getItems()[0]->getItems(), $expected);
     }
-    
+
     private function checkMenuItems(CliMenu $menu, array $expected) : void
     {
         $this->checkItems($this->readAttribute($menu, 'items'), $expected);
