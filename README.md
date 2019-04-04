@@ -52,7 +52,8 @@
     * [Menu Methods](#menu-methods)
       * [Redrawing the Menu](#redrawing-the-menu)
       * [Getting, Removing and Adding items](#getting-removing-and-adding-items)
-      * [Custom Control Mapping](#custom-control-mapping)
+    * [Custom Control Mapping](#custom-control-mapping)
+    * [Item Keyboard Shortcuts](#item-keyboard-shortcuts)
     * [Dialogues](#dialogues)
       * [Flash](#flash)
       * [Confirm](#confirm)
@@ -61,7 +62,7 @@
       * [Number](#number-input)
       * [Password](#password-input)
       * [Custom Input](#custom-input)
-    * [Dialogues & Input Styling](#dialogues-input-styling)
+    * [Dialogues & Input Styling](#dialogues--input-styling)
   * [Docs Translations](#docs-translations)
   * [Integrations](#integrations)
 
@@ -888,7 +889,7 @@ $menu = (new CliMenuBuilder)
 $menu->open();
 ```
 
-### Custom Control Mapping
+## Custom Control Mapping
 
 This functionality allows to map custom key presses to a callable. For example we can set the key press "x" to close the menu:
 
@@ -931,6 +932,38 @@ $menu = (new CliMenuBuilder)
 $menu->addCustomControlMapping('C', $myCallback);
 
 $menu->open();
+```
+
+## Item Keyboard Shortcuts
+
+By default `CliMenuBuilder` will parse the items text and check for shortcuts. Any single character inside square brackets
+will be treated as a shortcut. Pressing that character when the menu is open will trigger that items callable.
+
+This functionality works for split items as well as sub menus. The same characters can be used inside sub menus and the
+callable which is invoked will depend on which menu is currently open. 
+
+Note: all shortcuts are lower cased.
+
+You can disable this automatic keyboard shortcut mapping if you would like:
+
+```php
+<?php
+
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\CliMenu;
+
+$myCallback = function(CliMenu $menu) {
+    // Do something
+};
+
+$menu = (new CliMenuBuilder)
+    ->disableAutoShortcuts()
+    ->addItem('List of [C]lients', $myCallback)
+    ->build();
+
+$menu->open();
+
+//Pressing c will do nothing.
 ```
 
 ### Dialogues
