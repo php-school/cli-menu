@@ -30,6 +30,11 @@ class Text implements Input
     private $placeholderText = '';
 
     /**
+     * @var null|callable
+     */
+    private $validator;
+
+    /**
      * @var MenuStyle
      */
     private $style;
@@ -76,6 +81,13 @@ class Text implements Input
         return $this->placeholderText;
     }
 
+    public function setValidator(callable $validator) : Input
+    {
+        $this->validator = $validator;
+        
+        return $this;
+    }
+
     public function ask() : InputResult
     {
         return $this->inputIO->collect($this);
@@ -83,6 +95,16 @@ class Text implements Input
 
     public function validate(string $input) : bool
     {
+        if ($this->validator) {
+            $validator = $this->validator;
+            
+            if ($validator instanceof \Closure) {
+                $validator = $validator->bindTo($this);
+            }
+            
+            return $validator($input);
+        }
+
         return !empty($input);
     }
 
