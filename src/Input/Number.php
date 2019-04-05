@@ -31,6 +31,11 @@ class Number implements Input
     private $placeholderText = '';
 
     /**
+     * @var null|callable
+     */
+    private $validator;
+
+    /**
      * @var MenuStyle
      */
     private $style;
@@ -77,6 +82,13 @@ class Number implements Input
         return $this->placeholderText;
     }
 
+    public function setValidator(callable $validator) : Input
+    {
+        $this->validator = $validator;
+        
+        return $this;
+    }
+
     public function ask() : InputResult
     {
         $this->inputIO->registerControlCallback(InputCharacter::UP, function (string $input) {
@@ -92,6 +104,16 @@ class Number implements Input
 
     public function validate(string $input) : bool
     {
+        if ($this->validator) {
+            $validator = $this->validator;
+            
+            if ($validator instanceof \Closure) {
+                $validator = $validator->bindTo($this);
+            }
+            
+            return $validator($input);
+        }
+
         return (bool) preg_match('/^-?\d+$/', $input);
     }
 
