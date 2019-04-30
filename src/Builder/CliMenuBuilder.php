@@ -4,12 +4,14 @@ namespace PhpSchool\CliMenu\Builder;
 
 use PhpSchool\CliMenu\Action\ExitAction;
 use PhpSchool\CliMenu\Action\GoBackAction;
+use PhpSchool\CliMenu\Exception\InvalidShortcutException;
 use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
@@ -57,6 +59,22 @@ class CliMenuBuilder
     private $disabled = false;
 
     /**
+     * Whether or not to auto create keyboard shortcuts for items
+     * when they contain square brackets. Eg: [M]y item
+     *
+     * @var bool
+     */
+    private $autoShortcuts = false;
+
+    /**
+     * Regex to auto match for shortcuts defaults to looking
+     * for a single character encased in square brackets
+     *
+     * @var string
+     */
+    private $autoShortcutsRegex = '/\[(.)\]/';
+
+    /**
      * @var bool
      */
     private $subMenu = false;
@@ -86,6 +104,8 @@ class CliMenuBuilder
     public function addMenuItem(MenuItemInterface $item) : self
     {
         $this->menu->addItem($item);
+
+        $this->processItemShortcut($item);
 
         return $this;
     }
@@ -135,6 +155,10 @@ class CliMenuBuilder
     {
         $builder = self::newSubMenu($this->terminal);
 
+        if ($this->autoShortcuts) {
+            $builder->enableAutoShortcuts($this->autoShortcutsRegex);
+        }
+
         $callback = $callback->bindTo($builder);
         $callback($builder);
 
@@ -147,12 +171,14 @@ class CliMenuBuilder
             $menu->setStyle($this->menu->getStyle());
         }
 
-        $this->menu->addItem(new MenuMenuItem(
+        $this->menu->addItem($item = new MenuMenuItem(
             $text,
             $menu,
             $builder->isMenuDisabled()
         ));
-        
+
+        $this->processItemShortcut($item);
+
         return $this;
     }
 
@@ -167,24 +193,98 @@ class CliMenuBuilder
             $menu->setStyle($this->menu->getStyle());
         }
 
-        $this->menu->addItem(new MenuMenuItem(
+        $this->menu->addItem($item = new MenuMenuItem(
             $text,
             $menu,
             $builder->isMenuDisabled()
         ));
 
+        $this->processItemShortcut($item);
+
         return $this;
+    }
+
+    public function enableAutoShortcuts(string $regex = null) : self
+    {
+        $this->autoShortcuts = true;
+
+        if (null !== $regex) {
+            $this->autoShortcutsRegex = $regex;
+        }
+
+        return $this;
+    }
+
+    private function extractShortcut(string $title) : ?string
+    {
+        preg_match($this->autoShortcutsRegex, $title, $match);
+
+        if (!isset($match[1])) {
+            return null;
+        }
+
+        if (mb_strlen($match[1]) > 1) {
+            throw InvalidShortcutException::fromShortcut($match[1]);
+        }
+
+        return isset($match[1]) ? strtolower($match[1]) : null;
+    }
+
+    private function processItemShortcut(MenuItemInterface $item) : void
+    {
+        $this->processIndividualShortcut($item, function (CliMenu $menu) use ($item) {
+            $menu->executeAsSelected($item);
+        });
+    }
+
+    private function processSplitItemShortcuts(SplitItem $splitItem) : void
+    {
+        foreach ($splitItem->getItems() as $item) {
+            $this->processIndividualShortcut($item, function (CliMenu $menu) use ($splitItem, $item) {
+                $current = $splitItem->getSelectedItemIndex();
+
+                $splitItem->setSelectedItemIndex(
+                    array_search($item, $splitItem->getItems(), true)
+                );
+
+                $menu->executeAsSelected($splitItem);
+
+                if ($current !== null) {
+                    $splitItem->setSelectedItemIndex($current);
+                }
+            });
+        }
+    }
+
+    private function processIndividualShortcut(MenuItemInterface $item, callable $callback) : void
+    {
+        if (!$this->autoShortcuts) {
+            return;
+        }
+
+        if ($shortcut = $this->extractShortcut($item->getText())) {
+            $this->menu->addCustomControlMapping(
+                $shortcut,
+                $callback
+            );
+        }
     }
 
     public function addSplitItem(\Closure $callback) : self
     {
         $builder = new SplitItemBuilder($this->menu);
 
+        if ($this->autoShortcuts) {
+            $builder->enableAutoShortcuts($this->autoShortcutsRegex);
+        }
+
         $callback = $callback->bindTo($builder);
         $callback($builder);
         
-        $this->menu->addItem($builder->build());
-        
+        $this->menu->addItem($splitItem = $builder->build());
+
+        $this->processSplitItemShortcuts($splitItem);
+
         return $this;
     }
 

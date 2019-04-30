@@ -24,6 +24,22 @@ class SplitItemBuilder
      */
     private $splitItem;
 
+    /**
+     * Whether or not to auto create keyboard shortcuts for items
+     * when they contain square brackets. Eg: [M]y item
+     *
+     * @var bool
+     */
+    private $autoShortcuts = false;
+
+    /**
+     * Regex to auto match for shortcuts defaults to looking
+     * for a single character encased in square brackets
+     *
+     * @var string
+     */
+    private $autoShortcutsRegex = '/\[(.)\]/';
+
     public function __construct(CliMenu $menu)
     {
         $this->menu = $menu;
@@ -59,6 +75,10 @@ class SplitItemBuilder
     {
         $builder = CliMenuBuilder::newSubMenu($this->menu->getTerminal());
 
+        if ($this->autoShortcuts) {
+            $builder->enableAutoShortcuts($this->autoShortcutsRegex);
+        }
+
         $callback = $callback->bindTo($builder);
         $callback($builder);
 
@@ -78,6 +98,17 @@ class SplitItemBuilder
     {
         $this->splitItem->setGutter($gutter);
         
+        return $this;
+    }
+
+    public function enableAutoShortcuts(string $regex = null) : self
+    {
+        $this->autoShortcuts = true;
+
+        if (null !== $regex) {
+            $this->autoShortcutsRegex = $regex;
+        }
+
         return $this;
     }
     

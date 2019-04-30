@@ -379,6 +379,25 @@ class CliMenu
             : $item;
     }
 
+    public function setSelectedItem(MenuItemInterface $item) : void
+    {
+        $key = array_search($item, $this->items, true);
+
+        if (false === $key) {
+            throw new \InvalidArgumentException('Item does not exist in menu');
+        }
+
+        $this->selectedItem = $key;
+    }
+
+    public function executeAsSelected(MenuItemInterface $item) : void
+    {
+        $current = $this->items[$this->selectedItem];
+        $this->setSelectedItem($item);
+        $this->executeCurrentItem();
+        $this->setSelectedItem($current);
+    }
+
     /**
      * Execute the current item
      */
