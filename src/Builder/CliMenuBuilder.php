@@ -155,6 +155,10 @@ class CliMenuBuilder
     {
         $builder = self::newSubMenu($this->terminal);
 
+        if ($this->autoShortcuts) {
+            $builder->enableAutoShortcuts($this->autoShortcutsRegex);
+        }
+
         $callback = $callback->bindTo($builder);
         $callback($builder);
 
@@ -269,6 +273,10 @@ class CliMenuBuilder
     public function addSplitItem(\Closure $callback) : self
     {
         $builder = new SplitItemBuilder($this->menu);
+
+        if ($this->autoShortcuts) {
+            $builder->enableAutoShortcuts($this->autoShortcutsRegex);
+        }
 
         $callback = $callback->bindTo($builder);
         $callback($builder);

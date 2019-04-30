@@ -23,10 +23,14 @@ $menu = (new CliMenuBuilder)
             })
             ->addLineBreak('-');
     })
-    ->addSplitItem(function (SplitItemBuilder $b) {
+    ->addSplitItem(function (SplitItemBuilder $b) use ($itemCallable) {
         $b->addItem('Split Item [1]', function() { echo 'Split Item 1!'; })
             ->addItem('Split Item [2]', function() { echo 'Split Item 2!'; })
-            ->addItem('Split Item [3]', function() { echo 'Split Item 3!'; });
+            ->addItem('Split Item [3]', function() { echo 'Split Item 3!'; })
+            ->addSubMenu('Split Item [4]', function (CliMenuBuilder $builder) use ($itemCallable) {
+                $builder->addItem('Third [I]tem', $itemCallable);
+
+            });
     })
     ->addLineBreak('-')
     ->build();
