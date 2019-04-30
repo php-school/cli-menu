@@ -11,6 +11,13 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ### Removed
 
+## [3.2.0]
+### Added
+ - Allow ESC key to "cancel" editing an input (#174)
+ - Methods for disabling the default VIM mappings and setting your own (#172)
+ - Ability to set custom validator on Text and Number inputs (#177)
+ - Ability to turn on automatic item shortcuts (#176)
+
 ## [3.1.0]
 ### Changed
  - Update dependencies + fix some static analysis issues
