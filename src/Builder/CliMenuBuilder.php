@@ -4,6 +4,7 @@ namespace PhpSchool\CliMenu\Builder;
 
 use PhpSchool\CliMenu\Action\ExitAction;
 use PhpSchool\CliMenu\Action\GoBackAction;
+use PhpSchool\CliMenu\Exception\InvalidShortcutException;
 use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
@@ -63,7 +64,15 @@ class CliMenuBuilder
      *
      * @var bool
      */
-    private $autoShortcuts = true;
+    private $autoShortcuts = false;
+
+    /**
+     * Regex to auto match for shortcuts defaults to looking
+     * for a single character encased in square brackets
+     *
+     * @var string
+     */
+    private $autoShortcutsRegex = '/\[(.)\]/';
 
     /**
      * @var bool
@@ -191,16 +200,29 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function disableAutoShortcuts() : self
+    public function enableAutoShortcuts(string $regex = null) : self
     {
-        $this->autoShortcuts = false;
+        $this->autoShortcuts = true;
+
+        if (null !== $regex) {
+            $this->autoShortcutsRegex = $regex;
+        }
 
         return $this;
     }
 
     private function extractShortcut(string $title) : ?string
     {
-        preg_match('/\[(.)\]/', $title, $match);
+        preg_match($this->autoShortcutsRegex, $title, $match);
+
+        if (!isset($match[1])) {
+            return null;
+        }
+
+        if (mb_strlen($match[1]) > 1) {
+            throw InvalidShortcutException::fromShortcut($match[1]);
+        }
+
         return isset($match[1]) ? strtolower($match[1]) : null;
     }
 

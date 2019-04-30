@@ -936,7 +936,7 @@ $menu->open();
 
 ## Item Keyboard Shortcuts
 
-By default `CliMenuBuilder` will parse the items text and check for shortcuts. Any single character inside square brackets
+If you enable auto shortcuts `CliMenuBuilder` will parse the items text and check for shortcuts. Any single character inside square brackets
 will be treated as a shortcut. Pressing that character when the menu is open will trigger that items callable.
 
 This functionality works for split items as well as sub menus. The same characters can be used inside sub menus and the
@@ -944,7 +944,7 @@ callable which is invoked will depend on which menu is currently open.
 
 Note: all shortcuts are lower cased.
 
-You can disable this automatic keyboard shortcut mapping if you would like:
+To enable this automatic keyboard shortcut mapping simply call `->enableAutoShortcuts()`:
 
 ```php
 <?php
@@ -957,14 +957,17 @@ $myCallback = function(CliMenu $menu) {
 };
 
 $menu = (new CliMenuBuilder)
-    ->disableAutoShortcuts()
+    ->enableAutoShortcuts()
     ->addItem('List of [C]lients', $myCallback)
     ->build();
 
 $menu->open();
 
-//Pressing c will do nothing.
+//Pressing c will execute $myCallback.
 ```
+
+You can customise the shortcut matching by passing your own regex to `enableAutoShortcuts`. Be careful to only match 
+one character in the first capture group or an exception will be thrown.
 
 ### Dialogues
 

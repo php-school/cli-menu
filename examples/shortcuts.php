@@ -11,7 +11,7 @@ $itemCallable = function (CliMenu $menu) {
 };
 
 $menu = (new CliMenuBuilder)
-    ->disableAutoShortcuts()
+    ->enableAutoShortcuts()
     ->setTitle('Basic CLI Menu')
     ->addItem('[F]irst Item', $itemCallable)
     ->addItem('Se[c]ond Item', $itemCallable)
@@ -32,3 +32,4 @@ $menu = (new CliMenuBuilder)
     ->build();
 
 $menu->open();
+
