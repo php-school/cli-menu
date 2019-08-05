@@ -312,8 +312,8 @@ class CliMenu
 
             if ($this->selectedItem !== null && !array_key_exists($this->selectedItem, $this->items)) {
                 $this->selectedItem  = $direction === 'UP'
-                    ? end($itemKeys)
-                    : reset($itemKeys);
+                    ? (int) end($itemKeys)
+                    : (int) reset($itemKeys);
             }
         } while (!$this->canSelect());
     }
@@ -332,6 +332,10 @@ class CliMenu
         $itemKeys = array_keys($item->getItems());
         $selectedItemIndex = $item->getSelectedItemIndex();
 
+        if (null === $selectedItemIndex) {
+            $selectedItemIndex = 0;
+        }
+
         do {
             $direction === 'LEFT'
                 ? $selectedItemIndex--
@@ -339,8 +343,8 @@ class CliMenu
 
             if (!array_key_exists($selectedItemIndex, $item->getItems())) {
                 $selectedItemIndex = $direction === 'LEFT'
-                    ? end($itemKeys)
-                    : reset($itemKeys);
+                    ? (int) end($itemKeys)
+                    : (int) reset($itemKeys);
             }
         } while (!$item->canSelectIndex($selectedItemIndex));
         
