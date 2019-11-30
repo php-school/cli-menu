@@ -810,7 +810,6 @@ class CliMenuBuilderTest extends TestCase
             unset($expectedItem['class']);
 
             foreach ($expectedItem as $property => $value) {
-
                 if (isset($propMap[$property])) {
                     $getter = $propMap[$property];
                 } else {
