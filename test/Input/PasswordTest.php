@@ -29,7 +29,7 @@ class PasswordTest extends TestCase
      */
     private $input;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->terminal = $this->createMock(Terminal::class);
         $menu           = $this->createMock(CliMenu::class);

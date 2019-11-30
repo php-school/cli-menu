@@ -90,7 +90,7 @@ class SplitItemBuilderTest extends TestCase
         $builder->setGutter(4);
 
         $item = $builder->build();
-        self::assertEquals(4, self::readAttribute($item, 'gutter'));
+        self::assertEquals(4, $item->getGutter());
     }
 
     public function testAddSubMenuWithClosureBinding() : void
@@ -134,7 +134,7 @@ class SplitItemBuilderTest extends TestCase
             unset($expectedItem['class']);
 
             foreach ($expectedItem as $property => $value) {
-                self::assertEquals($this->readAttribute($actualItem, $property), $value);
+                self::assertEquals($actualItem->{'get'. ucfirst($property)}(), $value);
             }
         }
     }

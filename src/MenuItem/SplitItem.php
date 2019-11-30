@@ -52,6 +52,11 @@ class SplitItem implements MenuItemInterface
         $this->gutter = $gutter;
     }
 
+    public function getGutter() : int
+    {
+        return $this->gutter;
+    }
+
     public function addItem(MenuItemInterface $item) : self
     {
         foreach (self::$blacklistedItems as $bl) {

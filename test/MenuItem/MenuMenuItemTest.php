@@ -28,7 +28,7 @@ class MenuMenuItemTest extends TestCase
         $item = new MenuMenuItem('Item', $subMenu);
         
         $action = $item->getSelectAction();
-        $this->assertInternalType('callable', $action);
+        $this->assertIsCallable($action);
     }
 
     public function testShowsItemExtra() : void

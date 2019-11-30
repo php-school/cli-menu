@@ -128,6 +128,16 @@ class AsciiArtItem implements MenuItemInterface
         return $this->artLength;
     }
 
+    public function getPosition() : string
+    {
+        return $this->position;
+    }
+
+    public function getAlternateText() : string
+    {
+        return $this->alternateText;
+    }
+
     /**
      * Whether or not the menu item is showing the menustyle extra value
      */

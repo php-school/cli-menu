@@ -11,7 +11,6 @@ use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
@@ -69,17 +68,18 @@ class CliMenuBuilderTest extends TestCase
         $builder->setTitleSeparator('-');
 
         $menu = $builder->build();
+        $style = $menu->getStyle();
 
-        $this->checkStyleVariable($menu, 'bg', 'red');
-        $this->checkStyleVariable($menu, 'fg', 'red');
-        $this->checkStyleVariable($menu, 'width', 40);
-        $this->checkStyleVariable($menu, 'paddingTopBottom', 4);
-        $this->checkStyleVariable($menu, 'paddingLeftRight', 1);
-        $this->checkStyleVariable($menu, 'margin', 4);
-        $this->checkStyleVariable($menu, 'unselectedMarker', '>');
-        $this->checkStyleVariable($menu, 'selectedMarker', 'x');
-        $this->checkStyleVariable($menu, 'itemExtra', '*');
-        $this->checkStyleVariable($menu, 'titleSeparator', '-');
+        self::assertEquals('red', $style->getBg());
+        self::assertEquals('red', $style->getFg());
+        self::assertEquals(40, $style->getWidth());
+        self::assertEquals(4, $style->getPaddingTopBottom());
+        self::assertEquals(1, $style->getPaddingLeftRight());
+        self::assertEquals(4, $style->getMargin());
+        self::assertEquals('>', $style->getUnselectedMarker());
+        self::assertEquals('x', $style->getSelectedMarker());
+        self::assertEquals('*', $style->getItemExtra());
+        self::assertEquals('-', $style->getTitleSeparator());
     }
 
     public function testSetBorderShorthandFunction() : void
@@ -90,85 +90,93 @@ class CliMenuBuilderTest extends TestCase
             ->method('getWidth')
             ->will($this->returnValue(200));
 
-        $menu = (new CliMenuBuilder($terminal))
+        $style = (new CliMenuBuilder($terminal))
             ->setBorder(2)
-            ->build();
-        
-        $this->checkStyleVariable($menu, 'borderTopWidth', 2);
-        $this->checkStyleVariable($menu, 'borderRightWidth', 2);
-        $this->checkStyleVariable($menu, 'borderBottomWidth', 2);
-        $this->checkStyleVariable($menu, 'borderLeftWidth', 2);
-        $this->checkStyleVariable($menu, 'borderColour', 'white');
+            ->build()
+            ->getStyle();
 
-        $menu = (new CliMenuBuilder($terminal))
+        self::assertEquals(2, $style->getBorderTopWidth());
+        self::assertEquals(2, $style->getBorderRightWidth());
+        self::assertEquals(2, $style->getBorderBottomWidth());
+        self::assertEquals(2, $style->getBorderLeftWidth());
+        self::assertEquals('white', $style->getBorderColour());
+
+        $style = (new CliMenuBuilder($terminal))
             ->setBorder(2, 4)
-            ->build();
-        
-        $this->checkStyleVariable($menu, 'borderTopWidth', 2);
-        $this->checkStyleVariable($menu, 'borderRightWidth', 4);
-        $this->checkStyleVariable($menu, 'borderBottomWidth', 2);
-        $this->checkStyleVariable($menu, 'borderLeftWidth', 4);
-        $this->checkStyleVariable($menu, 'borderColour', 'white');
+            ->build()
+            ->getStyle();
 
-        $menu = (new CliMenuBuilder($terminal))
+        self::assertEquals(2, $style->getBorderTopWidth());
+        self::assertEquals(4, $style->getBorderRightWidth());
+        self::assertEquals(2, $style->getBorderBottomWidth());
+        self::assertEquals(4, $style->getBorderLeftWidth());
+        self::assertEquals('white', $style->getBorderColour());
+
+        $style = (new CliMenuBuilder($terminal))
             ->setBorder(2, 4, 6)
-            ->build();
-        
-        $this->checkStyleVariable($menu, 'borderTopWidth', 2);
-        $this->checkStyleVariable($menu, 'borderRightWidth', 4);
-        $this->checkStyleVariable($menu, 'borderBottomWidth', 6);
-        $this->checkStyleVariable($menu, 'borderLeftWidth', 4);
-        $this->checkStyleVariable($menu, 'borderColour', 'white');
+            ->build()
+            ->getStyle();
 
-        $menu = (new CliMenuBuilder($terminal))
+        self::assertEquals(2, $style->getBorderTopWidth());
+        self::assertEquals(4, $style->getBorderRightWidth());
+        self::assertEquals(6, $style->getBorderBottomWidth());
+        self::assertEquals(4, $style->getBorderLeftWidth());
+        self::assertEquals('white', $style->getBorderColour());
+
+        $style = (new CliMenuBuilder($terminal))
             ->setBorder(2, 4, 6, 8)
-            ->build();
-        
-        $this->checkStyleVariable($menu, 'borderTopWidth', 2);
-        $this->checkStyleVariable($menu, 'borderRightWidth', 4);
-        $this->checkStyleVariable($menu, 'borderBottomWidth', 6);
-        $this->checkStyleVariable($menu, 'borderLeftWidth', 8);
-        $this->checkStyleVariable($menu, 'borderColour', 'white');
+            ->build()
+            ->getStyle();
 
-        $menu = (new CliMenuBuilder($terminal))
+        self::assertEquals(2, $style->getBorderTopWidth());
+        self::assertEquals(4, $style->getBorderRightWidth());
+        self::assertEquals(6, $style->getBorderBottomWidth());
+        self::assertEquals(8, $style->getBorderLeftWidth());
+        self::assertEquals('white', $style->getBorderColour());
+
+        $style = (new CliMenuBuilder($terminal))
             ->setBorder(2, 4, 6, 8, 'green')
-            ->build();
-        
-        $this->checkStyleVariable($menu, 'borderTopWidth', 2);
-        $this->checkStyleVariable($menu, 'borderRightWidth', 4);
-        $this->checkStyleVariable($menu, 'borderBottomWidth', 6);
-        $this->checkStyleVariable($menu, 'borderLeftWidth', 8);
-        $this->checkStyleVariable($menu, 'borderColour', 'green');
+            ->build()
+            ->getStyle();
 
-        $menu = (new CliMenuBuilder($terminal))
+        self::assertEquals(2, $style->getBorderTopWidth());
+        self::assertEquals(4, $style->getBorderRightWidth());
+        self::assertEquals(6, $style->getBorderBottomWidth());
+        self::assertEquals(8, $style->getBorderLeftWidth());
+        self::assertEquals('green', $style->getBorderColour());
+
+        $style = (new CliMenuBuilder($terminal))
             ->setBorder(2, 4, 6, 'green')
-            ->build();
-        
-        $this->checkStyleVariable($menu, 'borderTopWidth', 2);
-        $this->checkStyleVariable($menu, 'borderRightWidth', 4);
-        $this->checkStyleVariable($menu, 'borderBottomWidth', 6);
-        $this->checkStyleVariable($menu, 'borderLeftWidth', 4);
-        $this->checkStyleVariable($menu, 'borderColour', 'green');
+            ->build()
+            ->getStyle();
 
-        $menu = (new CliMenuBuilder($terminal))
+        self::assertEquals(2, $style->getBorderTopWidth());
+        self::assertEquals(4, $style->getBorderRightWidth());
+        self::assertEquals(6, $style->getBorderBottomWidth());
+        self::assertEquals(4, $style->getBorderLeftWidth());
+        self::assertEquals('green', $style->getBorderColour());
+
+        $style = (new CliMenuBuilder($terminal))
             ->setBorder(2, 4, 'green')
-            ->build();
-        
-        $this->checkStyleVariable($menu, 'borderTopWidth', 2);
-        $this->checkStyleVariable($menu, 'borderRightWidth', 4);
-        $this->checkStyleVariable($menu, 'borderBottomWidth', 2);
-        $this->checkStyleVariable($menu, 'borderLeftWidth', 4);
-        $this->checkStyleVariable($menu, 'borderColour', 'green');
+            ->build()
+            ->getStyle();
 
-        $menu = (new CliMenuBuilder($terminal))
+        self::assertEquals(2, $style->getBorderTopWidth());
+        self::assertEquals(4, $style->getBorderRightWidth());
+        self::assertEquals(2, $style->getBorderBottomWidth());
+        self::assertEquals(4, $style->getBorderLeftWidth());
+        self::assertEquals('green', $style->getBorderColour());
+
+        $style = (new CliMenuBuilder($terminal))
             ->setBorder(2, 'green')
-            ->build();
-        
-        $this->checkStyleVariable($menu, 'borderTopWidth', 2);
-        $this->checkStyleVariable($menu, 'borderRightWidth', 2);
-        $this->checkStyleVariable($menu, 'borderBottomWidth', 2);
-        $this->checkStyleVariable($menu, 'borderLeftWidth', 2);
-        $this->checkStyleVariable($menu, 'borderColour', 'green');
+            ->build()
+            ->getStyle();
+
+        self::assertEquals(2, $style->getBorderTopWidth());
+        self::assertEquals(2, $style->getBorderRightWidth());
+        self::assertEquals(2, $style->getBorderBottomWidth());
+        self::assertEquals(2, $style->getBorderLeftWidth());
+        self::assertEquals('green', $style->getBorderColour());
     }
 
     public function testSetBorderTopWidth() : void
@@ -232,10 +240,11 @@ class CliMenuBuilderTest extends TestCase
         $builder = new CliMenuBuilder($terminal);
         $builder->setBackgroundColour(16, 'white');
         $builder->setForegroundColour(206, 'red');
-        $menu = $builder->build();
+        $style = $builder->build()
+            ->getStyle();
 
-        $this->checkStyleVariable($menu, 'bg', 16);
-        $this->checkStyleVariable($menu, 'fg', 206);
+        self::assertEquals(16, $style->getBg());
+        self::assertEquals(206, $style->getFg());
 
         $terminal = static::createMock(Terminal::class);
         $terminal
@@ -246,10 +255,11 @@ class CliMenuBuilderTest extends TestCase
         $builder = new CliMenuBuilder($terminal);
         $builder->setBackgroundColour(16, 'white');
         $builder->setForegroundColour(206, 'red');
-        $menu = $builder->build();
+        $style = $builder->build()
+            ->getStyle();
 
-        $this->checkStyleVariable($menu, 'bg', 'white');
-        $this->checkStyleVariable($menu, 'fg', 'red');
+        self::assertEquals('white', $style->getBg());
+        self::assertEquals('red', $style->getFg());
     }
 
     public function testSetFgThrowsExceptionWhenColourCodeIsNotInRange() : void
@@ -288,8 +298,8 @@ class CliMenuBuilderTest extends TestCase
         $builder->disableDefaultItems();
         
         $menu = $builder->build();
-            
-        $this->checkVariable($menu, 'items', []);
+
+        self::assertEquals([], $menu->getItems());
     }
 
     public function testSetTitle() : void
@@ -299,7 +309,7 @@ class CliMenuBuilderTest extends TestCase
         
         $menu = $builder->build();
 
-        $this->checkVariable($menu, 'title', 'title');
+        self::assertEquals('title', $menu->getTitle());
     }
 
     public function testAddItem() : void
@@ -782,11 +792,15 @@ class CliMenuBuilderTest extends TestCase
 
     private function checkMenuItems(CliMenu $menu, array $expected) : void
     {
-        $this->checkItems($this->readAttribute($menu, 'items'), $expected);
+        $this->checkItems($menu->getItems(), $expected);
     }
 
     private function checkItems(array $actualItems, array $expected) : void
     {
+        $propMap = [
+            'breakChar' => 'getText',
+        ];
+
         self::assertCount(count($expected), $actualItems);
 
         foreach ($expected as $expectedItem) {
@@ -796,21 +810,15 @@ class CliMenuBuilderTest extends TestCase
             unset($expectedItem['class']);
 
             foreach ($expectedItem as $property => $value) {
-                self::assertEquals($this->readAttribute($actualItem, $property), $value);
+
+                if (isset($propMap[$property])) {
+                    $getter = $propMap[$property];
+                } else {
+                    $getter = 'get'. ucfirst($property);
+                }
+
+                self::assertEquals($actualItem->{$getter}(), $value);
             }
         }
-    }
-
-    
-    private function checkVariable(CliMenu $menu, string $property, $expected) : void
-    {
-        $actual = $this->readAttribute($menu, $property);
-        self::assertEquals($expected, $actual);
-    }
-
-    private function checkStyleVariable(CliMenu $menu, string $property, $expected) : void
-    {
-        $style = $this->readAttribute($menu, 'style');
-        self::assertEquals($this->readAttribute($style, $property), $expected);
     }
 }

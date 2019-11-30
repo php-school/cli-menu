@@ -41,7 +41,7 @@ class InputIOTest extends TestCase
      */
     private $inputIO;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->terminal = $this->createMock(Terminal::class);
         $this->output   = new BufferedOutput;

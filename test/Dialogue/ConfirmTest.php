@@ -24,7 +24,7 @@ class ConfirmTest extends TestCase
      */
     private $output;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->output = new BufferedOutput;
         $this->terminal = $this->createMock(Terminal::class);
