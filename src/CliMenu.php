@@ -132,6 +132,11 @@ class CliMenu
         $this->title = $title;
     }
 
+    public function getTitle() : ?string
+    {
+        return $this->title;
+    }
+
     public function setParent(CliMenu $parent) : void
     {
         $this->parent = $parent;
@@ -226,6 +231,11 @@ class CliMenu
         }
 
         $this->customControlMappings[$input] = $callable;
+    }
+
+    public function getCustomControlMappings() : array
+    {
+        return $this->customControlMappings;
     }
 
     /**

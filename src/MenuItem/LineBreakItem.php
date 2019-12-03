@@ -80,6 +80,11 @@ class LineBreakItem implements MenuItemInterface
         return false;
     }
 
+    public function getLines() : int
+    {
+        return $this->lines;
+    }
+
     /**
      * Enable showing item extra
      */

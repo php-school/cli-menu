@@ -29,7 +29,7 @@ class CliMenuTest extends TestCase
      */
     private $output;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->output = new BufferedOutput;
         $this->terminal = $this->createMock(Terminal::class);
@@ -671,10 +671,10 @@ class CliMenuTest extends TestCase
 
         $menu = new CliMenu('PHP School FTW', [], $this->terminal);
         $menu->addCustomControlMapping('c', $action);
-        self::assertSame(['c' => $action], $this->readAttribute($menu, 'customControlMappings'));
+        self::assertSame(['c' => $action], $menu->getCustomControlMappings());
         
         $menu->removeCustomControlMapping('c');
-        self::assertSame([], $this->readAttribute($menu, 'customControlMappings'));
+        self::assertSame([], $menu->getCustomControlMappings());
     }
 
     public function testSplitItemWithNoSelectableItemsScrollingVertically() : void
@@ -847,7 +847,11 @@ class CliMenuTest extends TestCase
         $menu = new CliMenu('PHP School FTW', [], $this->terminal);
         $menu->addItem(new StaticItem('No Selectable'));
 
-        self::assertNull(self::readAttribute($menu, 'selectedItem'));
+        try {
+            $menu->getSelectedItem();
+            $this->fail('Exception not thrown');
+        } catch (\RuntimeException $e) {
+        }
 
         $menu->addItem($item = new SelectableItem('Selectable', function () {
         }));
@@ -860,7 +864,11 @@ class CliMenuTest extends TestCase
         $menu = new CliMenu('PHP School FTW', [], $this->terminal);
         $menu->addItem(new StaticItem('No Selectable'));
 
-        self::assertNull(self::readAttribute($menu, 'selectedItem'));
+        try {
+            $menu->getSelectedItem();
+            $this->fail('Exception not thrown');
+        } catch (\RuntimeException $e) {
+        }
 
         $menu->addItems([$item = new SelectableItem('Selectable', function () {
         })]);
@@ -894,7 +902,11 @@ class CliMenuTest extends TestCase
 
         $menu->removeItem($item);
 
-        self::assertNull(self::readAttribute($menu, 'selectedItem'));
+        try {
+            $menu->getSelectedItem();
+            $this->fail('Exception not thrown');
+        } catch (\RuntimeException $e) {
+        }
 
         $menu = new CliMenu('PHP School FTW', [], $this->terminal);
         $menu->addItem(new StaticItem('No Selectable'));
