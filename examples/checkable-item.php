@@ -17,7 +17,7 @@ $itemCallable = function (CliMenu $menu) {
 
 $menu = (new CliMenuBuilder)
     ->setTitle('Select a Language')
-    ->addSubMenu('Compiled', function (CliMenuBuilder $b) use($itemCallable) {
+    ->addSubMenu('Compiled', function (CliMenuBuilder $b) use ($itemCallable) {
         $b->setTitle('Compiled Languages')
             ->addCheckableItem('Rust', $itemCallable)
             ->addCheckableItem('C++', $itemCallable)
@@ -26,7 +26,7 @@ $menu = (new CliMenuBuilder)
             ->addCheckableItem('C', $itemCallable)
         ;
     })
-    ->addSubMenu('Interpreted', function (CliMenuBuilder $b) use($itemCallable) {
+    ->addSubMenu('Interpreted', function (CliMenuBuilder $b) use ($itemCallable) {
         $b->setTitle('Interpreted Languages')
             ->setUncheckedMarker('[○] ')
             ->setCheckedMarker('[●] ')
