@@ -72,6 +72,16 @@ class MenuStyle
     /**
      * @var string
      */
+    private $checkedMarker;
+
+    /**
+     * @var string
+     */
+    private $uncheckedMarker;
+
+    /**
+     * @var string
+     */
     private $itemExtra;
 
     /**
@@ -158,6 +168,8 @@ class MenuStyle
         'margin' => 2,
         'selectedMarker' => '● ',
         'unselectedMarker' => '○ ',
+        'checkedMarker' => '[✔] ',
+        'uncheckedMarker' => '[ ] ',
         'itemExtra' => '✔',
         'displaysExtra' => false,
         'titleSeparator' => '=',
@@ -229,6 +241,8 @@ class MenuStyle
         $this->setMargin(self::$defaultStyleValues['margin']);
         $this->setSelectedMarker(self::$defaultStyleValues['selectedMarker']);
         $this->setUnselectedMarker(self::$defaultStyleValues['unselectedMarker']);
+        $this->setCheckedMarker(self::$defaultStyleValues['checkedMarker']);
+        $this->setUncheckedMarker(self::$defaultStyleValues['uncheckedMarker']);
         $this->setItemExtra(self::$defaultStyleValues['itemExtra']);
         $this->setDisplaysExtra(self::$defaultStyleValues['displaysExtra']);
         $this->setTitleSeparator(self::$defaultStyleValues['titleSeparator']);
@@ -250,6 +264,8 @@ class MenuStyle
             $this->margin,
             $this->selectedMarker,
             $this->unselectedMarker,
+            $this->checkedMarker,
+            $this->uncheckedMarker,
             $this->itemExtra,
             $this->displaysExtra,
             $this->titleSeparator,
@@ -555,6 +571,30 @@ class MenuStyle
     public function getMarker(bool $selected) : string
     {
         return $selected ? $this->selectedMarker : $this->unselectedMarker;
+    }
+
+    public function getCheckedMarker() : string
+    {
+        return $this->checkedMarker;
+    }
+
+    public function setCheckedMarker(string $marker) : self
+    {
+        $this->checkedMarker = $marker;
+
+        return $this;
+    }
+
+    public function getUncheckedMarker() : string
+    {
+        return $this->uncheckedMarker;
+    }
+
+    public function setUncheckedMarker(string $marker) : self
+    {
+        $this->uncheckedMarker = $marker;
+
+        return $this;
     }
 
     public function setItemExtra(string $itemExtra) : self

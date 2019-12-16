@@ -6,6 +6,7 @@ use PhpSchool\CliMenu\Action\ExitAction;
 use PhpSchool\CliMenu\Action\GoBackAction;
 use PhpSchool\CliMenu\Exception\InvalidShortcutException;
 use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
+use PhpSchool\CliMenu\MenuItem\CheckableItem;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
@@ -126,6 +127,17 @@ class CliMenuBuilder
         foreach ($items as $item) {
             $this->addItem(...$item);
         }
+
+        return $this;
+    }
+
+    public function addCheckableItem(
+        string $text,
+        callable $itemCallable,
+        bool $showItemExtra = false,
+        bool $disabled = false
+    ) : self {
+        $this->addMenuItem(new CheckableItem($text, $itemCallable, $showItemExtra, $disabled));
 
         return $this;
     }
@@ -391,6 +403,20 @@ class CliMenuBuilder
     public function setSelectedMarker(string $marker) : self
     {
         $this->style->setSelectedMarker($marker);
+
+        return $this;
+    }
+
+    public function setUncheckedMarker(string $marker) : self
+    {
+        $this->style->setUncheckedMarker($marker);
+
+        return $this;
+    }
+
+    public function setCheckedMarker(string $marker) : self
+    {
+        $this->style->setCheckedMarker($marker);
 
         return $this;
     }

@@ -5,6 +5,7 @@ namespace PhpSchool\CliMenuTest\Builder;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
+use PhpSchool\CliMenu\MenuItem\CheckableItem;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
@@ -64,6 +65,8 @@ class CliMenuBuilderTest extends TestCase
         $builder->setMargin(4);
         $builder->setUnselectedMarker('>');
         $builder->setSelectedMarker('x');
+        $builder->setUncheckedMarker('-');
+        $builder->setCheckedMarker('+');
         $builder->setItemExtra('*');
         $builder->setTitleSeparator('-');
 
@@ -78,6 +81,8 @@ class CliMenuBuilderTest extends TestCase
         self::assertEquals(4, $style->getMargin());
         self::assertEquals('>', $style->getUnselectedMarker());
         self::assertEquals('x', $style->getSelectedMarker());
+        self::assertEquals('-', $style->getUncheckedMarker());
+        self::assertEquals('+', $style->getCheckedMarker());
         self::assertEquals('*', $style->getItemExtra());
         self::assertEquals('-', $style->getTitleSeparator());
     }
@@ -357,6 +362,31 @@ class CliMenuBuilderTest extends TestCase
             ],
             [
                 'class' => SelectableItem::class,
+                'text'  => 'Item 2',
+            ],
+        ];
+
+        $this->checkMenuItems($menu, $expected);
+    }
+
+    public function testAddCheckableItem() : void
+    {
+        $callable = function () {
+        };
+
+        $builder = new CliMenuBuilder;
+        $builder->disableDefaultItems();
+        $builder->addCheckableItem('Item 1', $callable);
+        $builder->addCheckableItem('Item 2', $callable);
+        $menu = $builder->build();
+
+        $expected = [
+            [
+                'class' => CheckableItem::class,
+                'text'  => 'Item 1',
+            ],
+            [
+                'class' => CheckableItem::class,
                 'text'  => 'Item 2',
             ],
         ];
