@@ -10,7 +10,7 @@ $itemCallable = function (CliMenu $menu) {
     /** @var CheckableItem $item */
     $item = $menu->getSelectedItem();
 
-    $item->check();
+    $item->toggle();
 
     $menu->redraw();
 };
