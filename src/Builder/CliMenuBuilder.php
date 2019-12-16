@@ -425,6 +425,9 @@ class CliMenuBuilder
     {
         $this->style->setItemExtra($extra);
 
+        //if we customise item extra, it means we most likely want to display it
+        $this->displayExtra();
+
         return $this;
     }
 
@@ -505,6 +508,13 @@ class CliMenuBuilder
         return $this;
     }
 
+    public function displayExtra() : self
+    {
+        $this->style->setDisplaysExtra(true);
+
+        return $this;
+    }
+
     private function itemsHaveExtra(array $items) : bool
     {
         return !empty(array_filter($items, function (MenuItemInterface $item) {
@@ -518,7 +528,9 @@ class CliMenuBuilder
             $this->menu->addItems($this->getDefaultItems());
         }
 
-        $this->style->setDisplaysExtra($this->itemsHaveExtra($this->menu->getItems()));
+        if (!$this->style->getDisplaysExtra()) {
+            $this->style->setDisplaysExtra($this->itemsHaveExtra($this->menu->getItems()));
+        }
 
         return $this->menu;
     }
