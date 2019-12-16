@@ -138,7 +138,7 @@ class CheckableItem implements MenuItem\MenuItemInterface
     /**
      * Toggles checked state
      */
-    public function check()
+    public function toggle()
     {
         $this->checked = !$this->checked;
     }
