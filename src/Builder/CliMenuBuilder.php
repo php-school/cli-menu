@@ -6,11 +6,11 @@ use PhpSchool\CliMenu\Action\ExitAction;
 use PhpSchool\CliMenu\Action\GoBackAction;
 use PhpSchool\CliMenu\Exception\InvalidShortcutException;
 use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
+use PhpSchool\CliMenu\MenuItem\CheckableItem;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
-use PhpSchool\CliMenu\MenuItem\ToggleableItem;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
@@ -131,13 +131,13 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function addToggleableItem(
+    public function addCheckableItem(
         string $text,
         callable $itemCallable,
         bool $showItemExtra = false,
         bool $disabled = false
     ) : self {
-        $this->addMenuItem(new ToggleableItem($text, $itemCallable, $showItemExtra, $disabled));
+        $this->addMenuItem(new CheckableItem($text, $itemCallable, $showItemExtra, $disabled));
 
         return $this;
     }
@@ -407,16 +407,16 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function setUntoggledMarker(string $marker) : self
+    public function setUncheckedMarker(string $marker) : self
     {
-        $this->style->setUntoggledMarker($marker);
+        $this->style->setUncheckedMarker($marker);
 
         return $this;
     }
 
-    public function setToggledMarker(string $marker) : self
+    public function setCheckedMarker(string $marker) : self
     {
-        $this->style->setToggledMarker($marker);
+        $this->style->setCheckedMarker($marker);
 
         return $this;
     }

@@ -72,12 +72,12 @@ class MenuStyle
     /**
      * @var string
      */
-    private $toggledMarker;
+    private $checkedMarker;
 
     /**
      * @var string
      */
-    private $untoggledMarker;
+    private $uncheckedMarker;
 
     /**
      * @var string
@@ -160,25 +160,25 @@ class MenuStyle
      * @var array
      */
     private static $defaultStyleValues = [
-        'fg'                => 'white',
-        'bg'                => 'blue',
-        'width'             => 100,
-        'paddingTopBottom'  => 1,
-        'paddingLeftRight'  => 2,
-        'margin'            => 2,
-        'selectedMarker'    => '● ',
-        'unselectedMarker'  => '○ ',
-        'toggledMarker'     => '[●] ',
-        'untoggledMarker'   => '[○] ',
-        'itemExtra'         => '✔',
-        'displaysExtra'     => false,
-        'titleSeparator'    => '=',
-        'borderTopWidth'    => 0,
-        'borderRightWidth'  => 0,
+        'fg' => 'white',
+        'bg' => 'blue',
+        'width' => 100,
+        'paddingTopBottom' => 1,
+        'paddingLeftRight' => 2,
+        'margin' => 2,
+        'selectedMarker' => '● ',
+        'unselectedMarker' => '○ ',
+        'checkedMarker' => '[✔] ',
+        'uncheckedMarker' => '[ ] ',
+        'itemExtra' => '✔',
+        'displaysExtra' => false,
+        'titleSeparator' => '=',
+        'borderTopWidth' => 0,
+        'borderRightWidth' => 0,
         'borderBottomWidth' => 0,
-        'borderLeftWidth'   => 0,
-        'borderColour'      => 'white',
-        'marginAuto'        => false,
+        'borderLeftWidth' => 0,
+        'borderColour' => 'white',
+        'marginAuto' => false,
     ];
 
     /**
@@ -241,8 +241,8 @@ class MenuStyle
         $this->setMargin(self::$defaultStyleValues['margin']);
         $this->setSelectedMarker(self::$defaultStyleValues['selectedMarker']);
         $this->setUnselectedMarker(self::$defaultStyleValues['unselectedMarker']);
-        $this->setToggledMarker(self::$defaultStyleValues['toggledMarker']);
-        $this->setUntoggledMarker(self::$defaultStyleValues['untoggledMarker']);
+        $this->setCheckedMarker(self::$defaultStyleValues['checkedMarker']);
+        $this->setUncheckedMarker(self::$defaultStyleValues['uncheckedMarker']);
         $this->setItemExtra(self::$defaultStyleValues['itemExtra']);
         $this->setDisplaysExtra(self::$defaultStyleValues['displaysExtra']);
         $this->setTitleSeparator(self::$defaultStyleValues['titleSeparator']);
@@ -264,8 +264,8 @@ class MenuStyle
             $this->margin,
             $this->selectedMarker,
             $this->unselectedMarker,
-            $this->toggledMarker,
-            $this->untoggledMarker,
+            $this->checkedMarker,
+            $this->uncheckedMarker,
             $this->itemExtra,
             $this->displaysExtra,
             $this->titleSeparator,
@@ -573,36 +573,28 @@ class MenuStyle
         return $selected ? $this->selectedMarker : $this->unselectedMarker;
     }
 
-    public function getToggledMarker() : string
+    public function getCheckedMarker() : string
     {
-        return $this->toggledMarker;
+        return $this->checkedMarker;
     }
 
-    public function setToggledMarker(string $marker) : self
+    public function setCheckedMarker(string $marker) : self
     {
-        $this->toggledMarker = $marker;
+        $this->checkedMarker = $marker;
 
         return $this;
     }
 
-    public function getUntoggledMarker() : string
+    public function getUncheckedMarker() : string
     {
-        return $this->untoggledMarker;
+        return $this->uncheckedMarker;
     }
 
-    public function setUntoggledMarker(string $marker) : self
+    public function setUncheckedMarker(string $marker) : self
     {
-        $this->untoggledMarker = $marker;
+        $this->uncheckedMarker = $marker;
 
         return $this;
-    }
-
-    /**
-     * Get the correct toggled marker for the item
-     */
-    public function getMarkerToggled(bool $toggled) : string
-    {
-        return $toggled ? $this->toggledMarker : $this->untoggledMarker;
     }
 
     public function setItemExtra(string $itemExtra) : self

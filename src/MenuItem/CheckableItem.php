@@ -6,7 +6,7 @@ use PhpSchool\CliMenu\MenuItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
 
-class ToggleableItem implements MenuItem\MenuItemInterface
+class CheckableItem implements MenuItem\MenuItemInterface
 {
     /**
      * @var callable
@@ -31,7 +31,7 @@ class ToggleableItem implements MenuItem\MenuItemInterface
     /**
      * @var bool
      */
-    private $toggled = false;
+    private $checked = false;
 
     public function __construct(
         string $text,
@@ -71,10 +71,14 @@ class ToggleableItem implements MenuItem\MenuItemInterface
 
     /**
      * The output text for the item
+     *
+     * @param MenuStyle $style
+     * @param bool $selected Currently unused in this class
+     * @return array
      */
-    public function getRows(MenuStyle $style, bool $toggled = false) : array
+    public function getRows(MenuStyle $style, bool $selected = false) : array
     {
-        $marker = sprintf("%s", $style->getMarkerToggled($this->toggled));
+        $marker = sprintf("%s", $this->checked ? $style->getCheckedMarker() : $style->getUncheckedMarker());
 
         $length = $style->getDisplaysExtra()
             ? $style->getContentWidth() - (mb_strlen($style->getItemExtra()) + 2)
@@ -83,7 +87,7 @@ class ToggleableItem implements MenuItem\MenuItemInterface
         $rows = explode(
             "\n",
             StringUtil::wordwrap(
-                sprintf('%s %s', $marker, $this->text),
+                sprintf('%s%s', $marker, $this->text),
                 $length,
                 sprintf("\n%s", str_repeat(' ', mb_strlen($marker)))
             )
@@ -131,13 +135,32 @@ class ToggleableItem implements MenuItem\MenuItemInterface
         $this->showItemExtra = false;
     }
 
-    public function setToggled(bool $toggled)
+    /**
+     * Toggles checked state
+     */
+    public function check()
     {
-        $this->toggled = $toggled;
+        $this->checked = !$this->checked;
     }
 
-    public function getToggled(): bool
+    /**
+     * Sets checked state to true
+     */
+    public function setChecked()
     {
-        return $this->toggled;
+        $this->checked = true;
+    }
+
+    /**
+     * Sets checked state to false
+     */
+    public function setUnchecked()
+    {
+        $this->checked = false;
+    }
+
+    public function getChecked(): bool
+    {
+        return $this->checked;
     }
 }
