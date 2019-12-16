@@ -72,6 +72,16 @@ class MenuStyle
     /**
      * @var string
      */
+    private $toggledMarker;
+
+    /**
+     * @var string
+     */
+    private $untoggledMarker;
+
+    /**
+     * @var string
+     */
     private $itemExtra;
 
     /**
@@ -150,23 +160,25 @@ class MenuStyle
      * @var array
      */
     private static $defaultStyleValues = [
-        'fg' => 'white',
-        'bg' => 'blue',
-        'width' => 100,
-        'paddingTopBottom' => 1,
-        'paddingLeftRight' => 2,
-        'margin' => 2,
-        'selectedMarker' => '● ',
-        'unselectedMarker' => '○ ',
-        'itemExtra' => '✔',
-        'displaysExtra' => false,
-        'titleSeparator' => '=',
-        'borderTopWidth' => 0,
-        'borderRightWidth' => 0,
+        'fg'                => 'white',
+        'bg'                => 'blue',
+        'width'             => 100,
+        'paddingTopBottom'  => 1,
+        'paddingLeftRight'  => 2,
+        'margin'            => 2,
+        'selectedMarker'    => '● ',
+        'unselectedMarker'  => '○ ',
+        'toggledMarker'     => '[●] ',
+        'untoggledMarker'   => '[○] ',
+        'itemExtra'         => '✔',
+        'displaysExtra'     => false,
+        'titleSeparator'    => '=',
+        'borderTopWidth'    => 0,
+        'borderRightWidth'  => 0,
         'borderBottomWidth' => 0,
-        'borderLeftWidth' => 0,
-        'borderColour' => 'white',
-        'marginAuto' => false,
+        'borderLeftWidth'   => 0,
+        'borderColour'      => 'white',
+        'marginAuto'        => false,
     ];
 
     /**
@@ -229,6 +241,8 @@ class MenuStyle
         $this->setMargin(self::$defaultStyleValues['margin']);
         $this->setSelectedMarker(self::$defaultStyleValues['selectedMarker']);
         $this->setUnselectedMarker(self::$defaultStyleValues['unselectedMarker']);
+        $this->setToggledMarker(self::$defaultStyleValues['toggledMarker']);
+        $this->setUntoggledMarker(self::$defaultStyleValues['untoggledMarker']);
         $this->setItemExtra(self::$defaultStyleValues['itemExtra']);
         $this->setDisplaysExtra(self::$defaultStyleValues['displaysExtra']);
         $this->setTitleSeparator(self::$defaultStyleValues['titleSeparator']);
@@ -250,6 +264,8 @@ class MenuStyle
             $this->margin,
             $this->selectedMarker,
             $this->unselectedMarker,
+            $this->toggledMarker,
+            $this->untoggledMarker,
             $this->itemExtra,
             $this->displaysExtra,
             $this->titleSeparator,
@@ -555,6 +571,38 @@ class MenuStyle
     public function getMarker(bool $selected) : string
     {
         return $selected ? $this->selectedMarker : $this->unselectedMarker;
+    }
+
+    public function getToggledMarker() : string
+    {
+        return $this->toggledMarker;
+    }
+
+    public function setToggledMarker(string $marker) : self
+    {
+        $this->toggledMarker = $marker;
+
+        return $this;
+    }
+
+    public function getUntoggledMarker() : string
+    {
+        return $this->untoggledMarker;
+    }
+
+    public function setUntoggledMarker(string $marker) : self
+    {
+        $this->untoggledMarker = $marker;
+
+        return $this;
+    }
+
+    /**
+     * Get the correct toggled marker for the item
+     */
+    public function getMarkerToggled(bool $toggled) : string
+    {
+        return $toggled ? $this->toggledMarker : $this->untoggledMarker;
     }
 
     public function setItemExtra(string $itemExtra) : self

@@ -10,6 +10,7 @@ use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
+use PhpSchool\CliMenu\MenuItem\ToggleableItem;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
@@ -126,6 +127,17 @@ class CliMenuBuilder
         foreach ($items as $item) {
             $this->addItem(...$item);
         }
+
+        return $this;
+    }
+
+    public function addToggleableItem(
+        string $text,
+        callable $itemCallable,
+        bool $showItemExtra = false,
+        bool $disabled = false
+    ) : self {
+        $this->addMenuItem(new ToggleableItem($text, $itemCallable, $showItemExtra, $disabled));
 
         return $this;
     }
@@ -391,6 +403,20 @@ class CliMenuBuilder
     public function setSelectedMarker(string $marker) : self
     {
         $this->style->setSelectedMarker($marker);
+
+        return $this;
+    }
+
+    public function setUntoggledMarker(string $marker) : self
+    {
+        $this->style->setUntoggledMarker($marker);
+
+        return $this;
+    }
+
+    public function setToggledMarker(string $marker) : self
+    {
+        $this->style->setToggledMarker($marker);
 
         return $this;
     }
