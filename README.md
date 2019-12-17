@@ -555,9 +555,7 @@ use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\CliMenu;
 
 $callable = function (CliMenu $menu) {
-    $item = $menu->getSelectedItem();
-    $item->toggle();
-    $menu->redraw();
+    echo $menu->getSelectedItem()->getText();
 };
 
 $menu = (new CliMenuBuilder)

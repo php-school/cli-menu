@@ -2,6 +2,7 @@
 
 namespace PhpSchool\CliMenu\MenuItem;
 
+use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
 
@@ -49,7 +50,12 @@ class CheckableItem implements MenuItemInterface
      */
     public function getSelectAction() : ?callable
     {
-        return $this->selectAction;
+        return function (CliMenu $cliMenu) {
+            $this->toggle();
+            $cliMenu->redraw();
+
+            return ($this->selectAction)($cliMenu);
+        };
     }
 
     /**
