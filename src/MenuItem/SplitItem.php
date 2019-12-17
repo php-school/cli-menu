@@ -129,8 +129,17 @@ class SplitItem implements MenuItemInterface
         return $this->buildRows(
             array_map(function ($index, $item) use ($selected, $length, $style) {
                 $isSelected = $selected && $index === $this->selectedItemIndex;
+
+                if ($item instanceof CheckableItem) {
+                    $markerType = $item->getChecked()
+                        ? $style->getCheckedMarker()
+                        : $style->getUncheckedMarker();
+                } else {
+                    $markerType = $style->getMarker($isSelected);
+                }
+
                 $marker = $item->canSelect()
-                    ? sprintf('%s', $style->getMarker($isSelected))
+                    ? sprintf('%s', $markerType)
                     : '';
 
                 $itemExtra = '';

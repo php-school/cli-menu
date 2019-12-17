@@ -2,11 +2,10 @@
 
 namespace PhpSchool\CliMenu\MenuItem;
 
-use PhpSchool\CliMenu\MenuItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
 
-class CheckableItem implements MenuItem\MenuItemInterface
+class CheckableItem implements MenuItemInterface
 {
     /**
      * @var callable

@@ -3,6 +3,7 @@
 namespace PhpSchool\CliMenu\Builder;
 
 use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\MenuItem\CheckableItem;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
@@ -53,6 +54,17 @@ class SplitItemBuilder
         bool $disabled = false
     ) : self {
         $this->splitItem->addItem(new SelectableItem($text, $itemCallable, $showItemExtra, $disabled));
+
+        return $this;
+    }
+
+    public function addCheckableItem(
+        string $text,
+        callable $itemCallable,
+        bool $showItemExtra = false,
+        bool $disabled = false
+    ) : self {
+        $this->splitItem->addItem(new CheckableItem($text, $itemCallable, $showItemExtra, $disabled));
 
         return $this;
     }
