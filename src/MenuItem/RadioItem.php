@@ -52,7 +52,6 @@ class RadioItem implements MenuItemInterface, ToggableItemInterface
                 ? $parentItem->getItems()
                 : $cliMenu->getItems();
 
-
             $filtered = array_filter(
                 $siblings,
                 function (MenuItemInterface $item) {
