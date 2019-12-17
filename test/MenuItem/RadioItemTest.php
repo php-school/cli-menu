@@ -135,8 +135,16 @@ class RadioItemTest extends TestCase
 
         $cliMenu = $this->getMockBuilder(CliMenu::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getItems', 'redraw'])
+            ->onlyMethods(['getItems', 'redraw', 'getSelectedItemIndex', 'getItemByIndex'])
             ->getMock();
+
+        $cliMenu->expects($this->atLeastOnce())
+            ->method('getSelectedItemIndex')
+            ->willReturn(1);
+
+        $cliMenu->expects($this->atLeastOnce())
+            ->method('getItemByIndex')
+            ->willReturn($item1);
 
         $cliMenu->expects($this->atLeastOnce())
             ->method('getItems')

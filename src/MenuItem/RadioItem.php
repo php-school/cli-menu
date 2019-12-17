@@ -53,7 +53,7 @@ class RadioItem implements MenuItemInterface, ToggableItemInterface
                 : $cliMenu->getItems();
 
             array_walk(
-                $filter = array_filter(
+                array_filter(
                     $siblings,
                     function (MenuItemInterface $item) {
                         return $item instanceof self;
