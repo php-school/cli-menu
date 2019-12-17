@@ -4,7 +4,7 @@ namespace PhpSchool\CliMenu\MenuItem;
 
 use PhpSchool\CliMenu\CliMenu;
 
-class CheckableItem implements MenuItemInterface, ToggableItemInterface
+class RadioItem implements MenuItemInterface, ToggableItemInterface
 {
     use ToggableTrait;
 
@@ -46,7 +46,27 @@ class CheckableItem implements MenuItemInterface, ToggableItemInterface
     public function getSelectAction() : ?callable
     {
         return function (CliMenu $cliMenu) {
-            $this->toggle();
+            $parentItem = $cliMenu->getItemByIndex($cliMenu->getSelectedItemIndex());
+
+            $siblings = $parentItem instanceof SplitItem
+                ? $parentItem->getItems()
+                : $cliMenu->getItems();
+
+            $filtered = array_filter(
+                $siblings,
+                function (MenuItemInterface $item) {
+                    return $item instanceof self;
+                }
+            );
+
+            array_walk(
+                $filtered,
+                function (RadioItem $checkableItem) {
+                    $checkableItem->setUnchecked();
+                }
+            );
+
+            $this->setChecked();
             $cliMenu->redraw();
 
             return ($this->selectAction)($cliMenu);

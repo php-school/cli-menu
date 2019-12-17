@@ -134,6 +134,10 @@ class SplitItem implements MenuItemInterface
                     $markerType = $item->getChecked()
                         ? $style->getCheckedMarker()
                         : $style->getUncheckedMarker();
+                } elseif ($item instanceof RadioItem) {
+                    $markerType = $item->getChecked()
+                        ? $style->getRadioMarker()
+                        : $style->getUnradioMarker();
                 } else {
                     $markerType = $style->getMarker($isSelected);
                 }

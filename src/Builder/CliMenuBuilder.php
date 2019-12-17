@@ -10,6 +10,7 @@ use PhpSchool\CliMenu\MenuItem\CheckableItem;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
+use PhpSchool\CliMenu\MenuItem\RadioItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
@@ -138,6 +139,17 @@ class CliMenuBuilder
         bool $disabled = false
     ) : self {
         $this->addMenuItem(new CheckableItem($text, $itemCallable, $showItemExtra, $disabled));
+
+        return $this;
+    }
+
+    public function addRadioItem(
+        string $text,
+        callable $itemCallable,
+        bool $showItemExtra = false,
+        bool $disabled = false
+    ) : self {
+        $this->addMenuItem(new RadioItem($text, $itemCallable, $showItemExtra, $disabled));
 
         return $this;
     }
@@ -417,6 +429,20 @@ class CliMenuBuilder
     public function setCheckedMarker(string $marker) : self
     {
         $this->style->setCheckedMarker($marker);
+
+        return $this;
+    }
+
+    public function setUnradioMarker(string $marker) : self
+    {
+        $this->style->setUnradioMarker($marker);
+
+        return $this;
+    }
+
+    public function setRadioMarker(string $marker) : self
+    {
+        $this->style->setRadioMarker($marker);
 
         return $this;
     }

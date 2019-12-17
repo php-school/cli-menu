@@ -8,6 +8,7 @@ use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
 use PhpSchool\CliMenu\MenuItem\CheckableItem;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
+use PhpSchool\CliMenu\MenuItem\RadioItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\Terminal\Terminal;
@@ -387,6 +388,31 @@ class CliMenuBuilderTest extends TestCase
             ],
             [
                 'class' => CheckableItem::class,
+                'text'  => 'Item 2',
+            ],
+        ];
+
+        $this->checkMenuItems($menu, $expected);
+    }
+
+    public function testAddRadioItem() : void
+    {
+        $callable = function () {
+        };
+
+        $builder = new CliMenuBuilder;
+        $builder->disableDefaultItems();
+        $builder->addRadioItem('Item 1', $callable);
+        $builder->addRadioItem('Item 2', $callable);
+        $menu = $builder->build();
+
+        $expected = [
+            [
+                'class' => RadioItem::class,
+                'text'  => 'Item 1',
+            ],
+            [
+                'class' => RadioItem::class,
                 'text'  => 'Item 2',
             ],
         ];

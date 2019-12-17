@@ -42,6 +42,7 @@
     * [Items](#appearance)
       * [Selectable Item](#selectable-item)
       * [Checkable Item](#checkable-item)
+      * [Radio Item](#radio-item)
       * [Line Break Item](#line-break-item)
       * [Static Item](#static-item)
       * [Ascii Art Item](#ascii-art-item)
@@ -501,6 +502,7 @@ There a few different types of items you can add to your menu
 
 * Selectable Item - This is the type of item you need for something to be selectable (you can hit enter and it will invoke your callable) 
 * Checkable Item - This is a checkbox type of item that keeps track of its toggled state to show a different marker.
+* Radio Item - This is a radio type of item that keeps track of its toggled state to show a different marker. Disables all other radios within its `CliMenu` level.
 * Line Break Item - This is used to break up areas, it can span multiple lines and will be the width of Menu. Whatever string is passed will be repeated.
 * Static Item - This will print whatever text is passed, useful for headings.
 * Ascii Art Item - Special item which allows usage of Ascii art. It takes care of padding and alignment.
@@ -567,6 +569,28 @@ $menu = (new CliMenuBuilder)
 
 When selecting an item, it will be toggled. Notice at first each item is unchecked. After selecting one it will become
 checked.
+
+### Radio Item
+
+```php
+<?php
+
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\CliMenu;
+
+$callable = function (CliMenu $menu) {
+    echo $menu->getSelectedItem()->getText();
+};
+
+$menu = (new CliMenuBuilder)
+    ->addRadioItem('Item 1', $callable)
+    ->addRadioItem('Item 2', $callable)
+    ->addRadioItem('Item 3', $callable)
+    ->build();
+```
+
+When selecting an item, it will be toggled. Notice at first each item is unchecked. After selecting one it will become
+checked and all other `RadioItem` within the same level will be unchecked.
 
 ### Line Break Item
 
@@ -698,7 +722,7 @@ Split Items allows you to add multiple items on the same row. The full width of 
 
 You can set the number of spaces separating items using `->setGutter()` (defaults to 2).
 
-Only Selectable, Checkable, Static and SubMenu items are currently allowed inside a Split Item.
+Only Selectable, Checkable, Radio, Static and SubMenu items are currently allowed inside a Split Item.
 
 ```php
 <?php
@@ -731,7 +755,7 @@ $menu->open();
 There are a few things to note about the syntax and builder process here:
 
 1. The first parameter to `addSplitItem` is a closure, which will be invoked with a new instance of `SplitItemBuilder` which you can use to add items to the split item.
-2. You can call `addItem`, `addCheckableItem`, `addSubMenu` and `addStaticItem` on the `SplitItemBuilder`. 
+2. You can call `addItem`, `addCheckableItem`, `addRadioItem`, `addSubMenu` and `addStaticItem` on the `SplitItemBuilder`. 
 3. `SplitItemBuilder` has a fluent interface so you can chain method calls.
 
 Note: The closure used to build the split item is also binded with the `SplitItemBuilder` instance so you can add items and such using `$this->addItem()` rather than using the function
@@ -803,6 +827,19 @@ use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 $menu = (new CliMenuBuilder)
     ->setUncheckedMarker('[○] ')
     ->setCheckedMarker('[●] ')
+    ->build();
+```
+
+and for `\PhpSchool\CliMenu\MenuItem\RadioItem`:
+
+```php
+<?php
+
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+
+$menu = (new CliMenuBuilder)
+    ->setUnradioMarker('[ ] ')
+    ->setRadioMarker('[✔] ')
     ->build();
 ```
 

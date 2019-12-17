@@ -102,6 +102,8 @@ class MenuStyleTest extends TestCase
         $style->setSelectedMarker('>');
         $style->setUncheckedMarker('/');
         $style->setCheckedMarker('+');
+        $style->setUnradioMarker('O');
+        $style->setRadioMarker('X');
         $style->setItemExtra('EXTRA!');
         $style->setDisplaysExtra(true);
         $style->setTitleSeparator('+');
@@ -121,6 +123,8 @@ class MenuStyleTest extends TestCase
         self::assertSame('>', $style->getSelectedMarker());
         self::assertEquals('/', $style->getUncheckedMarker());
         self::assertEquals('+', $style->getCheckedMarker());
+        self::assertEquals('O', $style->getUnradioMarker());
+        self::assertEquals('X', $style->getRadioMarker());
         self::assertSame('EXTRA!', $style->getItemExtra());
         self::assertTrue($style->getDisplaysExtra());
         self::assertSame('+', $style->getTitleSeparator());

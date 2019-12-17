@@ -14,11 +14,11 @@ $menu = (new CliMenuBuilder)
     ->setTitle('Select a Language')
     ->addSplitItem(function (SplitItemBuilder $b) use ($itemCallable) {
         $b->setGutter(5)
-            ->addCheckableItem('Rust', $itemCallable)
-            ->addCheckableItem('C++', $itemCallable)
-            ->addCheckableItem('Go', $itemCallable)
-            ->addCheckableItem('Java', $itemCallable)
-            ->addCheckableItem('C', $itemCallable)
+            ->addRadioItem('Rust', $itemCallable)
+            ->addRadioItem('C++', $itemCallable)
+            ->addRadioItem('Go', $itemCallable)
+            ->addRadioItem('Java', $itemCallable)
+            ->addRadioItem('C', $itemCallable)
         ;
     })
     ->build();
