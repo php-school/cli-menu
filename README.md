@@ -565,6 +565,9 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
+When selecting an item, it will be toggled. Notice at first each item is unchecked. After selecting one it will become
+checked.
+
 ### Line Break Item
 
 ```php
