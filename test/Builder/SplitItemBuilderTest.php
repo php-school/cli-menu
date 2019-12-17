@@ -6,6 +6,7 @@ use PhpSchool\CliMenu\Builder\SplitItemBuilder;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\CheckableItem;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
+use PhpSchool\CliMenu\MenuItem\RadioItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
@@ -56,6 +57,31 @@ class SplitItemBuilderTest extends TestCase
             ],
             [
                 'class' => CheckableItem::class,
+                'text'  => 'Item 2',
+            ],
+        ];
+
+        $this->checkItemItems($item, $expected);
+    }
+
+    public function testAddRadioItem() : void
+    {
+        $callable = function () {
+        };
+
+        $menu = new CliMenu(null, []);
+        $builder = new SplitItemBuilder($menu);
+        $builder->addRadioItem('Item 1', $callable);
+        $builder->addRadioItem('Item 2', $callable);
+        $item = $builder->build();
+
+        $expected = [
+            [
+                'class' => RadioItem::class,
+                'text'  => 'Item 1',
+            ],
+            [
+                'class' => RadioItem::class,
                 'text'  => 'Item 2',
             ],
         ];

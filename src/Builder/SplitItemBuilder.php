@@ -6,6 +6,7 @@ use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\CheckableItem;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
+use PhpSchool\CliMenu\MenuItem\RadioItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
@@ -65,6 +66,17 @@ class SplitItemBuilder
         bool $disabled = false
     ) : self {
         $this->splitItem->addItem(new CheckableItem($text, $itemCallable, $showItemExtra, $disabled));
+
+        return $this;
+    }
+
+    public function addRadioItem(
+        string $text,
+        callable $itemCallable,
+        bool $showItemExtra = false,
+        bool $disabled = false
+    ) : self {
+        $this->splitItem->addItem(new RadioItem($text, $itemCallable, $showItemExtra, $disabled));
 
         return $this;
     }

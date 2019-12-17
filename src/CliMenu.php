@@ -404,6 +404,24 @@ class CliMenu
         $this->selectedItem = $key;
     }
 
+    public function getSelectedItemIndex() : int
+    {
+        if (null === $this->selectedItem) {
+            throw new \RuntimeException('No selected item');
+        }
+
+        return $this->selectedItem;
+    }
+
+    public function getItemByIndex(int $index) : MenuItemInterface
+    {
+        if (!isset($this->items[$index])) {
+            throw new \RuntimeException('Item with index does not exist');
+        }
+
+        return $this->items[$index];
+    }
+
     public function executeAsSelected(MenuItemInterface $item) : void
     {
         $current = $this->items[$this->selectedItem];

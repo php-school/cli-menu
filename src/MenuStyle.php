@@ -82,6 +82,16 @@ class MenuStyle
     /**
      * @var string
      */
+    private $radioMarker;
+
+    /**
+     * @var string
+     */
+    private $unradioMarker;
+
+    /**
+     * @var string
+     */
     private $itemExtra;
 
     /**
@@ -170,6 +180,8 @@ class MenuStyle
         'unselectedMarker' => '○ ',
         'checkedMarker' => '[✔] ',
         'uncheckedMarker' => '[ ] ',
+        'radioMarker' => '[●] ',
+        'unradioMarker' => '[○] ',
         'itemExtra' => '✔',
         'displaysExtra' => false,
         'titleSeparator' => '=',
@@ -243,6 +255,8 @@ class MenuStyle
         $this->setUnselectedMarker(self::$defaultStyleValues['unselectedMarker']);
         $this->setCheckedMarker(self::$defaultStyleValues['checkedMarker']);
         $this->setUncheckedMarker(self::$defaultStyleValues['uncheckedMarker']);
+        $this->setRadioMarker(self::$defaultStyleValues['radioMarker']);
+        $this->setUnradioMarker(self::$defaultStyleValues['unradioMarker']);
         $this->setItemExtra(self::$defaultStyleValues['itemExtra']);
         $this->setDisplaysExtra(self::$defaultStyleValues['displaysExtra']);
         $this->setTitleSeparator(self::$defaultStyleValues['titleSeparator']);
@@ -266,6 +280,8 @@ class MenuStyle
             $this->unselectedMarker,
             $this->checkedMarker,
             $this->uncheckedMarker,
+            $this->radioMarker,
+            $this->unradioMarker,
             $this->itemExtra,
             $this->displaysExtra,
             $this->titleSeparator,
@@ -593,6 +609,30 @@ class MenuStyle
     public function setUncheckedMarker(string $marker) : self
     {
         $this->uncheckedMarker = $marker;
+
+        return $this;
+    }
+
+    public function getRadioMarker() : string
+    {
+        return $this->radioMarker;
+    }
+
+    public function setRadioMarker(string $marker) : self
+    {
+        $this->radioMarker = $marker;
+
+        return $this;
+    }
+
+    public function getUnradioMarker() : string
+    {
+        return $this->unradioMarker;
+    }
+
+    public function setUnradioMarker(string $marker) : self
+    {
+        $this->unradioMarker = $marker;
 
         return $this;
     }
