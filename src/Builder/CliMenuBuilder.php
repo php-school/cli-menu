@@ -302,7 +302,6 @@ class CliMenuBuilder
             $builder->enableAutoShortcuts($this->autoShortcutsRegex);
         }
 
-        $callback = $callback->bindTo($builder);
         $callback($builder);
         
         $this->menu->addItem($splitItem = $builder->build());

@@ -103,7 +103,6 @@ class SplitItemBuilder
             $builder->enableAutoShortcuts($this->autoShortcutsRegex);
         }
 
-        $callback = $callback->bindTo($builder);
         $callback($builder);
 
         $menu = $builder->build();
