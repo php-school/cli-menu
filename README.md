@@ -791,6 +791,32 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
+If no items have display extra set to true, then the item extra will not be displayed. If you toggle the item to show
+it's item extra in a callback or at runtime it will render incorrectly.
+
+In order to fix that you need to tell the menu to display item extra explicitly. You can do this when constructing the
+menu like so:
+
+```php
+<?php
+
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\CliMenu;
+
+$menu = (new CliMenuBuilder)
+    ->setItemExtra('✔')
+    ->addItem('Exercise 1', function (CliMenu $menu) { 
+        $selectedItem = $menu->getSelectedItem();
+        if ($selectedItem->showsItemExtra()) {
+            $selectedItem->hideItemExtra();
+        } else {
+            $selectedItem->showItemExtra();
+        }       
+    })
+    ->displayExtra()
+    ->build();
+```
+
 ## Menu Methods
 
 The next set of documentation applies to methods available directly on the `\PhpSchool\CliMenu\CliMenu` instance. Typically
