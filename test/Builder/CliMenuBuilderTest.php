@@ -808,9 +808,9 @@ class CliMenuBuilderTest extends TestCase
     {
         $builder = new CliMenuBuilder;
         $builder->disableDefaultItems();
-        $builder->addSubMenu('My SubMenu', function () {
-            $this->disableDefaultItems();
-            $this->addItem('My Item', function () {
+        $builder->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
+            $b->disableDefaultItems();
+            $b->addItem('My Item', function () {
             });
         });
 
