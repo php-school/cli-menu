@@ -2,6 +2,7 @@
 
 namespace PhpSchool\CliMenuTest\MenuItem;
 
+use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\CheckableItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\Terminal\Terminal;
@@ -14,6 +15,20 @@ class CheckableItemTest extends TestCase
         $item = new CheckableItem('Item', function () {
         });
         $this->assertTrue($item->canSelect());
+    }
+
+    public function testGetSelectAction() : void
+    {
+        $callable = function () {
+            return 'callable is called';
+        };
+        $item = new CheckableItem('Item', $callable);
+
+        $cliMenu = $this->getMockBuilder(CLiMenu::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->assertSame($callable(), $item->getSelectAction()($cliMenu));
     }
 
     public function testShowsItemExtra() : void
