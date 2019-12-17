@@ -2,17 +2,11 @@
 
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
-use PhpSchool\CliMenu\MenuItem\CheckableItem;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
 $itemCallable = function (CliMenu $menu) {
-    /** @var CheckableItem $item */
-    $item = $menu->getSelectedItem();
-
-    $item->toggle();
-
-    $menu->redraw();
+    echo $menu->getSelectedItem()->getText();
 };
 
 $menu = (new CliMenuBuilder)

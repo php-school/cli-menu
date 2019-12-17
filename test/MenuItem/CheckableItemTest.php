@@ -16,14 +16,6 @@ class CheckableItemTest extends TestCase
         $this->assertTrue($item->canSelect());
     }
 
-    public function testGetSelectAction() : void
-    {
-        $callable = function () {
-        };
-        $item = new CheckableItem('Item', $callable);
-        $this->assertSame($callable, $item->getSelectAction());
-    }
-
     public function testShowsItemExtra() : void
     {
         $item = new CheckableItem('Item', function () {
