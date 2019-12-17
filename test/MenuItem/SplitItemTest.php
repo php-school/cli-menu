@@ -2,9 +2,12 @@
 
 namespace PhpSchool\CliMenuTest\MenuItem;
 
+use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
+use PhpSchool\CliMenu\MenuItem\CheckableItem;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
+use PhpSchool\CliMenu\MenuItem\RadioItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
@@ -465,5 +468,66 @@ class SplitItemTest extends TestCase
         self::assertFalse($splitItem->canSelectIndex(0));
         self::assertFalse($splitItem->canSelectIndex(5));
         self::assertTrue($splitItem->canSelectIndex(1));
+    }
+
+    public function testRadioItem() : void
+    {
+        $menuStyle = $this->createMock(MenuStyle::class);
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getContentWidth')
+            ->will($this->returnValue(30));
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getRadioMarker')
+            ->willReturn('[●] ');
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getUnradioMarker')
+            ->willReturn('[○] ');
+
+        $checkableItem1 = new RadioItem('Item One', function () {
+        });
+
+        $checkableItem2 = new RadioItem('Item Two', function () {
+        });
+
+        $item = new SplitItem(
+            [
+                $checkableItem1,
+                $checkableItem2,
+            ]
+        );
+
+        $cliMenu = $this->getMockBuilder(CliMenu::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getItems', 'redraw', 'getSelectedItemIndex', 'getItemByIndex'])
+            ->getMock();
+
+        $cliMenu->expects($this->never())
+            ->method('getItems');
+
+        $cliMenu->expects($this->atLeastOnce())
+            ->method('getSelectedItemIndex')
+            ->willReturn(1);
+
+        $cliMenu->expects($this->atLeastOnce())
+            ->method('getItemByIndex')
+            ->willReturn($item);
+
+        $item->setSelectedItemIndex(0);
+
+        self::assertEquals(['[○] Item One   [○] Item Two   '], $item->getRows($menuStyle, true));
+
+        $checkableItem1->getSelectAction()($cliMenu);
+
+        self::assertEquals(['[●] Item One   [○] Item Two   '], $item->getRows($menuStyle, true));
+
+        $checkableItem2->getSelectAction()($cliMenu);
+
+        self::assertEquals(['[○] Item One   [●] Item Two   '], $item->getRows($menuStyle, true));
     }
 }

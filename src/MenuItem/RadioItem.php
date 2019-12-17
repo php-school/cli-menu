@@ -46,9 +46,15 @@ class RadioItem implements MenuItemInterface, ToggableItemInterface
     public function getSelectAction() : ?callable
     {
         return function (CliMenu $cliMenu) {
+            $parentItem = $cliMenu->getItemByIndex($cliMenu->getSelectedItemIndex());
+
+            $siblings = $parentItem instanceof SplitItem
+                ? $parentItem->getItems()
+                : $cliMenu->getItems();
+
             array_walk(
                 $filter = array_filter(
-                    $cliMenu->getItems(),
+                    $siblings,
                     function (MenuItemInterface $item) {
                         return $item instanceof self;
                     }
