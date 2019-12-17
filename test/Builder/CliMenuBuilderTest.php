@@ -2,6 +2,7 @@
 
 namespace PhpSchool\CliMenuTest\Builder;
 
+use PhpSchool\CliMenu\Builder\SplitItemBuilder;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
@@ -803,8 +804,8 @@ class CliMenuBuilderTest extends TestCase
     {
         $builder = new CliMenuBuilder;
         $builder->disableDefaultItems();
-        $builder->addSplitItem(function () {
-            $this->addItem('My Item', function () {
+        $builder->addSplitItem(function (SplitItemBuilder $b) {
+            $b->addItem('My Item', function () {
             });
         });
 

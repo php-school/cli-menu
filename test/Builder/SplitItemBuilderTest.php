@@ -2,6 +2,7 @@
 
 namespace PhpSchool\CliMenuTest\Builder;
 
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\Builder\SplitItemBuilder;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
@@ -97,9 +98,9 @@ class SplitItemBuilderTest extends TestCase
     {
         $menu = new CliMenu(null, []);
         $builder = new SplitItemBuilder($menu);
-        $builder->addSubMenu('My SubMenu', function () {
-            $this->disableDefaultItems();
-            $this->addItem('My Item', function () {
+        $builder->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
+            $b->disableDefaultItems();
+            $b->addItem('My Item', function () {
             });
         });
 
