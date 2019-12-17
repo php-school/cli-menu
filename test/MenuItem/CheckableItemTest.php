@@ -24,11 +24,29 @@ class CheckableItemTest extends TestCase
         };
         $item = new CheckableItem('Item', $callable);
 
-        $cliMenu = $this->getMockBuilder(CLiMenu::class)
+        $cliMenu = $this->getMockBuilder(CliMenu::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->assertSame($callable(), $item->getSelectAction()($cliMenu));
+    }
+
+    public function testSelectActionTogglesItem() : void
+    {
+        $callable = function () {
+        };
+
+        $item = new CheckableItem('Item', $callable);
+
+        self::assertFalse($item->getChecked());
+
+        $cliMenu = $this->getMockBuilder(CliMenu::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $item->getSelectAction()($cliMenu);
+
+        self::assertTrue($item->getChecked());
     }
 
     public function testShowsItemExtra() : void
