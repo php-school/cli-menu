@@ -11,6 +11,17 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ### Removed
 
+## [4.0.0]
+### Added
+ - Add PHP 7.4 support (#183)
+ 
+### Fixed
+ - Fixed item extra rendering outside of menu (#66, £184, #187)
+
+### Removed
+ - Remove rebinding $this in builder closures so we can access the real $this (#91)
+
+
 ## [3.2.0]
 ### Added
  - Allow ESC key to "cancel" editing an input (#174)
