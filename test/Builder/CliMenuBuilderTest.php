@@ -820,6 +820,35 @@ class CliMenuBuilderTest extends TestCase
         $this->checkItems($menu->getItems()[0]->getItems(), $expected);
     }
 
+    public function testDisplayExtraForcesExtraToBeDisplayedWhenNoItemsDisplayExtra() : void
+    {
+        $cb = function () {
+        };
+        $builder = new CliMenuBuilder;
+        $builder->addItem('Item 1', $cb);
+        $builder->addItem('Item 2', $cb);
+        $builder->displayExtra();
+
+        $menu = $builder->build();
+
+        self::assertTrue($menu->getStyle()->getDisplaysExtra());
+    }
+
+    public function testModifyingItemExtraForcesExtraToBeDisplayedWhenNoItemsDisplayExtra() : void
+    {
+        $cb = function () {
+        };
+        $builder = new CliMenuBuilder;
+        $builder->addItem('Item 1', $cb);
+        $builder->addItem('Item 2', $cb);
+        $builder->setItemExtra('DONE');
+
+        $menu = $builder->build();
+
+        self::assertTrue($menu->getStyle()->getDisplaysExtra());
+    }
+
+
     private function checkMenuItems(CliMenu $menu, array $expected) : void
     {
         $this->checkItems($menu->getItems(), $expected);
