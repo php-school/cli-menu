@@ -184,7 +184,7 @@ class MenuStyle
     /**
      * @var array
      */
-    private static $availableForegroundColors = array(
+    private static $availableForegroundColors = [
         'black'   => 30,
         'red'     => 31,
         'green'   => 32,
@@ -194,12 +194,12 @@ class MenuStyle
         'cyan'    => 36,
         'white'   => 37,
         'default' => 39,
-    );
+    ];
 
     /**
      * @var array
      */
-    private static $availableBackgroundColors = array(
+    private static $availableBackgroundColors = [
         'black'   => 40,
         'red'     => 41,
         'green'   => 42,
@@ -209,19 +209,19 @@ class MenuStyle
         'cyan'    => 46,
         'white'   => 47,
         'default' => 49,
-    );
+    ];
 
     /**
      * @var array
      */
-    private static $availableOptions = array(
-        'bold'       => array('set' => 1, 'unset' => 22),
-        'dim'        => array('set' => 2, 'unset' => 22),
-        'underscore' => array('set' => 4, 'unset' => 24),
-        'blink'      => array('set' => 5, 'unset' => 25),
-        'reverse'    => array('set' => 7, 'unset' => 27),
-        'conceal'    => array('set' => 8, 'unset' => 28)
-    );
+    private static $availableOptions = [
+        'bold'       => ['set' => 1, 'unset' => 22],
+        'dim'        => ['set' => 2, 'unset' => 22],
+        'underscore' => ['set' => 4, 'unset' => 24],
+        'blink'      => ['set' => 5, 'unset' => 25],
+        'reverse'    => ['set' => 7, 'unset' => 27],
+        'conceal'    => ['set' => 8, 'unset' => 28]
+    ];
 
     /**
      * Initialise style
