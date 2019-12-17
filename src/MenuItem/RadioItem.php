@@ -52,13 +52,16 @@ class RadioItem implements MenuItemInterface, ToggableItemInterface
                 ? $parentItem->getItems()
                 : $cliMenu->getItems();
 
+
+            $filtered = array_filter(
+                $siblings,
+                function (MenuItemInterface $item) {
+                    return $item instanceof self;
+                }
+            );
+
             array_walk(
-                array_filter(
-                    $siblings,
-                    function (MenuItemInterface $item) {
-                        return $item instanceof self;
-                    }
-                ),
+                $filtered,
                 function (RadioItem $checkableItem) {
                     $checkableItem->setUnchecked();
                 }
