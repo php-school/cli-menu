@@ -1,6 +1,7 @@
 <?php
 
 use PhpSchool\CliMenu\Action\ExitAction;
+use PhpSchool\CliMenu\Builder\SplitItemBuilder;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
@@ -44,16 +45,16 @@ $builder = (new CliMenuBuilder)
     ->addLineBreak();
 
 for ($i = 0; $i < $rows; $i++) {
-    $builder->addSplitItem(function() use ($cols, $paint) {
-        $this->setGutter(0);
+    $builder->addSplitItem(function(SplitItemBuilder $b) use ($cols, $paint) {
+        $b->setGutter(0);
         for ($j = 0; $j < $cols; $j++) {
-            $this->addItem(' ', $paint);
+            $b->addItem(' ', $paint);
         }
     });
 }
 
-$builder->addSplitItem(function() {
-    $this->addStaticItem('Enter: Toggle draw')
+$builder->addSplitItem(function(SplitItemBuilder $b) {
+    $b->addStaticItem('Enter: Toggle draw')
         ->addStaticItem('C: Clear screen')
         ->addStaticItem('X: Exit');
 });
