@@ -946,6 +946,78 @@ class CliMenuTest extends TestCase
         self::assertCount(1, $menu->getItems());
     }
 
+    public function testSetSelectedItemThrowsExceptionIfItemDoesNotExistInMenu() : void
+    {
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+        $menu->addItem($item1 = new SelectableItem('Selectable 1', function () {
+        }));
+        $menu->addItem($item2 = new SelectableItem('Selectable 2', function () {
+        }));
+
+        $item3 = new SelectableItem('Selectable 2', function () {
+        });
+
+        $this->expectException(\InvalidArgumentException::class, 'Item does not exist in menu');
+
+        $menu->setSelectedItem($item3);
+    }
+
+    public function testSetSelectedItem() : void
+    {
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+        $menu->addItem($item1 = new SelectableItem('Selectable 1', function () {
+        }));
+        $menu->addItem($item2 = new SelectableItem('Selectable 2', function () {
+        }));
+
+        $menu->setSelectedItem($item2);
+
+        self::assertSame($item2, $menu->getSelectedItem());
+    }
+
+    public function testGetSelectedItemIndexThrowsExceptionIfNoItemSelected() : void
+    {
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+
+        $this->expectException(\RuntimeException::class, 'No selected item');
+        $menu->getSelectedItemIndex();
+    }
+
+    public function testGetSelectedItemIndex() : void
+    {
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+        $menu->addItem($item1 = new SelectableItem('Selectable 1', function () {
+        }));
+        $menu->addItem($item2 = new SelectableItem('Selectable 2', function () {
+        }));
+
+        $menu->setSelectedItem($item2);
+
+        self::assertSame(1, $menu->getSelectedItemIndex());
+    }
+
+    public function testGetItemByIndexThrowsExceptionIfItemDoesNotExistInMenu() : void
+    {
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+
+        $this->expectException(\RuntimeException::class, 'Item with index does not exist');
+        $menu->getItemByIndex(3);
+    }
+
+    public function testGetItemByIndex() : void
+    {
+        $menu = new CliMenu('PHP School FTW', [], $this->terminal);
+
+        $menu->addItem($item1 = new SelectableItem('Selectable 1', function () {
+        }));
+        $menu->addItem($item2 = new SelectableItem('Selectable 2', function () {
+        }));
+
+        $menu->setSelectedItem($item2);
+
+        self::assertSame($item2, $menu->getItemByIndex(1));
+    }
+
     private function getTestFile() : string
     {
         return sprintf('%s/res/%s.txt', __DIR__, $this->getName());
