@@ -130,8 +130,7 @@ class SplitItem implements MenuItemInterface
             array_map(function ($index, $item) use ($selected, $length, $style) {
                 $isSelected = $selected && $index === $this->selectedItemIndex;
 
-                if (is_a($item, CheckableItem::class)) {
-                    /** @var CheckableItem $item */
+                if ($item instanceof CheckableItem) {
                     $markerType = $item->getChecked()
                         ? $style->getCheckedMarker()
                         : $style->getUncheckedMarker();
