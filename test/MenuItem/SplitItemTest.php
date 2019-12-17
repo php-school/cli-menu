@@ -470,6 +470,47 @@ class SplitItemTest extends TestCase
         self::assertTrue($splitItem->canSelectIndex(1));
     }
 
+    public function testCheckableItem() : void
+    {
+        $menuStyle = $this->createMock(MenuStyle::class);
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getContentWidth')
+            ->will($this->returnValue(30));
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getCheckedMarker')
+            ->willReturn('[✔] ');
+
+        $menuStyle
+            ->expects($this->any())
+            ->method('getUncheckedMarker')
+            ->willReturn('[ ] ');
+
+        $checkableItem1 = new CheckableItem('Item One', function () {
+        });
+
+        $checkableItem2 = new CheckableItem('Item Two', function () {
+        });
+
+        $item = new SplitItem(
+            [
+                $checkableItem1,
+                $checkableItem2,
+            ]
+        );
+
+        $item->setSelectedItemIndex(0);
+
+        self::assertEquals(['[ ] Item One   [ ] Item Two   '], $item->getRows($menuStyle, true));
+
+        $checkableItem1->toggle();
+
+        self::assertEquals(['[✔] Item One   [ ] Item Two   '], $item->getRows($menuStyle, true));
+    }
+
     public function testRadioItem() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
