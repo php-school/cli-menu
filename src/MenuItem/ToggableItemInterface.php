@@ -21,8 +21,6 @@ interface ToggableItemInterface
 
     /**
      * Gets checked state
-     *
-     * @return bool
      */
     public function getChecked() : bool;
 }

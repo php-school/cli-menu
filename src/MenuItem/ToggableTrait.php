@@ -14,10 +14,6 @@ trait ToggableTrait
 
     /**
      * The output text for the item
-     *
-     * @param MenuStyle $style
-     * @param bool $selected Currently unused in this class
-     * @return array
      */
     public function getRows(MenuStyle $style, bool $selected = false) : array
     {
@@ -82,6 +78,9 @@ trait ToggableTrait
         $this->checked = false;
     }
 
+    /**
+     * Whether or not the item is checked
+     */
     public function getChecked() : bool
     {
         return $this->checked;
