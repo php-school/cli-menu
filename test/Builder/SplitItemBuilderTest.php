@@ -4,6 +4,7 @@ namespace PhpSchool\CliMenuTest\Builder;
 
 use PhpSchool\CliMenu\Builder\SplitItemBuilder;
 use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\MenuItem\CheckableItem;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
@@ -30,6 +31,31 @@ class SplitItemBuilderTest extends TestCase
             ],
             [
                 'class' => SelectableItem::class,
+                'text'  => 'Item 2',
+            ],
+        ];
+
+        $this->checkItemItems($item, $expected);
+    }
+
+    public function testAddCheckableItem() : void
+    {
+        $callable = function () {
+        };
+
+        $menu = new CliMenu(null, []);
+        $builder = new SplitItemBuilder($menu);
+        $builder->addCheckableItem('Item 1', $callable);
+        $builder->addCheckableItem('Item 2', $callable);
+        $item = $builder->build();
+
+        $expected = [
+            [
+                'class' => CheckableItem::class,
+                'text'  => 'Item 1',
+            ],
+            [
+                'class' => CheckableItem::class,
                 'text'  => 'Item 2',
             ],
         ];
