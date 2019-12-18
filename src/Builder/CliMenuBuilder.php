@@ -200,7 +200,7 @@ class CliMenuBuilder
         $callback = $callback->bindTo($builder);
         $callback($builder);
 
-        $menu = $this->createMenuClosure($builder, $this->menu);
+        $menu = $this->createMenuClosure($builder);
 
         $item = (new MenuMenuItem($text, $menu, $builder->isMenuDisabled()))
             ->setStyle($this->menu->getSelectableStyle());
@@ -214,7 +214,7 @@ class CliMenuBuilder
 
     public function addSubMenuFromBuilder(string $text, CliMenuBuilder $builder) : self
     {
-        $menu = $this->createMenuClosure($builder, $this->menu);
+        $menu = $this->createMenuClosure($builder);
 
         $item = (new MenuMenuItem($text, $menu, $builder->isMenuDisabled()))
             ->setStyle($this->menu->getSelectableStyle());
@@ -231,17 +231,14 @@ class CliMenuBuilder
      * This allows us to wait until all user-provided styles are parsed and apply them to nested items
      *
      * @param CliMenuBuilder|SplitItemBuilder $builder
-     * @param CliMenu $parent
      * @return Closure
      */
-    protected function createMenuClosure($builder, CliMenu $parent = null) : Closure
+    protected function createMenuClosure($builder) : Closure
     {
-        return function () use ($builder, $parent) {
+        return function () use ($builder) {
             $menu = $builder->build();
 
-            if ($parent) {
-                $menu->setParent($parent);
-            }
+            $menu->setParent($this->menu);
 
             // we apply the parent theme if nothing was changed
             // if no styles were changed in this sub-menu

@@ -207,9 +207,12 @@ class SplitItemBuilder
 
             $menu->setParent($this->menu);
 
-            $menu->setCheckableStyle(function (CheckableStyle $style) {
-                $style->fromArray($this->menu->getCheckableStyle()->toArray());
-            });
+            // If user changed this style, persist to the menu so children CheckableItems may use it
+            if ($this->menu->getCheckableStyle()->getIsCustom()) {
+                $menu->setCheckableStyle(function (CheckableStyle $style) {
+                    $style->fromArray($this->menu->getCheckableStyle()->toArray());
+                });
+            }
 
             // If user changed this style, persist to the menu so children RadioItems may use it
             if ($this->menu->getRadioStyle()->getIsCustom()) {
