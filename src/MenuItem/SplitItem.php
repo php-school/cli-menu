@@ -130,16 +130,12 @@ class SplitItem implements MenuItemInterface
             array_map(function ($index, $item) use ($selected, $length, $style) {
                 $isSelected = $selected && $index === $this->selectedItemIndex;
 
-                if ($item instanceof CheckableItem) {
-                    $markerType = $item->getChecked()
-                        ? $style->getCheckedMarker()
-                        : $style->getUncheckedMarker();
-                } elseif ($item instanceof RadioItem) {
-                    $markerType = $item->getChecked()
-                        ? $style->getRadioMarker()
-                        : $style->getUnradioMarker();
+                $itemStyle = $item->getStyle();
+
+                if ($item instanceof ToggableItemInterface) {
+                    $markerType = $itemStyle->getMarker($item->getChecked());
                 } else {
-                    $markerType = $style->getMarker($isSelected);
+                    $markerType = $itemStyle->getMarker($isSelected);
                 }
 
                 $marker = $item->canSelect()

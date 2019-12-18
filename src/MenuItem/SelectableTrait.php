@@ -3,6 +3,7 @@
 namespace PhpSchool\CliMenu\MenuItem;
 
 use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Style;
 use PhpSchool\CliMenu\Util\StringUtil;
 
 /**
@@ -10,30 +11,46 @@ use PhpSchool\CliMenu\Util\StringUtil;
  */
 trait SelectableTrait
 {
-    /**
-     * @var string
-     */
     private $text = '';
 
-    /**
-     * @var bool
-     */
     private $showItemExtra = false;
 
-    /**
-     * @var bool
-     */
     private $disabled = false;
+
+    /**
+     * @var Style\ItemStyleInterface;
+     */
+    private $style;
+
+    public function getStyle() : Style\ItemStyleInterface
+    {
+        if (!$this->style) {
+            $this->style = new Style\SelectableStyle();
+        }
+
+        return $this->style;
+    }
+
+    /**
+     * @param Style\ItemStyleInterface|Style\SelectableStyle $style
+     * @return $this
+     */
+    public function setStyle(Style\ItemStyleInterface $style) : self
+    {
+        $this->style = $style;
+
+        return $this;
+    }
 
     /**
      * The output text for the item
      */
     public function getRows(MenuStyle $style, bool $selected = false) : array
     {
-        $marker = sprintf("%s", $style->getMarker($selected));
+        $marker = sprintf("%s", $this->style->getMarker($selected));
 
-        $length = $style->getDisplaysExtra()
-            ? $style->getContentWidth() - (mb_strlen($style->getItemExtra()) + 2)
+        $length = $this->style->getDisplaysExtra()
+            ? $style->getContentWidth() - (mb_strlen($this->style->getItemExtra()) + 2)
             : $style->getContentWidth();
 
         $rows = explode(
@@ -50,7 +67,7 @@ trait SelectableTrait
 
             if ($key === 0) {
                 return $this->showItemExtra
-                    ? sprintf('%s%s  %s', $text, str_repeat(' ', $length - mb_strlen($row)), $style->getItemExtra())
+                    ? sprintf('%s%s  %s', $text, str_repeat(' ', $length - mb_strlen($row)), $this->style->getItemExtra())
                     : $text;
             }
 

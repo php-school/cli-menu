@@ -3,30 +3,11 @@
 namespace PhpSchool\CliMenu\MenuItem;
 
 use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\Style;
 
-class RadioItem implements MenuItemInterface, ToggableItemInterface
+class RadioItem implements MenuItemInterface, ToggableItemInterface, RadioInterface
 {
     use ToggableTrait;
-
-    /**
-     * @var callable
-     */
-    private $selectAction;
-
-    /**
-     * @var string
-     */
-    private $text = '';
-
-    /**
-     * @var bool
-     */
-    private $showItemExtra = false;
-
-    /**
-     * @var bool
-     */
-    private $disabled = false;
 
     public function __construct(
         string $text,
@@ -38,6 +19,26 @@ class RadioItem implements MenuItemInterface, ToggableItemInterface
         $this->selectAction  = $selectAction;
         $this->showItemExtra = $showItemExtra;
         $this->disabled      = $disabled;
+    }
+
+    public function getStyle() : Style\ItemStyleInterface
+    {
+        if (!$this->style) {
+            $this->style = new Style\RadioStyle();
+        }
+
+        return $this->style;
+    }
+
+    /**
+     * @param Style\RadioStyle|Style\ItemStyleInterface $style
+     * @return $this
+     */
+    public function setStyle(Style\ItemStyleInterface $style) : self
+    {
+        $this->style = $style;
+
+        return $this;
     }
 
     /**
@@ -71,50 +72,5 @@ class RadioItem implements MenuItemInterface, ToggableItemInterface
 
             return ($this->selectAction)($cliMenu);
         };
-    }
-
-    /**
-     * Return the raw string of text
-     */
-    public function getText() : string
-    {
-        return $this->text;
-    }
-
-    /**
-     * Set the raw string of text
-     */
-    public function setText(string $text) : void
-    {
-        $this->text = $text;
-    }
-
-    /**
-     * Can the item be selected
-     */
-    public function canSelect() : bool
-    {
-        return !$this->disabled;
-    }
-
-    public function showsItemExtra() : bool
-    {
-        return $this->showItemExtra;
-    }
-
-    /**
-     * Enable showing item extra
-     */
-    public function showItemExtra() : void
-    {
-        $this->showItemExtra = true;
-    }
-
-    /**
-     * Disable showing item extra
-     */
-    public function hideItemExtra() : void
-    {
-        $this->showItemExtra = false;
     }
 }

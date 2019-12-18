@@ -2,6 +2,7 @@
 
 namespace PhpSchool\CliMenu\Builder;
 
+use Closure;
 use PhpSchool\CliMenu\Action\ExitAction;
 use PhpSchool\CliMenu\Action\GoBackAction;
 use PhpSchool\CliMenu\Exception\InvalidShortcutException;
@@ -11,11 +12,15 @@ use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\RadioItem;
+use PhpSchool\CliMenu\MenuItem\SelectableInterface;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Style\CheckableStyle;
+use PhpSchool\CliMenu\Style\RadioStyle;
+use PhpSchool\CliMenu\Style\SelectableStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\Terminal\Terminal;
 
@@ -118,7 +123,10 @@ class CliMenuBuilder
         bool $showItemExtra = false,
         bool $disabled = false
     ) : self {
-        $this->addMenuItem(new SelectableItem($text, $itemCallable, $showItemExtra, $disabled));
+        $item = (new SelectableItem($text, $itemCallable, $showItemExtra, $disabled))
+            ->setStyle($this->menu->getSelectableStyle());
+
+        $this->addMenuItem($item);
 
         return $this;
     }
@@ -138,7 +146,10 @@ class CliMenuBuilder
         bool $showItemExtra = false,
         bool $disabled = false
     ) : self {
-        $this->addMenuItem(new CheckableItem($text, $itemCallable, $showItemExtra, $disabled));
+        $item = (new CheckableItem($text, $itemCallable, $showItemExtra, $disabled))
+            ->setStyle($this->menu->getCheckableStyle());
+
+        $this->addMenuItem($item);
 
         return $this;
     }
@@ -149,7 +160,10 @@ class CliMenuBuilder
         bool $showItemExtra = false,
         bool $disabled = false
     ) : self {
-        $this->addMenuItem(new RadioItem($text, $itemCallable, $showItemExtra, $disabled));
+        $item = (new RadioItem($text, $itemCallable, $showItemExtra, $disabled))
+            ->setStyle($this->menu->getRadioStyle());
+
+        $this->addMenuItem($item);
 
         return $this;
     }
@@ -175,7 +189,7 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function addSubMenu(string $text, \Closure $callback) : self
+    public function addSubMenu(string $text, Closure $callback) : self
     {
         $builder = self::newSubMenu($this->terminal);
 
@@ -186,20 +200,12 @@ class CliMenuBuilder
         $callback = $callback->bindTo($builder);
         $callback($builder);
 
-        $menu = $builder->build();
-        $menu->setParent($this->menu);
-        
-        //we apply the parent theme if nothing was changed
-        //if no styles were changed in this sub-menu
-        if (!$menu->getStyle()->hasChangedFromDefaults()) {
-            $menu->setStyle($this->menu->getStyle());
-        }
+        $menu = $this->createMenuClosure($builder, $this->menu);
 
-        $this->menu->addItem($item = new MenuMenuItem(
-            $text,
-            $menu,
-            $builder->isMenuDisabled()
-        ));
+        $item = (new MenuMenuItem($text, $menu, $builder->isMenuDisabled()))
+            ->setStyle($this->menu->getSelectableStyle());
+
+        $this->menu->addItem($item);
 
         $this->processItemShortcut($item);
 
@@ -208,24 +214,71 @@ class CliMenuBuilder
 
     public function addSubMenuFromBuilder(string $text, CliMenuBuilder $builder) : self
     {
-        $menu = $builder->build();
-        $menu->setParent($this->menu);
+        $menu = $this->createMenuClosure($builder, $this->menu);
 
-        //we apply the parent theme if nothing was changed
-        //if no styles were changed in this sub-menu
-        if (!$menu->getStyle()->hasChangedFromDefaults()) {
-            $menu->setStyle($this->menu->getStyle());
-        }
+        $item = (new MenuMenuItem($text, $menu, $builder->isMenuDisabled()))
+            ->setStyle($this->menu->getSelectableStyle());
 
-        $this->menu->addItem($item = new MenuMenuItem(
-            $text,
-            $menu,
-            $builder->isMenuDisabled()
-        ));
+        $this->menu->addItem($item);
 
         $this->processItemShortcut($item);
 
         return $this;
+    }
+
+    /**
+     * Create the submenu as a closure which is then unpacked in MenuMenuItem::showSubMenu
+     * This allows us to wait until all user-provided styles are parsed and apply them to nested items
+     *
+     * @param CliMenuBuilder|SplitItemBuilder $builder
+     * @param CliMenu $parent
+     * @return Closure
+     */
+    protected function createMenuClosure($builder, CliMenu $parent = null) : Closure
+    {
+        return function () use ($builder, $parent) {
+            $menu = $builder->build();
+
+            if ($parent) {
+                $menu->setParent($parent);
+            }
+
+            // we apply the parent theme if nothing was changed
+            // if no styles were changed in this sub-menu
+            if (!$menu->getStyle()->hasChangedFromDefaults()) {
+                $menu->setStyle($this->menu->getStyle());
+            }
+
+            // If user changed this style, persist to the menu so children CheckableItems may use it
+            if ($this->menu->getCheckableStyle()->getIsCustom()) {
+                $menu->setCheckableStyle(function (CheckableStyle $style) {
+                    $style->fromArray($this->menu->getCheckableStyle()->toArray());
+                });
+            }
+
+            // If user changed this style, persist to the menu so children RadioItems may use it
+            if ($this->menu->getRadioStyle()->getIsCustom()) {
+                $menu->setRadioStyle(function (RadioStyle $style) {
+                    $style->fromArray($this->menu->getRadioStyle()->toArray());
+                });
+            }
+
+            // If user changed this style, persist to the menu so children SelectableItems may use it
+            if ($this->menu->getSelectableStyle()->getIsCustom()) {
+                $menu->setSelectableStyle(function (SelectableStyle $style) {
+                    $style->fromArray($this->menu->getSelectableStyle()->toArray());
+                });
+            }
+
+            // This will be filled with user-provided items
+            foreach ($menu->getItems() as $item) {
+                if ($item instanceof SelectableInterface && !$item->getStyle()->getIsCustom()) {
+                    $item->setStyle(clone $menu->getSelectableStyle());
+                }
+            }
+
+            return $menu;
+        };
     }
 
     public function enableAutoShortcuts(string $regex = null) : self
@@ -294,12 +347,33 @@ class CliMenuBuilder
         }
     }
 
-    public function addSplitItem(\Closure $callback) : self
+    public function addSplitItem(Closure $callback) : self
     {
         $builder = new SplitItemBuilder($this->menu);
 
         if ($this->autoShortcuts) {
             $builder->enableAutoShortcuts($this->autoShortcutsRegex);
+        }
+
+        // If user changed this style, persist to the menu so children CheckableItems may use it
+        if ($this->menu->getCheckableStyle()->getIsCustom()) {
+            $builder->setCheckableStyle(function (CheckableStyle $style) {
+                $style->fromArray($this->menu->getCheckableStyle()->toArray());
+            });
+        }
+
+        // If user changed this style, persist to the menu so children RadioItems may use it
+        if ($this->menu->getRadioStyle()->getIsCustom()) {
+            $builder->setRadioStyle(function (RadioStyle $style) {
+                $style->fromArray($this->menu->getRadioStyle()->toArray());
+            });
+        }
+
+        // If user changed this style, persist to the menu so children SelectableItems may use it
+        if ($this->menu->getSelectableStyle()->getIsCustom()) {
+            $builder->setSelectableStyle(function (SelectableStyle $style) {
+                $style->fromArray($this->menu->getSelectableStyle()->toArray());
+            });
         }
 
         $callback($builder);
@@ -418,34 +492,6 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function setUncheckedMarker(string $marker) : self
-    {
-        $this->style->setUncheckedMarker($marker);
-
-        return $this;
-    }
-
-    public function setCheckedMarker(string $marker) : self
-    {
-        $this->style->setCheckedMarker($marker);
-
-        return $this;
-    }
-
-    public function setUnradioMarker(string $marker) : self
-    {
-        $this->style->setUnradioMarker($marker);
-
-        return $this;
-    }
-
-    public function setRadioMarker(string $marker) : self
-    {
-        $this->style->setRadioMarker($marker);
-
-        return $this;
-    }
-
     public function setItemExtra(string $extra) : self
     {
         $this->style->setItemExtra($extra);
@@ -519,10 +565,13 @@ class CliMenuBuilder
     {
         $actions = [];
         if ($this->subMenu) {
-            $actions[] = new SelectableItem($this->goBackButtonText, new GoBackAction);
+            $actions[] = (new SelectableItem($this->goBackButtonText, new GoBackAction))
+                ->setStyle($this->menu->getSelectableStyle());
         }
 
-        $actions[] = new SelectableItem($this->exitButtonText, new ExitAction);
+        $actions[] = (new SelectableItem($this->exitButtonText, new ExitAction))
+                ->setStyle($this->menu->getSelectableStyle());
+
         return $actions;
     }
 
@@ -558,5 +607,26 @@ class CliMenuBuilder
         }
 
         return $this->menu;
+    }
+
+    public function setCheckableStyle(callable $itemCallable) : self
+    {
+        $this->menu->setCheckableStyle($itemCallable);
+
+        return $this;
+    }
+
+    public function setRadioStyle(callable $itemCallable) : self
+    {
+        $this->menu->setRadioStyle($itemCallable);
+
+        return $this;
+    }
+
+    public function setSelectableStyle(callable $itemCallable) : self
+    {
+        $this->menu->setSelectableStyle($itemCallable);
+
+        return $this;
     }
 }
