@@ -596,6 +596,31 @@ class CliMenuBuilderTest extends TestCase
         self::assertSame($menu->getStyle(), $menu->getItems()[0]->getSubMenu()->getStyle());
     }
 
+    public function testNestedSubMenuInheritsParentsStyle() : void
+    {
+        $terminal = self::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getWidth')
+            ->will($this->returnValue(200));
+
+        $menu = (new CliMenuBuilder($terminal))
+            ->setBackgroundColour('green')
+            ->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
+                $b->addSubMenu('Nested submenu', function (CliMenuBuilder $b) {
+                    $b->addItem('Nested item', function () {
+                    });
+                })->addItem('Some Item', function () {
+                });
+            })
+            ->build();
+
+        self::assertSame('green', $menu->getItems()[0]->getSubMenu()->getStyle()->getBg());
+        self::assertSame($menu->getStyle(), $menu->getItems()[0]->getSubMenu()->getStyle());
+        self::assertSame($menu->getStyle(), $menu->getItems()[0]->getSubMenu()->getItems()[0]->getSubMenu()->getStyle());
+    }
+
+
     public function testSubMenuDoesNotInheritsParentsStyleWhenSubMenuStyleHasAlterations() : void
     {
         $menu = (new CliMenuBuilder)

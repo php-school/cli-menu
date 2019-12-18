@@ -187,12 +187,6 @@ class CliMenuBuilder
 
         $menu = $builder->build();
         $menu->setParent($this->menu);
-        
-        //we apply the parent theme if nothing was changed
-        //if no styles were changed in this sub-menu
-        if (!$menu->getStyle()->hasChangedFromDefaults()) {
-            $menu->setStyle($this->menu->getStyle());
-        }
 
         $this->menu->addItem($item = new MenuMenuItem(
             $text,
@@ -209,12 +203,6 @@ class CliMenuBuilder
     {
         $menu = $builder->build();
         $menu->setParent($this->menu);
-
-        //we apply the parent theme if nothing was changed
-        //if no styles were changed in this sub-menu
-        if (!$menu->getStyle()->hasChangedFromDefaults()) {
-            $menu->setStyle($this->menu->getStyle());
-        }
 
         $this->menu->addItem($item = new MenuMenuItem(
             $text,
@@ -556,6 +544,31 @@ class CliMenuBuilder
             $this->style->setDisplaysExtra($this->itemsHaveExtra($this->menu->getItems()));
         }
 
+        if (!$this->subMenu) {
+            $this->propagateStyles($this->menu->getItems());
+        }
+
         return $this->menu;
+    }
+
+    private function propagateStyles(array $items) : void
+    {
+        $menuItems = array_filter($items, function (MenuItemInterface $menuItem) {
+            return $menuItem instanceof MenuMenuItem;
+        });
+
+        $changedMenus = array_filter($menuItems, function (MenuMenuItem $menuItem) {
+            return !$menuItem->getSubMenu()
+                ->getStyle()
+                ->hasChangedFromDefaults();
+        });
+
+        array_walk($changedMenus, function (MenuMenuItem $menuItem) {
+            $menuItem->getSubMenu()->setStyle(
+                $this->menu->getStyle()
+            );
+
+            $this->propagateStyles($menuItem->getSubMenu()->getItems());
+        });
     }
 }
