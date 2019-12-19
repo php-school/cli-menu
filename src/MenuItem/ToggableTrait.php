@@ -33,8 +33,10 @@ trait ToggableTrait
     {
         $marker = sprintf("%s", $this->style->getMarker($this->checked));
 
-        $length = $style->getDisplaysExtra()
-            ? $style->getContentWidth() - (mb_strlen($style->getItemExtra()) + 2)
+        $itemExtra = $this->style->getItemExtra();
+
+        $length = $this->style->getDisplaysExtra()
+            ? $style->getContentWidth() - (mb_strlen($itemExtra) + 2)
             : $style->getContentWidth();
 
         $rows = explode(
@@ -46,12 +48,12 @@ trait ToggableTrait
             )
         );
 
-        return array_map(function ($row, $key) use ($style, $length) {
+        return array_map(function ($row, $key) use ($style, $length, $itemExtra) {
             $text = $this->disabled ? $style->getDisabledItemText($row) : $row;
 
             if ($key === 0) {
                 return $this->showItemExtra
-                    ? sprintf('%s%s  %s', $text, str_repeat(' ', $length - mb_strlen($row)), $style->getItemExtra())
+                    ? sprintf('%s%s  %s', $text, str_repeat(' ', $length - mb_strlen($row)), $itemExtra)
                     : $text;
             }
 

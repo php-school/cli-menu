@@ -141,11 +141,12 @@ class CheckableItemTest extends TestCase
         $menuStyle = new MenuStyle($terminal);
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(20);
-        $menuStyle->setItemExtra('[EXTRA]');
-        $menuStyle->setDisplaysExtra(true);
 
         $item = new CheckableItem('Item', function () {
         }, true);
+        $item->getStyle()
+            ->setItemExtra('[EXTRA]')
+            ->setDisplaysExtra(true);
         $this->assertEquals(['[ ] Item     [EXTRA]'], $item->getRows($menuStyle));
     }
 
@@ -157,11 +158,12 @@ class CheckableItemTest extends TestCase
         $menuStyle = new MenuStyle($terminal);
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(20);
-        $menuStyle->setItemExtra('[EXTRA]');
-        $menuStyle->setDisplaysExtra(true);
 
         $item = new CheckableItem('LONG ITEM LINE', function () {
         }, true);
+        $item->getStyle()
+            ->setItemExtra('[EXTRA]')
+            ->setDisplaysExtra(true);
         $this->assertEquals(
             [
                 "[ ] LONG     [EXTRA]",

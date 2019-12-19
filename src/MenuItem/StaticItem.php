@@ -1,8 +1,8 @@
 <?php
 
 namespace PhpSchool\CliMenu\MenuItem;
+use PhpSchool\CliMenu\Style;
 
-use Assert\Assertion;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
 
@@ -16,9 +16,32 @@ class StaticItem implements MenuItemInterface
      */
     private $text;
 
+    /**
+     * @var Style\ItemStyleInterface;
+     */
+    private $style;
+
     public function __construct(string $text)
     {
         $this->text = $text;
+
+        $this->style = new Style\StaticStyle();
+    }
+
+    public function getStyle() : Style\ItemStyleInterface
+    {
+        return $this->style;
+    }
+
+    /**
+     * @param Style\ItemStyleInterface|Style\SelectableStyle $style
+     * @return $this
+     */
+    public function setStyle(Style\ItemStyleInterface $style) : self
+    {
+        $this->style = $style;
+
+        return $this;
     }
 
     /**

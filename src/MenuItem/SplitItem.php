@@ -4,6 +4,7 @@ namespace PhpSchool\CliMenu\MenuItem;
 
 use Assert\Assertion;
 use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Style\SplitStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
 
 /**
@@ -32,6 +33,16 @@ class SplitItem implements MenuItemInterface
     private $gutter = 2;
 
     /**
+     * @var SplitStyle
+     */
+    private $style;
+
+    /**
+     * @var \Callable
+     */
+    private $styleCallback = null;
+
+    /**
      * @var array
      */
     private static $blacklistedItems = [
@@ -44,6 +55,13 @@ class SplitItem implements MenuItemInterface
     {
         $this->addItems($items);
         $this->setDefaultSelectedItem();
+
+        $this->style = new SplitStyle();
+    }
+
+    public function setStyleCallback(Callable $callable)
+    {
+        $this->styleCallback = $callable;
     }
 
     public function setGutter(int $gutter) : void
@@ -107,6 +125,13 @@ class SplitItem implements MenuItemInterface
      */
     public function getRows(MenuStyle $style, bool $selected = false) : array
     {
+        // Set local style with parent style
+        if ($this->styleCallback) {
+            ($this->styleCallback)($this->style);
+
+            $this->styleCallback = null;
+        }
+
         $numberOfItems = count($this->items);
 
         if ($numberOfItems === 0) {
@@ -117,8 +142,8 @@ class SplitItem implements MenuItemInterface
             $this->setDefaultSelectedItem();
         }
 
-        $length = $style->getDisplaysExtra()
-            ? floor($style->getContentWidth() / $numberOfItems) - (mb_strlen($style->getItemExtra()) + 2)
+        $length = $this->style->getDisplaysExtra()
+            ? floor($style->getContentWidth() / $numberOfItems) - (mb_strlen($this->style->getItemExtra()) + 2)
             : floor($style->getContentWidth() / $numberOfItems);
         
         $length -= $this->gutter;
@@ -128,33 +153,25 @@ class SplitItem implements MenuItemInterface
         
         return $this->buildRows(
             array_map(function ($index, $item) use ($selected, $length, $style) {
+                /** @var ItemStyleInterface|MenuItemInterface $item */
                 $isSelected = $selected && $index === $this->selectedItemIndex;
 
-                if ($item instanceof ItemStyleInterface) {
-                    $itemStyle = $item->getStyle();
+                $itemStyle = $item->getStyle();
 
-                    $getMarkerType = $item instanceof ToggableItemInterface
-                        ? $item->getChecked()
-                        : $isSelected;
-
-                    $markerType        = $itemStyle->getMarker($getMarkerType);
-                    $displaysExtraType = $itemStyle->getDisplaysExtra();
-                    $itemExtraType     = $itemStyle->getItemExtra();
-                } else {
-                    $markerType        = $style->getMarker($isSelected);
-                    $displaysExtraType = $style->getDisplaysExtra();
-                    $itemExtraType     = $style->getItemExtra();
-                }
+                $getMarkerType = $item instanceof ToggableItemInterface
+                    ? $item->getChecked()
+                    : $isSelected;
 
                 $marker = $item->canSelect()
-                    ? sprintf('%s', $markerType)
+                    ? sprintf('%s', $itemStyle->getMarker($getMarkerType))
                     : '';
 
                 $itemExtra = '';
-                if ($displaysExtraType) {
+                if ($itemStyle->getDisplaysExtra()) {
+                    $itemExtraString = $itemStyle->getItemExtra();
                     $itemExtra = $item->showsItemExtra()
-                        ? sprintf('  %s', $itemExtraType)
-                        : sprintf('  %s', str_repeat(' ', mb_strlen($itemExtraType)));
+                        ? sprintf('  %s', $itemExtraString)
+                        : sprintf('  %s', str_repeat(' ', mb_strlen($itemExtraString)));
                 }
 
                 return $this->buildCell(
@@ -180,7 +197,7 @@ class SplitItem implements MenuItemInterface
 
     private function buildRows(array $cells, MenuStyle $style, int $missingLength, int $length) : array
     {
-        $extraPadLength = $style->getDisplaysExtra() ? 2 + mb_strlen($style->getItemExtra()) : 0;
+        $extraPadLength = $this->style->getDisplaysExtra() ? 2 + mb_strlen($this->style->getItemExtra()) : 0;
         
         return array_map(
             function ($i) use ($cells, $length, $missingLength, $extraPadLength) {

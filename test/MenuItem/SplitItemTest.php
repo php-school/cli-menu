@@ -15,6 +15,7 @@ use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Style\CheckableStyle;
 use PhpSchool\CliMenu\Style\RadioStyle;
 use PhpSchool\CliMenu\Style\SelectableStyle;
+use PhpSchool\CliMenu\Style\SplitStyle;
 use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
 
@@ -308,9 +309,6 @@ class SplitItemTest extends TestCase
         $menuStyle = new MenuStyle($terminal);
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(50);
-        $menuStyle->setItemExtra('[EXTRA]');
-        $menuStyle->setDisplaysExtra(true);
-        $menuStyle->setUnselectedMarker('* ');
 
         $selectableStyle = new SelectableStyle();
         $selectableStyle->setItemExtra('[EXTRA]')
@@ -325,13 +323,14 @@ class SplitItemTest extends TestCase
                 }, true))->setStyle($selectableStyle),
             ]
         );
+        $item->setStyleCallback(function (SplitStyle $style) {
+            $style->setItemExtra('[EXTRA]')
+                ->setDisplaysExtra(true);
+        });
         
         self::assertEquals(['* Item 1        [EXTRA]  * Item 2        [EXTRA]  '], $item->getRows($menuStyle));
     }
 
-    /**
-     * @todo Refactor this to use SelectableStyle() exclusively
-     */
     public function testGetRowsWithMultipleLinesWithItemExtra() : void
     {
         $terminal = $this->createMock(Terminal::class);
@@ -340,9 +339,6 @@ class SplitItemTest extends TestCase
         $menuStyle = new MenuStyle($terminal);
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(50);
-        $menuStyle->setItemExtra(' [EXTRA]');
-        $menuStyle->setDisplaysExtra(true);
-        $menuStyle->setUnselectedMarker('* ');
 
         $selectableStyle = new SelectableStyle();
         $selectableStyle->setItemExtra(' [EXTRA]')
@@ -357,6 +353,10 @@ class SplitItemTest extends TestCase
                 }, true))->setStyle($selectableStyle),
             ]
         );
+        $item->setStyleCallback(function (SplitStyle $style) {
+            $style->setItemExtra(' [EXTRA]')
+                ->setDisplaysExtra(true);
+        });
 
         self::assertEquals(
             [
@@ -375,9 +375,6 @@ class SplitItemTest extends TestCase
         $menuStyle = new MenuStyle($terminal);
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(50);
-        $menuStyle->setItemExtra(' [EXTRA] ');
-        $menuStyle->setDisplaysExtra(true);
-        $menuStyle->setUnselectedMarker('* ');
 
         $selectableStyle = new SelectableStyle();
         $selectableStyle->setItemExtra(' [EXTRA] ')
@@ -392,6 +389,10 @@ class SplitItemTest extends TestCase
                 }, true))->setStyle($selectableStyle),
             ]
         );
+        $item->setStyleCallback(function (SplitStyle $style) {
+            $style->setItemExtra(' [EXTRA] ')
+                ->setDisplaysExtra(true);
+        });
 
         self::assertEquals(
             [

@@ -75,6 +75,9 @@ trait ItemStyleTrait
 
         $this->itemExtra = $itemExtra;
 
+        // if we customise item extra, it means we most likely want to display it
+        $this->setDisplaysExtra(true);
+
         return $this;
     }
 

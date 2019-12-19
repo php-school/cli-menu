@@ -22,6 +22,7 @@ use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Style\CheckableStyle;
 use PhpSchool\CliMenu\Style\RadioStyle;
 use PhpSchool\CliMenu\Style\SelectableStyle;
+use PhpSchool\CliMenu\Style\SplitStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\Terminal\Terminal;
 
@@ -198,7 +199,6 @@ class CliMenuBuilder
             $builder->enableAutoShortcuts($this->autoShortcutsRegex);
         }
 
-        $callback = $callback->bindTo($builder);
         $callback($builder);
 
         $menu = $this->createMenuClosure($builder);
@@ -375,8 +375,13 @@ class CliMenuBuilder
         });
 
         $callback($builder);
-        
-        $this->menu->addItem($splitItem = $builder->build());
+
+        $splitItem = $builder->build();
+        $splitItem->setStyleCallback(function (SplitStyle $style) {
+            $style->fromArray($this->menu->getSelectableStyle()->toArray());
+        });
+
+        $this->menu->addItem($splitItem);
 
         $this->processSplitItemShortcuts($splitItem);
 
@@ -478,23 +483,47 @@ class CliMenuBuilder
 
     public function setUnselectedMarker(string $marker) : self
     {
-        $this->style->setUnselectedMarker($marker);
+        array_map(function (SelectableInterface $item) use ($marker) {
+            $item->getStyle()
+                ->setMarkerOff($marker);
+        }, array_filter($this->menu->getItems(), function (MenuItemInterface $item) {
+            return $item instanceof SelectableInterface;
+        }));
+
+        $this->menu->getSelectableStyle()
+            ->setMarkerOff($marker);
 
         return $this;
     }
 
     public function setSelectedMarker(string $marker) : self
     {
-        $this->style->setSelectedMarker($marker);
+        array_map(function (SelectableInterface $item) use ($marker) {
+            $item->getStyle()
+                ->setMarkerOn($marker);
+        }, array_filter($this->menu->getItems(), function (MenuItemInterface $item) {
+            return $item instanceof SelectableInterface;
+        }));
+
+        $this->menu->getSelectableStyle()
+            ->setMarkerOn($marker);
 
         return $this;
     }
 
     public function setItemExtra(string $extra) : self
     {
-        $this->style->setItemExtra($extra);
+        array_map(function (SelectableInterface $item) use ($extra) {
+            $item->getStyle()
+                ->setItemExtra($extra);
+        }, array_filter($this->menu->getItems(), function (MenuItemInterface $item) {
+            return $item instanceof SelectableInterface;
+        }));
 
-        //if we customise item extra, it means we most likely want to display it
+        $this->menu->getSelectableStyle()
+            ->setItemExtra($extra);
+
+        // if we customise item extra, it means we most likely want to display it
         $this->displayExtra();
 
         return $this;
@@ -582,7 +611,15 @@ class CliMenuBuilder
 
     public function displayExtra() : self
     {
-        $this->style->setDisplaysExtra(true);
+        array_map(function (SelectableInterface $item) {
+            $item->getStyle()
+                ->setDisplaysExtra(true);
+        }, array_filter($this->menu->getItems(), function (MenuItemInterface $item) {
+            return $item instanceof SelectableInterface;
+        }));
+
+        $this->menu->getSelectableStyle()
+            ->setDisplaysExtra(true);
 
         return $this;
     }
@@ -600,8 +637,15 @@ class CliMenuBuilder
             $this->menu->addItems($this->getDefaultItems());
         }
 
-        if (!$this->style->getDisplaysExtra()) {
-            $this->style->setDisplaysExtra($this->itemsHaveExtra($this->menu->getItems()));
+        if (!$this->menu->getSelectableStyle()->getDisplaysExtra()) {
+            $displaysExtra = $this->itemsHaveExtra($this->menu->getItems());
+
+            array_map(function (SelectableInterface $item) use ($displaysExtra) {
+                $item->getStyle()
+                    ->setDisplaysExtra($displaysExtra);
+            }, array_filter($this->menu->getItems(), function (MenuItemInterface $item) {
+                return $item instanceof SelectableInterface;
+            }));
         }
 
         return $this->menu;

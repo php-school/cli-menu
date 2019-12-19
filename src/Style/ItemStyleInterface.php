@@ -10,17 +10,29 @@ interface ItemStyleInterface
 
     public function getMarkerOn() : string;
 
-    public function setMarkerOn(string $marker) : self;
+    /**
+     * @return $this
+     */
+    public function setMarkerOn(string $marker);
 
     public function getMarkerOff() : string;
 
-    public function setMarkerOff(string $marker) : self;
+    /**
+     * @return $this
+     */
+    public function setMarkerOff(string $marker);
 
     public function getItemExtra() : string;
 
-    public function setItemExtra(string $itemExtra) : self;
+    /**
+     * @return $this
+     */
+    public function setItemExtra(string $itemExtra);
 
     public function getDisplaysExtra() : bool;
 
-    public function setDisplaysExtra(bool $displaysExtra) : self;
+    /**
+     * @return $this
+     */
+    public function setDisplaysExtra(bool $displaysExtra);
 }

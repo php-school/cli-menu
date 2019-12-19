@@ -79,10 +79,11 @@ class CliMenuBuilderTest extends TestCase
         self::assertEquals(4, $style->getPaddingTopBottom());
         self::assertEquals(1, $style->getPaddingLeftRight());
         self::assertEquals(4, $style->getMargin());
-        self::assertEquals('>', $style->getUnselectedMarker());
-        self::assertEquals('x', $style->getSelectedMarker());
-        self::assertEquals('*', $style->getItemExtra());
         self::assertEquals('-', $style->getTitleSeparator());
+
+        self::assertEquals('>', $menu->getSelectableStyle()->getMarkerOff());
+        self::assertEquals('x', $menu->getSelectableStyle()->getMarkerOn());
+        self::assertEquals('*', $menu->getSelectableStyle()->getItemExtra());
     }
 
     public function testSetBorderShorthandFunction() : void
@@ -804,9 +805,9 @@ class CliMenuBuilderTest extends TestCase
     {
         $builder = new CliMenuBuilder;
         $builder->disableDefaultItems();
-        $builder->addSubMenu('My SubMenu', function () {
-            $this->disableDefaultItems();
-            $this->addItem('My Item', function () {
+        $builder->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
+            $b->disableDefaultItems();
+            $b->addItem('My Item', function () {
             });
         });
 
@@ -854,7 +855,7 @@ class CliMenuBuilderTest extends TestCase
 
         $menu = $builder->build();
 
-        self::assertTrue($menu->getStyle()->getDisplaysExtra());
+        self::assertTrue($menu->getSelectableStyle()->getDisplaysExtra());
     }
 
     public function testModifyingItemExtraForcesExtraToBeDisplayedWhenNoItemsDisplayExtra() : void
@@ -868,7 +869,7 @@ class CliMenuBuilderTest extends TestCase
 
         $menu = $builder->build();
 
-        self::assertTrue($menu->getStyle()->getDisplaysExtra());
+        self::assertTrue($menu->getSelectableStyle()->getDisplaysExtra());
     }
 
 
