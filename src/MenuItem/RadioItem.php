@@ -3,30 +3,18 @@
 namespace PhpSchool\CliMenu\MenuItem;
 
 use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Util\StringUtil;
+use PhpSchool\CliMenu\Style\RadioStyle;
 
 class RadioItem implements MenuItemInterface, ToggableItemInterface
 {
     use ToggableTrait;
 
     /**
-     * @var callable
+     * @var RadioStyle;
      */
-    private $selectAction;
-
-    /**
-     * @var string
-     */
-    private $text = '';
-
-    /**
-     * @var bool
-     */
-    private $showItemExtra = false;
-
-    /**
-     * @var bool
-     */
-    private $disabled = false;
+    private $style;
 
     public function __construct(
         string $text,
@@ -38,6 +26,43 @@ class RadioItem implements MenuItemInterface, ToggableItemInterface
         $this->selectAction  = $selectAction;
         $this->showItemExtra = $showItemExtra;
         $this->disabled      = $disabled;
+
+        $this->style = new RadioStyle();
+    }
+
+    /**
+     * The output text for the item
+     */
+    public function getRows(MenuStyle $style, bool $selected = false) : array
+    {
+        $marker = sprintf("%s", $this->style->getMarker($this->checked));
+
+        $itemExtra = $this->style->getItemExtra();
+
+        $length = $this->style->getDisplaysExtra()
+            ? $style->getContentWidth() - (mb_strlen($itemExtra) + 2)
+            : $style->getContentWidth();
+
+        $rows = explode(
+            "\n",
+            StringUtil::wordwrap(
+                sprintf('%s%s', $marker, $this->text),
+                $length,
+                sprintf("\n%s", str_repeat(' ', mb_strlen($marker)))
+            )
+        );
+
+        return array_map(function ($row, $key) use ($style, $length, $itemExtra) {
+            $text = $this->disabled ? $style->getDisabledItemText($row) : $row;
+
+            if ($key === 0) {
+                return $this->showItemExtra
+                    ? sprintf('%s%s  %s', $text, str_repeat(' ', $length - mb_strlen($row)), $itemExtra)
+                    : $text;
+            }
+
+            return $text;
+        }, $rows, array_keys($rows));
     }
 
     /**
@@ -73,48 +98,15 @@ class RadioItem implements MenuItemInterface, ToggableItemInterface
         };
     }
 
-    /**
-     * Return the raw string of text
-     */
-    public function getText() : string
+    public function getStyle() : RadioStyle
     {
-        return $this->text;
+        return $this->style;
     }
 
-    /**
-     * Set the raw string of text
-     */
-    public function setText(string $text) : void
+    public function setStyle(RadioStyle $style) : self
     {
-        $this->text = $text;
-    }
+        $this->style = $style;
 
-    /**
-     * Can the item be selected
-     */
-    public function canSelect() : bool
-    {
-        return !$this->disabled;
-    }
-
-    public function showsItemExtra() : bool
-    {
-        return $this->showItemExtra;
-    }
-
-    /**
-     * Enable showing item extra
-     */
-    public function showItemExtra() : void
-    {
-        $this->showItemExtra = true;
-    }
-
-    /**
-     * Disable showing item extra
-     */
-    public function hideItemExtra() : void
-    {
-        $this->showItemExtra = false;
+        return $this;
     }
 }
