@@ -70,6 +70,21 @@ class MenuStyle
     private $coloursSetCode;
 
     /**
+     * @var string
+     */
+    private $invertedColoursSetCode = "\033[7m";
+
+    /**
+     * @var string
+     */
+    private $invertedColoursUnsetCode = "\033[27m";
+
+    /**
+     * @var string
+     */
+    private $coloursResetCode = "\033[0m";
+
+    /**
      * @var int
      */
     private $borderTopWidth;
@@ -128,6 +143,36 @@ class MenuStyle
         'borderLeftWidth' => 0,
         'borderColour' => 'white',
         'marginAuto' => false,
+    ];
+
+    /**
+     * @var array
+     */
+    private static $availableForegroundColors = [
+        'black'   => 30,
+        'red'     => 31,
+        'green'   => 32,
+        'yellow'  => 33,
+        'blue'    => 34,
+        'magenta' => 35,
+        'cyan'    => 36,
+        'white'   => 37,
+        'default' => 39,
+    ];
+
+    /**
+     * @var array
+     */
+    private static $availableBackgroundColors = [
+        'black'   => 40,
+        'red'     => 41,
+        'green'   => 42,
+        'yellow'  => 43,
+        'blue'    => 44,
+        'magenta' => 45,
+        'cyan'    => 46,
+        'white'   => 47,
+        'default' => 49,
     ];
 
     /**
@@ -203,13 +248,13 @@ class MenuStyle
     private function generateColoursSetCode() : void
     {
         if (!ctype_digit($this->fg)) {
-            $fgCode = Style\Colour::AVAILABLE_FOREGROUND_COLOURS[$this->fg];
+            $fgCode = self::$availableForegroundColors[$this->fg];
         } else {
             $fgCode = sprintf("38;5;%s", $this->fg);
         }
 
         if (!ctype_digit($this->bg)) {
-            $bgCode = Style\Colour::AVAILABLE_BACKGROUND_COLOURS[$this->bg];
+            $bgCode = self::$availableBackgroundColors[$this->bg];
         } else {
             $bgCode = sprintf("48;5;%s", $this->bg);
         }
@@ -230,7 +275,7 @@ class MenuStyle
      */
     public function getInvertedColoursSetCode() : string
     {
-        return Style\Colour::INVERTED_SET_CODE;
+        return $this->invertedColoursSetCode;
     }
 
     /**
@@ -238,7 +283,7 @@ class MenuStyle
      */
     public function getInvertedColoursUnsetCode() : string
     {
-        return Style\Colour::INVERTED_UNSET_CODE;
+        return $this->invertedColoursUnsetCode;
     }
 
     /**
@@ -246,7 +291,7 @@ class MenuStyle
      */
     public function getColoursResetCode() : string
     {
-        return Style\Colour::RESET_CODE;
+        return $this->coloursResetCode;
     }
 
     /**
@@ -353,7 +398,7 @@ class MenuStyle
             str_repeat(' ', $this->paddingLeftRight),
             $borderColour,
             str_repeat(' ', $this->borderRightWidth),
-            Style\Colour::RESET_CODE
+            $this->coloursResetCode
         );
 
         $this->paddingTopBottomRows = array_fill(0, $this->paddingTopBottom, $paddingRow);
@@ -467,7 +512,7 @@ class MenuStyle
             str_repeat(' ', $this->margin),
             $this->getBorderColourCode(),
             str_repeat(' ', $this->width),
-            Style\Colour::RESET_CODE
+            $this->coloursResetCode
         );
 
         $this->borderTopRows = array_fill(0, $this->borderTopWidth, $borderRow);
@@ -604,7 +649,7 @@ class MenuStyle
     public function getBorderColourCode() : string
     {
         if (!ctype_digit($this->borderColour)) {
-            $borderColourCode = Style\Colour::AVAILABLE_BACKGROUND_COLOURS[$this->borderColour];
+            $borderColourCode = self::$availableBackgroundColors[$this->borderColour];
         } else {
             $borderColourCode = sprintf("48;5;%s", $this->borderColour);
         }
