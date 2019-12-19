@@ -820,7 +820,7 @@ use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\Style\CheckboxStyle;
 
 $menu = (new CliMenuBuilder)
-    ->checkboxStyle(function (CheckboxStyle $style) {
+    ->modifyCheckboxStyle(function (CheckboxStyle $style) {
         $style->setMarkerOff('[○] ')
             ->setMarkerOn('[●] ');
     })
@@ -836,7 +836,7 @@ use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\Style\RadioStyle;
 
 $menu = (new CliMenuBuilder)
-    ->radioStyle(function (RadioStyle $style) {
+    ->modifyRadioStyle(function (RadioStyle $style) {
         $style->setMarkerOff('[ ] ')
             ->setMarkerOn('[✔] ');
     })
