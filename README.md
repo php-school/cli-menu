@@ -41,7 +41,7 @@
       * [Remove Exit Button](#remove-exit-button)
     * [Items](#appearance)
       * [Selectable Item](#selectable-item)
-      * [Checkable Item](#checkable-item)
+      * [Checkbox Item](#checkbox-item)
       * [Radio Item](#radio-item)
       * [Line Break Item](#line-break-item)
       * [Static Item](#static-item)
@@ -501,7 +501,7 @@ $menu = (new CliMenuBuilder)
 There a few different types of items you can add to your menu
 
 * Selectable Item - This is the type of item you need for something to be selectable (you can hit enter and it will invoke your callable) 
-* Checkable Item - This is a checkbox type of item that keeps track of its toggled state to show a different marker.
+* Checkbox Item - This is a checkbox type of item that keeps track of its toggled state to show a different marker.
 * Radio Item - This is a radio type of item that keeps track of its toggled state to show a different marker. Disables all other radios within its `CliMenu` level.
 * Line Break Item - This is used to break up areas, it can span multiple lines and will be the width of Menu. Whatever string is passed will be repeated.
 * Static Item - This will print whatever text is passed, useful for headings.
@@ -548,7 +548,7 @@ $menu = (new CliMenuBuilder)
 Note: You can add as many items as you want and they can all have a different action. The action is the second parameter
 and must be a valid PHP `callable`. Try using an `Invokable` class to keep your actions easily testable.
 
-### Checkable Item
+### Checkbox Item
 
 ```php
 <?php
@@ -561,9 +561,9 @@ $callable = function (CliMenu $menu) {
 };
 
 $menu = (new CliMenuBuilder)
-    ->addCheckableItem('Item 1', $callable)
-    ->addCheckableItem('Item 2', $callable)
-    ->addCheckableItem('Item 3', $callable)
+    ->addCheckboxItem('Item 1', $callable)
+    ->addCheckboxItem('Item 2', $callable)
+    ->addCheckboxItem('Item 3', $callable)
     ->build();
 ```
 
@@ -719,7 +719,7 @@ Split Items allows you to add multiple items on the same row. The full width of 
 
 You can set the number of spaces separating items using `->setGutter()` (defaults to 2).
 
-Only Selectable, Checkable, Radio, Static and SubMenu items are currently allowed inside a Split Item.
+Only Selectable, Checkbox, Radio, Static and SubMenu items are currently allowed inside a Split Item.
 
 ```php
 <?php
@@ -752,7 +752,7 @@ $menu->open();
 There are a few things to note about the syntax and builder process here:
 
 1. The first parameter to `addSplitItem` is a closure, which will be invoked with a new instance of `SplitItemBuilder` which you can use to add items to the split item.
-2. You can call `addItem`, `addCheckableItem`, `addRadioItem`, `addSubMenu` and `addStaticItem` on the `SplitItemBuilder`. 
+2. You can call `addItem`, `addCheckboxItem`, `addRadioItem`, `addSubMenu` and `addStaticItem` on the `SplitItemBuilder`. 
 3. `SplitItemBuilder` has a fluent interface so you can chain method calls.
 
 ### Disabling Items & Sub Menus
@@ -811,7 +811,7 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
-You may also change the marker for `\PhpSchool\CliMenu\MenuItem\CheckableItem`:
+You may also change the marker for `\PhpSchool\CliMenu\MenuItem\CheckboxItem`:
 
 ```php
 <?php

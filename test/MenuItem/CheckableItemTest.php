@@ -3,16 +3,16 @@
 namespace PhpSchool\CliMenuTest\MenuItem;
 
 use PhpSchool\CliMenu\CliMenu;
-use PhpSchool\CliMenu\MenuItem\CheckableItem;
+use PhpSchool\CliMenu\MenuItem\CheckboxItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
 
-class CheckableItemTest extends TestCase
+class CheckboxItemTest extends TestCase
 {
     public function testCanSelectIsTrue() : void
     {
-        $item = new CheckableItem('Item', function () {
+        $item = new CheckboxItem('Item', function () {
         });
         $this->assertTrue($item->canSelect());
     }
@@ -22,7 +22,7 @@ class CheckableItemTest extends TestCase
         $callable = function () {
             return 'callable is called';
         };
-        $item = new CheckableItem('Item', $callable);
+        $item = new CheckboxItem('Item', $callable);
 
         $cliMenu = $this->getMockBuilder(CliMenu::class)
             ->disableOriginalConstructor()
@@ -36,7 +36,7 @@ class CheckableItemTest extends TestCase
         $callable = function () {
         };
 
-        $item = new CheckableItem('Item', $callable);
+        $item = new CheckboxItem('Item', $callable);
 
         self::assertFalse($item->getChecked());
 
@@ -51,18 +51,18 @@ class CheckableItemTest extends TestCase
 
     public function testShowsItemExtra() : void
     {
-        $item = new CheckableItem('Item', function () {
+        $item = new CheckboxItem('Item', function () {
         });
         $this->assertFalse($item->showsItemExtra());
 
-        $item = new CheckableItem('Item', function () {
+        $item = new CheckboxItem('Item', function () {
         }, true);
         $this->assertTrue($item->showsItemExtra());
     }
 
     public function testGetText() : void
     {
-        $item = new CheckableItem('Item', function () {
+        $item = new CheckboxItem('Item', function () {
         });
         $this->assertEquals('Item', $item->getText());
     }
@@ -76,10 +76,10 @@ class CheckableItemTest extends TestCase
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(8);
 
-        $item = new CheckableItem('Item', function () {
+        $item = new CheckboxItem('Item', function () {
         });
 
-        $itemChecked = new CheckableItem('Item', function () {
+        $itemChecked = new CheckboxItem('Item', function () {
         });
         $itemChecked->toggle();
         $this->assertEquals(['[ ] Item'], $item->getRows($menuStyle));
@@ -96,11 +96,11 @@ class CheckableItemTest extends TestCase
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(12);
 
-        $item = new CheckableItem('Item', function () {
+        $item = new CheckboxItem('Item', function () {
         });
         $item->setText('New Text');
 
-        $itemChecked = new CheckableItem('Item', function () {
+        $itemChecked = new CheckboxItem('Item', function () {
         });
         $itemChecked->setText('New Text');
         $itemChecked->toggle();
@@ -118,10 +118,10 @@ class CheckableItemTest extends TestCase
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(12);
 
-        $item = new CheckableItem('Item', function () {
+        $item = new CheckboxItem('Item', function () {
         });
 
-        $itemChecked = new CheckableItem('Item', function () {
+        $itemChecked = new CheckboxItem('Item', function () {
         });
         $itemChecked->toggle();
         $this->assertEquals(['[ ] Item'], $item->getRows($menuStyle));
@@ -144,7 +144,7 @@ class CheckableItemTest extends TestCase
         $menuStyle->setItemExtra('[EXTRA]');
         $menuStyle->setDisplaysExtra(true);
 
-        $item = new CheckableItem('Item', function () {
+        $item = new CheckboxItem('Item', function () {
         }, true);
         $this->assertEquals(['[ ] Item     [EXTRA]'], $item->getRows($menuStyle));
     }
@@ -160,7 +160,7 @@ class CheckableItemTest extends TestCase
         $menuStyle->setItemExtra('[EXTRA]');
         $menuStyle->setDisplaysExtra(true);
 
-        $item = new CheckableItem('LONG ITEM LINE', function () {
+        $item = new CheckboxItem('LONG ITEM LINE', function () {
         }, true);
         $this->assertEquals(
             [
@@ -173,7 +173,7 @@ class CheckableItemTest extends TestCase
 
     public function testHideAndShowItemExtra() : void
     {
-        $item = new CheckableItem('Item', function () {
+        $item = new CheckboxItem('Item', function () {
         });
 
         $this->assertFalse($item->showsItemExtra());

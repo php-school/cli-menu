@@ -4,7 +4,7 @@ namespace PhpSchool\CliMenu\MenuItem;
 
 use PhpSchool\CliMenu\CliMenu;
 
-class CheckableItem implements MenuItemInterface, ToggableItemInterface
+class CheckboxItem implements MenuItemInterface, ToggableItemInterface
 {
     use ToggableTrait;
 

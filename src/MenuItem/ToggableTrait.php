@@ -18,10 +18,10 @@ trait ToggableTrait
     public function getRows(MenuStyle $style, bool $selected = false) : array
     {
         $markerTypes = [
-            true => $this instanceof CheckableItem
+            true => $this instanceof CheckboxItem
                 ? $style->getCheckedMarker()
                 : $style->getRadioMarker(),
-            false => $this instanceof CheckableItem
+            false => $this instanceof CheckboxItem
                 ? $style->getUncheckedMarker()
                 : $style->getUnradioMarker(),
         ];

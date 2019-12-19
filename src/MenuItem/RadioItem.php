@@ -61,8 +61,8 @@ class RadioItem implements MenuItemInterface, ToggableItemInterface
 
             array_walk(
                 $filtered,
-                function (RadioItem $checkableItem) {
-                    $checkableItem->setUnchecked();
+                function (RadioItem $item) {
+                    $item->setUnchecked();
                 }
             );
 

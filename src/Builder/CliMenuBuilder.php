@@ -6,7 +6,7 @@ use PhpSchool\CliMenu\Action\ExitAction;
 use PhpSchool\CliMenu\Action\GoBackAction;
 use PhpSchool\CliMenu\Exception\InvalidShortcutException;
 use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
-use PhpSchool\CliMenu\MenuItem\CheckableItem;
+use PhpSchool\CliMenu\MenuItem\CheckboxItem;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
@@ -132,13 +132,13 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function addCheckableItem(
+    public function addCheckboxItem(
         string $text,
         callable $itemCallable,
         bool $showItemExtra = false,
         bool $disabled = false
     ) : self {
-        $this->addMenuItem(new CheckableItem($text, $itemCallable, $showItemExtra, $disabled));
+        $this->addMenuItem(new CheckboxItem($text, $itemCallable, $showItemExtra, $disabled));
 
         return $this;
     }
