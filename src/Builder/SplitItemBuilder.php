@@ -169,16 +169,6 @@ class SplitItemBuilder
         return $this->splitItem;
     }
 
-    /**
-     * Use as
-     *
-        ->checkboxStyle(function (CheckboxStyle $style) {
-            $style->setMarkerOff('- ');
-        })
-     *
-     * @param callable $itemCallable
-     * @return $this
-     */
     public function checkboxStyle(callable $itemCallable) : self
     {
         $this->menu->checkboxStyle($itemCallable);
@@ -186,16 +176,6 @@ class SplitItemBuilder
         return $this;
     }
 
-    /**
-     * Use as
-     *
-        ->radioStyle(function (RadioStyle $style) {
-            $style->setMarkerOff('- ');
-        })
-     *
-     * @param callable $itemCallable
-     * @return $this
-     */
     public function radioStyle(callable $itemCallable) : self
     {
         $this->menu->radioStyle($itemCallable);

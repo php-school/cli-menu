@@ -660,16 +660,6 @@ class CliMenu
         return $this->checkboxStyle;
     }
 
-    /**
-     * Use as
-     *
-        ->checkboxStyle(function (CheckboxStyle $style) {
-            $style->setMarkerOff('- ');
-        })
-     *
-     * @param callable $itemCallable
-     * @return $this
-     */
     public function checkboxStyle(callable $itemCallable) : self
     {
         $itemCallable($this->checkboxStyle);
@@ -682,16 +672,6 @@ class CliMenu
         return $this->radioStyle;
     }
 
-    /**
-     * Use as
-     *
-        ->radioStyle(function (RadioStyle $style) {
-            $style->setMarkerOff('- ');
-        })
-     *
-     * @param callable $itemCallable
-     * @return $this
-     */
     public function radioStyle(callable $itemCallable) : self
     {
         $itemCallable($this->radioStyle);
