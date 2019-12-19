@@ -817,10 +817,13 @@ You may also change the marker for `\PhpSchool\CliMenu\MenuItem\CheckboxItem`:
 <?php
 
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\Style\CheckboxStyle;
 
 $menu = (new CliMenuBuilder)
-    ->setUncheckedMarker('[○] ')
-    ->setCheckedMarker('[●] ')
+    ->checkboxStyle(function (CheckboxStyle $style) {
+        $style->setMarkerOff('[○] ')
+            ->setMarkerOn('[●] ');
+    })
     ->build();
 ```
 
@@ -830,10 +833,13 @@ and for `\PhpSchool\CliMenu\MenuItem\RadioItem`:
 <?php
 
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\Style\RadioStyle;
 
 $menu = (new CliMenuBuilder)
-    ->setUnradioMarker('[ ] ')
-    ->setRadioMarker('[✔] ')
+    ->radioStyle(function (RadioStyle $style) {
+        $style->setMarkerOff('[ ] ')
+            ->setMarkerOn('[✔] ');
+    })
     ->build();
 ```
 
