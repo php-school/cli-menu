@@ -24,10 +24,6 @@ trait SelectableTrait
 
     public function getStyle() : Style\ItemStyleInterface
     {
-        if (!$this->style) {
-            $this->style = new Style\SelectableStyle();
-        }
-
         return $this->style;
     }
 

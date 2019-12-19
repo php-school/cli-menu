@@ -19,14 +19,12 @@ class RadioItem implements MenuItemInterface, ToggableItemInterface, RadioInterf
         $this->selectAction  = $selectAction;
         $this->showItemExtra = $showItemExtra;
         $this->disabled      = $disabled;
+
+        $this->style = new Style\RadioStyle();
     }
 
     public function getStyle() : Style\ItemStyleInterface
     {
-        if (!$this->style) {
-            $this->style = new Style\RadioStyle();
-        }
-
         return $this->style;
     }
 

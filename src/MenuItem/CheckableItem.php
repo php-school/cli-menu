@@ -19,14 +19,12 @@ class CheckableItem implements MenuItemInterface, ToggableItemInterface, Checkab
         $this->selectAction  = $selectAction;
         $this->showItemExtra = $showItemExtra;
         $this->disabled      = $disabled;
+
+        $this->style = new Style\CheckableStyle();
     }
 
     public function getStyle() : Style\ItemStyleInterface
     {
-        if (!$this->style) {
-            $this->style = new Style\CheckableStyle();
-        }
-
         return $this->style;
     }
 

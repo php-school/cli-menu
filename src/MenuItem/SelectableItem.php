@@ -2,6 +2,8 @@
 
 namespace PhpSchool\CliMenu\MenuItem;
 
+use PhpSchool\CliMenu\Style;
+
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
@@ -24,6 +26,8 @@ class SelectableItem implements MenuItemInterface, SelectableInterface
         $this->selectAction  = $selectAction;
         $this->showItemExtra = $showItemExtra;
         $this->disabled      = $disabled;
+
+        $this->style = new Style\SelectableStyle();
     }
 
     /**

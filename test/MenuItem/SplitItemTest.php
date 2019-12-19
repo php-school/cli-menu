@@ -12,6 +12,9 @@ use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Style\CheckableStyle;
+use PhpSchool\CliMenu\Style\RadioStyle;
+use PhpSchool\CliMenu\Style\SelectableStyle;
 use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
 
@@ -193,17 +196,16 @@ class SplitItemTest extends TestCase
             ->method('getContentWidth')
             ->will($this->returnValue(30));
 
-        $menuStyle
-            ->expects($this->any())
-            ->method('getMarker')
-            ->willReturnMap([[true, '= '], [false, '* ']]);
+        $selectableStyle = new SelectableStyle();
+        $selectableStyle->setMarkerOn('= ')
+            ->setMarkerOff('* ');
 
         $item = new SplitItem(
             [
-                new SelectableItem('Item One', function () {
-                }),
-                new SelectableItem('Item Two', function () {
-                })
+                (new SelectableItem('Item One', function () {
+                }))->setStyle($selectableStyle),
+                (new SelectableItem('Item Two', function () {
+                }))->setStyle($selectableStyle),
             ]
         );
 
@@ -241,18 +243,15 @@ class SplitItemTest extends TestCase
             ->method('getContentWidth')
             ->will($this->returnValue(30));
 
-        $menuStyle
-            ->expects($this->any())
-            ->method('getMarker')
-            ->with(false)
-            ->will($this->returnValue('* '));
+        $selectableStyle = new SelectableStyle();
+        $selectableStyle->setMarkerOff('* ');
 
         $item = new SplitItem(
             [
-                new SelectableItem("Item\nOne", function () {
-                }),
-                new SelectableItem("Item\nTwo", function () {
-                })
+                (new SelectableItem("Item\nOne", function () {
+                }))->setStyle($selectableStyle),
+                (new SelectableItem("Item\nTwo", function () {
+                }))->setStyle($selectableStyle),
             ]
         );
 
@@ -274,17 +273,16 @@ class SplitItemTest extends TestCase
             ->method('getContentWidth')
             ->will($this->returnValue(30));
 
-        $menuStyle
-            ->expects($this->any())
-            ->method('getMarker')
-            ->willReturnMap([[true, '= '], [false, '* ']]);
+        $selectableStyle = new SelectableStyle();
+        $selectableStyle->setMarkerOn('= ')
+            ->setMarkerOff('* ');
 
         $item = new SplitItem(
             [
-                new SelectableItem("Item\nOne", function () {
-                }),
-                new SelectableItem("Item\nTwo", function () {
-                })
+                (new SelectableItem("Item\nOne", function () {
+                }))->setStyle($selectableStyle),
+                (new SelectableItem("Item\nTwo", function () {
+                }))->setStyle($selectableStyle),
             ]
         );
         
@@ -299,6 +297,9 @@ class SplitItemTest extends TestCase
         );
     }
 
+    /**
+     * @todo Refactor this to use SelectableStyle() exclusively
+     */
     public function testGetRowsWithItemExtra() : void
     {
         $terminal = $this->createMock(Terminal::class);
@@ -311,18 +312,26 @@ class SplitItemTest extends TestCase
         $menuStyle->setDisplaysExtra(true);
         $menuStyle->setUnselectedMarker('* ');
 
+        $selectableStyle = new SelectableStyle();
+        $selectableStyle->setItemExtra('[EXTRA]')
+            ->setDisplaysExtra(true)
+            ->setMarkerOff('* ');
+
         $item = new SplitItem(
             [
-                new SelectableItem('Item 1', function () {
-                }, true),
-                new SelectableItem('Item 2', function () {
-                }, true)
+                (new SelectableItem('Item 1', function () {
+                }, true))->setStyle($selectableStyle),
+                (new SelectableItem('Item 2', function () {
+                }, true))->setStyle($selectableStyle),
             ]
         );
         
         self::assertEquals(['* Item 1        [EXTRA]  * Item 2        [EXTRA]  '], $item->getRows($menuStyle));
     }
 
+    /**
+     * @todo Refactor this to use SelectableStyle() exclusively
+     */
     public function testGetRowsWithMultipleLinesWithItemExtra() : void
     {
         $terminal = $this->createMock(Terminal::class);
@@ -335,12 +344,17 @@ class SplitItemTest extends TestCase
         $menuStyle->setDisplaysExtra(true);
         $menuStyle->setUnselectedMarker('* ');
 
+        $selectableStyle = new SelectableStyle();
+        $selectableStyle->setItemExtra(' [EXTRA]')
+            ->setDisplaysExtra(true)
+            ->setMarkerOff('* ');
+
         $item = new SplitItem(
             [
-                new SelectableItem("Item 1\nItem 1", function () {
-                }, true),
-                new SelectableItem("Item 2\nItem 2", function () {
-                }, true)
+                (new SelectableItem("Item 1\nItem 1", function () {
+                }, true))->setStyle($selectableStyle),
+                (new SelectableItem("Item 2\nItem 2", function () {
+                }, true))->setStyle($selectableStyle),
             ]
         );
 
@@ -365,12 +379,17 @@ class SplitItemTest extends TestCase
         $menuStyle->setDisplaysExtra(true);
         $menuStyle->setUnselectedMarker('* ');
 
+        $selectableStyle = new SelectableStyle();
+        $selectableStyle->setItemExtra(' [EXTRA] ')
+            ->setDisplaysExtra(true)
+            ->setMarkerOff('* ');
+
         $item = new SplitItem(
             [
-                new SelectableItem("Item 1\nItem 1", function () {
-                }),
-                new SelectableItem("Item 2\nItem 2", function () {
-                }, true)
+                (new SelectableItem("Item 1\nItem 1", function () {
+                }))->setStyle($selectableStyle),
+                (new SelectableItem("Item 2\nItem 2", function () {
+                }, true))->setStyle($selectableStyle),
             ]
         );
 
@@ -479,21 +498,17 @@ class SplitItemTest extends TestCase
             ->method('getContentWidth')
             ->will($this->returnValue(30));
 
-        $menuStyle
-            ->expects($this->any())
-            ->method('getCheckedMarker')
-            ->willReturn('[✔] ');
-
-        $menuStyle
-            ->expects($this->any())
-            ->method('getUncheckedMarker')
-            ->willReturn('[ ] ');
-
         $checkableItem1 = new CheckableItem('Item One', function () {
         });
+        $checkableItem1->getStyle()
+            ->setMarkerOff('[ ] ')
+            ->setMarkerOn('[✔] ');
 
         $checkableItem2 = new CheckableItem('Item Two', function () {
         });
+        $checkableItem2->getStyle()
+            ->setMarkerOff('[ ] ')
+            ->setMarkerOn('[✔] ');
 
         $item = new SplitItem(
             [
@@ -520,26 +535,22 @@ class SplitItemTest extends TestCase
             ->method('getContentWidth')
             ->will($this->returnValue(30));
 
-        $menuStyle
-            ->expects($this->any())
-            ->method('getRadioMarker')
-            ->willReturn('[●] ');
+        $radioStyle = new RadioStyle();
+        $radioStyle->setMarkerOn('[+] ')
+            ->setMarkerOff('[-] ');
 
-        $menuStyle
-            ->expects($this->any())
-            ->method('getUnradioMarker')
-            ->willReturn('[○] ');
-
-        $checkableItem1 = new RadioItem('Item One', function () {
+        $radioItem1 = new RadioItem('Item One', function () {
         });
+        $radioItem1->setStyle($radioStyle);
 
-        $checkableItem2 = new RadioItem('Item Two', function () {
+        $radioItem2 = new RadioItem('Item Two', function () {
         });
+        $radioItem2->setStyle($radioStyle);
 
         $item = new SplitItem(
             [
-                $checkableItem1,
-                $checkableItem2,
+                $radioItem1,
+                $radioItem2,
             ]
         );
 
@@ -561,14 +572,14 @@ class SplitItemTest extends TestCase
 
         $item->setSelectedItemIndex(0);
 
-        self::assertEquals(['[○] Item One   [○] Item Two   '], $item->getRows($menuStyle, true));
+        self::assertEquals(['[-] Item One   [-] Item Two   '], $item->getRows($menuStyle, true));
 
-        $checkableItem1->getSelectAction()($cliMenu);
+        $radioItem1->getSelectAction()($cliMenu);
 
-        self::assertEquals(['[●] Item One   [○] Item Two   '], $item->getRows($menuStyle, true));
+        self::assertEquals(['[+] Item One   [-] Item Two   '], $item->getRows($menuStyle, true));
 
-        $checkableItem2->getSelectAction()($cliMenu);
+        $radioItem2->getSelectAction()($cliMenu);
 
-        self::assertEquals(['[○] Item One   [●] Item Two   '], $item->getRows($menuStyle, true));
+        self::assertEquals(['[-] Item One   [+] Item Two   '], $item->getRows($menuStyle, true));
     }
 }

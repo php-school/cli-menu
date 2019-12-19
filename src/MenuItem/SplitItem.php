@@ -130,12 +130,20 @@ class SplitItem implements MenuItemInterface
             array_map(function ($index, $item) use ($selected, $length, $style) {
                 $isSelected = $selected && $index === $this->selectedItemIndex;
 
-                $itemStyle = $item->getStyle();
+                if ($item instanceof ItemStyleInterface) {
+                    $itemStyle = $item->getStyle();
 
-                if ($item instanceof ToggableItemInterface) {
-                    $markerType = $itemStyle->getMarker($item->getChecked());
+                    $getMarkerType = $item instanceof ToggableItemInterface
+                        ? $item->getChecked()
+                        : $isSelected;
+
+                    $markerType        = $itemStyle->getMarker($getMarkerType);
+                    $displaysExtraType = $itemStyle->getDisplaysExtra();
+                    $itemExtraType     = $itemStyle->getItemExtra();
                 } else {
-                    $markerType = $itemStyle->getMarker($isSelected);
+                    $markerType        = $style->getMarker($isSelected);
+                    $displaysExtraType = $style->getDisplaysExtra();
+                    $itemExtraType     = $style->getItemExtra();
                 }
 
                 $marker = $item->canSelect()
@@ -143,10 +151,10 @@ class SplitItem implements MenuItemInterface
                     : '';
 
                 $itemExtra = '';
-                if ($style->getDisplaysExtra()) {
+                if ($displaysExtraType) {
                     $itemExtra = $item->showsItemExtra()
-                        ? sprintf('  %s', $style->getItemExtra())
-                        : sprintf('  %s', str_repeat(' ', mb_strlen($style->getItemExtra())));
+                        ? sprintf('  %s', $itemExtraType)
+                        : sprintf('  %s', str_repeat(' ', mb_strlen($itemExtraType)));
                 }
 
                 return $this->buildCell(

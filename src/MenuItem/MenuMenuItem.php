@@ -3,6 +3,7 @@
 namespace PhpSchool\CliMenu\MenuItem;
 
 use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\Style;
 
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
@@ -21,6 +22,8 @@ class MenuMenuItem implements MenuItemInterface, SelectableInterface
         $this->text     = $text;
         $this->subMenu  = $subMenu;
         $this->disabled = $disabled;
+
+        $this->style = new Style\SelectableStyle();
     }
 
     /**
@@ -54,6 +57,10 @@ class MenuMenuItem implements MenuItemInterface, SelectableInterface
      */
     public function getSubMenu() : CliMenu
     {
+        if ($this->subMenu instanceof \Closure) {
+            $this->subMenu = ($this->subMenu)();
+        }
+
         return $this->subMenu;
     }
 
