@@ -112,9 +112,9 @@ class CliMenu
         $this->items           = $items;
         $this->terminal        = $terminal ?: TerminalFactory::fromSystem();
         $this->style           = $style ?: new MenuStyle($this->terminal);
-        $this->checkableStyle  = new CheckableStyle($this->terminal);
-        $this->radioStyle      = new RadioStyle($this->terminal);
-        $this->selectableStyle = new SelectableStyle($this->terminal);
+        $this->checkableStyle  = new CheckableStyle();
+        $this->radioStyle      = new RadioStyle();
+        $this->selectableStyle = new SelectableStyle();
 
         $this->selectFirstItem();
     }
@@ -664,7 +664,17 @@ class CliMenu
         return $this->checkableStyle;
     }
 
-    public function setCheckableStyle(callable $itemCallable) : self
+    /**
+     * Use as
+     *
+        ->checkableStyle(function (CheckableStyle $style) {
+            $style->setMarkerOff('- ');
+        })
+     *
+     * @param callable $itemCallable
+     * @return $this
+     */
+    public function checkableStyle(callable $itemCallable) : self
     {
         $itemCallable($this->checkableStyle);
 
@@ -676,7 +686,17 @@ class CliMenu
         return $this->radioStyle;
     }
 
-    public function setRadioStyle(callable $itemCallable) : self
+    /**
+     * Use as
+     *
+        ->radioStyle(function (RadioStyle $style) {
+            $style->setMarkerOff('- ');
+        })
+     *
+     * @param callable $itemCallable
+     * @return $this
+     */
+    public function radioStyle(callable $itemCallable) : self
     {
         $itemCallable($this->radioStyle);
 
@@ -688,7 +708,17 @@ class CliMenu
         return $this->selectableStyle;
     }
 
-    public function setSelectableStyle(callable $itemCallable) : self
+    /**
+     * Use as
+     *
+        ->selectableStyle(function (SelectableStyle $style) {
+            $style->setMarkerOff('- ');
+        })
+     *
+     * @param callable $itemCallable
+     * @return $this
+     */
+    public function selectableStyle(callable $itemCallable) : self
     {
         $itemCallable($this->selectableStyle);
 

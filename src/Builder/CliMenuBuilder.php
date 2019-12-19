@@ -247,15 +247,15 @@ class CliMenuBuilder
                 $menu->setStyle($this->menu->getStyle());
             }
 
-            $menu->setCheckableStyle(function (CheckableStyle $style) {
+            $menu->checkableStyle(function (CheckableStyle $style) {
                 $style->fromArray($this->menu->getCheckableStyle()->toArray());
             });
 
-            $menu->setRadioStyle(function (RadioStyle $style) {
+            $menu->radioStyle(function (RadioStyle $style) {
                 $style->fromArray($this->menu->getRadioStyle()->toArray());
             });
 
-            $menu->setSelectableStyle(function (SelectableStyle $style) {
+            $menu->selectableStyle(function (SelectableStyle $style) {
                 $style->fromArray($this->menu->getSelectableStyle()->toArray());
             });
 
@@ -362,15 +362,15 @@ class CliMenuBuilder
             $builder->enableAutoShortcuts($this->autoShortcutsRegex);
         }
 
-        $builder->setCheckableStyle(function (CheckableStyle $style) {
+        $builder->checkableStyle(function (CheckableStyle $style) {
             $style->fromArray($this->menu->getCheckableStyle()->toArray());
         });
 
-        $builder->setRadioStyle(function (RadioStyle $style) {
+        $builder->radioStyle(function (RadioStyle $style) {
             $style->fromArray($this->menu->getRadioStyle()->toArray());
         });
 
-        $builder->setSelectableStyle(function (SelectableStyle $style) {
+        $builder->selectableStyle(function (SelectableStyle $style) {
             $style->fromArray($this->menu->getSelectableStyle()->toArray());
         });
 
@@ -651,23 +651,53 @@ class CliMenuBuilder
         return $this->menu;
     }
 
-    public function setCheckableStyle(callable $itemCallable) : self
+    /**
+     * Use as
+     *
+        ->checkableStyle(function (CheckableStyle $style) {
+            $style->setMarkerOff('- ');
+        })
+     *
+     * @param callable $itemCallable
+     * @return $this
+     */
+    public function checkableStyle(callable $itemCallable) : self
     {
-        $this->menu->setCheckableStyle($itemCallable);
+        $this->menu->checkableStyle($itemCallable);
 
         return $this;
     }
 
-    public function setRadioStyle(callable $itemCallable) : self
+    /**
+     * Use as
+     *
+        ->radioStyle(function (RadioStyle $style) {
+            $style->setMarkerOff('- ');
+        })
+     *
+     * @param callable $itemCallable
+     * @return $this
+     */
+    public function radioStyle(callable $itemCallable) : self
     {
-        $this->menu->setRadioStyle($itemCallable);
+        $this->menu->radioStyle($itemCallable);
 
         return $this;
     }
 
-    public function setSelectableStyle(callable $itemCallable) : self
+    /**
+     * Use as
+     *
+        ->selectableStyle(function (SelectableStyle $style) {
+            $style->setMarkerOff('- ');
+        })
+     *
+     * @param callable $itemCallable
+     * @return $this
+     */
+    public function selectableStyle(callable $itemCallable) : self
     {
-        $this->menu->setSelectableStyle($itemCallable);
+        $this->menu->selectableStyle($itemCallable);
 
         return $this;
     }

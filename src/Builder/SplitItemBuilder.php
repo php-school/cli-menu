@@ -67,9 +67,9 @@ class SplitItemBuilder
         $this->menu = $menu;
         $this->splitItem = new SplitItem();
 
-        $this->checkableStyle  = new CheckableStyle($menu->getTerminal());
-        $this->radioStyle      = new RadioStyle($menu->getTerminal());
-        $this->selectableStyle = new SelectableStyle($menu->getTerminal());
+        $this->checkableStyle  = new CheckableStyle();
+        $this->radioStyle      = new RadioStyle();
+        $this->selectableStyle = new SelectableStyle();
     }
 
     public function addItem(
@@ -172,23 +172,53 @@ class SplitItemBuilder
         return $this->splitItem;
     }
 
-    public function setCheckableStyle(callable $itemCallable) : self
+    /**
+     * Use as
+     *
+        ->checkableStyle(function (CheckableStyle $style) {
+            $style->setMarkerOff('- ');
+        })
+     *
+     * @param callable $itemCallable
+     * @return $this
+     */
+    public function checkableStyle(callable $itemCallable) : self
     {
-        $this->menu->setCheckableStyle($itemCallable);
+        $this->menu->checkableStyle($itemCallable);
 
         return $this;
     }
 
-    public function setRadioStyle(callable $itemCallable) : self
+    /**
+     * Use as
+     *
+        ->radioStyle(function (RadioStyle $style) {
+            $style->setMarkerOff('- ');
+        })
+     *
+     * @param callable $itemCallable
+     * @return $this
+     */
+    public function radioStyle(callable $itemCallable) : self
     {
-        $this->menu->setRadioStyle($itemCallable);
+        $this->menu->radioStyle($itemCallable);
 
         return $this;
     }
 
-    public function setSelectableStyle(callable $itemCallable) : self
+    /**
+     * Use as
+     *
+        ->selectableStyle(function (SelectableStyle $style) {
+            $style->setMarkerOff('- ');
+        })
+     *
+     * @param callable $itemCallable
+     * @return $this
+     */
+    public function selectableStyle(callable $itemCallable) : self
     {
-        $this->menu->setSelectableStyle($itemCallable);
+        $this->menu->selectableStyle($itemCallable);
 
         return $this;
     }
@@ -209,21 +239,21 @@ class SplitItemBuilder
 
             // If user changed this style, persist to the menu so children CheckableItems may use it
             if ($this->menu->getCheckableStyle()->getIsCustom()) {
-                $menu->setCheckableStyle(function (CheckableStyle $style) {
+                $menu->checkableStyle(function (CheckableStyle $style) {
                     $style->fromArray($this->menu->getCheckableStyle()->toArray());
                 });
             }
 
             // If user changed this style, persist to the menu so children RadioItems may use it
             if ($this->menu->getRadioStyle()->getIsCustom()) {
-                $menu->setRadioStyle(function (RadioStyle $style) {
+                $menu->radioStyle(function (RadioStyle $style) {
                     $style->fromArray($this->menu->getRadioStyle()->toArray());
                 });
             }
 
             // If user changed this style, persist to the menu so children SelectableItems may use it
             if ($this->menu->getSelectableStyle()->getIsCustom()) {
-                $menu->setSelectableStyle(function (SelectableStyle $style) {
+                $menu->selectableStyle(function (SelectableStyle $style) {
                     $style->fromArray($this->menu->getSelectableStyle()->toArray());
                 });
             }
