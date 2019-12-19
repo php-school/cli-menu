@@ -6,16 +6,6 @@ interface ItemStyleInterface
 {
     public function getIsCustom() : bool;
 
-    public function getColoursSetCode() : string;
-
-    public function getFg();
-
-    public function setFg(string $fg, string $fallback = null) : self;
-
-    public function getBg();
-
-    public function setBg(string $bg, string $fallback = null) : self;
-
     public function getMarker(bool $selected) : string;
 
     public function getMarkerOn() : string;
