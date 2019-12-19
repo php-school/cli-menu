@@ -23,7 +23,7 @@ $menu = (new CliMenuBuilder)
     })
     ->addSubMenu('Interpreted', function (CliMenuBuilder $b) use ($itemCallable) {
         $b->setTitle('Interpreted Languages')
-            ->checkboxStyle(function (CheckboxStyle $style) {
+            ->modifyCheckboxStyle(function (CheckboxStyle $style) {
                 $style->setMarkerOff('[○] ')
                     ->setMarkerOn('[●] ');
             })

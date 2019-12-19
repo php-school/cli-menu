@@ -4,14 +4,22 @@ namespace PhpSchool\CliMenu\Style;
 
 class CheckboxStyle
 {
-    use ItemStyleTrait;
-
     protected const DEFAULT_STYLES = [
         'markerOn'      => '[✔] ',
         'markerOff'     => '[ ] ',
         'itemExtra'     => '✔',
         'displaysExtra' => false,
     ];
+
+    protected $markerOn = '';
+
+    protected $markerOff = '';
+
+    protected $itemExtra = '';
+
+    protected $displaysExtra = false;
+
+    protected $custom = false;
 
     public function __construct()
     {
@@ -23,22 +31,71 @@ class CheckboxStyle
         $this->custom = false;
     }
 
-    public function toArray() : array
+    public function hasChangedFromDefaults() : bool
     {
-        return [
-            'markerOn'      => $this->markerOn,
-            'markerOff'     => $this->markerOff,
-            'itemExtra'     => $this->itemExtra,
-            'displaysExtra' => $this->displaysExtra,
-        ];
+        return $this->custom;
     }
 
-    public function fromArray(array $style) : self
+    public function getMarker(bool $selected) : string
     {
-        $this->markerOn      = $style['markerOn'] ?? $this->markerOn;
-        $this->markerOff     = $style['markerOff'] ?? $this->markerOff;
-        $this->itemExtra     = $style['itemExtra'] ?? $this->itemExtra;
-        $this->displaysExtra = $style['displaysExtra'] ?? $this->displaysExtra;
+        return $selected ? $this->markerOn : $this->markerOff;
+    }
+
+    public function getMarkerOn() : string
+    {
+        return $this->markerOn;
+    }
+
+    public function setMarkerOn(string $marker) : self
+    {
+        $this->custom = true;
+
+        $this->markerOn = $marker;
+
+        return $this;
+    }
+
+    public function getMarkerOff() : string
+    {
+        return $this->markerOff;
+    }
+
+    public function setMarkerOff(string $marker) : self
+    {
+        $this->custom = true;
+
+        $this->markerOff = $marker;
+
+        return $this;
+    }
+
+    public function getItemExtra() : string
+    {
+        return $this->itemExtra;
+    }
+
+    public function setItemExtra(string $itemExtra) : self
+    {
+        $this->custom = true;
+
+        $this->itemExtra = $itemExtra;
+
+        // if we customise item extra, it means we most likely want to display it
+        $this->setDisplaysExtra(true);
+
+        return $this;
+    }
+
+    public function getDisplaysExtra() : bool
+    {
+        return $this->displaysExtra;
+    }
+
+    public function setDisplaysExtra(bool $displaysExtra) : self
+    {
+        $this->custom = true;
+
+        $this->displaysExtra = $displaysExtra;
 
         return $this;
     }
