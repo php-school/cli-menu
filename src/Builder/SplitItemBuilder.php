@@ -129,13 +129,13 @@ class SplitItemBuilder
         $menu = $builder->build();
         $menu->setParent($this->menu);
 
-        $menu->checkboxStyle(function (CheckboxStyle $style) {
-            $style->fromArray($this->menu->getCheckboxStyle()->toArray());
-        });
+        if (!$menu->getCheckboxStyle()->hasChangedFromDefaults()) {
+            $menu->setCheckboxStyle(clone $this->menu->getCheckboxStyle());
+        }
 
-        $menu->radioStyle(function (RadioStyle $style) {
-            $style->fromArray($this->menu->getRadioStyle()->toArray());
-        });
+        if (!$menu->getRadioStyle()->hasChangedFromDefaults()) {
+            $menu->setRadioStyle(clone $this->menu->getRadioStyle());
+        }
 
         $this->splitItem->addItem(new MenuMenuItem(
             $text,
@@ -169,16 +169,40 @@ class SplitItemBuilder
         return $this->splitItem;
     }
 
-    public function checkboxStyle(callable $itemCallable) : self
+    public function getCheckboxStyle() : CheckboxStyle
     {
-        $this->menu->checkboxStyle($itemCallable);
+        return $this->checkboxStyle;
+    }
+
+    public function setCheckboxStyle(CheckboxStyle $style) : self
+    {
+        $this->checkboxStyle = $style;
 
         return $this;
     }
 
-    public function radioStyle(callable $itemCallable) : self
+    public function modifyCheckboxStyle(callable $itemCallable) : self
     {
-        $this->menu->radioStyle($itemCallable);
+        $itemCallable($this->menu->getCheckboxStyle());
+
+        return $this;
+    }
+
+    public function getRadioStyle() : RadioStyle
+    {
+        return $this->radioStyle;
+    }
+
+    public function setRadioStyle(RadioStyle $style) : self
+    {
+        $this->radioStyle = $style;
+
+        return $this;
+    }
+
+    public function modifyRadioStyle(callable $itemCallable) : self
+    {
+        $itemCallable($this->menu->getRadioStyle());
 
         return $this;
     }

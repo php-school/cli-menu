@@ -202,16 +202,12 @@ class CliMenuBuilder
             $menu->setStyle($this->menu->getStyle());
         }
 
-        if (!$menu->getCheckboxStyle()->getIsCustom()) {
-            $menu->checkboxStyle(function (CheckboxStyle $style) {
-                $style->fromArray($this->menu->getCheckboxStyle()->toArray());
-            });
+        if (!$menu->getCheckboxStyle()->hasChangedFromDefaults()) {
+            $menu->setCheckboxStyle(clone $this->menu->getCheckboxStyle());
         }
 
-        if (!$menu->getRadioStyle()->getIsCustom()) {
-            $menu->radioStyle(function (RadioStyle $style) {
-                $style->fromArray($this->menu->getRadioStyle()->toArray());
-            });
+        if (!$menu->getRadioStyle()->hasChangedFromDefaults()) {
+            $menu->setRadioStyle(clone $this->menu->getRadioStyle());
         }
 
         $this->menu->addItem($item = new MenuMenuItem(
@@ -236,13 +232,13 @@ class CliMenuBuilder
             $menu->setStyle($this->menu->getStyle());
         }
 
-        $menu->checkboxStyle(function (CheckboxStyle $style) {
-            $style->fromArray($this->menu->getCheckboxStyle()->toArray());
-        });
+        if (!$menu->getCheckboxStyle()->hasChangedFromDefaults()) {
+            $menu->setCheckboxStyle(clone $this->menu->getCheckboxStyle());
+        }
 
-        $menu->radioStyle(function (RadioStyle $style) {
-            $style->fromArray($this->menu->getRadioStyle()->toArray());
-        });
+        if (!$menu->getRadioStyle()->hasChangedFromDefaults()) {
+            $menu->setRadioStyle(clone $this->menu->getRadioStyle());
+        }
 
         $this->menu->addItem($item = new MenuMenuItem(
             $text,
@@ -331,13 +327,13 @@ class CliMenuBuilder
 
         $callback($builder);
 
-        $builder->checkboxStyle(function (CheckboxStyle $style) {
-            $style->fromArray($this->menu->getCheckboxStyle()->toArray());
-        });
+        if (!$builder->getCheckboxStyle()->hasChangedFromDefaults()) {
+            $builder->setCheckboxStyle(clone $this->menu->getCheckboxStyle());
+        }
 
-        $builder->radioStyle(function (RadioStyle $style) {
-            $style->fromArray($this->menu->getRadioStyle()->toArray());
-        });
+        if (!$builder->getRadioStyle()->hasChangedFromDefaults()) {
+            $builder->setRadioStyle(clone $this->menu->getRadioStyle());
+        }
         
         $this->menu->addItem($splitItem = $builder->build());
 
@@ -567,16 +563,40 @@ class CliMenuBuilder
         return $this->menu;
     }
 
-    public function checkboxStyle(callable $itemCallable) : self
+    public function getCheckboxStyle() : CheckboxStyle
     {
-        $this->menu->checkboxStyle($itemCallable);
+        return $this->menu->getCheckboxStyle();
+    }
+
+    public function setCheckboxStyle(CheckboxStyle $style) : self
+    {
+        $this->menu->setCheckboxStyle($style);
 
         return $this;
     }
 
-    public function radioStyle(callable $itemCallable) : self
+    public function modifyCheckboxStyle(callable $itemCallable) : self
     {
-        $this->menu->radioStyle($itemCallable);
+        $itemCallable($this->menu->getCheckboxStyle());
+
+        return $this;
+    }
+
+    public function getRadioStyle() : RadioStyle
+    {
+        return $this->menu->getRadioStyle();
+    }
+
+    public function setRadioStyle(RadioStyle $style) : self
+    {
+        $this->menu->setRadioStyle($style);
+
+        return $this;
+    }
+
+    public function modifyRadioStyle(callable $itemCallable) : self
+    {
+        $itemCallable($this->menu->getRadioStyle());
 
         return $this;
     }

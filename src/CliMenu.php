@@ -660,9 +660,9 @@ class CliMenu
         return $this->checkboxStyle;
     }
 
-    public function checkboxStyle(callable $itemCallable) : self
+    public function setCheckboxStyle(CheckboxStyle $style) : self
     {
-        $itemCallable($this->checkboxStyle);
+        $this->checkboxStyle = $style;
 
         return $this;
     }
@@ -672,9 +672,9 @@ class CliMenu
         return $this->radioStyle;
     }
 
-    public function radioStyle(callable $itemCallable) : self
+    public function setRadioStyle(RadioStyle $style) : self
     {
-        $itemCallable($this->radioStyle);
+        $this->radioStyle = $style;
 
         return $this;
     }
