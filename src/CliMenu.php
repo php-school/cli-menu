@@ -8,12 +8,15 @@ use PhpSchool\CliMenu\Input\InputIO;
 use PhpSchool\CliMenu\Input\Number;
 use PhpSchool\CliMenu\Input\Password;
 use PhpSchool\CliMenu\Input\Text;
+use PhpSchool\CliMenu\MenuItem\CheckboxItem;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Dialogue\Confirm;
 use PhpSchool\CliMenu\Dialogue\Flash;
+use PhpSchool\CliMenu\Style\CheckboxStyle;
+use PhpSchool\CliMenu\Style\RadioStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\CliMenu\Util\StringUtil as s;
 use PhpSchool\Terminal\InputCharacter;
@@ -34,6 +37,16 @@ class CliMenu
      * @var MenuStyle
      */
     protected $style;
+
+    /**
+     * @var CheckboxStyle
+     */
+    private $checkboxStyle;
+
+    /**
+     * @var RadioStyle
+     */
+    private $radioStyle;
 
     /**
      * @var ?string
@@ -90,10 +103,12 @@ class CliMenu
         Terminal $terminal = null,
         MenuStyle $style = null
     ) {
-        $this->title      = $title;
-        $this->items      = $items;
-        $this->terminal   = $terminal ?: TerminalFactory::fromSystem();
-        $this->style      = $style ?: new MenuStyle($this->terminal);
+        $this->title         = $title;
+        $this->items         = $items;
+        $this->terminal      = $terminal ?: TerminalFactory::fromSystem();
+        $this->style         = $style ?: new MenuStyle($this->terminal);
+        $this->checkboxStyle = new CheckboxStyle();
+        $this->radioStyle    = new RadioStyle();
 
         $this->selectFirstItem();
     }
@@ -638,6 +653,50 @@ class CliMenu
     public function setStyle(MenuStyle $style) : void
     {
         $this->style = $style;
+    }
+
+    public function getCheckboxStyle() : CheckboxStyle
+    {
+        return $this->checkboxStyle;
+    }
+
+    /**
+     * Use as
+     *
+        ->checkboxStyle(function (CheckboxStyle $style) {
+            $style->setMarkerOff('- ');
+        })
+     *
+     * @param callable $itemCallable
+     * @return $this
+     */
+    public function checkboxStyle(callable $itemCallable) : self
+    {
+        $itemCallable($this->checkboxStyle);
+
+        return $this;
+    }
+
+    public function getRadioStyle() : RadioStyle
+    {
+        return $this->radioStyle;
+    }
+
+    /**
+     * Use as
+     *
+        ->radioStyle(function (RadioStyle $style) {
+            $style->setMarkerOff('- ');
+        })
+     *
+     * @param callable $itemCallable
+     * @return $this
+     */
+    public function radioStyle(callable $itemCallable) : self
+    {
+        $itemCallable($this->radioStyle);
+
+        return $this;
     }
 
     public function getCurrentFrame() : Frame

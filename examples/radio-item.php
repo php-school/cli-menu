@@ -2,6 +2,7 @@
 
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\Style\RadioStyle;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
@@ -22,8 +23,10 @@ $menu = (new CliMenuBuilder)
     })
     ->addSubMenu('Interpreted', function (CliMenuBuilder $b) use ($itemCallable) {
         $b->setTitle('Interpreted Languages')
-            ->setUnradioMarker('[ ] ')
-            ->setRadioMarker('[✔] ')
+            ->radioStyle(function (RadioStyle $style) {
+                $style->setMarkerOff('[ ] ')
+                    ->setMarkerOn('[✔] ');
+            })
             ->addRadioItem('PHP', $itemCallable)
             ->addRadioItem('Javascript', $itemCallable)
             ->addRadioItem('Ruby', $itemCallable)
