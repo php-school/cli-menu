@@ -5,7 +5,7 @@ namespace PhpSchool\CliMenuTest\Builder;
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\Builder\SplitItemBuilder;
 use PhpSchool\CliMenu\CliMenu;
-use PhpSchool\CliMenu\MenuItem\CheckableItem;
+use PhpSchool\CliMenu\MenuItem\CheckboxItem;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\RadioItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
@@ -40,24 +40,24 @@ class SplitItemBuilderTest extends TestCase
         $this->checkItemItems($item, $expected);
     }
 
-    public function testAddCheckableItem() : void
+    public function testAddCheckboxItem() : void
     {
         $callable = function () {
         };
 
         $menu = new CliMenu(null, []);
         $builder = new SplitItemBuilder($menu);
-        $builder->addCheckableItem('Item 1', $callable);
-        $builder->addCheckableItem('Item 2', $callable);
+        $builder->addCheckboxItem('Item 1', $callable);
+        $builder->addCheckboxItem('Item 2', $callable);
         $item = $builder->build();
 
         $expected = [
             [
-                'class' => CheckableItem::class,
+                'class' => CheckboxItem::class,
                 'text'  => 'Item 1',
             ],
             [
-                'class' => CheckableItem::class,
+                'class' => CheckboxItem::class,
                 'text'  => 'Item 2',
             ],
         ];

@@ -6,7 +6,7 @@ use PhpSchool\CliMenu\Builder\SplitItemBuilder;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
-use PhpSchool\CliMenu\MenuItem\CheckableItem;
+use PhpSchool\CliMenu\MenuItem\CheckboxItem;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\RadioItem;
@@ -371,24 +371,24 @@ class CliMenuBuilderTest extends TestCase
         $this->checkMenuItems($menu, $expected);
     }
 
-    public function testAddCheckableItem() : void
+    public function testAddCheckboxItem() : void
     {
         $callable = function () {
         };
 
         $builder = new CliMenuBuilder;
         $builder->disableDefaultItems();
-        $builder->addCheckableItem('Item 1', $callable);
-        $builder->addCheckableItem('Item 2', $callable);
+        $builder->addCheckboxItem('Item 1', $callable);
+        $builder->addCheckboxItem('Item 2', $callable);
         $menu = $builder->build();
 
         $expected = [
             [
-                'class' => CheckableItem::class,
+                'class' => CheckboxItem::class,
                 'text'  => 'Item 1',
             ],
             [
-                'class' => CheckableItem::class,
+                'class' => CheckboxItem::class,
                 'text'  => 'Item 2',
             ],
         ];

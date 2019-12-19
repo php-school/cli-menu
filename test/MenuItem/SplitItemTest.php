@@ -4,7 +4,7 @@ namespace PhpSchool\CliMenuTest\MenuItem;
 
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
-use PhpSchool\CliMenu\MenuItem\CheckableItem;
+use PhpSchool\CliMenu\MenuItem\CheckboxItem;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\RadioItem;
@@ -470,7 +470,7 @@ class SplitItemTest extends TestCase
         self::assertTrue($splitItem->canSelectIndex(1));
     }
 
-    public function testCheckableItem() : void
+    public function testCheckboxItem() : void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -489,16 +489,16 @@ class SplitItemTest extends TestCase
             ->method('getUncheckedMarker')
             ->willReturn('[ ] ');
 
-        $checkableItem1 = new CheckableItem('Item One', function () {
+        $checkboxItem1 = new CheckboxItem('Item One', function () {
         });
 
-        $checkableItem2 = new CheckableItem('Item Two', function () {
+        $checkboxItem2 = new CheckboxItem('Item Two', function () {
         });
 
         $item = new SplitItem(
             [
-                $checkableItem1,
-                $checkableItem2,
+                $checkboxItem1,
+                $checkboxItem2,
             ]
         );
 
@@ -506,7 +506,7 @@ class SplitItemTest extends TestCase
 
         self::assertEquals(['[ ] Item One   [ ] Item Two   '], $item->getRows($menuStyle, true));
 
-        $checkableItem1->toggle();
+        $checkboxItem1->toggle();
 
         self::assertEquals(['[✔] Item One   [ ] Item Two   '], $item->getRows($menuStyle, true));
     }
@@ -530,16 +530,16 @@ class SplitItemTest extends TestCase
             ->method('getUnradioMarker')
             ->willReturn('[○] ');
 
-        $checkableItem1 = new RadioItem('Item One', function () {
+        $checkboxItem1 = new RadioItem('Item One', function () {
         });
 
-        $checkableItem2 = new RadioItem('Item Two', function () {
+        $checkboxItem2 = new RadioItem('Item Two', function () {
         });
 
         $item = new SplitItem(
             [
-                $checkableItem1,
-                $checkableItem2,
+                $checkboxItem1,
+                $checkboxItem2,
             ]
         );
 
@@ -563,11 +563,11 @@ class SplitItemTest extends TestCase
 
         self::assertEquals(['[○] Item One   [○] Item Two   '], $item->getRows($menuStyle, true));
 
-        $checkableItem1->getSelectAction()($cliMenu);
+        $checkboxItem1->getSelectAction()($cliMenu);
 
         self::assertEquals(['[●] Item One   [○] Item Two   '], $item->getRows($menuStyle, true));
 
-        $checkableItem2->getSelectAction()($cliMenu);
+        $checkboxItem2->getSelectAction()($cliMenu);
 
         self::assertEquals(['[○] Item One   [●] Item Two   '], $item->getRows($menuStyle, true));
     }
