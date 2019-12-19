@@ -8,6 +8,7 @@ use PhpSchool\CliMenu\Action\GoBackAction;
 use PhpSchool\CliMenu\Exception\InvalidShortcutException;
 use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
 use PhpSchool\CliMenu\MenuItem\CheckableItem;
+use PhpSchool\CliMenu\MenuItem\ItemStyleInterface;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
@@ -246,30 +247,39 @@ class CliMenuBuilder
                 $menu->setStyle($this->menu->getStyle());
             }
 
-            // If user changed this style, persist to the menu so children CheckableItems may use it
-            if ($this->menu->getCheckableStyle()->getIsCustom()) {
-                $menu->setCheckableStyle(function (CheckableStyle $style) {
-                    $style->fromArray($this->menu->getCheckableStyle()->toArray());
-                });
-            }
+            $menu->setCheckableStyle(function (CheckableStyle $style) {
+                $style->fromArray($this->menu->getCheckableStyle()->toArray());
+            });
 
-            // If user changed this style, persist to the menu so children RadioItems may use it
-            if ($this->menu->getRadioStyle()->getIsCustom()) {
-                $menu->setRadioStyle(function (RadioStyle $style) {
-                    $style->fromArray($this->menu->getRadioStyle()->toArray());
-                });
-            }
+            $menu->setRadioStyle(function (RadioStyle $style) {
+                $style->fromArray($this->menu->getRadioStyle()->toArray());
+            });
 
-            // If user changed this style, persist to the menu so children SelectableItems may use it
-            if ($this->menu->getSelectableStyle()->getIsCustom()) {
-                $menu->setSelectableStyle(function (SelectableStyle $style) {
-                    $style->fromArray($this->menu->getSelectableStyle()->toArray());
-                });
-            }
+            $menu->setSelectableStyle(function (SelectableStyle $style) {
+                $style->fromArray($this->menu->getSelectableStyle()->toArray());
+            });
 
             // This will be filled with user-provided items
             foreach ($menu->getItems() as $item) {
-                if ($item instanceof SelectableInterface && !$item->getStyle()->getIsCustom()) {
+                // Only set style for compatible items
+                if (!$item instanceof ItemStyleInterface) {
+                    continue;
+                }
+
+                // If item has a custom style, skip overriding
+                if ($item->getStyle()->getIsCustom()) {
+                    continue;
+                }
+
+                if ($item instanceof CheckableStyle) {
+                    $item->setStyle(clone $menu->getCheckableStyle());
+                }
+
+                if ($item instanceof RadioStyle) {
+                    $item->setStyle(clone $menu->getRadioStyle());
+                }
+
+                if ($item instanceof SelectableInterface) {
                     $item->setStyle(clone $menu->getSelectableStyle());
                 }
             }
@@ -352,26 +362,17 @@ class CliMenuBuilder
             $builder->enableAutoShortcuts($this->autoShortcutsRegex);
         }
 
-        // If user changed this style, persist to the menu so children CheckableItems may use it
-        if ($this->menu->getCheckableStyle()->getIsCustom()) {
-            $builder->setCheckableStyle(function (CheckableStyle $style) {
-                $style->fromArray($this->menu->getCheckableStyle()->toArray());
-            });
-        }
+        $builder->setCheckableStyle(function (CheckableStyle $style) {
+            $style->fromArray($this->menu->getCheckableStyle()->toArray());
+        });
 
-        // If user changed this style, persist to the menu so children RadioItems may use it
-        if ($this->menu->getRadioStyle()->getIsCustom()) {
-            $builder->setRadioStyle(function (RadioStyle $style) {
-                $style->fromArray($this->menu->getRadioStyle()->toArray());
-            });
-        }
+        $builder->setRadioStyle(function (RadioStyle $style) {
+            $style->fromArray($this->menu->getRadioStyle()->toArray());
+        });
 
-        // If user changed this style, persist to the menu so children SelectableItems may use it
-        if ($this->menu->getSelectableStyle()->getIsCustom()) {
-            $builder->setSelectableStyle(function (SelectableStyle $style) {
-                $style->fromArray($this->menu->getSelectableStyle()->toArray());
-            });
-        }
+        $builder->setSelectableStyle(function (SelectableStyle $style) {
+            $style->fromArray($this->menu->getSelectableStyle()->toArray());
+        });
 
         $callback($builder);
         
