@@ -10,6 +10,8 @@ use PhpSchool\CliMenu\MenuItem\RadioItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
+use PhpSchool\CliMenu\Style\CheckboxStyle;
+use PhpSchool\CliMenu\Style\RadioStyle;
 
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
@@ -42,10 +44,23 @@ class SplitItemBuilder
      */
     private $autoShortcutsRegex = '/\[(.)\]/';
 
+    /**
+     * @var CheckboxStyle
+     */
+    private $checkboxStyle;
+
+    /**
+     * @var RadioStyle
+     */
+    private $radioStyle;
+
     public function __construct(CliMenu $menu)
     {
         $this->menu = $menu;
         $this->splitItem = new SplitItem();
+
+        $this->checkboxStyle  = new CheckboxStyle();
+        $this->radioStyle      = new RadioStyle();
     }
 
     public function addItem(
@@ -65,7 +80,10 @@ class SplitItemBuilder
         bool $showItemExtra = false,
         bool $disabled = false
     ) : self {
-        $this->splitItem->addItem(new CheckboxItem($text, $itemCallable, $showItemExtra, $disabled));
+        $item = (new CheckboxItem($text, $itemCallable, $showItemExtra, $disabled))
+            ->setStyle($this->menu->getCheckboxStyle());
+
+        $this->splitItem->addItem($item);
 
         return $this;
     }
@@ -76,7 +94,10 @@ class SplitItemBuilder
         bool $showItemExtra = false,
         bool $disabled = false
     ) : self {
-        $this->splitItem->addItem(new RadioItem($text, $itemCallable, $showItemExtra, $disabled));
+        $item = (new RadioItem($text, $itemCallable, $showItemExtra, $disabled))
+            ->setStyle($this->menu->getRadioStyle());
+
+        $this->splitItem->addItem($item);
 
         return $this;
     }
@@ -108,6 +129,14 @@ class SplitItemBuilder
         $menu = $builder->build();
         $menu->setParent($this->menu);
 
+        $menu->checkboxStyle(function (CheckboxStyle $style) {
+            $style->fromArray($this->menu->getCheckboxStyle()->toArray());
+        });
+
+        $menu->radioStyle(function (RadioStyle $style) {
+            $style->fromArray($this->menu->getRadioStyle()->toArray());
+        });
+
         $this->splitItem->addItem(new MenuMenuItem(
             $text,
             $menu,
@@ -138,5 +167,39 @@ class SplitItemBuilder
     public function build() : SplitItem
     {
         return $this->splitItem;
+    }
+
+    /**
+     * Use as
+     *
+        ->checkboxStyle(function (CheckboxStyle $style) {
+            $style->setMarkerOff('- ');
+        })
+     *
+     * @param callable $itemCallable
+     * @return $this
+     */
+    public function checkboxStyle(callable $itemCallable) : self
+    {
+        $this->menu->checkboxStyle($itemCallable);
+
+        return $this;
+    }
+
+    /**
+     * Use as
+     *
+        ->radioStyle(function (RadioStyle $style) {
+            $style->setMarkerOff('- ');
+        })
+     *
+     * @param callable $itemCallable
+     * @return $this
+     */
+    public function radioStyle(callable $itemCallable) : self
+    {
+        $this->menu->radioStyle($itemCallable);
+
+        return $this;
     }
 }

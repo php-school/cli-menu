@@ -16,6 +16,8 @@ use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Style\CheckboxStyle;
+use PhpSchool\CliMenu\Style\RadioStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\Terminal\Terminal;
 
@@ -138,7 +140,10 @@ class CliMenuBuilder
         bool $showItemExtra = false,
         bool $disabled = false
     ) : self {
-        $this->addMenuItem(new CheckboxItem($text, $itemCallable, $showItemExtra, $disabled));
+        $item = (new CheckboxItem($text, $itemCallable, $showItemExtra, $disabled))
+            ->setStyle($this->menu->getCheckboxStyle());
+
+        $this->addMenuItem($item);
 
         return $this;
     }
@@ -149,7 +154,10 @@ class CliMenuBuilder
         bool $showItemExtra = false,
         bool $disabled = false
     ) : self {
-        $this->addMenuItem(new RadioItem($text, $itemCallable, $showItemExtra, $disabled));
+        $item = (new RadioItem($text, $itemCallable, $showItemExtra, $disabled))
+            ->setStyle($this->menu->getRadioStyle());
+
+        $this->addMenuItem($item);
 
         return $this;
     }
@@ -194,6 +202,18 @@ class CliMenuBuilder
             $menu->setStyle($this->menu->getStyle());
         }
 
+        if (!$menu->getCheckboxStyle()->getIsCustom()) {
+            $menu->checkboxStyle(function (CheckboxStyle $style) {
+                $style->fromArray($this->menu->getCheckboxStyle()->toArray());
+            });
+        }
+
+        if (!$menu->getRadioStyle()->getIsCustom()) {
+            $menu->radioStyle(function (RadioStyle $style) {
+                $style->fromArray($this->menu->getRadioStyle()->toArray());
+            });
+        }
+
         $this->menu->addItem($item = new MenuMenuItem(
             $text,
             $menu,
@@ -215,6 +235,14 @@ class CliMenuBuilder
         if (!$menu->getStyle()->hasChangedFromDefaults()) {
             $menu->setStyle($this->menu->getStyle());
         }
+
+        $menu->checkboxStyle(function (CheckboxStyle $style) {
+            $style->fromArray($this->menu->getCheckboxStyle()->toArray());
+        });
+
+        $menu->radioStyle(function (RadioStyle $style) {
+            $style->fromArray($this->menu->getRadioStyle()->toArray());
+        });
 
         $this->menu->addItem($item = new MenuMenuItem(
             $text,
@@ -302,6 +330,14 @@ class CliMenuBuilder
         }
 
         $callback($builder);
+
+        $builder->checkboxStyle(function (CheckboxStyle $style) {
+            $style->fromArray($this->menu->getCheckboxStyle()->toArray());
+        });
+
+        $builder->radioStyle(function (RadioStyle $style) {
+            $style->fromArray($this->menu->getRadioStyle()->toArray());
+        });
         
         $this->menu->addItem($splitItem = $builder->build());
 
@@ -413,34 +449,6 @@ class CliMenuBuilder
     public function setSelectedMarker(string $marker) : self
     {
         $this->style->setSelectedMarker($marker);
-
-        return $this;
-    }
-
-    public function setUncheckedMarker(string $marker) : self
-    {
-        $this->style->setUncheckedMarker($marker);
-
-        return $this;
-    }
-
-    public function setCheckedMarker(string $marker) : self
-    {
-        $this->style->setCheckedMarker($marker);
-
-        return $this;
-    }
-
-    public function setUnradioMarker(string $marker) : self
-    {
-        $this->style->setUnradioMarker($marker);
-
-        return $this;
-    }
-
-    public function setRadioMarker(string $marker) : self
-    {
-        $this->style->setRadioMarker($marker);
 
         return $this;
     }
@@ -557,5 +565,39 @@ class CliMenuBuilder
         }
 
         return $this->menu;
+    }
+
+    /**
+     * Use as
+     *
+        ->checkboxStyle(function (CheckboxStyle $style) {
+            $style->setMarkerOff('- ');
+        })
+     *
+     * @param callable $itemCallable
+     * @return $this
+     */
+    public function checkboxStyle(callable $itemCallable) : self
+    {
+        $this->menu->checkboxStyle($itemCallable);
+
+        return $this;
+    }
+
+    /**
+     * Use as
+     *
+        ->radioStyle(function (RadioStyle $style) {
+            $style->setMarkerOff('- ');
+        })
+     *
+     * @param callable $itemCallable
+     * @return $this
+     */
+    public function radioStyle(callable $itemCallable) : self
+    {
+        $this->menu->radioStyle($itemCallable);
+
+        return $this;
     }
 }
