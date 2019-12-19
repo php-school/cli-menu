@@ -44,23 +44,10 @@ class SplitItemBuilder
      */
     private $autoShortcutsRegex = '/\[(.)\]/';
 
-    /**
-     * @var CheckboxStyle
-     */
-    private $checkboxStyle;
-
-    /**
-     * @var RadioStyle
-     */
-    private $radioStyle;
-
     public function __construct(CliMenu $menu)
     {
         $this->menu = $menu;
         $this->splitItem = new SplitItem();
-
-        $this->checkboxStyle  = new CheckboxStyle();
-        $this->radioStyle      = new RadioStyle();
     }
 
     public function addItem(
@@ -171,12 +158,12 @@ class SplitItemBuilder
 
     public function getCheckboxStyle() : CheckboxStyle
     {
-        return $this->checkboxStyle;
+        return $this->menu->getCheckboxStyle();
     }
 
     public function setCheckboxStyle(CheckboxStyle $style) : self
     {
-        $this->checkboxStyle = $style;
+        $this->menu->setCheckboxStyle($style);
 
         return $this;
     }
@@ -190,12 +177,12 @@ class SplitItemBuilder
 
     public function getRadioStyle() : RadioStyle
     {
-        return $this->radioStyle;
+        return $this->menu->getRadioStyle();
     }
 
     public function setRadioStyle(RadioStyle $style) : self
     {
-        $this->radioStyle = $style;
+        $this->menu->setRadioStyle($style);
 
         return $this;
     }
