@@ -31,11 +31,6 @@ class RadioStyle
      */
     private $displaysExtra;
 
-    /**
-     * @var bool
-     */
-    protected $custom = false;
-
     public function __construct()
     {
         $this->checkedMarker = self::DEFAULT_STYLES['checkedMarker'];

@@ -31,11 +31,6 @@ class SelectableStyle
      */
     private $displaysExtra;
 
-    /**
-     * @var bool
-     */
-    private $custom = false;
-
     public function __construct()
     {
         $this->selectedMarker = self::DEFAULT_STYLES['selectedMarker'];
