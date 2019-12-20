@@ -66,7 +66,12 @@ class SelectableItem implements MenuItemInterface
 
             if ($key === 0) {
                 return $this->showItemExtra
-                    ? sprintf('%s%s  %s', $text, str_repeat(' ', $length - mb_strlen($row)), $this->style->getItemExtra())
+                    ? sprintf(
+                        '%s%s  %s',
+                        $text,
+                        str_repeat(' ', $length - mb_strlen($row)),
+                        $this->style->getItemExtra()
+                    )
                     : $text;
             }
 
