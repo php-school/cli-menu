@@ -12,29 +12,38 @@ use PhpSchool\CliMenu\Style\SelectableStyle;
  */
 class MenuMenuItem implements MenuItemInterface
 {
-    private $text = '';
+    /**
+     * @var string
+     */
+    private $text;
 
-    private $showItemExtra = false;
+    /**
+     * @var CliMenu
+     */
+    private $subMenu;
 
-    private $disabled = false;
+    /**
+     * @var bool
+     */
+    private $showItemExtra;
+
+    /**
+     * @var bool
+     */
+    private $disabled;
 
     /**
      * @var SelectableStyle;
      */
     private $style;
-    
-    /**
-     * @var CliMenu
-     */
-    private $subMenu;
 
     public function __construct(
         string $text,
         CliMenu $subMenu,
         bool $disabled = false
     ) {
-        $this->text     = $text;
-        $this->subMenu  = $subMenu;
+        $this->text = $text;
+        $this->subMenu = $subMenu;
         $this->disabled = $disabled;
 
         $this->style = new SelectableStyle();
@@ -79,28 +88,6 @@ class MenuMenuItem implements MenuItemInterface
     }
 
     /**
-     * Execute the items callable if required
-     */
-    public function getSelectAction() : ?callable
-    {
-        return function (CliMenu $menu) {
-            $this->showSubMenu($menu);
-        };
-    }
-
-    public function getStyle() : SelectableStyle
-    {
-        return $this->style;
-    }
-
-    public function setStyle(SelectableStyle $style) : self
-    {
-        $this->style = $style;
-
-        return $this;
-    }
-
-    /**
      * Return the raw string of text
      */
     public function getText() : string
@@ -117,32 +104,13 @@ class MenuMenuItem implements MenuItemInterface
     }
 
     /**
-     * Can the item be selected
+     * Execute the items callable if required
      */
-    public function canSelect() : bool
+    public function getSelectAction() : ?callable
     {
-        return !$this->disabled;
-    }
-
-    public function showsItemExtra() : bool
-    {
-        return $this->showItemExtra;
-    }
-
-    /**
-     * Enable showing item extra
-     */
-    public function showItemExtra() : void
-    {
-        $this->showItemExtra = true;
-    }
-
-    /**
-     * Disable showing item extra
-     */
-    public function hideItemExtra() : void
-    {
-        $this->showItemExtra = false;
+        return function (CliMenu $menu) {
+            $this->showSubMenu($menu);
+        };
     }
 
     /**
@@ -160,5 +128,49 @@ class MenuMenuItem implements MenuItemInterface
     {
         $parentMenu->closeThis();
         $this->subMenu->open();
+    }
+
+    /**
+     * Can the item be selected
+     */
+    public function canSelect() : bool
+    {
+        return !$this->disabled;
+    }
+
+    /**
+     * Enable showing item extra
+     */
+    public function showItemExtra() : void
+    {
+        $this->showItemExtra = true;
+    }
+
+    /**
+     * Whether or not we are showing item extra
+     */
+    public function showsItemExtra() : bool
+    {
+        return $this->showItemExtra;
+    }
+
+    /**
+     * Disable showing item extra
+     */
+    public function hideItemExtra() : void
+    {
+        $this->showItemExtra = false;
+    }
+
+    public function getStyle() : SelectableStyle
+    {
+        return $this->style;
+    }
+
+    public function setStyle(SelectableStyle $style) : self
+    {
+        $this->style = $style;
+
+        return $this;
     }
 }
