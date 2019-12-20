@@ -619,9 +619,11 @@ class CliMenuBuilderTest extends TestCase
             ->setBackgroundColour('green')
             ->addSplitItem(function (SplitItemBuilder $b) {
                 $b
-                    ->addItem('Item 1', function () {})
+                    ->addItem('Item 1', function () {
+                    })
                     ->addSubMenu('Submenu 1', function (CliMenuBuilder $b) {
-                        $b->addItem('Item 2', function () {});
+                        $b->addItem('Item 2', function () {
+                        });
                     })
                 ;
             })
@@ -653,7 +655,7 @@ class CliMenuBuilderTest extends TestCase
                     ->addSubMenu('My SubSubMenu', function (CliMenuBuilder $b) {
                         $b->addItem('Some Item', function () {
                         });
-                });
+                    });
             })
             ->build();
 

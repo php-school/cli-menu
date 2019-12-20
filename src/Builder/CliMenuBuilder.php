@@ -564,8 +564,9 @@ class CliMenuBuilder
             if ($item instanceof MenuMenuItem) {
                 $subMenu = $item->getSubMenu();
 
-                !$subMenu->getStyle()->hasChangedFromDefaults()
-                    && $subMenu->setStyle(clone $menu->getStyle());
+                if (!$subMenu->getStyle()->hasChangedFromDefaults()) {
+                    $subMenu->setStyle(clone $menu->getStyle());
+                }
 
                 $this->propagateStyles($subMenu);
             }
