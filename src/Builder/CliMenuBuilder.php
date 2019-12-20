@@ -13,6 +13,7 @@ use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\RadioItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\MenuItem\SelectableStyleInterface;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
@@ -592,7 +593,7 @@ class CliMenuBuilder
                 $item->setStyle(clone $menu->getRadioStyle());
             }
 
-            if (($item instanceof SelectableItem || $item instanceof MenuMenuItem)
+            if ($item instanceof SelectableStyleInterface
                 && !$item->getStyle()->hasChangedFromDefaults()
             ) {
                 $item->setStyle(clone $menu->getSelectableStyle());

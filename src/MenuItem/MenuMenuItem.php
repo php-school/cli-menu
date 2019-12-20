@@ -10,7 +10,7 @@ use PhpSchool\CliMenu\Style\SelectableStyle;
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
-class MenuMenuItem implements MenuItemInterface
+class MenuMenuItem implements MenuItemInterface, SelectableStyleInterface
 {
     private $text = '';
 
