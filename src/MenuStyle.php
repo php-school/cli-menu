@@ -146,8 +146,6 @@ class MenuStyle
         'paddingTopBottom' => 1,
         'paddingLeftRight' => 2,
         'margin' => 2,
-        'selectedMarker' => '● ',
-        'unselectedMarker' => '○ ',
         'itemExtra' => '✔',
         'displaysExtra' => false,
         'titleSeparator' => '=',

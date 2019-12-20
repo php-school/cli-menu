@@ -81,8 +81,6 @@ class MenuStyleTest extends TestCase
 
         self::assertSame('blue', $style->getBg());
         self::assertSame('white', $style->getFg());
-        self::assertSame('○ ', $style->getUnselectedMarker());
-        self::assertSame('● ', $style->getSelectedMarker());
         self::assertSame('✔', $style->getItemExtra());
         self::assertFalse($style->getDisplaysExtra());
         self::assertSame('=', $style->getTitleSeparator());
@@ -98,8 +96,6 @@ class MenuStyleTest extends TestCase
 
         $style->setBg('red');
         $style->setFg('yellow');
-        $style->setUnselectedMarker('-');
-        $style->setSelectedMarker('>');
         $style->setItemExtra('EXTRA!');
         $style->setDisplaysExtra(true);
         $style->setTitleSeparator('+');
@@ -115,8 +111,6 @@ class MenuStyleTest extends TestCase
 
         self::assertSame('red', $style->getBg());
         self::assertSame('yellow', $style->getFg());
-        self::assertSame('-', $style->getUnselectedMarker());
-        self::assertSame('>', $style->getSelectedMarker());
         self::assertSame('EXTRA!', $style->getItemExtra());
         self::assertTrue($style->getDisplaysExtra());
         self::assertSame('+', $style->getTitleSeparator());
@@ -231,17 +225,6 @@ class MenuStyleTest extends TestCase
 
         $style = $this->getMenuStyle(256);
         $style->setBg(257, 'white');
-    }
-
-    public function testGetMarkerReturnsTheCorrectMarkers() : void
-    {
-        $style = $this->getMenuStyle();
-
-        $style->setSelectedMarker('>');
-        $style->setUnselectedMarker('x');
-
-        static::assertSame('>', $style->getMarker(true));
-        static::assertSame('x', $style->getMarker(false));
     }
 
     public function testWidthCalculation() : void

@@ -2,23 +2,30 @@
 
 namespace PhpSchool\CliMenu\MenuItem;
 
-use Assert\Assertion;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
+use PhpSchool\CliMenu\Style\SelectableStyle;
 
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
-class StaticItem implements MenuItemInterface
+class StaticItem implements MenuItemInterface, SelectableStyleInterface
 {
     /**
      * @var string
      */
     private $text;
 
+    /**
+     * @var SelectableStyle;
+     */
+    private $style;
+
     public function __construct(string $text)
     {
         $this->text = $text;
+
+        $this->style = new SelectableStyle();
     }
 
     /**
@@ -43,6 +50,18 @@ class StaticItem implements MenuItemInterface
     public function getSelectAction() : ?callable
     {
         return null;
+    }
+
+    public function getStyle() : SelectableStyle
+    {
+        return $this->style;
+    }
+
+    public function setStyle(SelectableStyle $style) : self
+    {
+        $this->style = $style;
+
+        return $this;
     }
 
     /**

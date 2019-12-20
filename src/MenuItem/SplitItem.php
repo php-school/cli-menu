@@ -32,6 +32,11 @@ class SplitItem implements MenuItemInterface
     private $gutter = 2;
 
     /**
+     * @var int
+     */
+    private $largestItemExtra = 0;
+
+    /**
      * @var array
      */
     private static $blacklistedItems = [
@@ -117,13 +122,15 @@ class SplitItem implements MenuItemInterface
             $this->setDefaultSelectedItem();
         }
 
-        $length = $style->getDisplaysExtra()
-            ? floor($style->getContentWidth() / $numberOfItems) - (mb_strlen($style->getItemExtra()) + 2)
+        $this->calculateItemExtra();
+
+        $length = $this->largestItemExtra > 0
+            ? floor($style->getContentWidth() / $numberOfItems) - ($this->largestItemExtra + 2)
             : floor($style->getContentWidth() / $numberOfItems);
-        
+
         $length -= $this->gutter;
         $length = (int) $length;
-        
+
         $missingLength = $style->getContentWidth() % $numberOfItems;
         
         return $this->buildRows(
@@ -131,13 +138,10 @@ class SplitItem implements MenuItemInterface
                 $isSelected = $selected && $index === $this->selectedItemIndex;
 
                 if ($item instanceof CheckboxItem || $item instanceof RadioItem) {
-                    $markerType    = $item->getStyle()->getMarker($item->getChecked());
-                    $displaysExtra = $item->getStyle()->getDisplaysExtra();
-                    $itemExtraVal  = $item->getStyle()->getItemExtra();
+                    $markerType = $item->getStyle()->getMarker($item->getChecked());
                 } else {
-                    $markerType    = $style->getMarker($isSelected);
-                    $displaysExtra = $style->getDisplaysExtra();
-                    $itemExtraVal  = $style->getItemExtra();
+                    /** @var SelectableStyleInterface $item */
+                    $markerType = $item->getStyle()->getMarker($isSelected);
                 }
 
                 $marker = $item->canSelect()
@@ -145,7 +149,8 @@ class SplitItem implements MenuItemInterface
                     : '';
 
                 $itemExtra = '';
-                if ($displaysExtra) {
+                if ($item->getStyle()->getDisplaysExtra()) {
+                    $itemExtraVal = $item->getStyle()->getItemExtra();
                     $itemExtra = $item->showsItemExtra()
                         ? sprintf('  %s', $itemExtraVal)
                         : sprintf('  %s', str_repeat(' ', mb_strlen($itemExtraVal)));
@@ -166,15 +171,14 @@ class SplitItem implements MenuItemInterface
                     $itemExtra
                 );
             }, array_keys($this->items), $this->items),
-            $style,
             $missingLength,
             $length
         );
     }
 
-    private function buildRows(array $cells, MenuStyle $style, int $missingLength, int $length) : array
+    private function buildRows(array $cells, int $missingLength, int $length) : array
     {
-        $extraPadLength = $style->getDisplaysExtra() ? 2 + mb_strlen($style->getItemExtra()) : 0;
+        $extraPadLength = $this->largestItemExtra > 0 ? 2 + $this->largestItemExtra : 0;
         
         return array_map(
             function ($i) use ($cells, $length, $missingLength, $extraPadLength) {
@@ -324,5 +328,24 @@ class SplitItem implements MenuItemInterface
     public function getText() : string
     {
         throw new \BadMethodCallException(sprintf('Not supported on: %s', __CLASS__));
+    }
+
+    /**
+     * Finds largest itemExtra value in items
+     */
+    private function calculateItemExtra() : void
+    {
+        /** @var CheckboxItem|RadioItem|SelectableStyleInterface $item */
+        foreach ($this->items as $item) {
+            if (!$item->getStyle()->getDisplaysExtra()) {
+                continue;
+            }
+
+            if (mb_strlen($item->getStyle()->getItemExtra() < $this->largestItemExtra)) {
+                continue;
+            }
+
+            $this->largestItemExtra = mb_strlen($item->getStyle()->getItemExtra());
+        }
     }
 }
