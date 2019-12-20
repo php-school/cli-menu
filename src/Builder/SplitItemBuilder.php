@@ -113,14 +113,14 @@ class SplitItemBuilder
             $menu,
             $builder->isMenuDisabled()
         ));
-        
+
         return $this;
     }
 
     public function setGutter(int $gutter) : self
     {
         $this->splitItem->setGutter($gutter);
-        
+
         return $this;
     }
 
@@ -134,7 +134,7 @@ class SplitItemBuilder
 
         return $this;
     }
-    
+
     public function build() : SplitItem
     {
         return $this->splitItem;

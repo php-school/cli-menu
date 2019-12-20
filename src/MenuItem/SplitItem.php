@@ -130,16 +130,14 @@ class SplitItem implements MenuItemInterface
             array_map(function ($index, $item) use ($selected, $length, $style) {
                 $isSelected = $selected && $index === $this->selectedItemIndex;
 
-                if ($item instanceof CheckboxItem) {
-                    $markerType = $item->getChecked()
-                        ? $style->getCheckedMarker()
-                        : $style->getUncheckedMarker();
-                } elseif ($item instanceof RadioItem) {
-                    $markerType = $item->getChecked()
-                        ? $style->getRadioMarker()
-                        : $style->getUnradioMarker();
+                if ($item instanceof CheckboxItem || $item instanceof RadioItem) {
+                    $markerType    = $item->getStyle()->getMarker($item->getChecked());
+                    $displaysExtra = $item->getStyle()->getDisplaysExtra();
+                    $itemExtraVal  = $item->getStyle()->getItemExtra();
                 } else {
-                    $markerType = $style->getMarker($isSelected);
+                    $markerType    = $style->getMarker($isSelected);
+                    $displaysExtra = $style->getDisplaysExtra();
+                    $itemExtraVal  = $style->getItemExtra();
                 }
 
                 $marker = $item->canSelect()
@@ -147,10 +145,10 @@ class SplitItem implements MenuItemInterface
                     : '';
 
                 $itemExtra = '';
-                if ($style->getDisplaysExtra()) {
+                if ($displaysExtra) {
                     $itemExtra = $item->showsItemExtra()
-                        ? sprintf('  %s', $style->getItemExtra())
-                        : sprintf('  %s', str_repeat(' ', mb_strlen($style->getItemExtra())));
+                        ? sprintf('  %s', $itemExtraVal)
+                        : sprintf('  %s', str_repeat(' ', mb_strlen($itemExtraVal)));
                 }
 
                 return $this->buildCell(
