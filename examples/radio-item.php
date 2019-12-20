@@ -24,8 +24,8 @@ $menu = (new CliMenuBuilder)
     ->addSubMenu('Interpreted', function (CliMenuBuilder $b) use ($itemCallable) {
         $b->setTitle('Interpreted Languages')
             ->modifyRadioStyle(function (RadioStyle $style) {
-                $style->setMarkerOff('[ ] ')
-                    ->setMarkerOn('[✔] ');
+                $style->setUncheckedMarker('[ ] ')
+                    ->setCheckedMarker('[✔] ');
             })
             ->addRadioItem('PHP', $itemCallable)
             ->addRadioItem('Javascript', $itemCallable)
