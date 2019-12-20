@@ -37,7 +37,7 @@ class CheckboxItem implements MenuItemInterface, ToggableItemInterface
     private $checked = false;
 
     /**
-     * @var CheckboxStyle;
+     * @var CheckboxStyle
      */
     private $style;
 

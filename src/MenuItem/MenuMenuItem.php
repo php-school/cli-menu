@@ -33,7 +33,7 @@ class MenuMenuItem implements MenuItemInterface
     private $disabled;
 
     /**
-     * @var SelectableStyle;
+     * @var SelectableStyle
      */
     private $style;
 

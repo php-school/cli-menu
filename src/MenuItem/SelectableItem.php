@@ -12,18 +12,27 @@ use PhpSchool\CliMenu\Style\SelectableStyle;
 class SelectableItem implements MenuItemInterface
 {
     /**
+     * @var string
+     */
+    private $text;
+
+    /**
      * @var callable
      */
     private $selectAction;
 
-    private $text = '';
-
-    private $showItemExtra = false;
-
-    private $disabled = false;
+    /**
+     * @var bool
+     */
+    private $showItemExtra;
 
     /**
-     * @var SelectableStyle;
+     * @var bool
+     */
+    private $disabled;
+
+    /**
+     * @var SelectableStyle
      */
     private $style;
 
@@ -33,10 +42,10 @@ class SelectableItem implements MenuItemInterface
         bool $showItemExtra = false,
         bool $disabled = false
     ) {
-        $this->text          = $text;
-        $this->selectAction  = $selectAction;
+        $this->text = $text;
+        $this->selectAction = $selectAction;
         $this->showItemExtra = $showItemExtra;
-        $this->disabled      = $disabled;
+        $this->disabled = $disabled;
 
         $this->style = new SelectableStyle();
     }
@@ -80,26 +89,6 @@ class SelectableItem implements MenuItemInterface
     }
 
     /**
-     * Execute the items callable if required
-     */
-    public function getSelectAction() : ?callable
-    {
-        return $this->selectAction;
-    }
-
-    public function getStyle() : SelectableStyle
-    {
-        return $this->style;
-    }
-
-    public function setStyle(SelectableStyle $style) : self
-    {
-        $this->style = $style;
-
-        return $this;
-    }
-
-    /**
      * Return the raw string of text
      */
     public function getText() : string
@@ -116,6 +105,14 @@ class SelectableItem implements MenuItemInterface
     }
 
     /**
+     * Execute the items callable if required
+     */
+    public function getSelectAction() : ?callable
+    {
+        return $this->selectAction;
+    }
+
+    /**
      * Can the item be selected
      */
     public function canSelect() : bool
@@ -123,6 +120,9 @@ class SelectableItem implements MenuItemInterface
         return !$this->disabled;
     }
 
+    /**
+     * Whether or not we are showing item extra
+     */
     public function showsItemExtra() : bool
     {
         return $this->showItemExtra;
@@ -142,5 +142,17 @@ class SelectableItem implements MenuItemInterface
     public function hideItemExtra() : void
     {
         $this->showItemExtra = false;
+    }
+
+    public function getStyle() : SelectableStyle
+    {
+        return $this->style;
+    }
+
+    public function setStyle(SelectableStyle $style) : self
+    {
+        $this->style = $style;
+
+        return $this;
     }
 }

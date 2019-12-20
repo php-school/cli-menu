@@ -37,7 +37,7 @@ class RadioItem implements MenuItemInterface, ToggableItemInterface
     private $checked = false;
 
     /**
-     * @var RadioStyle;
+     * @var RadioStyle
      */
     private $style;
 
