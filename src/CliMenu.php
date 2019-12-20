@@ -16,6 +16,7 @@ use PhpSchool\CliMenu\Dialogue\Confirm;
 use PhpSchool\CliMenu\Dialogue\Flash;
 use PhpSchool\CliMenu\Style\CheckboxStyle;
 use PhpSchool\CliMenu\Style\RadioStyle;
+use PhpSchool\CliMenu\Style\SelectableStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\CliMenu\Util\StringUtil as s;
 use PhpSchool\Terminal\InputCharacter;
@@ -46,6 +47,11 @@ class CliMenu
      * @var RadioStyle
      */
     private $radioStyle;
+
+    /**
+     * @var SelectableStyle
+     */
+    private $selectableStyle;
 
     /**
      * @var ?string
@@ -102,12 +108,13 @@ class CliMenu
         Terminal $terminal = null,
         MenuStyle $style = null
     ) {
-        $this->title         = $title;
-        $this->items         = $items;
-        $this->terminal      = $terminal ?: TerminalFactory::fromSystem();
-        $this->style         = $style ?: new MenuStyle($this->terminal);
-        $this->checkboxStyle = new CheckboxStyle();
-        $this->radioStyle    = new RadioStyle();
+        $this->title           = $title;
+        $this->items           = $items;
+        $this->terminal        = $terminal ?: TerminalFactory::fromSystem();
+        $this->style           = $style ?: new MenuStyle($this->terminal);
+        $this->checkboxStyle   = new CheckboxStyle();
+        $this->radioStyle      = new RadioStyle();
+        $this->selectableStyle = new SelectableStyle();
 
         $this->selectFirstItem();
     }
@@ -674,6 +681,18 @@ class CliMenu
     public function setRadioStyle(RadioStyle $style) : self
     {
         $this->radioStyle = $style;
+
+        return $this;
+    }
+
+    public function getSelectableStyle() : SelectableStyle
+    {
+        return $this->selectableStyle;
+    }
+
+    public function setSelectableStyle(SelectableStyle $style) : self
+    {
+        $this->selectableStyle = $style;
 
         return $this;
     }

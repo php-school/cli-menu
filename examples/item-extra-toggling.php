@@ -2,6 +2,7 @@
 
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\Style\SelectableStyle;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
@@ -20,8 +21,9 @@ $menu = (new CliMenuBuilder)
     ->addItem('First Item', $itemCallable)
     ->addItem('Second Item', $itemCallable)
     ->addItem('Third Item', $itemCallable)
-    ->setItemExtra('[COMPLETE!]')
-    ->displayExtra()
+    ->modifySelectableStyle(function (SelectableStyle $style) {
+        $style->setItemExtra('[COMPLETE!]');
+    })
     ->addLineBreak('-')
     ->build();
 

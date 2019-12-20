@@ -2,11 +2,11 @@
 
 namespace PhpSchool\CliMenu\Style;
 
-class RadioStyle
+class SelectableStyle
 {
     private const DEFAULT_STYLES = [
-        'checkedMarker' => '[●] ',
-        'uncheckedMarker' => '[○] ',
+        'selectedMarker' => '● ',
+        'unselectedMarker' => '○ ',
         'itemExtra' => '✔',
         'displaysExtra' => false,
     ];
@@ -14,12 +14,12 @@ class RadioStyle
     /**
      * @var string
      */
-    private $checkedMarker;
+    private $selectedMarker;
 
     /**
      * @var string
      */
-    private $uncheckedMarker;
+    private $unselectedMarker;
 
     /**
      * @var string
@@ -33,8 +33,8 @@ class RadioStyle
 
     public function __construct()
     {
-        $this->checkedMarker = self::DEFAULT_STYLES['checkedMarker'];
-        $this->uncheckedMarker = self::DEFAULT_STYLES['uncheckedMarker'];
+        $this->selectedMarker = self::DEFAULT_STYLES['selectedMarker'];
+        $this->unselectedMarker = self::DEFAULT_STYLES['unselectedMarker'];
         $this->itemExtra = self::DEFAULT_STYLES['itemExtra'];
         $this->displaysExtra = self::DEFAULT_STYLES['displaysExtra'];
     }
@@ -42,8 +42,8 @@ class RadioStyle
     public function hasChangedFromDefaults() : bool
     {
         $currentValues = [
-            $this->checkedMarker,
-            $this->uncheckedMarker,
+            $this->selectedMarker,
+            $this->unselectedMarker,
             $this->itemExtra,
             $this->displaysExtra,
         ];
@@ -53,29 +53,29 @@ class RadioStyle
 
     public function getMarker(bool $selected) : string
     {
-        return $selected ? $this->checkedMarker : $this->uncheckedMarker;
+        return $selected ? $this->selectedMarker : $this->unselectedMarker;
     }
 
-    public function getCheckedMarker() : string
+    public function getSelectedMarker() : string
     {
-        return $this->checkedMarker;
+        return $this->selectedMarker;
     }
 
-    public function setCheckedMarker(string $marker) : self
+    public function setSelectedMarker(string $marker) : self
     {
-        $this->checkedMarker = $marker;
+        $this->selectedMarker = $marker;
 
         return $this;
     }
 
-    public function getUncheckedMarker() : string
+    public function getUnselectedMarker() : string
     {
-        return $this->uncheckedMarker;
+        return $this->unselectedMarker;
     }
 
-    public function setUncheckedMarker(string $marker) : self
+    public function setUnselectedMarker(string $marker) : self
     {
-        $this->uncheckedMarker = $marker;
+        $this->unselectedMarker = $marker;
 
         return $this;
     }
