@@ -188,12 +188,6 @@ class CliMenuBuilder
         $menu = $builder->build();
         $menu->setParent($this->menu);
         
-        //we apply the parent theme if nothing was changed
-        //if no styles were changed in this sub-menu
-        if (!$menu->getStyle()->hasChangedFromDefaults()) {
-            $menu->setStyle($this->menu->getStyle());
-        }
-
         $this->menu->addItem($item = new MenuMenuItem(
             $text,
             $menu,
@@ -209,12 +203,6 @@ class CliMenuBuilder
     {
         $menu = $builder->build();
         $menu->setParent($this->menu);
-
-        //we apply the parent theme if nothing was changed
-        //if no styles were changed in this sub-menu
-        if (!$menu->getStyle()->hasChangedFromDefaults()) {
-            $menu->setStyle($this->menu->getStyle());
-        }
 
         $this->menu->addItem($item = new MenuMenuItem(
             $text,
@@ -556,6 +544,37 @@ class CliMenuBuilder
             $this->style->setDisplaysExtra($this->itemsHaveExtra($this->menu->getItems()));
         }
 
+        if (!$this->subMenu) {
+            $this->propagateStyles($this->menu);
+        }
+
         return $this->menu;
+    }
+
+    /**
+     * Pass styles from current menu to sub-menu
+     * only if sub-menu style has not be customized
+     */
+    private function propagateStyles(CliMenu $menu, array $items = [])
+    {
+        $currentItems = !empty($items) ? $items : $menu->getItems();
+
+        foreach ($currentItems as $item) {
+            // Apply current style to children, if they are not customized
+            if ($item instanceof MenuMenuItem) {
+                $subMenu = $item->getSubMenu();
+
+                if (!$subMenu->getStyle()->hasChangedFromDefaults()) {
+                    $subMenu->setStyle(clone $menu->getStyle());
+                }
+
+                $this->propagateStyles($subMenu);
+            }
+
+            // Apply styles to SplitItem children using current $menu
+            if ($item instanceof SplitItem) {
+                $this->propagateStyles($menu, $item->getItems());
+            }
+        }
     }
 }

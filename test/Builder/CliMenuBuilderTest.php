@@ -11,6 +11,7 @@ use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\RadioItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
+use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
@@ -583,17 +584,89 @@ class CliMenuBuilderTest extends TestCase
             ->expects($this->any())
             ->method('getWidth')
             ->will($this->returnValue(200));
-        
+
         $menu = (new CliMenuBuilder($terminal))
             ->setBackgroundColour('green')
             ->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
-                $b->addItem('Some Item', function () {
+                $b->addSubMenu('My SubSubMenu', function (CliMenuBuilder $b) {
+                    $b->addItem('Some Item', function () {
+                    });
                 });
             })
             ->build();
 
-        self::assertSame('green', $menu->getItems()[0]->getSubMenu()->getStyle()->getBg());
-        self::assertSame($menu->getStyle(), $menu->getItems()[0]->getSubMenu()->getStyle());
+        /** @var CliMenu $subMenu1 */
+        $subMenu1 = $menu->getItems()[0]->getSubMenu();
+        /** @var CliMenu $subMenu2 */
+        $subMenu2 = $subMenu1->getItems()[0]->getSubMenu();
+
+        self::assertSame('green', $subMenu1->getStyle()->getBg());
+        self::assertEquals($menu->getStyle(), $subMenu1->getStyle());
+
+        self::assertSame('green', $subMenu2->getStyle()->getBg());
+        self::assertEquals($menu->getStyle(), $subMenu2->getStyle());
+    }
+
+    public function testSplitItemSubMenuInheritsParentsStyle() : void
+    {
+        $terminal = self::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getWidth')
+            ->will($this->returnValue(200));
+
+        $menu = (new CliMenuBuilder($terminal))
+            ->setBackgroundColour('green')
+            ->addSplitItem(function (SplitItemBuilder $b) {
+                $b
+                    ->addItem('Item 1', function () {
+                    })
+                    ->addSubMenu('Submenu 1', function (CliMenuBuilder $b) {
+                        $b->addItem('Item 2', function () {
+                        });
+                    })
+                ;
+            })
+            ->build();
+
+        /** @var SplitItem $splitItem */
+        $splitItem = $menu->getItems()[0];
+        /** @var SelectableItem $selectableItem1 */
+        $selectableItem1 = $splitItem->getItems()[0];
+        /** @var CliMenu $subMenu */
+        $subMenu = $splitItem->getItems()[1]->getSubMenu();
+
+        self::assertSame('green', $subMenu->getStyle()->getBg());
+        self::assertEquals($menu->getStyle(), $subMenu->getStyle());
+    }
+
+    public function testSubMenuIgnoresParentsStyleIfCustomAndPassesToChildren() : void
+    {
+        $terminal = self::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getWidth')
+            ->will($this->returnValue(200));
+
+        $menu = (new CliMenuBuilder($terminal))
+            ->setBackgroundColour('green')
+            ->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
+                $b->setBackgroundColour('yellow')
+                    ->addSubMenu('My SubSubMenu', function (CliMenuBuilder $b) {
+                        $b->addItem('Some Item', function () {
+                        });
+                    });
+            })
+            ->build();
+
+        /** @var CliMenu $subMenu1 */
+        $subMenu1 = $menu->getItems()[0]->getSubMenu();
+        /** @var CliMenu $subMenu2 */
+        $subMenu2 = $subMenu1->getItems()[0]->getSubMenu();
+
+        self::assertSame('green', $menu->getStyle()->getBg());
+        self::assertSame('yellow', $subMenu1->getStyle()->getBg());
+        self::assertSame('yellow', $subMenu2->getStyle()->getBg());
     }
 
     public function testSubMenuDoesNotInheritsParentsStyleWhenSubMenuStyleHasAlterations() : void
