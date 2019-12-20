@@ -8,7 +8,6 @@ use PhpSchool\CliMenu\Input\InputIO;
 use PhpSchool\CliMenu\Input\Number;
 use PhpSchool\CliMenu\Input\Password;
 use PhpSchool\CliMenu\Input\Text;
-use PhpSchool\CliMenu\MenuItem\CheckboxItem;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\SplitItem;

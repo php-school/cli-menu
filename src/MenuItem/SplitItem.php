@@ -133,7 +133,7 @@ class SplitItem implements MenuItemInterface
                 if ($item instanceof CheckboxItem || $item instanceof RadioItem) {
                     $markerType    = $item->getStyle()->getMarker($item->getChecked());
                     $displaysExtra = $item->getStyle()->getDisplaysExtra();
-                    $itemExtraVal     = $item->getStyle()->getItemExtra();
+                    $itemExtraVal  = $item->getStyle()->getItemExtra();
                 } else {
                     $markerType    = $style->getMarker($isSelected);
                     $displaysExtra = $style->getDisplaysExtra();

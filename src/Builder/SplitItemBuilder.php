@@ -10,8 +10,6 @@ use PhpSchool\CliMenu\MenuItem\RadioItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
-use PhpSchool\CliMenu\Style\CheckboxStyle;
-use PhpSchool\CliMenu\Style\RadioStyle;
 
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
@@ -129,14 +127,14 @@ class SplitItemBuilder
             $menu,
             $builder->isMenuDisabled()
         ));
-        
+
         return $this;
     }
 
     public function setGutter(int $gutter) : self
     {
         $this->splitItem->setGutter($gutter);
-        
+
         return $this;
     }
 
@@ -150,47 +148,9 @@ class SplitItemBuilder
 
         return $this;
     }
-    
+
     public function build() : SplitItem
     {
         return $this->splitItem;
-    }
-
-    public function getCheckboxStyle() : CheckboxStyle
-    {
-        return $this->menu->getCheckboxStyle();
-    }
-
-    public function setCheckboxStyle(CheckboxStyle $style) : self
-    {
-        $this->menu->setCheckboxStyle($style);
-
-        return $this;
-    }
-
-    public function modifyCheckboxStyle(callable $itemCallable) : self
-    {
-        $itemCallable($this->menu->getCheckboxStyle());
-
-        return $this;
-    }
-
-    public function getRadioStyle() : RadioStyle
-    {
-        return $this->menu->getRadioStyle();
-    }
-
-    public function setRadioStyle(RadioStyle $style) : self
-    {
-        $this->menu->setRadioStyle($style);
-
-        return $this;
-    }
-
-    public function modifyRadioStyle(callable $itemCallable) : self
-    {
-        $itemCallable($this->menu->getRadioStyle());
-
-        return $this;
     }
 }

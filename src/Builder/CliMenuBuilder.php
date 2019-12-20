@@ -320,8 +320,6 @@ class CliMenuBuilder
     public function addSplitItem(\Closure $callback) : self
     {
         $builder = new SplitItemBuilder($this->menu);
-        $builder->setCheckboxStyle(clone $this->menu->getCheckboxStyle())
-            ->setRadioStyle(clone $this->menu->getRadioStyle());
 
         if ($this->autoShortcuts) {
             $builder->enableAutoShortcuts($this->autoShortcutsRegex);
