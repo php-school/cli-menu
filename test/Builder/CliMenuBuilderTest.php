@@ -583,7 +583,7 @@ class CliMenuBuilderTest extends TestCase
             ->expects($this->any())
             ->method('getWidth')
             ->will($this->returnValue(200));
-        
+
         $menu = (new CliMenuBuilder($terminal))
             ->setBackgroundColour('green')
             ->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
@@ -594,7 +594,9 @@ class CliMenuBuilderTest extends TestCase
             })
             ->build();
 
+        /** @var CliMenu $subMenu1 */
         $subMenu1 = $menu->getItems()[0]->getSubMenu();
+        /** @var CliMenu $subMenu2 */
         $subMenu2 = $subMenu1->getItems()[0]->getSubMenu();
 
         self::assertSame('green', $subMenu1->getStyle()->getBg());
@@ -602,6 +604,35 @@ class CliMenuBuilderTest extends TestCase
 
         self::assertSame('green', $subMenu2->getStyle()->getBg());
         self::assertEquals($menu->getStyle(), $subMenu2->getStyle());
+    }
+
+    public function testSubMenuIgnoresParentsStyleIfCustomAndPassesToChildren() : void
+    {
+        $terminal = self::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getWidth')
+            ->will($this->returnValue(200));
+
+        $menu = (new CliMenuBuilder($terminal))
+            ->setBackgroundColour('green')
+            ->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
+                $b->setBackgroundColour('yellow')
+                    ->addSubMenu('My SubSubMenu', function (CliMenuBuilder $b) {
+                        $b->addItem('Some Item', function () {
+                        });
+                });
+            })
+            ->build();
+
+        /** @var CliMenu $subMenu1 */
+        $subMenu1 = $menu->getItems()[0]->getSubMenu();
+        /** @var CliMenu $subMenu2 */
+        $subMenu2 = $subMenu1->getItems()[0]->getSubMenu();
+
+        self::assertSame('green', $menu->getStyle()->getBg());
+        self::assertSame('yellow', $subMenu1->getStyle()->getBg());
+        self::assertSame('yellow', $subMenu2->getStyle()->getBg());
     }
 
     public function testSubMenuDoesNotInheritsParentsStyleWhenSubMenuStyleHasAlterations() : void
