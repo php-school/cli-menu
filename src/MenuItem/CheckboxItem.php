@@ -10,16 +10,30 @@ use PhpSchool\CliMenu\Style\CheckboxStyle;
 class CheckboxItem implements MenuItemInterface, ToggableItemInterface
 {
     /**
+     * @var string
+     */
+    private $text;
+
+    /**
      * @var callable
      */
     private $selectAction;
 
-    private $text = '';
+    /**
+     * @var bool
+     */
+    private $showItemExtra;
 
-    private $showItemExtra = false;
+    /**
+     * @var bool
+     */
+    private $disabled;
 
-    private $disabled = false;
-
+    /**
+     * The current checkbox state
+     *
+     * @var bool
+     */
     private $checked = false;
 
     /**
@@ -33,10 +47,10 @@ class CheckboxItem implements MenuItemInterface, ToggableItemInterface
         bool $showItemExtra = false,
         bool $disabled = false
     ) {
-        $this->text          = $text;
-        $this->selectAction  = $selectAction;
+        $this->text = $text;
+        $this->selectAction = $selectAction;
         $this->showItemExtra = $showItemExtra;
-        $this->disabled      = $disabled;
+        $this->disabled = $disabled;
 
         $this->style = new CheckboxStyle();
     }
@@ -77,63 +91,6 @@ class CheckboxItem implements MenuItemInterface, ToggableItemInterface
     }
 
     /**
-     * Execute the items callable if required
-     */
-    public function getSelectAction() : ?callable
-    {
-        return function (CliMenu $cliMenu) {
-            $this->toggle();
-            $cliMenu->redraw();
-
-            return ($this->selectAction)($cliMenu);
-        };
-    }
-
-    public function getStyle() : CheckboxStyle
-    {
-        return $this->style;
-    }
-
-    public function setStyle(CheckboxStyle $style) : self
-    {
-        $this->style = $style;
-
-        return $this;
-    }
-
-    /**
-     * Toggles checked state
-     */
-    public function toggle() : void
-    {
-        $this->checked = !$this->checked;
-    }
-
-    /**
-     * Sets checked state to true
-     */
-    public function setChecked() : void
-    {
-        $this->checked = true;
-    }
-
-    /**
-     * Sets checked state to false
-     */
-    public function setUnchecked() : void
-    {
-        $this->checked = false;
-    }
-
-    /**
-     * Whether or not the item is checked
-     */
-    public function getChecked() : bool
-    {
-        return $this->checked;
-    }
-
-    /**
      * Return the raw string of text
      */
     public function getText() : string
@@ -150,6 +107,19 @@ class CheckboxItem implements MenuItemInterface, ToggableItemInterface
     }
 
     /**
+     * Execute the items callable if required
+     */
+    public function getSelectAction() : ?callable
+    {
+        return function (CliMenu $cliMenu) {
+            $this->toggle();
+            $cliMenu->redraw();
+
+            return ($this->selectAction)($cliMenu);
+        };
+    }
+
+    /**
      * Can the item be selected
      */
     public function canSelect() : bool
@@ -157,6 +127,9 @@ class CheckboxItem implements MenuItemInterface, ToggableItemInterface
         return !$this->disabled;
     }
 
+    /**
+     * Whether or not we are showing item extra
+     */
     public function showsItemExtra() : bool
     {
         return $this->showItemExtra;
@@ -176,5 +149,49 @@ class CheckboxItem implements MenuItemInterface, ToggableItemInterface
     public function hideItemExtra() : void
     {
         $this->showItemExtra = false;
+    }
+
+    /**
+     * Whether or not the item is checked
+     */
+    public function getChecked() : bool
+    {
+        return $this->checked;
+    }
+
+    /**
+     * Sets checked state to true
+     */
+    public function setChecked() : void
+    {
+        $this->checked = true;
+    }
+
+    /**
+     * Sets checked state to false
+     */
+    public function setUnchecked() : void
+    {
+        $this->checked = false;
+    }
+
+    /**
+     * Toggles checked state
+     */
+    public function toggle() : void
+    {
+        $this->checked = !$this->checked;
+    }
+
+    public function getStyle() : CheckboxStyle
+    {
+        return $this->style;
+    }
+
+    public function setStyle(CheckboxStyle $style) : self
+    {
+        $this->style = $style;
+
+        return $this;
     }
 }

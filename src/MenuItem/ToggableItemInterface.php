@@ -5,9 +5,9 @@ namespace PhpSchool\CliMenu\MenuItem;
 interface ToggableItemInterface
 {
     /**
-     * Flip checked state
+     * Gets checked state
      */
-    public function toggle() : void;
+    public function getChecked() : bool;
 
     /**
      * Sets checked state to true
@@ -20,7 +20,7 @@ interface ToggableItemInterface
     public function setUnchecked() : void;
 
     /**
-     * Gets checked state
+     * Flip checked state
      */
-    public function getChecked() : bool;
+    public function toggle() : void;
 }
