@@ -31,11 +31,6 @@ class CheckboxStyle
      */
     private $displaysExtra;
 
-    /**
-     * @var bool
-     */
-    private $custom = false;
-
     public function __construct()
     {
         $this->markerOn      = self::DEFAULT_STYLES['markerOn'];
@@ -46,7 +41,14 @@ class CheckboxStyle
 
     public function hasChangedFromDefaults() : bool
     {
-        return $this->custom;
+        $currentValues = [
+            $this->markerOn,
+            $this->markerOff,
+            $this->itemExtra,
+            $this->displaysExtra,
+        ];
+
+        return $currentValues !== array_values(self::DEFAULT_STYLES);
     }
 
     public function getMarker(bool $selected) : string
@@ -61,8 +63,6 @@ class CheckboxStyle
 
     public function setMarkerOn(string $marker) : self
     {
-        $this->custom = true;
-
         $this->markerOn = $marker;
 
         return $this;
@@ -75,8 +75,6 @@ class CheckboxStyle
 
     public function setMarkerOff(string $marker) : self
     {
-        $this->custom = true;
-
         $this->markerOff = $marker;
 
         return $this;
@@ -89,8 +87,6 @@ class CheckboxStyle
 
     public function setItemExtra(string $itemExtra) : self
     {
-        $this->custom = true;
-
         $this->itemExtra = $itemExtra;
 
         // if we customise item extra, it means we most likely want to display it
@@ -106,8 +102,6 @@ class CheckboxStyle
 
     public function setDisplaysExtra(bool $displaysExtra) : self
     {
-        $this->custom = true;
-
         $this->displaysExtra = $displaysExtra;
 
         return $this;
