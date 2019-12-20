@@ -4,22 +4,37 @@ namespace PhpSchool\CliMenu\Style;
 
 class CheckboxStyle
 {
-    protected const DEFAULT_STYLES = [
+    private const DEFAULT_STYLES = [
         'markerOn'      => '[✔] ',
         'markerOff'     => '[ ] ',
         'itemExtra'     => '✔',
         'displaysExtra' => false,
     ];
 
-    protected $markerOn = '';
+    /**
+     * @var string
+     */
+    private $markerOn;
 
-    protected $markerOff = '';
+    /**
+     * @var string
+     */
+    private $markerOff;
 
-    protected $itemExtra = '';
+    /**
+     * @var string
+     */
+    private $itemExtra;
 
-    protected $displaysExtra = false;
+    /**
+     * @var bool
+     */
+    private $displaysExtra;
 
-    protected $custom = false;
+    /**
+     * @var bool
+     */
+    private $custom = false;
 
     public function __construct()
     {
