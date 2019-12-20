@@ -18,6 +18,7 @@ use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Style\CheckboxStyle;
 use PhpSchool\CliMenu\Style\RadioStyle;
+use PhpSchool\CliMenu\Style\SelectableStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\Terminal\Terminal;
 
@@ -89,12 +90,12 @@ class CliMenuBuilder
         $this->style    = new MenuStyle($this->terminal);
         $this->menu     = new CliMenu(null, [], $this->terminal, $this->style);
     }
-    
+
     public static function newSubMenu(Terminal $terminal) : self
     {
         $instance = new self($terminal);
         $instance->subMenu = true;
-        
+
         return $instance;
     }
 
@@ -396,6 +397,7 @@ class CliMenuBuilder
     public function setUnselectedMarker(string $marker) : self
     {
         $this->style->setUnselectedMarker($marker);
+        $this->menu->getSelectableStyle()->setUnselectedMarker($marker);
 
         return $this;
     }
@@ -403,6 +405,7 @@ class CliMenuBuilder
     public function setSelectedMarker(string $marker) : self
     {
         $this->style->setSelectedMarker($marker);
+        $this->menu->getSelectableStyle()->setSelectedMarker($marker);
 
         return $this;
     }
@@ -410,8 +413,9 @@ class CliMenuBuilder
     public function setItemExtra(string $extra) : self
     {
         $this->style->setItemExtra($extra);
+        $this->menu->getSelectableStyle()->setItemExtra($extra);
 
-        //if we customise item extra, it means we most likely want to display it
+        // if we customise item extra, it means we most likely want to display it
         $this->displayExtra();
 
         return $this;
@@ -434,7 +438,7 @@ class CliMenuBuilder
     public function setBorderTopWidth(int $width) : self
     {
         $this->style->setBorderTopWidth($width);
-        
+
         return $this;
     }
 
@@ -497,6 +501,7 @@ class CliMenuBuilder
     public function displayExtra() : self
     {
         $this->style->setDisplaysExtra(true);
+        $this->menu->getSelectableStyle()->setDisplaysExtra(true);
 
         return $this;
     }
@@ -507,7 +512,7 @@ class CliMenuBuilder
             return $item->showsItemExtra();
         }));
     }
-    
+
     public function build() : CliMenu
     {
         if (!$this->disableDefaultItems) {
@@ -563,6 +568,25 @@ class CliMenuBuilder
         return $this;
     }
 
+    public function getSelectableStyle() : SelectableStyle
+    {
+        return $this->menu->getSelectableStyle();
+    }
+
+    public function setSelectableStyle(SelectableStyle $style) : self
+    {
+        $this->menu->setSelectableStyle($style);
+
+        return $this;
+    }
+
+    public function modifySelectableStyle(callable $itemCallable) : self
+    {
+        $itemCallable($this->menu->getSelectableStyle());
+
+        return $this;
+    }
+
     /**
      * Pass styles from current menu to sub-menu
      * only if sub-menu style has not be customized
@@ -584,6 +608,12 @@ class CliMenuBuilder
                 $item->setStyle(clone $menu->getRadioStyle());
             }
 
+            if ($item instanceof SelectableItem
+                && !$item->getStyle()->hasChangedFromDefaults()
+            ) {
+                $item->setStyle(clone $menu->getSelectableStyle());
+            }
+
             // Apply current style to children, if they are not customized
             if ($item instanceof MenuMenuItem) {
                 $subMenu = $item->getSubMenu();
@@ -598,6 +628,10 @@ class CliMenuBuilder
 
                 if (!$subMenu->getRadioStyle()->hasChangedFromDefaults()) {
                     $subMenu->setRadioStyle(clone $menu->getRadioStyle());
+                }
+
+                if (!$subMenu->getSelectableStyle()->hasChangedFromDefaults()) {
+                    $subMenu->setSelectableStyle(clone $menu->getSelectableStyle());
                 }
 
                 $this->propagateStyles($subMenu);

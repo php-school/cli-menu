@@ -801,13 +801,17 @@ markers only display on *selectable* items, which are: `\PhpSchool\CliMenu\MenuI
 <?php
 
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\Style\SelectableStyle;
 
 $menu = (new CliMenuBuilder)
-    ->setUnselectedMarker('❅ ')
-    ->setSelectedMarker('✏ ')
-    
-    //disable unselected marker
-    ->setUnselectedMarker('')
+    ->modifySelectableStyle(function (SelectableStyle $style) {
+        $style->setUnselectedMarker('❅ ')
+            ->setSelectedMarker('✏ ')
+
+            // disable unselected marker
+            ->setUnselectedMarker('')
+        ;
+    })
     ->build();
 ```
 
@@ -858,9 +862,12 @@ The third parameter to `addItem` is a boolean whether to show the item extra or 
 
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\Style\SelectableStyle;
 
 $menu = (new CliMenuBuilder)
-    ->setItemExtra('✔')
+    ->modifySelectableStyle(function (SelectableStyle $style) {
+        $style->setItemExtra('✔');
+    })
     ->addItem('Exercise 1', function (CliMenu $menu) { echo 'I am complete!'; }, true)
     ->build();
 ```

@@ -87,14 +87,10 @@ class SelectableItemTest extends TestCase
             ->method('getContentWidth')
             ->will($this->returnValue(10));
 
-        $menuStyle
-            ->expects($this->exactly(2))
-            ->method('getMarker')
-            ->with(false)
-            ->will($this->returnValue('* '));
-
         $item = new SelectableItem('Item', function () {
         });
+        $item->getStyle()
+            ->setUnselectedMarker('* ');
         $this->assertEquals(['* Item'], $item->getRows($menuStyle));
         $this->assertEquals(['* Item'], $item->getRows($menuStyle, false));
     }
@@ -108,14 +104,10 @@ class SelectableItemTest extends TestCase
             ->method('getContentWidth')
             ->will($this->returnValue(10));
 
-        $menuStyle
-            ->expects($this->once())
-            ->method('getMarker')
-            ->with(true)
-            ->will($this->returnValue('= '));
-
         $item = new SelectableItem('Item', function () {
         });
+        $item->getStyle()
+            ->setSelectedMarker('= ');
         $this->assertEquals(['= Item'], $item->getRows($menuStyle, true));
     }
 
@@ -127,12 +119,13 @@ class SelectableItemTest extends TestCase
         $menuStyle = new MenuStyle($terminal);
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(20);
-        $menuStyle->setItemExtra('[EXTRA]');
-        $menuStyle->setDisplaysExtra(true);
-        $menuStyle->setUnselectedMarker('* ');
 
         $item = new SelectableItem('Item', function () {
         }, true);
+        $item->getStyle()
+            ->setItemExtra('[EXTRA]')
+            ->setDisplaysExtra(true)
+            ->setUnselectedMarker('* ');
         $this->assertEquals(['* Item       [EXTRA]'], $item->getRows($menuStyle));
     }
 
@@ -144,12 +137,13 @@ class SelectableItemTest extends TestCase
         $menuStyle = new MenuStyle($terminal);
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(20);
-        $menuStyle->setItemExtra('[EXTRA]');
-        $menuStyle->setDisplaysExtra(true);
-        $menuStyle->setUnselectedMarker('* ');
 
         $item = new SelectableItem('LONG ITEM LINE', function () {
         }, true);
+        $item->getStyle()
+            ->setItemExtra('[EXTRA]')
+            ->setDisplaysExtra(true)
+            ->setUnselectedMarker('* ');
         $this->assertEquals(
             [
                 "* LONG ITEM  [EXTRA]",

@@ -2,6 +2,7 @@
 
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\Style\SelectableStyle;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
@@ -20,9 +21,11 @@ $menu = (new CliMenuBuilder)
     ->setPadding(4)
     ->setMargin(4)
     ->setBorder(1, 2, 'red')
-    ->setUnselectedMarker(' ')
-    ->setSelectedMarker('>')
     ->setTitleSeparator('- ')
+    ->modifySelectableStyle(function (SelectableStyle $style) {
+        $style->setUnselectedMarker(' ')
+            ->setSelectedMarker('>');
+    })
     ->build();
 
 $menu->open();
