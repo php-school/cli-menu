@@ -46,15 +46,15 @@ class SplitItem implements MenuItemInterface
         $this->setDefaultSelectedItem();
     }
 
+    public function getGutter() : int
+    {
+        return $this->gutter;
+    }
+
     public function setGutter(int $gutter) : void
     {
         Assertion::greaterOrEqualThan($gutter, 0);
         $this->gutter = $gutter;
-    }
-
-    public function getGutter() : int
-    {
-        return $this->gutter;
     }
 
     public function addItem(MenuItemInterface $item) : self
