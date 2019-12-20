@@ -37,34 +37,6 @@ class StaticItem implements MenuItemInterface
     }
 
     /**
-     * Can the item be selected
-     */
-    public function canSelect() : bool
-    {
-        return false;
-    }
-
-    /**
-     * Execute the items callable if required
-     */
-    public function getSelectAction() : ?callable
-    {
-        return null;
-    }
-
-    public function getStyle() : SelectableStyle
-    {
-        return $this->style;
-    }
-
-    public function setStyle(SelectableStyle $style) : self
-    {
-        $this->style = $style;
-
-        return $this;
-    }
-
-    /**
      * Return the raw string of text
      */
     public function getText() : string
@@ -81,7 +53,23 @@ class StaticItem implements MenuItemInterface
     }
 
     /**
-     * Whether or not the menu item is showing the menustyle extra value
+     * Execute the items callable if required
+     */
+    public function getSelectAction() : ?callable
+    {
+        return null;
+    }
+
+    /**
+     * Can the item be selected
+     */
+    public function canSelect() : bool
+    {
+        return false;
+    }
+
+    /**
+     * Whether or not we are showing item extra
      */
     public function showsItemExtra() : bool
     {
@@ -102,5 +90,17 @@ class StaticItem implements MenuItemInterface
     public function hideItemExtra() : void
     {
         //noop
+    }
+
+    public function getStyle() : SelectableStyle
+    {
+        return $this->style;
+    }
+
+    public function setStyle(SelectableStyle $style) : self
+    {
+        $this->style = $style;
+
+        return $this;
     }
 }
