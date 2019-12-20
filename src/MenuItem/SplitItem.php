@@ -130,16 +130,10 @@ class SplitItem implements MenuItemInterface
             array_map(function ($index, $item) use ($selected, $length, $style) {
                 $isSelected = $selected && $index === $this->selectedItemIndex;
 
-                if ($item instanceof CheckboxItem) {
+                if ($item instanceof CheckboxItem || $item instanceof RadioItem) {
                     $markerType    = $item->getStyle()->getMarker($item->getChecked());
                     $displaysExtra = $item->getStyle()->getDisplaysExtra();
                     $itemExtraVal  = $item->getStyle()->getItemExtra();
-                } elseif ($item instanceof RadioItem) {
-                    $markerType    = $item->getChecked()
-                        ? $style->getRadioMarker()
-                        : $style->getUnradioMarker();
-                    $displaysExtra = $style->getDisplaysExtra();
-                    $itemExtraVal  = $style->getItemExtra();
                 } else {
                     $markerType    = $style->getMarker($isSelected);
                     $displaysExtra = $style->getDisplaysExtra();

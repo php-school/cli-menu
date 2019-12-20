@@ -833,10 +833,13 @@ and for `\PhpSchool\CliMenu\MenuItem\RadioItem`:
 <?php
 
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\Style\RadioStyle;
 
 $menu = (new CliMenuBuilder)
-    ->setUnradioMarker('[ ] ')
-    ->setRadioMarker('[✔] ')
+    ->modifyRadioStyle(function (RadioStyle $style) {
+        $style->setMarkerOff('[ ] ')
+            ->setMarkerOn('[✔] ');
+    })
     ->build();
 ```
 

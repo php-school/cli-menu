@@ -15,6 +15,7 @@ use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Dialogue\Confirm;
 use PhpSchool\CliMenu\Dialogue\Flash;
 use PhpSchool\CliMenu\Style\CheckboxStyle;
+use PhpSchool\CliMenu\Style\RadioStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\CliMenu\Util\StringUtil as s;
 use PhpSchool\Terminal\InputCharacter;
@@ -40,6 +41,11 @@ class CliMenu
      * @var CheckboxStyle
      */
     private $checkboxStyle;
+
+    /**
+     * @var RadioStyle
+     */
+    private $radioStyle;
 
     /**
      * @var ?string
@@ -101,6 +107,7 @@ class CliMenu
         $this->terminal      = $terminal ?: TerminalFactory::fromSystem();
         $this->style         = $style ?: new MenuStyle($this->terminal);
         $this->checkboxStyle = new CheckboxStyle();
+        $this->radioStyle    = new RadioStyle();
 
         $this->selectFirstItem();
     }
@@ -655,6 +662,18 @@ class CliMenu
     public function setCheckboxStyle(CheckboxStyle $style) : self
     {
         $this->checkboxStyle = $style;
+
+        return $this;
+    }
+
+    public function getRadioStyle() : RadioStyle
+    {
+        return $this->radioStyle;
+    }
+
+    public function setRadioStyle(RadioStyle $style) : self
+    {
+        $this->radioStyle = $style;
 
         return $this;
     }

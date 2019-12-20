@@ -17,6 +17,7 @@ use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Style\CheckboxStyle;
+use PhpSchool\CliMenu\Style\RadioStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\Terminal\Terminal;
 
@@ -543,6 +544,25 @@ class CliMenuBuilder
         return $this;
     }
 
+    public function getRadioStyle() : RadioStyle
+    {
+        return $this->menu->getRadioStyle();
+    }
+
+    public function setRadioStyle(RadioStyle $style) : self
+    {
+        $this->menu->setRadioStyle($style);
+
+        return $this;
+    }
+
+    public function modifyRadioStyle(callable $itemCallable) : self
+    {
+        $itemCallable($this->menu->getRadioStyle());
+
+        return $this;
+    }
+
     /**
      * Pass styles from current menu to sub-menu
      * only if sub-menu style has not be customized
@@ -558,6 +578,12 @@ class CliMenuBuilder
                 $item->setStyle(clone $menu->getCheckboxStyle());
             }
 
+            if ($item instanceof RadioItem
+                && !$item->getStyle()->hasChangedFromDefaults()
+            ) {
+                $item->setStyle(clone $menu->getRadioStyle());
+            }
+
             // Apply current style to children, if they are not customized
             if ($item instanceof MenuMenuItem) {
                 $subMenu = $item->getSubMenu();
@@ -568,6 +594,10 @@ class CliMenuBuilder
 
                 if (!$subMenu->getCheckboxStyle()->hasChangedFromDefaults()) {
                     $subMenu->setCheckboxStyle(clone $menu->getCheckboxStyle());
+                }
+
+                if (!$subMenu->getRadioStyle()->hasChangedFromDefaults()) {
+                    $subMenu->setRadioStyle(clone $menu->getRadioStyle());
                 }
 
                 $this->propagateStyles($subMenu);
