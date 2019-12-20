@@ -5,10 +5,10 @@ namespace PhpSchool\CliMenu\Style;
 class SelectableStyle
 {
     private const DEFAULT_STYLES = [
-        'selectedMarker'   => '● ',
+        'selectedMarker' => '● ',
         'unselectedMarker' => '○ ',
-        'itemExtra'        => '✔',
-        'displaysExtra'    => false,
+        'itemExtra' => '✔',
+        'displaysExtra' => false,
     ];
 
     /**
@@ -38,15 +38,22 @@ class SelectableStyle
 
     public function __construct()
     {
-        $this->selectedMarker   = self::DEFAULT_STYLES['selectedMarker'];
+        $this->selectedMarker = self::DEFAULT_STYLES['selectedMarker'];
         $this->unselectedMarker = self::DEFAULT_STYLES['unselectedMarker'];
-        $this->itemExtra        = self::DEFAULT_STYLES['itemExtra'];
-        $this->displaysExtra    = self::DEFAULT_STYLES['displaysExtra'];
+        $this->itemExtra = self::DEFAULT_STYLES['itemExtra'];
+        $this->displaysExtra = self::DEFAULT_STYLES['displaysExtra'];
     }
 
     public function hasChangedFromDefaults() : bool
     {
-        return $this->custom;
+        $currentValues = [
+            $this->selectedMarker,
+            $this->unselectedMarker,
+            $this->itemExtra,
+            $this->displaysExtra,
+        ];
+
+        return $currentValues !== array_values(self::DEFAULT_STYLES);
     }
 
     public function getMarker(bool $selected) : string
@@ -61,8 +68,6 @@ class SelectableStyle
 
     public function setSelectedMarker(string $marker) : self
     {
-        $this->custom = true;
-
         $this->selectedMarker = $marker;
 
         return $this;
@@ -75,8 +80,6 @@ class SelectableStyle
 
     public function setUnselectedMarker(string $marker) : self
     {
-        $this->custom = true;
-
         $this->unselectedMarker = $marker;
 
         return $this;
@@ -89,8 +92,6 @@ class SelectableStyle
 
     public function setItemExtra(string $itemExtra) : self
     {
-        $this->custom = true;
-
         $this->itemExtra = $itemExtra;
 
         // if we customise item extra, it means we most likely want to display it
@@ -106,8 +107,6 @@ class SelectableStyle
 
     public function setDisplaysExtra(bool $displaysExtra) : self
     {
-        $this->custom = true;
-
         $this->displaysExtra = $displaysExtra;
 
         return $this;
