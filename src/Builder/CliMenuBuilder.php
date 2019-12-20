@@ -394,22 +394,6 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function setUnselectedMarker(string $marker) : self
-    {
-        $this->style->setUnselectedMarker($marker);
-        $this->menu->getSelectableStyle()->setUnselectedMarker($marker);
-
-        return $this;
-    }
-
-    public function setSelectedMarker(string $marker) : self
-    {
-        $this->style->setSelectedMarker($marker);
-        $this->menu->getSelectableStyle()->setSelectedMarker($marker);
-
-        return $this;
-    }
-
     public function setItemExtra(string $extra) : self
     {
         $this->style->setItemExtra($extra);
@@ -608,7 +592,10 @@ class CliMenuBuilder
                 $item->setStyle(clone $menu->getRadioStyle());
             }
 
-            if ($item instanceof SelectableItem
+            if (($item instanceof MenuMenuItem
+                    || $item instanceof SelectableItem
+                    || $item instanceof StaticItem
+                )
                 && !$item->getStyle()->hasChangedFromDefaults()
             ) {
                 $item->setStyle(clone $menu->getSelectableStyle());

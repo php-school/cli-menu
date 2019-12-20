@@ -12,6 +12,7 @@ use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Style\SelectableStyle;
 use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
 
@@ -193,17 +194,16 @@ class SplitItemTest extends TestCase
             ->method('getContentWidth')
             ->will($this->returnValue(30));
 
-        $menuStyle
-            ->expects($this->any())
-            ->method('getMarker')
-            ->willReturnMap([[true, '= '], [false, '* ']]);
+        $selectableStyle = (new SelectableStyle())
+            ->setSelectedMarker('= ')
+            ->setUnselectedMarker('* ');
 
         $item = new SplitItem(
             [
-                new SelectableItem('Item One', function () {
-                }),
-                new SelectableItem('Item Two', function () {
-                })
+                (new SelectableItem('Item One', function () {
+                }))->setStyle($selectableStyle),
+                (new SelectableItem('Item Two', function () {
+                }))->setStyle($selectableStyle),
             ]
         );
 
@@ -241,18 +241,15 @@ class SplitItemTest extends TestCase
             ->method('getContentWidth')
             ->will($this->returnValue(30));
 
-        $menuStyle
-            ->expects($this->any())
-            ->method('getMarker')
-            ->with(false)
-            ->will($this->returnValue('* '));
+        $selectableStyle = (new SelectableStyle())
+            ->setUnselectedMarker('* ');
 
         $item = new SplitItem(
             [
-                new SelectableItem("Item\nOne", function () {
-                }),
-                new SelectableItem("Item\nTwo", function () {
-                })
+                (new SelectableItem("Item\nOne", function () {
+                }))->setStyle($selectableStyle),
+                (new SelectableItem("Item\nTwo", function () {
+                }))->setStyle($selectableStyle),
             ]
         );
 
@@ -274,17 +271,16 @@ class SplitItemTest extends TestCase
             ->method('getContentWidth')
             ->will($this->returnValue(30));
 
-        $menuStyle
-            ->expects($this->any())
-            ->method('getMarker')
-            ->willReturnMap([[true, '= '], [false, '* ']]);
+        $selectableStyle = (new SelectableStyle())
+            ->setSelectedMarker('= ')
+            ->setUnselectedMarker('* ');
 
         $item = new SplitItem(
             [
-                new SelectableItem("Item\nOne", function () {
-                }),
-                new SelectableItem("Item\nTwo", function () {
-                })
+                (new SelectableItem("Item\nOne", function () {
+                }))->setStyle($selectableStyle),
+                (new SelectableItem("Item\nTwo", function () {
+                }))->setStyle($selectableStyle),
             ]
         );
         
@@ -307,19 +303,21 @@ class SplitItemTest extends TestCase
         $menuStyle = new MenuStyle($terminal);
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(50);
-        $menuStyle->setItemExtra('[EXTRA]');
-        $menuStyle->setDisplaysExtra(true);
-        $menuStyle->setUnselectedMarker('* ');
+
+        $selectableStyle = (new SelectableStyle())
+            ->setItemExtra('[EXTRA]')
+            ->setDisplaysExtra(true)
+            ->setUnselectedMarker('* ');
 
         $item = new SplitItem(
             [
-                new SelectableItem('Item 1', function () {
-                }, true),
-                new SelectableItem('Item 2', function () {
-                }, true)
+                (new SelectableItem('Item 1', function () {
+                }, true))->setStyle($selectableStyle),
+                (new SelectableItem('Item 2', function () {
+                }, true))->setStyle($selectableStyle),
             ]
         );
-        
+
         self::assertEquals(['* Item 1        [EXTRA]  * Item 2        [EXTRA]  '], $item->getRows($menuStyle));
     }
 
@@ -331,16 +329,18 @@ class SplitItemTest extends TestCase
         $menuStyle = new MenuStyle($terminal);
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(50);
-        $menuStyle->setItemExtra(' [EXTRA]');
-        $menuStyle->setDisplaysExtra(true);
-        $menuStyle->setUnselectedMarker('* ');
+
+        $selectableStyle = (new SelectableStyle())
+            ->setItemExtra('[EXTRA]')
+            ->setDisplaysExtra(true)
+            ->setUnselectedMarker('* ');
 
         $item = new SplitItem(
             [
-                new SelectableItem("Item 1\nItem 1", function () {
-                }, true),
-                new SelectableItem("Item 2\nItem 2", function () {
-                }, true)
+                (new SelectableItem("Item 1\nItem 1", function () {
+                }, true))->setStyle($selectableStyle),
+                (new SelectableItem("Item 2\nItem 2", function () {
+                }, true))->setStyle($selectableStyle),
             ]
         );
 
@@ -361,16 +361,18 @@ class SplitItemTest extends TestCase
         $menuStyle = new MenuStyle($terminal);
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(50);
-        $menuStyle->setItemExtra(' [EXTRA] ');
-        $menuStyle->setDisplaysExtra(true);
-        $menuStyle->setUnselectedMarker('* ');
+
+        $selectableStyle = (new SelectableStyle())
+            ->setItemExtra(' [EXTRA] ')
+            ->setDisplaysExtra(true)
+            ->setUnselectedMarker('* ');
 
         $item = new SplitItem(
             [
-                new SelectableItem("Item 1\nItem 1", function () {
-                }),
-                new SelectableItem("Item 2\nItem 2", function () {
-                }, true)
+                (new SelectableItem("Item 1\nItem 1", function () {
+                }))->setStyle($selectableStyle),
+                (new SelectableItem("Item 2\nItem 2", function () {
+                }, true))->setStyle($selectableStyle),
             ]
         );
 

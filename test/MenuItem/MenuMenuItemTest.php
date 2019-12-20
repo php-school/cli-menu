@@ -55,11 +55,12 @@ class MenuMenuItemTest extends TestCase
         $menuStyle = new MenuStyle($terminal);
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(10);
-        $menuStyle->setUnselectedMarker('* ');
 
         $subMenu = $this->createMock(CliMenu::class);
 
         $item = new MenuMenuItem('Item', $subMenu);
+        $item->getStyle()
+            ->setUnselectedMarker('* ');
         $this->assertEquals(['* Item'], $item->getRows($menuStyle));
     }
 
@@ -71,11 +72,12 @@ class MenuMenuItemTest extends TestCase
         $menuStyle = new MenuStyle($terminal);
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(10);
-        $menuStyle->setUnselectedMarker('* ');
 
         $subMenu = $this->createMock(CliMenu::class);
 
         $item = new MenuMenuItem('Item', $subMenu);
+        $item->getStyle()
+            ->setUnselectedMarker('* ');
         $this->assertEquals(['* Item'], $item->getRows($menuStyle));
         $this->assertEquals(['* Item'], $item->getRows($menuStyle, false));
     }
@@ -89,17 +91,13 @@ class MenuMenuItemTest extends TestCase
             ->method('getContentWidth')
             ->will($this->returnValue(10));
 
-        $menuStyle
-            ->expects($this->once())
-            ->method('getMarker')
-            ->with(true)
-            ->will($this->returnValue('= '));
-
         $subMenu = $this->getMockBuilder(CliMenu::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $item = new MenuMenuItem('Item', $subMenu);
+        $item->getStyle()
+            ->setSelectedMarker('= ');
         $this->assertEquals(['= Item'], $item->getRows($menuStyle, true));
     }
 
@@ -112,11 +110,12 @@ class MenuMenuItemTest extends TestCase
         $menuStyle = new MenuStyle($terminal);
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(10);
-        $menuStyle->setUnselectedMarker('* ');
 
         $subMenu = $this->createMock(CliMenu::class);
 
         $item = new MenuMenuItem('LONG ITEM LINE', $subMenu);
+        $item->getStyle()
+            ->setUnselectedMarker('* ');
         $this->assertEquals(
             [
                 "* LONG",
