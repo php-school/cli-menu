@@ -5,6 +5,7 @@ use PhpSchool\CliMenu\Builder\SplitItemBuilder;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
+use PhpSchool\CliMenu\Style\SelectableStyle;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
@@ -39,8 +40,10 @@ $builder = (new CliMenuBuilder)
     ->setBorder(0)
     ->setMargin(2)
     ->setPadding(2, 5)
-    ->setSelectedMarker('')
-    ->setUnselectedMarker('')
+    ->modifySelectableStyle(function (SelectableStyle $style) {
+        $style->setSelectedMarker('')
+            ->setUnselectedMarker('');
+    })
     ->addAsciiArt('Draw your own art !')
     ->addLineBreak();
 
