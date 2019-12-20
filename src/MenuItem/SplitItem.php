@@ -32,11 +32,6 @@ class SplitItem implements MenuItemInterface
     private $gutter = 2;
 
     /**
-     * @var int
-     */
-    private $largestItemExtra = 0;
-
-    /**
      * @var array
      */
     private static $blacklistedItems = [
@@ -122,10 +117,10 @@ class SplitItem implements MenuItemInterface
             $this->setDefaultSelectedItem();
         }
 
-        $this->calculateItemExtra();
+        $largestItemExtra = $this->calculateItemExtra();
 
-        $length = $this->largestItemExtra > 0
-            ? floor($style->getContentWidth() / $numberOfItems) - ($this->largestItemExtra + 2)
+        $length = $largestItemExtra > 0
+            ? floor($style->getContentWidth() / $numberOfItems) - ($largestItemExtra + 2)
             : floor($style->getContentWidth() / $numberOfItems);
 
         $length -= $this->gutter;
@@ -140,7 +135,7 @@ class SplitItem implements MenuItemInterface
                 if ($item instanceof CheckboxItem || $item instanceof RadioItem) {
                     $markerType = $item->getStyle()->getMarker($item->getChecked());
                 } else {
-                    /** @var SelectableStyleInterface $item */
+                    /** @var MenuMenuItem|SelectableItem|StaticItem $item */
                     $markerType = $item->getStyle()->getMarker($isSelected);
                 }
 
@@ -172,13 +167,14 @@ class SplitItem implements MenuItemInterface
                 );
             }, array_keys($this->items), $this->items),
             $missingLength,
-            $length
+            $length,
+            $largestItemExtra
         );
     }
 
-    private function buildRows(array $cells, int $missingLength, int $length) : array
+    private function buildRows(array $cells, int $missingLength, int $length, int $largestItemExtra) : array
     {
-        $extraPadLength = $this->largestItemExtra > 0 ? 2 + $this->largestItemExtra : 0;
+        $extraPadLength = $largestItemExtra > 0 ? 2 + $largestItemExtra : 0;
         
         return array_map(
             function ($i) use ($cells, $length, $missingLength, $extraPadLength) {
@@ -333,19 +329,23 @@ class SplitItem implements MenuItemInterface
     /**
      * Finds largest itemExtra value in items
      */
-    private function calculateItemExtra() : void
+    private function calculateItemExtra() : int
     {
-        /** @var CheckboxItem|RadioItem|SelectableStyleInterface $item */
+        $largestItemExtra = 0;
+
+        /** @var CheckboxItem|RadioItem|MenuMenuItem|SelectableItem|StaticItem $item */
         foreach ($this->items as $item) {
             if (!$item->getStyle()->getDisplaysExtra()) {
                 continue;
             }
 
-            if (mb_strlen($item->getStyle()->getItemExtra()) < $this->largestItemExtra) {
+            if (mb_strlen($item->getStyle()->getItemExtra()) < $largestItemExtra) {
                 continue;
             }
 
-            $this->largestItemExtra = mb_strlen($item->getStyle()->getItemExtra());
+            $largestItemExtra = mb_strlen($item->getStyle()->getItemExtra());
         }
+
+        return $largestItemExtra;
     }
 }

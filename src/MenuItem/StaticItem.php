@@ -9,7 +9,7 @@ use PhpSchool\CliMenu\Style\SelectableStyle;
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
-class StaticItem implements MenuItemInterface, SelectableStyleInterface
+class StaticItem implements MenuItemInterface
 {
     /**
      * @var string
