@@ -140,10 +140,7 @@ class CliMenuBuilder
         bool $showItemExtra = false,
         bool $disabled = false
     ) : self {
-        $item = (new CheckboxItem($text, $itemCallable, $showItemExtra, $disabled))
-            ->setStyle($this->menu->getCheckboxStyle());
-
-        $this->addMenuItem($item);
+        $this->addMenuItem(new CheckboxItem($text, $itemCallable, $showItemExtra, $disabled));
 
         return $this;
     }
@@ -154,10 +151,7 @@ class CliMenuBuilder
         bool $showItemExtra = false,
         bool $disabled = false
     ) : self {
-        $item = (new RadioItem($text, $itemCallable, $showItemExtra, $disabled))
-            ->setStyle($this->menu->getRadioStyle());
-
-        $this->addMenuItem($item);
+        $this->addMenuItem(new RadioItem($text, $itemCallable, $showItemExtra, $disabled));
 
         return $this;
     }
@@ -196,20 +190,6 @@ class CliMenuBuilder
         $menu = $builder->build();
         $menu->setParent($this->menu);
 
-        //we apply the parent theme if nothing was changed
-        //if no styles were changed in this sub-menu
-        if (!$menu->getStyle()->hasChangedFromDefaults()) {
-            $menu->setStyle($this->menu->getStyle());
-        }
-
-        if (!$menu->getCheckboxStyle()->hasChangedFromDefaults()) {
-            $menu->setCheckboxStyle(clone $this->menu->getCheckboxStyle());
-        }
-
-        if (!$menu->getRadioStyle()->hasChangedFromDefaults()) {
-            $menu->setRadioStyle(clone $this->menu->getRadioStyle());
-        }
-
         $this->menu->addItem($item = new MenuMenuItem(
             $text,
             $menu,
@@ -225,20 +205,6 @@ class CliMenuBuilder
     {
         $menu = $builder->build();
         $menu->setParent($this->menu);
-
-        //we apply the parent theme if nothing was changed
-        //if no styles were changed in this sub-menu
-        if (!$menu->getStyle()->hasChangedFromDefaults()) {
-            $menu->setStyle($this->menu->getStyle());
-        }
-
-        if (!$menu->getCheckboxStyle()->hasChangedFromDefaults()) {
-            $menu->setCheckboxStyle(clone $this->menu->getCheckboxStyle());
-        }
-
-        if (!$menu->getRadioStyle()->hasChangedFromDefaults()) {
-            $menu->setRadioStyle(clone $this->menu->getRadioStyle());
-        }
 
         $this->menu->addItem($item = new MenuMenuItem(
             $text,
