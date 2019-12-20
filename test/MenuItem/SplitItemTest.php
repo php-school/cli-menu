@@ -482,14 +482,14 @@ class SplitItemTest extends TestCase
         $checkboxItem1 = new CheckboxItem('Item One', function () {
         });
         $checkboxItem1->getStyle()
-            ->setMarkerOff('[ ] ')
-            ->setMarkerOn('[✔] ');
+            ->setUncheckedMarker('[ ] ')
+            ->setCheckedMarker('[✔] ');
 
         $checkboxItem2 = new CheckboxItem('Item Two', function () {
         });
         $checkboxItem2->getStyle()
-            ->setMarkerOff('[ ] ')
-            ->setMarkerOn('[✔] ');
+            ->setUncheckedMarker('[ ] ')
+            ->setCheckedMarker('[✔] ');
 
         $item = new SplitItem(
             [
@@ -519,14 +519,14 @@ class SplitItemTest extends TestCase
         $radioItem1 = new RadioItem('Item One', function () {
         });
         $radioItem1->getStyle()
-            ->setMarkerOn('[+] ')
-            ->setMarkerOff('[-] ');
+            ->setCheckedMarker('[+] ')
+            ->setUncheckedMarker('[-] ');
 
         $radioItem2 = new RadioItem('Item Two', function () {
         });
         $radioItem2->getStyle()
-            ->setMarkerOn('[+] ')
-            ->setMarkerOff('[-] ');
+            ->setCheckedMarker('[+] ')
+            ->setUncheckedMarker('[-] ');
 
         $item = new SplitItem(
             [

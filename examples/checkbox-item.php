@@ -24,8 +24,8 @@ $menu = (new CliMenuBuilder)
     ->addSubMenu('Interpreted', function (CliMenuBuilder $b) use ($itemCallable) {
         $b->setTitle('Interpreted Languages')
             ->modifyCheckboxStyle(function (CheckboxStyle $style) {
-                $style->setMarkerOff('[○] ')
-                    ->setMarkerOn('[●] ');
+                $style->setUncheckedMarker('[○] ')
+                    ->setCheckedMarker('[●] ');
             })
             ->addCheckboxItem('PHP', $itemCallable)
             ->addCheckboxItem('Javascript', $itemCallable)

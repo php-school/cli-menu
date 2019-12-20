@@ -5,21 +5,21 @@ namespace PhpSchool\CliMenu\Style;
 class CheckboxStyle
 {
     private const DEFAULT_STYLES = [
-        'markerOn'      => '[✔] ',
-        'markerOff'     => '[ ] ',
-        'itemExtra'     => '✔',
+        'checkedMarker' => '[✔] ',
+        'uncheckedMarker' => '[ ] ',
+        'itemExtra' => '✔',
         'displaysExtra' => false,
     ];
 
     /**
      * @var string
      */
-    private $markerOn;
+    private $checkedMarker;
 
     /**
      * @var string
      */
-    private $markerOff;
+    private $uncheckedMarker;
 
     /**
      * @var string
@@ -33,17 +33,17 @@ class CheckboxStyle
 
     public function __construct()
     {
-        $this->markerOn      = self::DEFAULT_STYLES['markerOn'];
-        $this->markerOff     = self::DEFAULT_STYLES['markerOff'];
-        $this->itemExtra     = self::DEFAULT_STYLES['itemExtra'];
+        $this->checkedMarker = self::DEFAULT_STYLES['checkedMarker'];
+        $this->uncheckedMarker = self::DEFAULT_STYLES['uncheckedMarker'];
+        $this->itemExtra = self::DEFAULT_STYLES['itemExtra'];
         $this->displaysExtra = self::DEFAULT_STYLES['displaysExtra'];
     }
 
     public function hasChangedFromDefaults() : bool
     {
         $currentValues = [
-            $this->markerOn,
-            $this->markerOff,
+            $this->checkedMarker,
+            $this->uncheckedMarker,
             $this->itemExtra,
             $this->displaysExtra,
         ];
@@ -53,29 +53,29 @@ class CheckboxStyle
 
     public function getMarker(bool $selected) : string
     {
-        return $selected ? $this->markerOn : $this->markerOff;
+        return $selected ? $this->checkedMarker : $this->uncheckedMarker;
     }
 
-    public function getMarkerOn() : string
+    public function getCheckedMarker() : string
     {
-        return $this->markerOn;
+        return $this->checkedMarker;
     }
 
-    public function setMarkerOn(string $marker) : self
+    public function setCheckedMarker(string $marker) : self
     {
-        $this->markerOn = $marker;
+        $this->checkedMarker = $marker;
 
         return $this;
     }
 
-    public function getMarkerOff() : string
+    public function getUncheckedMarker() : string
     {
-        return $this->markerOff;
+        return $this->uncheckedMarker;
     }
 
-    public function setMarkerOff(string $marker) : self
+    public function setUncheckedMarker(string $marker) : self
     {
-        $this->markerOff = $marker;
+        $this->uncheckedMarker = $marker;
 
         return $this;
     }

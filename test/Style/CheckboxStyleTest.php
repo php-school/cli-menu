@@ -26,11 +26,11 @@ class CheckboxStyleTest extends TestCase
     {
         $style = new CheckboxStyle;
 
-        self::assertSame('[✔] ', $style->getMarkerOn());
+        self::assertSame('[✔] ', $style->getCheckedMarker());
 
-        $style->setMarkerOn('[x] ');
+        $style->setCheckedMarker('[x] ');
 
-        self::assertSame('[x] ', $style->getMarkerOn());
+        self::assertSame('[x] ', $style->getCheckedMarker());
         self::assertTrue($style->hasChangedFromDefaults());
     }
 
@@ -38,11 +38,11 @@ class CheckboxStyleTest extends TestCase
     {
         $style = new CheckboxStyle;
 
-        self::assertSame('[ ] ', $style->getMarkerOff());
+        self::assertSame('[ ] ', $style->getUncheckedMarker());
 
-        $style->setMarkerOff('( ) ');
+        $style->setUncheckedMarker('( ) ');
 
-        self::assertSame('( ) ', $style->getMarkerOff());
+        self::assertSame('( ) ', $style->getUncheckedMarker());
         self::assertTrue($style->hasChangedFromDefaults());
     }
 
