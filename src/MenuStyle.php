@@ -62,16 +62,6 @@ class MenuStyle
     /**
      * @var string
      */
-    private $selectedMarker;
-
-    /**
-     * @var string
-     */
-    private $unselectedMarker;
-
-    /**
-     * @var string
-     */
     private $itemExtra;
 
     /**
@@ -227,8 +217,6 @@ class MenuStyle
         $this->setPaddingTopBottom(self::$defaultStyleValues['paddingTopBottom']);
         $this->setPaddingLeftRight(self::$defaultStyleValues['paddingLeftRight']);
         $this->setMargin(self::$defaultStyleValues['margin']);
-        $this->setSelectedMarker(self::$defaultStyleValues['selectedMarker']);
-        $this->setUnselectedMarker(self::$defaultStyleValues['unselectedMarker']);
         $this->setItemExtra(self::$defaultStyleValues['itemExtra']);
         $this->setDisplaysExtra(self::$defaultStyleValues['displaysExtra']);
         $this->setTitleSeparator(self::$defaultStyleValues['titleSeparator']);
@@ -248,8 +236,6 @@ class MenuStyle
             $this->paddingTopBottom,
             $this->paddingLeftRight,
             $this->margin,
-            $this->selectedMarker,
-            $this->unselectedMarker,
             $this->itemExtra,
             $this->displaysExtra,
             $this->titleSeparator,
@@ -523,38 +509,6 @@ class MenuStyle
         }
 
         return $rightPadding;
-    }
-
-    public function getSelectedMarker() : string
-    {
-        return $this->selectedMarker;
-    }
-
-    public function setSelectedMarker(string $marker) : self
-    {
-        $this->selectedMarker = $marker;
-
-        return $this;
-    }
-
-    public function getUnselectedMarker() : string
-    {
-        return $this->unselectedMarker;
-    }
-
-    public function setUnselectedMarker(string $marker) : self
-    {
-        $this->unselectedMarker = $marker;
-
-        return $this;
-    }
-
-    /**
-     * Get the correct marker for the item
-     */
-    public function getMarker(bool $selected) : string
-    {
-        return $selected ? $this->selectedMarker : $this->unselectedMarker;
     }
 
     public function setItemExtra(string $itemExtra) : self
