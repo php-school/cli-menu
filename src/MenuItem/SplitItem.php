@@ -341,7 +341,7 @@ class SplitItem implements MenuItemInterface
                 continue;
             }
 
-            if (mb_strlen($item->getStyle()->getItemExtra() < $this->largestItemExtra)) {
+            if (mb_strlen($item->getStyle()->getItemExtra()) < $this->largestItemExtra) {
                 continue;
             }
 
