@@ -11,6 +11,7 @@ use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\RadioItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
+use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
@@ -604,6 +605,37 @@ class CliMenuBuilderTest extends TestCase
 
         self::assertSame('green', $subMenu2->getStyle()->getBg());
         self::assertEquals($menu->getStyle(), $subMenu2->getStyle());
+    }
+
+    public function testSplitItemSubMenuInheritsParentsStyle() : void
+    {
+        $terminal = self::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getWidth')
+            ->will($this->returnValue(200));
+
+        $menu = (new CliMenuBuilder($terminal))
+            ->setBackgroundColour('green')
+            ->addSplitItem(function (SplitItemBuilder $b) {
+                $b
+                    ->addItem('Item 1', function () {})
+                    ->addSubMenu('Submenu 1', function (CliMenuBuilder $b) {
+                        $b->addItem('Item 2', function () {});
+                    })
+                ;
+            })
+            ->build();
+
+        /** @var SplitItem $splitItem */
+        $splitItem = $menu->getItems()[0];
+        /** @var SelectableItem $selectableItem1 */
+        $selectableItem1 = $splitItem->getItems()[0];
+        /** @var CliMenu $subMenu */
+        $subMenu = $splitItem->getItems()[1]->getSubMenu();
+
+        self::assertSame('green', $subMenu->getStyle()->getBg());
+        self::assertEquals($menu->getStyle(), $subMenu->getStyle());
     }
 
     public function testSubMenuIgnoresParentsStyleIfCustomAndPassesToChildren() : void

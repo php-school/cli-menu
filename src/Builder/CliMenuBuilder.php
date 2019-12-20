@@ -555,9 +555,12 @@ class CliMenuBuilder
      * Pass styles from current menu to sub-menu
      * only if sub-menu style has not be customized
      */
-    private function propagateStyles(CliMenu $menu)
+    private function propagateStyles(CliMenu $menu, array $items = [])
     {
-        foreach ($menu->getItems() as $item) {
+        $currentItems = !empty($items) ? $items : $menu->getItems();
+
+        foreach ($currentItems as $item) {
+            // Apply current style to children, if they are not customized
             if ($item instanceof MenuMenuItem) {
                 $subMenu = $item->getSubMenu();
 
@@ -565,6 +568,11 @@ class CliMenuBuilder
                     && $subMenu->setStyle(clone $menu->getStyle());
 
                 $this->propagateStyles($subMenu);
+            }
+
+            // Apply styles to SplitItem children using current $menu
+            if ($item instanceof SplitItem) {
+                $this->propagateStyles($menu, $item->getItems());
             }
         }
     }
