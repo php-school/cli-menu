@@ -587,13 +587,21 @@ class CliMenuBuilderTest extends TestCase
         $menu = (new CliMenuBuilder($terminal))
             ->setBackgroundColour('green')
             ->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
-                $b->addItem('Some Item', function () {
+                $b->addSubMenu('My SubSubMenu', function (CliMenuBuilder $b) {
+                    $b->addItem('Some Item', function () {
+                    });
                 });
             })
             ->build();
 
-        self::assertSame('green', $menu->getItems()[0]->getSubMenu()->getStyle()->getBg());
-        self::assertEquals($menu->getStyle(), $menu->getItems()[0]->getSubMenu()->getStyle());
+        $subMenu1 = $menu->getItems()[0]->getSubMenu();
+        $subMenu2 = $subMenu1->getItems()[0]->getSubMenu();
+
+        self::assertSame('green', $subMenu1->getStyle()->getBg());
+        self::assertEquals($menu->getStyle(), $subMenu1->getStyle());
+
+        self::assertSame('green', $subMenu2->getStyle()->getBg());
+        self::assertEquals($menu->getStyle(), $subMenu2->getStyle());
     }
 
     public function testSubMenuDoesNotInheritsParentsStyleWhenSubMenuStyleHasAlterations() : void
