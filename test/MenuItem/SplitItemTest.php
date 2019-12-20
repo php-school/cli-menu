@@ -479,21 +479,17 @@ class SplitItemTest extends TestCase
             ->method('getContentWidth')
             ->will($this->returnValue(30));
 
-        $menuStyle
-            ->expects($this->any())
-            ->method('getCheckedMarker')
-            ->willReturn('[✔] ');
-
-        $menuStyle
-            ->expects($this->any())
-            ->method('getUncheckedMarker')
-            ->willReturn('[ ] ');
-
         $checkboxItem1 = new CheckboxItem('Item One', function () {
         });
+        $checkboxItem1->getStyle()
+            ->setMarkerOff('[ ] ')
+            ->setMarkerOn('[✔] ');
 
         $checkboxItem2 = new CheckboxItem('Item Two', function () {
         });
+        $checkboxItem2->getStyle()
+            ->setMarkerOff('[ ] ')
+            ->setMarkerOn('[✔] ');
 
         $item = new SplitItem(
             [

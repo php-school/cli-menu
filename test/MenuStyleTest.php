@@ -100,8 +100,6 @@ class MenuStyleTest extends TestCase
         $style->setFg('yellow');
         $style->setUnselectedMarker('-');
         $style->setSelectedMarker('>');
-        $style->setUncheckedMarker('/');
-        $style->setCheckedMarker('+');
         $style->setUnradioMarker('O');
         $style->setRadioMarker('X');
         $style->setItemExtra('EXTRA!');
@@ -121,8 +119,6 @@ class MenuStyleTest extends TestCase
         self::assertSame('yellow', $style->getFg());
         self::assertSame('-', $style->getUnselectedMarker());
         self::assertSame('>', $style->getSelectedMarker());
-        self::assertEquals('/', $style->getUncheckedMarker());
-        self::assertEquals('+', $style->getCheckedMarker());
         self::assertEquals('O', $style->getUnradioMarker());
         self::assertEquals('X', $style->getRadioMarker());
         self::assertSame('EXTRA!', $style->getItemExtra());

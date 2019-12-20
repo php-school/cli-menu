@@ -2,6 +2,7 @@
 
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\Style\CheckboxStyle;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
@@ -22,8 +23,10 @@ $menu = (new CliMenuBuilder)
     })
     ->addSubMenu('Interpreted', function (CliMenuBuilder $b) use ($itemCallable) {
         $b->setTitle('Interpreted Languages')
-            ->setUncheckedMarker('[○] ')
-            ->setCheckedMarker('[●] ')
+            ->modifyCheckboxStyle(function (CheckboxStyle $style) {
+                $style->setMarkerOff('[○] ')
+                    ->setMarkerOn('[●] ');
+            })
             ->addCheckboxItem('PHP', $itemCallable)
             ->addCheckboxItem('Javascript', $itemCallable)
             ->addCheckboxItem('Ruby', $itemCallable)

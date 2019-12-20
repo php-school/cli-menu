@@ -817,10 +817,13 @@ You may also change the marker for `\PhpSchool\CliMenu\MenuItem\CheckboxItem`:
 <?php
 
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\Style\CheckboxStyle;
 
 $menu = (new CliMenuBuilder)
-    ->setUncheckedMarker('[○] ')
-    ->setCheckedMarker('[●] ')
+    ->modifyCheckboxStyle(function (CheckboxStyle $style) {
+        $style->setMarkerOff('[○] ')
+            ->setMarkerOn('[●] ');
+    })
     ->build();
 ```
 

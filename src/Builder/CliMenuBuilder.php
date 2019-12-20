@@ -16,6 +16,7 @@ use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Style\CheckboxStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\Terminal\Terminal;
 
@@ -187,7 +188,7 @@ class CliMenuBuilder
 
         $menu = $builder->build();
         $menu->setParent($this->menu);
-        
+
         $this->menu->addItem($item = new MenuMenuItem(
             $text,
             $menu,
@@ -290,7 +291,7 @@ class CliMenuBuilder
         }
 
         $callback($builder);
-        
+
         $this->menu->addItem($splitItem = $builder->build());
 
         $this->processSplitItemShortcuts($splitItem);
@@ -401,34 +402,6 @@ class CliMenuBuilder
     public function setSelectedMarker(string $marker) : self
     {
         $this->style->setSelectedMarker($marker);
-
-        return $this;
-    }
-
-    public function setUncheckedMarker(string $marker) : self
-    {
-        $this->style->setUncheckedMarker($marker);
-
-        return $this;
-    }
-
-    public function setCheckedMarker(string $marker) : self
-    {
-        $this->style->setCheckedMarker($marker);
-
-        return $this;
-    }
-
-    public function setUnradioMarker(string $marker) : self
-    {
-        $this->style->setUnradioMarker($marker);
-
-        return $this;
-    }
-
-    public function setRadioMarker(string $marker) : self
-    {
-        $this->style->setRadioMarker($marker);
 
         return $this;
     }
@@ -551,6 +524,25 @@ class CliMenuBuilder
         return $this->menu;
     }
 
+    public function getCheckboxStyle() : CheckboxStyle
+    {
+        return $this->menu->getCheckboxStyle();
+    }
+
+    public function setCheckboxStyle(CheckboxStyle $style) : self
+    {
+        $this->menu->setCheckboxStyle($style);
+
+        return $this;
+    }
+
+    public function modifyCheckboxStyle(callable $itemCallable) : self
+    {
+        $itemCallable($this->menu->getCheckboxStyle());
+
+        return $this;
+    }
+
     /**
      * Pass styles from current menu to sub-menu
      * only if sub-menu style has not be customized
@@ -560,12 +552,22 @@ class CliMenuBuilder
         $currentItems = !empty($items) ? $items : $menu->getItems();
 
         foreach ($currentItems as $item) {
+            if ($item instanceof CheckboxItem
+                && !$item->getStyle()->hasChangedFromDefaults()
+            ) {
+                $item->setStyle(clone $menu->getCheckboxStyle());
+            }
+
             // Apply current style to children, if they are not customized
             if ($item instanceof MenuMenuItem) {
                 $subMenu = $item->getSubMenu();
 
                 if (!$subMenu->getStyle()->hasChangedFromDefaults()) {
                     $subMenu->setStyle(clone $menu->getStyle());
+                }
+
+                if (!$subMenu->getCheckboxStyle()->hasChangedFromDefaults()) {
+                    $subMenu->setCheckboxStyle(clone $menu->getCheckboxStyle());
                 }
 
                 $this->propagateStyles($subMenu);

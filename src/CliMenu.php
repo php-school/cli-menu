@@ -14,6 +14,7 @@ use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Dialogue\Confirm;
 use PhpSchool\CliMenu\Dialogue\Flash;
+use PhpSchool\CliMenu\Style\CheckboxStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\CliMenu\Util\StringUtil as s;
 use PhpSchool\Terminal\InputCharacter;
@@ -34,6 +35,11 @@ class CliMenu
      * @var MenuStyle
      */
     protected $style;
+
+    /**
+     * @var CheckboxStyle
+     */
+    private $checkboxStyle;
 
     /**
      * @var ?string
@@ -90,10 +96,11 @@ class CliMenu
         Terminal $terminal = null,
         MenuStyle $style = null
     ) {
-        $this->title      = $title;
-        $this->items      = $items;
-        $this->terminal   = $terminal ?: TerminalFactory::fromSystem();
-        $this->style      = $style ?: new MenuStyle($this->terminal);
+        $this->title         = $title;
+        $this->items         = $items;
+        $this->terminal      = $terminal ?: TerminalFactory::fromSystem();
+        $this->style         = $style ?: new MenuStyle($this->terminal);
+        $this->checkboxStyle = new CheckboxStyle();
 
         $this->selectFirstItem();
     }
@@ -638,6 +645,18 @@ class CliMenu
     public function setStyle(MenuStyle $style) : void
     {
         $this->style = $style;
+    }
+
+    public function getCheckboxStyle() : CheckboxStyle
+    {
+        return $this->checkboxStyle;
+    }
+
+    public function setCheckboxStyle(CheckboxStyle $style) : self
+    {
+        $this->checkboxStyle = $style;
+
+        return $this;
     }
 
     public function getCurrentFrame() : Frame

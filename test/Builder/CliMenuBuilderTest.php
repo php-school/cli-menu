@@ -68,8 +68,6 @@ class CliMenuBuilderTest extends TestCase
         $builder->setMargin(4);
         $builder->setUnselectedMarker('>');
         $builder->setSelectedMarker('x');
-        $builder->setUncheckedMarker('-');
-        $builder->setCheckedMarker('+');
         $builder->setItemExtra('*');
         $builder->setTitleSeparator('-');
 
@@ -84,8 +82,6 @@ class CliMenuBuilderTest extends TestCase
         self::assertEquals(4, $style->getMargin());
         self::assertEquals('>', $style->getUnselectedMarker());
         self::assertEquals('x', $style->getSelectedMarker());
-        self::assertEquals('-', $style->getUncheckedMarker());
-        self::assertEquals('+', $style->getCheckedMarker());
         self::assertEquals('*', $style->getItemExtra());
         self::assertEquals('-', $style->getTitleSeparator());
     }
