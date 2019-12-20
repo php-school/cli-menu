@@ -25,7 +25,7 @@ class MenuMenuItem implements MenuItemInterface
     /**
      * @var bool
      */
-    private $showItemExtra;
+    private $showItemExtra = false;
 
     /**
      * @var bool
