@@ -10,16 +10,30 @@ use PhpSchool\CliMenu\Style\RadioStyle;
 class RadioItem implements MenuItemInterface, ToggableItemInterface
 {
     /**
+     * @var string
+     */
+    private $text;
+
+    /**
      * @var callable
      */
     private $selectAction;
 
-    private $text = '';
+    /**
+     * @var bool
+     */
+    private $showItemExtra;
 
-    private $showItemExtra = false;
+    /**
+     * @var bool
+     */
+    private $disabled;
 
-    private $disabled = false;
-
+    /**
+     * The current checkbox state
+     *
+     * @var bool
+     */
     private $checked = false;
 
     /**
@@ -33,10 +47,10 @@ class RadioItem implements MenuItemInterface, ToggableItemInterface
         bool $showItemExtra = false,
         bool $disabled = false
     ) {
-        $this->text          = $text;
-        $this->selectAction  = $selectAction;
+        $this->text = $text;
+        $this->selectAction = $selectAction;
         $this->showItemExtra = $showItemExtra;
-        $this->disabled      = $disabled;
+        $this->disabled = $disabled;
 
         $this->style = new RadioStyle();
     }
@@ -77,6 +91,22 @@ class RadioItem implements MenuItemInterface, ToggableItemInterface
     }
 
     /**
+     * Return the raw string of text
+     */
+    public function getText() : string
+    {
+        return $this->text;
+    }
+
+    /**
+     * Set the raw string of text
+     */
+    public function setText(string $text) : void
+    {
+        $this->text = $text;
+    }
+
+    /**
      * Execute the items callable if required
      */
     public function getSelectAction() : ?callable
@@ -109,66 +139,6 @@ class RadioItem implements MenuItemInterface, ToggableItemInterface
         };
     }
 
-    public function getStyle() : RadioStyle
-    {
-        return $this->style;
-    }
-
-    public function setStyle(RadioStyle $style) : self
-    {
-        $this->style = $style;
-
-        return $this;
-    }
-
-    /**
-     * Toggles checked state
-     */
-    public function toggle() : void
-    {
-        $this->checked = !$this->checked;
-    }
-
-    /**
-     * Sets checked state to true
-     */
-    public function setChecked() : void
-    {
-        $this->checked = true;
-    }
-
-    /**
-     * Sets checked state to false
-     */
-    public function setUnchecked() : void
-    {
-        $this->checked = false;
-    }
-
-    /**
-     * Whether or not the item is checked
-     */
-    public function getChecked() : bool
-    {
-        return $this->checked;
-    }
-
-    /**
-     * Return the raw string of text
-     */
-    public function getText() : string
-    {
-        return $this->text;
-    }
-
-    /**
-     * Set the raw string of text
-     */
-    public function setText(string $text) : void
-    {
-        $this->text = $text;
-    }
-
     /**
      * Can the item be selected
      */
@@ -177,6 +147,9 @@ class RadioItem implements MenuItemInterface, ToggableItemInterface
         return !$this->disabled;
     }
 
+    /**
+     * Whether or not we are showing item extra
+     */
     public function showsItemExtra() : bool
     {
         return $this->showItemExtra;
@@ -196,5 +169,49 @@ class RadioItem implements MenuItemInterface, ToggableItemInterface
     public function hideItemExtra() : void
     {
         $this->showItemExtra = false;
+    }
+
+    /**
+     * Whether or not the item is checked
+     */
+    public function getChecked() : bool
+    {
+        return $this->checked;
+    }
+
+    /**
+     * Sets checked state to true
+     */
+    public function setChecked() : void
+    {
+        $this->checked = true;
+    }
+
+    /**
+     * Sets checked state to false
+     */
+    public function setUnchecked() : void
+    {
+        $this->checked = false;
+    }
+
+    /**
+     * Toggles checked state
+     */
+    public function toggle() : void
+    {
+        $this->checked = !$this->checked;
+    }
+
+    public function getStyle() : RadioStyle
+    {
+        return $this->style;
+    }
+
+    public function setStyle(RadioStyle $style) : self
+    {
+        $this->style = $style;
+
+        return $this;
     }
 }
