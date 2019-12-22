@@ -283,8 +283,7 @@ class CliMenuTest extends TestCase
         $item2 = new LineBreakItem();
 
 
-        $terminal = $this->createMock(Terminal::class);
-        $style = $this->getStyle($terminal);
+        $style = $this->getStyle($terminal = new MockTerminal);
 
         $menu = new CliMenu(
             'PHP School FTW',
@@ -304,8 +303,7 @@ class CliMenuTest extends TestCase
         $item1 = new LineBreakItem();
         $item2 = new LineBreakItem();
 
-        $terminal = $this->createMock(Terminal::class);
-        $style = $this->getStyle($terminal);
+        $style = $this->getStyle($terminal = new MockTerminal);
 
         $menu = new CliMenu(
             'PHP School FTW',
@@ -355,6 +353,10 @@ class CliMenuTest extends TestCase
         $this->expectException(\PhpSchool\CliMenu\Exception\InvalidTerminalException::class);
 
         $terminal = $this->createMock(Terminal::class);
+        $terminal
+            ->method('getWidth')
+            ->willReturn(100);
+
         $terminal->expects($this->once())
             ->method('isInteractive')
             ->willReturn(false);

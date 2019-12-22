@@ -640,4 +640,22 @@ class MenuStyleTest extends TestCase
 
         $this->getMenuStyle()->setMargin($value);
     }
+
+    public function testHasChangedFromDefaultsReturnsFalseWhenAutoShrunk() : void
+    {
+        $terminal = $this
+            ->getMockBuilder(UnixTerminal::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getWidth'])
+            ->getMock();
+
+        $terminal
+            ->expects(self::any())
+            ->method('getWidth')
+            ->willReturn(80);
+
+        $menuStyle = new MenuStyle($terminal);
+
+        self::assertFalse($menuStyle->hasChangedFromDefaults());
+    }
 }
