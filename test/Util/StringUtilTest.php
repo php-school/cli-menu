@@ -91,4 +91,28 @@ class StringUtilTest extends TestCase
             StringUtil::wordwrap($test, 11)
         );
     }
+
+    public function testLengthIgnoresAnsiEscapeSequences() : void
+    {
+        $result = StringUtil::length("\x1b[7mfoo\x1b[0m");
+        $this->assertEquals(3, $result);
+
+        $result = StringUtil::length("foobar\x1b[00m\x1b[01;31m");
+        $this->assertEquals(6, $result);
+
+        $result = StringUtil::length("foo\x1b[00mbar\x1b[01;31mbaz\x1b[00m!!!\x1b[01;31m");
+        $this->assertEquals(12, $result);
+    }
+
+    public function testLengthIncludingAnsiEscapeSequences() : void
+    {
+        $result = StringUtil::length("\x1b[7mfoo\x1b[0m", false);
+        $this->assertEquals(11, $result);
+
+        $result = StringUtil::length("foobar\x1b[00m\x1b[01;31m", false);
+        $this->assertEquals(19, $result);
+
+        $result = StringUtil::length("foo\x1b[00mbar\x1b[01;31mbaz\x1b[00m!!!\x1b[01;31m", false);
+        $this->assertEquals(38, $result);
+    }
 }
