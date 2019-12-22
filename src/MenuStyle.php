@@ -568,7 +568,7 @@ class MenuStyle
             "%s%s%s%s\n",
             str_repeat(' ', $this->margin),
             $this->getBorderColourCode(),
-            str_repeat(' ', $this->width),
+            str_repeat(' ', $this->width - $this->margin),
             $this->coloursResetCode
         );
 
