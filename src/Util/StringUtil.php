@@ -44,7 +44,7 @@ class StringUtil
         return (string) preg_replace('/\x1b[^m]*m/', '', $str);
     }
 
-    public static function length(string $str, bool $ignoreAnsiEscapeSequence = true) : string
+    public static function length(string $str, bool $ignoreAnsiEscapeSequence = true) : int
     {
         return mb_strlen($ignoreAnsiEscapeSequence ? self::stripAnsiEscapeSequence($str) : $str);
     }
