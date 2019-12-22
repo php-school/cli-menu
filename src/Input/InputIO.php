@@ -99,7 +99,7 @@ class InputIO
         $this->callbacks[$control][] = $callback;
     }
 
-    private function getInputWidth(array $lines)
+    private function getInputWidth(array $lines) : int
     {
         return max(
             array_map(
