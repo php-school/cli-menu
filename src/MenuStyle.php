@@ -317,7 +317,8 @@ class MenuStyle
     {
         $this->contentWidth = $this->width
             - ($this->paddingLeftRight * 2)
-            - ($this->borderRightWidth + $this->borderLeftWidth);
+            - ($this->borderRightWidth + $this->borderLeftWidth)
+            - $this->margin;
 
         if ($this->contentWidth < 0) {
             $this->contentWidth = 0;
