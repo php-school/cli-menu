@@ -53,6 +53,15 @@ class MenuStyle
     private $requestedWidth;
 
     /**
+     * If the window was resized, we store the original
+     * size, before any resizing, to attempt to restore
+     * it on a later resize.
+     *
+     * @var int
+     */
+    private $widthBeforeResize;
+
+    /**
      * @var int
      */
     protected $margin = 0;
@@ -402,6 +411,7 @@ class MenuStyle
         $this->requestedWidth = $width;
         $width = $this->maybeShrinkWidth($this->margin, $width);
 
+        $this->widthBeforeResize = null;
         $this->width = $width;
         if ($this->marginAuto) {
             $this->calculateMarginAuto($width);
@@ -421,6 +431,24 @@ class MenuStyle
         }
 
         return $width;
+    }
+
+    public function windowResize() : void
+    {
+        if (null === $this->widthBeforeResize) {
+            $this->widthBeforeResize = $this->width;
+        }
+
+        $width = $this->maybeShrinkWidth($this->margin, $this->widthBeforeResize);
+
+        $this->width = $width;
+        if ($this->marginAuto) {
+            $this->calculateMarginAuto($width);
+        }
+
+        $this->calculateContentWidth();
+        $this->generateBorderRows();
+        $this->generatePaddingTopBottomRows();
     }
 
     public function getPaddingTopBottom() : int

@@ -22,6 +22,7 @@ $menu = (new CliMenuBuilder)
             ->addLineBreak('-');
     })
     ->setWidth(70)
+    ->setMarginAuto()
     ->setBackgroundColour('yellow')
     ->build();
 

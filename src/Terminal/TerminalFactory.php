@@ -2,6 +2,7 @@
 
 namespace PhpSchool\CliMenu\Terminal;
 
+use PhpSchool\Terminal\IO\NonBlockingResourceInputStream;
 use PhpSchool\Terminal\IO\ResourceInputStream;
 use PhpSchool\Terminal\IO\ResourceOutputStream;
 use PhpSchool\Terminal\Terminal;
@@ -14,6 +15,6 @@ class TerminalFactory
 {
     public static function fromSystem() : Terminal
     {
-        return new UnixTerminal(new ResourceInputStream, new ResourceOutputStream);
+        return new UnixTerminal(new NonBlockingResourceInputStream, new ResourceOutputStream);
     }
 }

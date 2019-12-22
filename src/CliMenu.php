@@ -116,6 +116,14 @@ class CliMenu
         $this->radioStyle      = new RadioStyle();
         $this->selectableStyle = new SelectableStyle();
 
+        $this->terminal->onSignal(SIGWINCH, function () {
+            $this->style->windowResize();
+
+            if ($this->isOpen()) {
+                $this->redraw(true);
+            }
+        });
+
         $this->selectFirstItem();
     }
 
@@ -295,6 +303,12 @@ class CliMenu
 
         while ($this->isOpen()) {
             $char = $reader->readCharacter();
+
+            if (null === $char) {
+                usleep(10000);
+                continue;
+            }
+
             if (!$char->isHandledControl()) {
                 $rawChar = $char->get();
                 if (isset($this->customControlMappings[$rawChar])) {
