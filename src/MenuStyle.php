@@ -500,6 +500,7 @@ class MenuStyle
         $this->marginAuto = false;
         $this->margin = $margin;
 
+        $this->calculateContentWidth();
         $this->generateBorderRows();
         $this->generatePaddingTopBottomRows();
 
