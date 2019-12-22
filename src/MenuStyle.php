@@ -35,6 +35,15 @@ class MenuStyle
     protected $width;
 
     /**
+     * In case the menu is wider than the terminal
+     * The value that we originally shrunk it to
+     * (the width of the terminal)
+     *
+     * @var bool
+     */
+    private $widthShrunkTo;
+
+    /**
      * @var int
      */
     protected $margin;
@@ -244,8 +253,13 @@ class MenuStyle
             $this->borderColour,
             $this->marginAuto,
         ];
+
+        $defaultStyleValues = self::$defaultStyleValues;
+        if ($this->widthShrunkTo) {
+            $defaultStyleValues['width'] = $this->widthShrunkTo;
+        }
                 
-        return $currentValues !== array_values(self::$defaultStyleValues);
+        return $currentValues !== array_values($defaultStyleValues);
     }
 
     public function getDisabledItemText(string $text) : string
@@ -372,6 +386,7 @@ class MenuStyle
 
         if ($width >= $this->terminal->getWidth()) {
             $width = $this->terminal->getWidth();
+            $this->widthShrunkTo = $width;
         }
 
         $this->width = $width;
