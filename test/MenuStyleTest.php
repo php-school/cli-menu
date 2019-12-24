@@ -313,11 +313,11 @@ class MenuStyleTest extends TestCase
         $style->setMargin(20);
 
         self::assertSame(20, $style->getMargin());
-        self::assertSame(480, $style->getWidth());
+        self::assertSame(460, $style->getWidth());
 
         $style->setMargin(35);
         self::assertSame(35, $style->getMargin());
-        self::assertSame(465, $style->getWidth());
+        self::assertSame(430, $style->getWidth());
     }
 
     public function testMarginAutoCenters() : void
