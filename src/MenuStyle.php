@@ -2,6 +2,7 @@
 
 namespace PhpSchool\CliMenu;
 
+use PhpSchool\CliMenu\Exception\CannotShrinkMenuException;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\CliMenu\Util\ColourUtil;
 use PhpSchool\CliMenu\Util\StringUtil as s;
@@ -418,6 +419,10 @@ class MenuStyle
     {
         if ($width + ($margin * 2) >= $this->terminal->getWidth()) {
             $width = $this->terminal->getWidth() - ($margin * 2);
+
+            if ($width <= 0) {
+                throw CannotShrinkMenuException::fromMarginAndTerminalWidth($margin, $this->terminal->getWidth());
+            }
         }
 
         return $width;

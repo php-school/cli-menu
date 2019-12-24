@@ -774,7 +774,13 @@ class CliMenuBuilderTest extends TestCase
      */
     public function testSetMarginAcceptsZeroAndPositiveIntegers(int $value) : void
     {
-        $menu = (new CliMenuBuilder)->setMargin($value)->build();
+        $terminal = self::createMock(Terminal::class);
+        $terminal
+            ->expects($this->any())
+            ->method('getWidth')
+            ->will($this->returnValue(200));
+
+        $menu = (new CliMenuBuilder($terminal))->setMargin($value)->build();
         
         self::assertSame($value, $menu->getStyle()->getMargin());
     }
