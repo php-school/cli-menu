@@ -1,2 +1,6 @@
 parameters:
     checkMissingIterableValueType: false
+    ignoreErrors:
+        -
+            message: '#ArrayUtil::mapWithKeys() should return array but returns array|false#'
+            path: src/Util/ArrayUtil.php

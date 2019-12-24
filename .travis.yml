@@ -19,6 +19,7 @@ before_script:
 script:
   - ./vendor/bin/phpunit --coverage-clover ./build/logs/clover.xml
   - composer cs
+  - composer static
 
 after_script:
   - bash <(curl -s https://codecov.io/bash)
