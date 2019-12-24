@@ -35,7 +35,7 @@ class FlashTest extends TestCase
 
         $this->terminal->expects($this->any())
             ->method('getWidth')
-            ->willReturn(46);
+            ->willReturn(48);
 
         $this->terminal->expects($this->any())
             ->method('write')

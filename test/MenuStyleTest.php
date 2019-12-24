@@ -3,6 +3,7 @@
 namespace PhpSchool\CliMenuTest;
 
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\Exception\CannotShrinkMenuException;
 use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\Terminal\UnixTerminal;
@@ -313,11 +314,11 @@ class MenuStyleTest extends TestCase
         $style->setMargin(20);
 
         self::assertSame(20, $style->getMargin());
-        self::assertSame(480, $style->getWidth());
+        self::assertSame(460, $style->getWidth());
 
         $style->setMargin(35);
         self::assertSame(35, $style->getMargin());
-        self::assertSame(465, $style->getWidth());
+        self::assertSame(430, $style->getWidth());
     }
 
     public function testMarginAutoCenters() : void
@@ -711,5 +712,25 @@ class MenuStyleTest extends TestCase
             ["01234\033[41m                              \033[0m01234\n"],
             $style->getBorderTopRows()
         );
+    }
+
+    /**
+     * @dataProvider cannotShrinkProvider
+     */
+    public function testSetWidthThrowsExceptionIfMenuTooWideAndMarginConsumesTerminal(int $margin) : void
+    {
+        $this->expectException(CannotShrinkMenuException::class);
+        $this->expectExceptionMessage(
+            "Cannot shrink menu. Margin: $margin * 2 with terminal width: 100 leaves no space for menu"
+        );
+
+        $style = $this->getMenuStyle(8, 100);
+        $style->setMargin($margin);
+        $style->setWidth(10);
+    }
+
+    public function cannotShrinkProvider() : array
+    {
+        return [[50], [51], [100]];
     }
 }
