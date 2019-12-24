@@ -35,7 +35,7 @@ $itemCallable = function (CliMenu $menu) {
     });
 
     foreach (range(0, rand(1, 5)) as $i) {
-        $items[] = new LineBreakItem(array_rand(array_flip(['♥', '★', '😂 '])), rand(1, 3));
+        $items[] = new LineBreakItem(array_rand(array_flip(['♥', '★', '^'])), rand(1, 3));
     }
     shuffle($items);
 
