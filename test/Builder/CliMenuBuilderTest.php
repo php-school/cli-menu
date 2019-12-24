@@ -233,9 +233,12 @@ class CliMenuBuilderTest extends TestCase
     {
         $terminal = static::createMock(Terminal::class);
         $terminal
-            ->expects($this->any())
+            ->method('getWidth')
+            ->willReturn(100);
+
+        $terminal
             ->method('getColourSupport')
-            ->will($this->returnValue(256));
+            ->willReturn(256);
 
         $builder = new CliMenuBuilder($terminal);
         $builder->setBackgroundColour(16, 'white');
@@ -248,9 +251,12 @@ class CliMenuBuilderTest extends TestCase
 
         $terminal = static::createMock(Terminal::class);
         $terminal
-            ->expects($this->any())
+            ->method('getWidth')
+            ->willReturn(100);
+
+        $terminal
             ->method('getColourSupport')
-            ->will($this->returnValue(8));
+            ->willReturn(8);
 
         $builder = new CliMenuBuilder($terminal);
         $builder->setBackgroundColour(16, 'white');
@@ -269,9 +275,11 @@ class CliMenuBuilderTest extends TestCase
 
         $terminal = static::createMock(Terminal::class);
         $terminal
-            ->expects($this->any())
+            ->method('getWidth')
+            ->willReturn(100);
+        $terminal
             ->method('getColourSupport')
-            ->will($this->returnValue(256));
+            ->willReturn(256);
 
         $builder = new CliMenuBuilder($terminal);
         $builder->setForegroundColour(512, 'white');
@@ -284,9 +292,11 @@ class CliMenuBuilderTest extends TestCase
 
         $terminal = static::createMock(Terminal::class);
         $terminal
-            ->expects($this->any())
+            ->method('getWidth')
+            ->willReturn(100);
+        $terminal
             ->method('getColourSupport')
-            ->will($this->returnValue(256));
+            ->willReturn(256);
 
         $builder = new CliMenuBuilder($terminal);
         $builder->setBackgroundColour(257, 'white');

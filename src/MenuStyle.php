@@ -4,6 +4,7 @@ namespace PhpSchool\CliMenu;
 
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\CliMenu\Util\ColourUtil;
+use PhpSchool\CliMenu\Util\StringUtil as s;
 use PhpSchool\Terminal\Terminal;
 use Assert\Assertion;
 
@@ -30,14 +31,31 @@ class MenuStyle
     protected $bg;
 
     /**
+     * The width of the menu. Including borders and padding.
+     * Does not include margin.
+     *
+     * May not be the value that was requested in the
+     * circumstance that the terminal is smaller then the
+     * requested width.
+     *
      * @var int
      */
     protected $width;
 
     /**
+     * In case the requested width is wider than the terminal
+     * then we shrink the width to fit the terminal. We keep
+     * the requested size in case the margins are changed and
+     * we need to recalculate the width.
+     *
      * @var int
      */
-    protected $margin;
+    private $requestedWidth;
+
+    /**
+     * @var int
+     */
+    protected $margin = 0;
 
     /**
      * @var int
@@ -133,6 +151,11 @@ class MenuStyle
      * @var bool
      */
     private $marginAuto = false;
+
+    /**
+     * @var bool
+     */
+    private $debugMode = false;
 
     /**
      * Default Values
@@ -244,8 +267,13 @@ class MenuStyle
             $this->borderColour,
             $this->marginAuto,
         ];
-                
-        return $currentValues !== array_values(self::$defaultStyleValues);
+
+        $defaultStyleValues = self::$defaultStyleValues;
+        if ($this->width !== $this->requestedWidth) {
+            $defaultStyleValues['width'] = $this->width;
+        }
+
+        return $currentValues !== array_values($defaultStyleValues);
     }
 
     public function getDisabledItemText(string $text) : string
@@ -312,6 +340,8 @@ class MenuStyle
 
     /**
      * Calculate the contents width
+     *
+     * The content width is menu width minus borders and padding.
      */
     protected function calculateContentWidth() : void
     {
@@ -369,13 +399,12 @@ class MenuStyle
     {
         Assertion::greaterOrEqualThan($width, 0);
 
-        if ($width >= $this->terminal->getWidth()) {
-            $width = $this->terminal->getWidth();
-        }
+        $this->requestedWidth = $width;
+        $width = $this->maybeShrinkWidth($this->margin, $width);
 
         $this->width = $width;
         if ($this->marginAuto) {
-            $this->setMarginAuto();
+            $this->calculateMarginAuto($width);
         }
 
         $this->calculateContentWidth();
@@ -383,6 +412,15 @@ class MenuStyle
         $this->generatePaddingTopBottomRows();
 
         return $this;
+    }
+
+    private function maybeShrinkWidth(int $margin, int $width) : int
+    {
+        if ($width + $margin >= $this->terminal->getWidth()) {
+            $width = $this->terminal->getWidth() - $margin;
+        }
+
+        return $width;
     }
 
     public function getPaddingTopBottom() : int
@@ -405,7 +443,7 @@ class MenuStyle
 
         $paddingRow = sprintf(
             "%s%s%s%s%s%s%s%s%s%s\n",
-            str_repeat(' ', $this->margin),
+            $this->debugMode ? $this->getDebugString($this->margin) : str_repeat(' ', $this->margin),
             $borderColour,
             str_repeat(' ', $this->borderLeftWidth),
             $this->getColoursSetCode(),
@@ -416,6 +454,15 @@ class MenuStyle
             str_repeat(' ', $this->borderRightWidth),
             $this->coloursResetCode
         );
+
+
+        if ($this->debugMode && s::length($paddingRow) <= $this->terminal->getWidth()) {
+            $paddingRow = substr_replace(
+                $paddingRow,
+                sprintf("%s\n", $this->getDebugString($this->terminal->getWidth() - (s::length($paddingRow) - 1))),
+                -1
+            );
+        }
 
         $this->paddingTopBottomRows = array_fill(0, $this->paddingTopBottom, $paddingRow);
     }
@@ -469,12 +516,16 @@ class MenuStyle
     public function setMarginAuto() : self
     {
         $this->marginAuto = true;
-        $this->margin = (int) floor(($this->terminal->getWidth() - $this->width) / 2);
+        $this->margin = 0;
 
-        $this->generateBorderRows();
-        $this->generatePaddingTopBottomRows();
+        $this->setWidth($this->requestedWidth);
 
         return $this;
+    }
+
+    private function calculateMarginAuto(int $width) : void
+    {
+        $this->margin = (int) floor(($this->terminal->getWidth() - ($width)) / 2);
     }
 
     public function setMargin(int $margin) : self
@@ -484,8 +535,9 @@ class MenuStyle
         $this->marginAuto = false;
         $this->margin = $margin;
 
-        $this->generateBorderRows();
-        $this->generatePaddingTopBottomRows();
+        //margin + width may now exceed terminal size
+        //so set width again to trigger width check + maybe resize
+        $this->setWidth($this->requestedWidth);
 
         return $this;
     }
@@ -549,11 +601,19 @@ class MenuStyle
     {
         $borderRow = sprintf(
             "%s%s%s%s\n",
-            str_repeat(' ', $this->margin),
+            $this->debugMode ? $this->getDebugString($this->margin) : str_repeat(' ', $this->margin),
             $this->getBorderColourCode(),
             str_repeat(' ', $this->width),
-            $this->coloursResetCode
+            $this->getColoursResetCode()
         );
+
+        if ($this->debugMode && s::length($borderRow) <= $this->terminal->getWidth()) {
+            $borderRow = substr_replace(
+                $borderRow,
+                sprintf("%s\n", $this->getDebugString($this->terminal->getWidth() - (s::length($borderRow) - 1))),
+                -1
+            );
+        }
 
         $this->borderTopRows = array_fill(0, $this->borderTopWidth, $borderRow);
         $this->borderBottomRows = array_fill(0, $this->borderBottomWidth, $borderRow);
@@ -695,5 +755,23 @@ class MenuStyle
         }
 
         return sprintf("\033[%sm", $borderColourCode);
+    }
+
+    /**
+     * Get a string of given length consisting of 0-9
+     * eg $length = 15 : 012345678901234
+     */
+    private function getDebugString(int $length) : string
+    {
+        $nums = [];
+        for ($i = 0, $j = 0; $i < $length; $i++, $j++) {
+            if ($j === 10) {
+                $j = 0;
+            }
+
+            $nums[] = $j;
+        }
+
+        return implode('', $nums);
     }
 }

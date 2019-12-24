@@ -44,6 +44,10 @@ class InputIOTest extends TestCase
     public function setUp() : void
     {
         $this->terminal = $this->createMock(Terminal::class);
+        $this->terminal
+            ->method('getWidth')
+            ->willReturn(100);
+
         $this->output   = new BufferedOutput;
         $this->menu     = $this->createMock(CliMenu::class);
         $this->style    = new MenuStyle($this->terminal);
@@ -51,10 +55,6 @@ class InputIOTest extends TestCase
 
         $this->style->setBg('yellow');
         $this->style->setFg('red');
-
-        $this->terminal
-            ->method('getWidth')
-            ->willReturn(100);
 
         $parentStyle = new MenuStyle($this->terminal);
         $parentStyle->setBg('blue');

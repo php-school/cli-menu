@@ -14,12 +14,12 @@ use PHPUnit\Framework\TestCase;
  */
 class MenuStyleTest extends TestCase
 {
-    private function getMenuStyle(int $colours = 8) : MenuStyle
+    private function getMenuStyle(int $colours = 8, int $width = 500) : MenuStyle
     {
-        return new MenuStyle($this->getMockTerminal($colours));
+        return new MenuStyle($this->getMockTerminal($colours, $width));
     }
 
-    private function getMockTerminal(int $colours = 8) : MockObject
+    private function getMockTerminal(int $colours, int $width) : MockObject
     {
         $terminal = $this
             ->getMockBuilder(UnixTerminal::class)
@@ -28,14 +28,12 @@ class MenuStyleTest extends TestCase
             ->getMock();
 
         $terminal
-            ->expects(self::any())
             ->method('getWidth')
-            ->will(self::returnValue(500));
+            ->willReturn($width);
 
         $terminal
-            ->expects(self::any())
             ->method('getColourSupport')
-            ->will(self::returnValue($colours));
+            ->willReturn($colours);
 
         return $terminal;
     }
@@ -308,6 +306,20 @@ class MenuStyleTest extends TestCase
         self::assertSame(5, $style->getMargin());
     }
 
+    public function testSetMarginWhenWidthIsLargerThanTerminal() : void
+    {
+        $style = $this->getMenuStyle();
+        $style->setWidth(600);
+        $style->setMargin(20);
+
+        self::assertSame(20, $style->getMargin());
+        self::assertSame(480, $style->getWidth());
+
+        $style->setMargin(35);
+        self::assertSame(35, $style->getMargin());
+        self::assertSame(465, $style->getWidth());
+    }
+
     public function testMarginAutoCenters() : void
     {
         $style = $this->getMenuStyle();
@@ -320,7 +332,17 @@ class MenuStyleTest extends TestCase
         self::assertSame(290, $style->getContentWidth());
     }
 
-    public function testModifyWithWhenMarginAutoIsEnabledRecalculatesMargin() : void
+    public function testSetMarginAutoWhenWidthIsLargerThanTerminal() : void
+    {
+        $style = $this->getMenuStyle();
+        $style->setWidth(600);
+        $style->setMarginAuto();
+
+        self::assertSame(0, $style->getMargin());
+        self::assertSame(500, $style->getWidth());
+    }
+
+    public function testModifyWidthWhenMarginAutoIsEnabledRecalculatesMargin() : void
     {
         $style = $this->getMenuStyle();
 
@@ -639,5 +661,55 @@ class MenuStyleTest extends TestCase
         self::expectException(\Assert\InvalidArgumentException::class);
 
         $this->getMenuStyle()->setMargin($value);
+    }
+
+    public function testHasChangedFromDefaultsReturnsFalseWhenAutoShrunk() : void
+    {
+        $terminal = $this
+            ->getMockBuilder(UnixTerminal::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getWidth'])
+            ->getMock();
+
+        $terminal
+            ->expects(self::any())
+            ->method('getWidth')
+            ->willReturn(80);
+
+        $menuStyle = new MenuStyle($terminal);
+
+        self::assertFalse($menuStyle->hasChangedFromDefaults());
+    }
+
+    public function testDebugMode() : void
+    {
+        $style = $this->getMenuStyle(8, 40);
+
+        $prop = new \ReflectionProperty(MenuStyle::class, 'debugMode');
+        $prop->setAccessible(true);
+        $prop->setValue($style, true);
+
+        $style->setWidth(30);
+
+        self::assertEquals(
+            ["01\033[37;44m                              \033[0m01234567\n"],
+            $style->getPaddingTopBottomRows()
+        );
+
+        $style->setMarginAuto();
+
+        self::assertEquals(
+            ["01234\033[37;44m                              \033[0m01234\n"],
+            $style->getPaddingTopBottomRows()
+        );
+
+        $style->setBorderColour('red');
+        $style->setBorderTopWidth(1);
+        $style->setBorderBottomWidth(1);
+
+        self::assertEquals(
+            ["01234\033[41m                              \033[0m01234\n"],
+            $style->getBorderTopRows()
+        );
     }
 }
