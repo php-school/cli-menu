@@ -354,7 +354,7 @@ class MenuStyle
         }
     }
 
-    public function getFg()
+    public function getFg() : string
     {
         return $this->fg;
     }
@@ -371,7 +371,7 @@ class MenuStyle
         return $this;
     }
 
-    public function getBg()
+    public function getBg() : string
     {
         return $this->bg;
     }
@@ -467,6 +467,9 @@ class MenuStyle
         $this->paddingTopBottomRows = array_fill(0, $this->paddingTopBottom, $paddingRow);
     }
 
+    /**
+     * @return array
+     */
     public function getPaddingTopBottomRows() : array
     {
         return $this->paddingTopBottomRows;
@@ -619,17 +622,27 @@ class MenuStyle
         $this->borderBottomRows = array_fill(0, $this->borderBottomWidth, $borderRow);
     }
 
+    /**
+     * @return array
+     */
     public function getBorderTopRows() : array
     {
         return $this->borderTopRows;
     }
 
+    /**
+     * @return array
+     */
     public function getBorderBottomRows() : array
     {
         return $this->borderBottomRows;
     }
 
     /**
+     * @param int|string|null $rightWidth
+     * @param int|string|null $bottomWidth
+     * @param int|string|null $leftWidth
+     *
      * Shorthand function to set all borders values at once
      */
     public function setBorder(
@@ -658,8 +671,6 @@ class MenuStyle
 
         if (is_string($colour)) {
             $this->setBorderColour($colour);
-        } elseif ($colour !== null) {
-            throw new \InvalidArgumentException('Invalid colour');
         }
 
         $this->calculateContentWidth();
@@ -707,7 +718,7 @@ class MenuStyle
         return $this;
     }
 
-    public function setBorderColour(string $colour, $fallback = null) : self
+    public function setBorderColour(string $colour, string $fallback = null) : self
     {
         $this->borderColour = ColourUtil::validateColour(
             $this->terminal,

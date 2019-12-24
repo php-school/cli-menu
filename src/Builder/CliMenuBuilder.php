@@ -412,6 +412,11 @@ class CliMenuBuilder
         return $this;
     }
 
+    /**
+     * @param int|string|null $right
+     * @param int|string|null $bottom
+     * @param int|string|null $left
+     */
     public function setBorder(int $top, $right = null, $bottom = null, $left = null, string $colour = null) : self
     {
         $this->style->setBorder($top, $right, $bottom, $left, $colour);
@@ -447,7 +452,7 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function setBorderColour(string $colour, $fallback = null) : self
+    public function setBorderColour(string $colour, string $fallback = null) : self
     {
         $this->style->setBorderColour($colour, $fallback);
 
@@ -575,7 +580,7 @@ class CliMenuBuilder
      * Pass styles from current menu to sub-menu
      * only if sub-menu style has not be customized
      */
-    private function propagateStyles(CliMenu $menu, array $items = [])
+    private function propagateStyles(CliMenu $menu, array $items = []) : void
     {
         $currentItems = !empty($items) ? $items : $menu->getItems();
 

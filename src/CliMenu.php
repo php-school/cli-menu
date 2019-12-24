@@ -757,7 +757,7 @@ class CliMenu
         return new Password(new InputIO($this, $this->terminal), $style);
     }
 
-    private function guardSingleLine($text) : void
+    private function guardSingleLine(string $text) : void
     {
         if (strpos($text, "\n") !== false) {
             throw new \InvalidArgumentException;
