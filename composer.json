@@ -27,7 +27,10 @@
     "autoload" : {
         "psr-4" : {
             "PhpSchool\\CliMenu\\": "src"
-        }
+        },
+        "files" : [
+            "src/Util/ArrayUtils.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": { "PhpSchool\\CliMenuTest\\": "test/" }

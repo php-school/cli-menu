@@ -5,6 +5,7 @@ namespace PhpSchool\CliMenu\MenuItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
 use PhpSchool\CliMenu\Style\SelectableStyle;
+use function PhpSchool\CliMenu\Util\mapWithKeys;
 
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
@@ -70,7 +71,7 @@ class SelectableItem implements MenuItemInterface
             )
         );
 
-        return array_map(function ($row, $key) use ($style, $length) {
+        return mapWithKeys($rows, function (int $key, string $row) use ($style, $length) {
             $text = $this->disabled ? $style->getDisabledItemText($row) : $row;
 
             if ($key === 0) {
@@ -85,7 +86,7 @@ class SelectableItem implements MenuItemInterface
             }
 
             return $text;
-        }, $rows, array_keys($rows));
+        });
     }
 
     /**
