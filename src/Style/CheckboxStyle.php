@@ -2,7 +2,7 @@
 
 namespace PhpSchool\CliMenu\Style;
 
-class CheckboxStyle
+class CheckboxStyle implements Selectable
 {
     private const DEFAULT_STYLES = [
         'checkedMarker' => '[✔] ',

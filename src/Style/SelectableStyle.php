@@ -2,7 +2,7 @@
 
 namespace PhpSchool\CliMenu\Style;
 
-class SelectableStyle
+class SelectableStyle implements Selectable
 {
     private const DEFAULT_STYLES = [
         'selectedMarker' => '● ',

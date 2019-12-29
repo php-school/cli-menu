@@ -2,7 +2,7 @@
 
 namespace PhpSchool\CliMenu\Style;
 
-class RadioStyle
+class RadioStyle implements Selectable
 {
     private const DEFAULT_STYLES = [
         'checkedMarker' => '[●] ',
