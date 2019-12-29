@@ -7,7 +7,7 @@ use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
 use PhpSchool\CliMenu\Style\RadioStyle;
 
-class RadioItem implements MenuItemInterface, ToggableItemInterface
+class RadioItem implements MenuItemInterface
 {
     /**
      * @var string

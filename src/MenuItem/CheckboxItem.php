@@ -7,7 +7,7 @@ use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
 use PhpSchool\CliMenu\Style\CheckboxStyle;
 
-class CheckboxItem implements MenuItemInterface, ToggableItemInterface
+class CheckboxItem implements MenuItemInterface
 {
     /**
      * @var string
