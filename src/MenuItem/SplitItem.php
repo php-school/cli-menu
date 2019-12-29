@@ -5,6 +5,7 @@ namespace PhpSchool\CliMenu\MenuItem;
 use Assert\Assertion;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
+use function PhpSchool\CliMenu\Util\mapWithKeys;
 
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
@@ -129,7 +130,7 @@ class SplitItem implements MenuItemInterface
         $missingLength = $style->getContentWidth() % $numberOfItems;
         
         return $this->buildRows(
-            array_map(function ($index, $item) use ($selected, $length, $style) {
+            mapWithKeys($this->items, function (int $index, MenuItemInterface $item) use ($selected, $length, $style) {
                 $isSelected = $selected && $index === $this->selectedItemIndex;
 
                 if ($item instanceof CheckboxItem || $item instanceof RadioItem) {
@@ -165,7 +166,7 @@ class SplitItem implements MenuItemInterface
                     $isSelected,
                     $itemExtra
                 );
-            }, array_keys($this->items), $this->items),
+            }),
             $missingLength,
             $length,
             $largestItemExtra
