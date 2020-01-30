@@ -1,3 +1,5 @@
+TEMPORARY FORK OF php-school/cli-menu TO MAKE MY PACKAGE STABLE. THIS FORK WILL BE REMOVED RIGHT AFTER THE NEXT RELEASE OF php-school/cli-menu
+
 <p align="center">
     <img src="https://cloud.githubusercontent.com/assets/2174476/10601666/071e3e24-770b-11e5-9cba-8ae6402ff550.gif" width="300" />
 </p>
