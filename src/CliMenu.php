@@ -653,7 +653,7 @@ class CliMenu
         $this->style = $style;
     }
 
-    public function setItemStyle(ItemStyle $style, string $styleClass)
+    public function setItemStyle(ItemStyle $style, string $styleClass) : void
     {
         $this->itemStyleLocator->setStyle($style, $styleClass);
     }

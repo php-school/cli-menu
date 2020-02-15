@@ -18,6 +18,9 @@ use function PhpSchool\CliMenu\Util\mapWithKeys;
 
 class Locator
 {
+    /**
+     * @var array
+     */
     private $itemStyleMap = [
         /** Static non selectable items */
         StaticItem::class => DefaultStyle::class,
