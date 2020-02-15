@@ -3,14 +3,20 @@
 namespace PhpSchool\CliMenu\MenuItem;
 
 use Assert\Assertion;
+use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Style\DefaultStyle;
+use PhpSchool\CliMenu\Style\ItemStyle;
+use PhpSchool\CliMenu\Style\Selectable;
 use PhpSchool\CliMenu\Util\StringUtil;
+use function PhpSchool\CliMenu\Util\each;
 use function PhpSchool\CliMenu\Util\mapWithKeys;
+use function PhpSchool\CliMenu\Util\max;
 
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
-class SplitItem implements MenuItemInterface
+class SplitItem implements MenuItemInterface, PropagatesStyles
 {
     /**
      * @var array
@@ -33,6 +39,11 @@ class SplitItem implements MenuItemInterface
     private $gutter = 2;
 
     /**
+     * @var DefaultStyle
+     */
+    private $style;
+
+    /**
      * @var array
      */
     private static $blacklistedItems = [
@@ -45,6 +56,8 @@ class SplitItem implements MenuItemInterface
     {
         $this->addItems($items);
         $this->setDefaultSelectedItem();
+
+        $this->style = new DefaultStyle();
     }
 
     public function getGutter() : int
@@ -133,16 +146,10 @@ class SplitItem implements MenuItemInterface
             mapWithKeys($this->items, function (int $index, MenuItemInterface $item) use ($selected, $length, $style) {
                 $isSelected = $selected && $index === $this->selectedItemIndex;
 
-                if ($item instanceof CheckboxItem || $item instanceof RadioItem) {
-                    $markerType = $item->getStyle()->getMarker($item->getChecked());
-                } else {
-                    /** @var MenuMenuItem|SelectableItem|StaticItem $item */
-                    $markerType = $item->getStyle()->getMarker($isSelected);
+                $marker = '';
+                if ($item->canSelect()) {
+                    $marker = $item->getStyle()->getMarker($item, $isSelected);
                 }
-
-                $marker = $item->canSelect()
-                    ? sprintf('%s', $markerType)
-                    : '';
 
                 $itemExtra = '';
                 if ($item->getStyle()->getDisplaysExtra()) {
@@ -332,21 +339,50 @@ class SplitItem implements MenuItemInterface
      */
     private function calculateItemExtra() : int
     {
-        $largestItemExtra = 0;
+        return max(array_map(
+            function (MenuItemInterface $item) {
+                return mb_strlen($item->getStyle()->getItemExtra());
+            },
+            array_filter($this->items, function (MenuItemInterface $item) {
+                return $item->getStyle()->getDisplaysExtra();
+            })
+        ));
+    }
 
-        /** @var CheckboxItem|RadioItem|MenuMenuItem|SelectableItem|StaticItem $item */
-        foreach ($this->items as $item) {
-            if (!$item->getStyle()->getDisplaysExtra()) {
-                continue;
+    /**
+     * @return DefaultStyle
+     */
+    public function getStyle(): ItemStyle
+    {
+        return $this->style;
+    }
+
+    public function setStyle(DefaultStyle $style): void
+    {
+        $this->style = $style;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function propagateStyles(CliMenu $parent): void
+    {
+        each(
+            array_filter($this->getItems(), function (MenuItemInterface $item) {
+                return !$item->getStyle()->hasChangedFromDefaults();
+            }),
+            function ($index, $item) use ($parent) {
+                $item->setStyle(clone $parent->getItemStyleForItem($item));
             }
+        );
 
-            if (mb_strlen($item->getStyle()->getItemExtra()) < $largestItemExtra) {
-                continue;
+        each(
+            array_filter($this->getItems(), function (MenuItemInterface $item) {
+                return $item instanceof PropagatesStyles;
+            }),
+            function ($index, PropagatesStyles $item) use ($parent) {
+                $item->propagateStyles($parent);
             }
-
-            $largestItemExtra = mb_strlen($item->getStyle()->getItemExtra());
-        }
-
-        return $largestItemExtra;
+        );
     }
 }

@@ -17,6 +17,7 @@ use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Style\CheckboxStyle;
+use PhpSchool\CliMenu\Style\DefaultStyle;
 use PhpSchool\CliMenu\Style\RadioStyle;
 use PhpSchool\CliMenu\Style\SelectableStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
@@ -397,7 +398,7 @@ class CliMenuBuilder
     public function setItemExtra(string $extra) : self
     {
         $this->style->setItemExtra($extra);
-        $this->menu->getSelectableStyle()->setItemExtra($extra);
+        $this->getSelectableStyle()->setItemExtra($extra);
 
         // if we customise item extra, it means we most likely want to display it
         $this->displayExtra();
@@ -490,7 +491,7 @@ class CliMenuBuilder
     public function displayExtra() : self
     {
         $this->style->setDisplaysExtra(true);
-        $this->menu->getSelectableStyle()->setDisplaysExtra(true);
+        $this->getSelectableStyle()->setDisplaysExtra(true);
 
         return $this;
     }
@@ -513,126 +514,93 @@ class CliMenuBuilder
         }
 
         if (!$this->subMenu) {
-            $this->propagateStyles($this->menu);
+            $this->menu->propagateStyles();
         }
 
         return $this->menu;
     }
 
-    public function getCheckboxStyle() : CheckboxStyle
+    public function getDefaultStyle() : DefaultStyle
     {
-        return $this->menu->getCheckboxStyle();
+        $style = $this->menu->getItemStyle(DefaultStyle::class);
+        assert($style instanceof DefaultStyle);
+        return $style;
     }
 
-    public function setCheckboxStyle(CheckboxStyle $style) : self
+    public function setDefaultStyle(DefaultStyle $style) : self
     {
-        $this->menu->setCheckboxStyle($style);
+        $this->menu->setItemStyle($style, DefaultStyle::class);
 
         return $this;
     }
 
-    public function modifyCheckboxStyle(callable $itemCallable) : self
+    public function modifyDefaultStyle(callable $itemCallable) : self
     {
-        $itemCallable($this->menu->getCheckboxStyle());
-
-        return $this;
-    }
-
-    public function getRadioStyle() : RadioStyle
-    {
-        return $this->menu->getRadioStyle();
-    }
-
-    public function setRadioStyle(RadioStyle $style) : self
-    {
-        $this->menu->setRadioStyle($style);
-
-        return $this;
-    }
-
-    public function modifyRadioStyle(callable $itemCallable) : self
-    {
-        $itemCallable($this->menu->getRadioStyle());
+        $itemCallable($this->getDefaultStyle());
 
         return $this;
     }
 
     public function getSelectableStyle() : SelectableStyle
     {
-        return $this->menu->getSelectableStyle();
+        $style = $this->menu->getItemStyle(SelectableStyle::class);
+        assert($style instanceof SelectableStyle);
+        return $style;
     }
 
     public function setSelectableStyle(SelectableStyle $style) : self
     {
-        $this->menu->setSelectableStyle($style);
+        $this->menu->setItemStyle($style, SelectableStyle::class);
 
         return $this;
     }
 
     public function modifySelectableStyle(callable $itemCallable) : self
     {
-        $itemCallable($this->menu->getSelectableStyle());
+        $itemCallable($this->getSelectableStyle());
 
         return $this;
     }
 
-    /**
-     * Pass styles from current menu to sub-menu
-     * only if sub-menu style has not be customized
-     */
-    private function propagateStyles(CliMenu $menu, array $items = []) : void
+    public function getCheckboxStyle() : CheckboxStyle
     {
-        $currentItems = !empty($items) ? $items : $menu->getItems();
+        $style = $this->menu->getItemStyle(CheckboxStyle::class);
+        assert($style instanceof CheckboxStyle);
+        return $style;
+    }
 
-        foreach ($currentItems as $item) {
-            if ($item instanceof CheckboxItem
-                && !$item->getStyle()->hasChangedFromDefaults()
-            ) {
-                $item->setStyle(clone $menu->getCheckboxStyle());
-            }
+    public function setCheckboxStyle(CheckboxStyle $style) : self
+    {
+        $this->menu->setItemStyle($style, CheckboxStyle::class);
 
-            if ($item instanceof RadioItem
-                && !$item->getStyle()->hasChangedFromDefaults()
-            ) {
-                $item->setStyle(clone $menu->getRadioStyle());
-            }
+        return $this;
+    }
 
-            if (($item instanceof MenuMenuItem
-                    || $item instanceof SelectableItem
-                    || $item instanceof StaticItem
-                )
-                && !$item->getStyle()->hasChangedFromDefaults()
-            ) {
-                $item->setStyle(clone $menu->getSelectableStyle());
-            }
+    public function modifyCheckboxStyle(callable $itemCallable) : self
+    {
+        $itemCallable($this->getCheckboxStyle());
 
-            // Apply current style to children, if they are not customized
-            if ($item instanceof MenuMenuItem) {
-                $subMenu = $item->getSubMenu();
+        return $this;
+    }
 
-                if (!$subMenu->getStyle()->hasChangedFromDefaults()) {
-                    $subMenu->setStyle(clone $menu->getStyle());
-                }
+    public function getRadioStyle() : RadioStyle
+    {
+        $style = $this->menu->getItemStyle(RadioStyle::class);
+        assert($style instanceof RadioStyle);
+        return $style;
+    }
 
-                if (!$subMenu->getCheckboxStyle()->hasChangedFromDefaults()) {
-                    $subMenu->setCheckboxStyle(clone $menu->getCheckboxStyle());
-                }
+    public function setRadioStyle(RadioStyle $style) : self
+    {
+        $this->menu->setItemStyle($style, RadioItem::class);
 
-                if (!$subMenu->getRadioStyle()->hasChangedFromDefaults()) {
-                    $subMenu->setRadioStyle(clone $menu->getRadioStyle());
-                }
+        return $this;
+    }
 
-                if (!$subMenu->getSelectableStyle()->hasChangedFromDefaults()) {
-                    $subMenu->setSelectableStyle(clone $menu->getSelectableStyle());
-                }
+    public function modifyRadioStyle(callable $itemCallable) : self
+    {
+        $itemCallable($this->getRadioStyle());
 
-                $this->propagateStyles($subMenu);
-            }
-
-            // Apply styles to SplitItem children using current $menu
-            if ($item instanceof SplitItem) {
-                $this->propagateStyles($menu, $item->getItems());
-            }
-        }
+        return $this;
     }
 }

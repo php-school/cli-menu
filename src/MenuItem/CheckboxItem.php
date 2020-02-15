@@ -6,6 +6,7 @@ use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
 use PhpSchool\CliMenu\Style\CheckboxStyle;
+use PhpSchool\CliMenu\Style\ItemStyle;
 
 class CheckboxItem implements MenuItemInterface
 {
@@ -60,7 +61,7 @@ class CheckboxItem implements MenuItemInterface
      */
     public function getRows(MenuStyle $style, bool $selected = false) : array
     {
-        $marker = sprintf("%s", $this->style->getMarker($this->checked));
+        $marker = sprintf("%s", $this->style->getMarker($this, $selected));
 
         $itemExtra = $this->style->getItemExtra();
 
@@ -183,15 +184,16 @@ class CheckboxItem implements MenuItemInterface
         $this->checked = !$this->checked;
     }
 
-    public function getStyle() : CheckboxStyle
+    /**
+     * @return CheckboxStyle
+     */
+    public function getStyle() : ItemStyle
     {
         return $this->style;
     }
 
-    public function setStyle(CheckboxStyle $style) : self
+    public function setStyle(CheckboxStyle $style) : void
     {
         $this->style = $style;
-
-        return $this;
     }
 }

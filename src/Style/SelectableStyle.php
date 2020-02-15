@@ -2,7 +2,9 @@
 
 namespace PhpSchool\CliMenu\Style;
 
-class SelectableStyle
+use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
+
+class SelectableStyle implements ItemStyle
 {
     private const DEFAULT_STYLES = [
         'selectedMarker' => '● ',
@@ -51,7 +53,7 @@ class SelectableStyle
         return $currentValues !== array_values(self::DEFAULT_STYLES);
     }
 
-    public function getMarker(bool $selected) : string
+    public function getMarker(MenuItemInterface $item, bool $selected) : string
     {
         return $selected ? $this->selectedMarker : $this->unselectedMarker;
     }

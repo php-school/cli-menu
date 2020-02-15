@@ -1,6 +1,2 @@
 parameters:
     checkMissingIterableValueType: false
-    ignoreErrors:
-        -
-            message: '#Function PhpSchool\\\\CliMenu\\\\Util\\\\mapWithKeys should return array but returns array|false#'
-            path: src/Util/ArrayUtils.php

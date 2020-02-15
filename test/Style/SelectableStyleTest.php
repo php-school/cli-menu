@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Style;
 
+use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\Style\SelectableStyle;
 use PHPUnit\Framework\TestCase;
 
@@ -16,10 +17,11 @@ class SelectableStyleTest extends TestCase
 
     public function testGetMarker() : void
     {
+        $item = new SelectableItem('My Item', 'var_dump');
         $style = new SelectableStyle;
 
-        self::assertSame('● ', $style->getMarker(true));
-        self::assertSame('○ ', $style->getMarker(false));
+        self::assertSame('● ', $style->getMarker($item, true));
+        self::assertSame('○ ', $style->getMarker($item, false));
     }
 
     public function testGetSetMarkerOn() : void

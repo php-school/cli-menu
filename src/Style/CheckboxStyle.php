@@ -2,7 +2,10 @@
 
 namespace PhpSchool\CliMenu\Style;
 
-class CheckboxStyle
+use PhpSchool\CliMenu\MenuItem\CheckboxItem;
+use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
+
+class CheckboxStyle implements ItemStyle
 {
     private const DEFAULT_STYLES = [
         'checkedMarker' => '[✔] ',
@@ -51,9 +54,15 @@ class CheckboxStyle
         return $currentValues !== array_values(self::DEFAULT_STYLES);
     }
 
-    public function getMarker(bool $selected) : string
+    public function getMarker(MenuItemInterface $item, bool $selected) : string
     {
-        return $selected ? $this->checkedMarker : $this->uncheckedMarker;
+        if (!$item instanceof CheckboxItem) {
+            throw new \InvalidArgumentException(
+                sprintf('Expected an instance of: %s. Got: %s', CheckboxItem::class, get_class($item))
+            );
+        }
+
+        return $item->getChecked() ? $this->checkedMarker : $this->uncheckedMarker;
     }
 
     public function getCheckedMarker() : string

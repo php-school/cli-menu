@@ -3,6 +3,7 @@
 namespace PhpSchool\CliMenu\MenuItem;
 
 use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Style\ItemStyle;
 
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
@@ -43,4 +44,11 @@ interface MenuItemInterface
      * Disable showing item extra
      */
     public function hideItemExtra() : void;
+
+    /**
+     * Get the items style object. Can and
+     * should be subclassed to provide bespoke
+     * behaviour.
+     */
+    public function getStyle() : ItemStyle;
 }

@@ -2,7 +2,10 @@
 
 namespace PhpSchool\CliMenu\Style;
 
-class RadioStyle
+use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
+use PhpSchool\CliMenu\MenuItem\RadioItem;
+
+class RadioStyle implements ItemStyle
 {
     private const DEFAULT_STYLES = [
         'checkedMarker' => '[●] ',
@@ -51,9 +54,15 @@ class RadioStyle
         return $currentValues !== array_values(self::DEFAULT_STYLES);
     }
 
-    public function getMarker(bool $selected) : string
+    public function getMarker(MenuItemInterface $item, bool $selected) : string
     {
-        return $selected ? $this->checkedMarker : $this->uncheckedMarker;
+        if (!$item instanceof RadioItem) {
+            throw new \InvalidArgumentException(
+                sprintf('Expected an instance of: %s. Got: %s', RadioItem::class, get_class($item))
+            );
+        }
+
+        return $item->getChecked() ? $this->checkedMarker : $this->uncheckedMarker;
     }
 
     public function getCheckedMarker() : string

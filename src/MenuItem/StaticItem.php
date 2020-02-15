@@ -3,8 +3,9 @@
 namespace PhpSchool\CliMenu\MenuItem;
 
 use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Style\DefaultStyle;
+use PhpSchool\CliMenu\Style\ItemStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
-use PhpSchool\CliMenu\Style\SelectableStyle;
 
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
@@ -17,7 +18,7 @@ class StaticItem implements MenuItemInterface
     private $text;
 
     /**
-     * @var SelectableStyle;
+     * @var DefaultStyle
      */
     private $style;
 
@@ -25,7 +26,7 @@ class StaticItem implements MenuItemInterface
     {
         $this->text = $text;
 
-        $this->style = new SelectableStyle();
+        $this->style = new DefaultStyle();
     }
 
     /**
@@ -92,15 +93,16 @@ class StaticItem implements MenuItemInterface
         //noop
     }
 
-    public function getStyle() : SelectableStyle
+    /**
+     * @return DefaultStyle
+     */
+    public function getStyle() : ItemStyle
     {
         return $this->style;
     }
 
-    public function setStyle(SelectableStyle $style) : self
+    public function setStyle(DefaultStyle $style) : void
     {
         $this->style = $style;
-
-        return $this;
     }
 }
