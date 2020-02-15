@@ -3,6 +3,38 @@
 This document serves as a reference to upgrade your current cli-menu installation if improvements, deprecations
 or backwards compatibility (BC) breakages occur.
 
+## 4.0.0
+
+### BC breaks
+
+* Trait `PhpSchool\CliMenu\MenuItem\SelectableTrait` was removed. Copy the old code into your menu item 
+  if you need it.
+* Methods `PhpSchool\CliMenu\Builder\CliMenuBuilder#setUnselectedMarker()` & `PhpSchool\CliMenu\Builder\CliMenuBuilder#setSelectedMarker()` were removed.
+  Customise markers on the individual item styles: 
+  
+  ```php
+  <?php
+  
+  use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+  use PhpSchool\CliMenu\Style\SelectableStyle;
+  
+  $menu = (new CliMenuBuilder)
+      ->modifySelectableStyle(function (SelectableStyle $style) {
+          $style->setUnselectedMarker('❅ ')
+              ->setSelectedMarker('✏ ')
+  
+              // disable unselected marker
+              ->setUnselectedMarker('')
+          ;
+      })
+      ->build();
+  ```
+* Method getStyle() was added to interface PhpSchool\CliMenu\MenuItem\MenuItemInterface. Items must now implement this 
+  method. For selectable items use `\PhpSchool\CliMenu\Style\SelectableStyle` or a subclass of. For static items use 
+  `\PhpSchool\CliMenu\Style\DefaultStyle` or a subclass of.
+* `PhpSchool\CliMenu\MenuStyle` marker methods have been removed. If you were using these directly. Operate on the item
+  style object instead.
+
 ## 3.0.0
 
 ### BC breaks
