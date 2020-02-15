@@ -66,7 +66,7 @@ class SelectableItem implements MenuItemInterface
         $rows = explode(
             "\n",
             StringUtil::wordwrap(
-                sprintf('%s%s', $marker, $this->text),
+                sprintf('%s%s%s', str_repeat(' ', $this->style->getPaddingLeft()), $marker, $this->text),
                 $length,
                 sprintf("\n%s", str_repeat(' ', mb_strlen($marker)))
             )

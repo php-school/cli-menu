@@ -11,6 +11,7 @@ class SelectableStyle implements ItemStyle
         'unselectedMarker' => '○ ',
         'itemExtra' => '✔',
         'displaysExtra' => false,
+        'paddingLeft' => 0,
     ];
 
     /**
@@ -33,12 +34,18 @@ class SelectableStyle implements ItemStyle
      */
     private $displaysExtra;
 
+    /**
+     * @var int
+     */
+    private $paddingLeft;
+
     public function __construct()
     {
         $this->selectedMarker = self::DEFAULT_STYLES['selectedMarker'];
         $this->unselectedMarker = self::DEFAULT_STYLES['unselectedMarker'];
         $this->itemExtra = self::DEFAULT_STYLES['itemExtra'];
         $this->displaysExtra = self::DEFAULT_STYLES['displaysExtra'];
+        $this->paddingLeft = self::DEFAULT_STYLES['paddingLeft'];
     }
 
     public function hasChangedFromDefaults() : bool
@@ -48,6 +55,7 @@ class SelectableStyle implements ItemStyle
             $this->unselectedMarker,
             $this->itemExtra,
             $this->displaysExtra,
+            $this->paddingLeft,
         ];
 
         return $currentValues !== array_values(self::DEFAULT_STYLES);
@@ -105,6 +113,18 @@ class SelectableStyle implements ItemStyle
     public function setDisplaysExtra(bool $displaysExtra) : self
     {
         $this->displaysExtra = $displaysExtra;
+
+        return $this;
+    }
+
+    public function getPaddingLeft() : int
+    {
+        return $this->paddingLeft;
+    }
+
+    public function setPaddingLeft(int $paddingLeft) : self
+    {
+        $this->paddingLeft = $paddingLeft;
 
         return $this;
     }
