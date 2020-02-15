@@ -4,6 +4,8 @@ namespace PhpSchool\CliMenu\MenuItem;
 
 use Assert\Assertion;
 use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Style\DefaultStyle;
+use PhpSchool\CliMenu\Style\ItemStyle;
 
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
@@ -37,6 +39,11 @@ class AsciiArtItem implements MenuItemInterface
      */
     private $artLength;
 
+    /**
+     * @var DefaultStyle
+     */
+    private $style;
+
     public function __construct(string $text, string $position = self::POSITION_CENTER, string $alt = '')
     {
         Assertion::inArray($position, [self::POSITION_CENTER, self::POSITION_RIGHT, self::POSITION_LEFT]);
@@ -44,6 +51,8 @@ class AsciiArtItem implements MenuItemInterface
         $this->setText($text);
         $this->position  = $position;
         $this->alternateText = $alt;
+
+        $this->style = new DefaultStyle();
     }
 
     /**
@@ -160,5 +169,18 @@ class AsciiArtItem implements MenuItemInterface
     public function hideItemExtra() : void
     {
         //noop
+    }
+
+    /**
+     * @return DefaultStyle
+     */
+    public function getStyle() : ItemStyle
+    {
+        return $this->style;
+    }
+
+    public function setStyle(DefaultStyle $style) : void
+    {
+        $this->style = $style;
     }
 }

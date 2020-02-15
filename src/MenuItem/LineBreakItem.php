@@ -4,6 +4,8 @@ namespace PhpSchool\CliMenu\MenuItem;
 
 use Assert\Assertion;
 use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Style\DefaultStyle;
+use PhpSchool\CliMenu\Style\ItemStyle;
 
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
@@ -20,10 +22,17 @@ class LineBreakItem implements MenuItemInterface
      */
     private $lines;
 
+    /**
+     * @var DefaultStyle
+     */
+    private $style;
+
     public function __construct(string $breakChar = ' ', int $lines = 1)
     {
         $this->breakChar = $breakChar;
-        $this->lines     = $lines;
+        $this->lines = $lines;
+
+        $this->style = new DefaultStyle();
     }
 
     /**
@@ -99,5 +108,18 @@ class LineBreakItem implements MenuItemInterface
     public function hideItemExtra() : void
     {
         //noop
+    }
+
+    /**
+     * @return DefaultStyle
+     */
+    public function getStyle() : ItemStyle
+    {
+        return $this->style;
+    }
+
+    public function setStyle(DefaultStyle $style) : void
+    {
+        $this->style = $style;
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Style;
 
+use PhpSchool\CliMenu\MenuItem\CheckboxItem;
 use PhpSchool\CliMenu\Style\CheckboxStyle;
 use PHPUnit\Framework\TestCase;
 
@@ -16,10 +17,16 @@ class CheckboxStyleTest extends TestCase
 
     public function testGetMarker() : void
     {
+        $item = new CheckboxItem('My Checkbox', 'var_dump');
+        $item->setChecked();
+
         $style = new CheckboxStyle;
 
-        self::assertSame('[✔] ', $style->getMarker(true));
-        self::assertSame('[ ] ', $style->getMarker(false));
+        self::assertSame('[✔] ', $style->getMarker($item, false));
+
+        $item->setUnchecked();
+
+        self::assertSame('[ ] ', $style->getMarker($item, false));
     }
 
     public function testGetSetMarkerOn() : void

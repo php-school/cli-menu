@@ -5,6 +5,7 @@ namespace PhpSchool\CliMenu\MenuItem;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
+use PhpSchool\CliMenu\Style\ItemStyle;
 use PhpSchool\CliMenu\Style\SelectableStyle;
 use function PhpSchool\CliMenu\Util\mapWithKeys;
 
@@ -55,7 +56,7 @@ class MenuMenuItem implements MenuItemInterface
      */
     public function getRows(MenuStyle $style, bool $selected = false) : array
     {
-        $marker = sprintf("%s", $this->style->getMarker($selected));
+        $marker = sprintf("%s", $this->style->getMarker($this, $selected));
 
         $length = $this->style->getDisplaysExtra()
             ? $style->getContentWidth() - (mb_strlen($this->style->getItemExtra()) + 2)
@@ -163,15 +164,16 @@ class MenuMenuItem implements MenuItemInterface
         $this->showItemExtra = false;
     }
 
-    public function getStyle() : SelectableStyle
+    /**
+     * @return SelectableStyle
+     */
+    public function getStyle() : ItemStyle
     {
         return $this->style;
     }
 
-    public function setStyle(SelectableStyle $style) : self
+    public function setStyle(SelectableStyle $style) : void
     {
         $this->style = $style;
-
-        return $this;
     }
 }

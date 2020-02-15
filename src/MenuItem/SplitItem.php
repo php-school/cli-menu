@@ -4,6 +4,9 @@ namespace PhpSchool\CliMenu\MenuItem;
 
 use Assert\Assertion;
 use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Style\DefaultStyle;
+use PhpSchool\CliMenu\Style\ItemStyle;
+use PhpSchool\CliMenu\Style\Selectable;
 use PhpSchool\CliMenu\Util\StringUtil;
 use function PhpSchool\CliMenu\Util\mapWithKeys;
 
@@ -33,6 +36,11 @@ class SplitItem implements MenuItemInterface
     private $gutter = 2;
 
     /**
+     * @var DefaultStyle
+     */
+    private $style;
+
+    /**
      * @var array
      */
     private static $blacklistedItems = [
@@ -45,6 +53,8 @@ class SplitItem implements MenuItemInterface
     {
         $this->addItems($items);
         $this->setDefaultSelectedItem();
+
+        $this->style = new DefaultStyle();
     }
 
     public function getGutter() : int
@@ -133,16 +143,10 @@ class SplitItem implements MenuItemInterface
             mapWithKeys($this->items, function (int $index, MenuItemInterface $item) use ($selected, $length, $style) {
                 $isSelected = $selected && $index === $this->selectedItemIndex;
 
-                if ($item instanceof CheckboxItem || $item instanceof RadioItem) {
-                    $markerType = $item->getStyle()->getMarker($item->getChecked());
-                } else {
-                    /** @var MenuMenuItem|SelectableItem|StaticItem $item */
-                    $markerType = $item->getStyle()->getMarker($isSelected);
+                $marker = '';
+                if ($item->canSelect()) {
+                    $marker = $item->getStyle()->getMarker($item, $isSelected);
                 }
-
-                $marker = $item->canSelect()
-                    ? sprintf('%s', $markerType)
-                    : '';
 
                 $itemExtra = '';
                 if ($item->getStyle()->getDisplaysExtra()) {
@@ -348,5 +352,18 @@ class SplitItem implements MenuItemInterface
         }
 
         return $largestItemExtra;
+    }
+
+    /**
+     * @return DefaultStyle
+     */
+    public function getStyle(): ItemStyle
+    {
+        return $this->style;
+    }
+
+    public function setStyle(DefaultStyle $style): void
+    {
+        $this->style = $style;
     }
 }

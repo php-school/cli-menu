@@ -585,24 +585,19 @@ class CliMenuBuilder
         $currentItems = !empty($items) ? $items : $menu->getItems();
 
         foreach ($currentItems as $item) {
-            if ($item instanceof CheckboxItem
-                && !$item->getStyle()->hasChangedFromDefaults()
-            ) {
+            if ($item instanceof CheckboxItem && !$item->getStyle()->hasChangedFromDefaults()) {
                 $item->setStyle(clone $menu->getCheckboxStyle());
             }
 
-            if ($item instanceof RadioItem
-                && !$item->getStyle()->hasChangedFromDefaults()
-            ) {
+            if ($item instanceof RadioItem && !$item->getStyle()->hasChangedFromDefaults()) {
                 $item->setStyle(clone $menu->getRadioStyle());
             }
 
-            if (($item instanceof MenuMenuItem
-                    || $item instanceof SelectableItem
-                    || $item instanceof StaticItem
-                )
-                && !$item->getStyle()->hasChangedFromDefaults()
-            ) {
+            if ($item instanceof StaticItem && !$item->getStyle()->hasChangedFromDefaults()) {
+                $item->setStyle(clone $menu->getDefaultStyle());
+            }
+
+            if (($item instanceof MenuMenuItem || $item instanceof SelectableItem) && !$item->getStyle()->hasChangedFromDefaults()) {
                 $item->setStyle(clone $menu->getSelectableStyle());
             }
 

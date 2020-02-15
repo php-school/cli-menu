@@ -5,6 +5,7 @@ namespace PhpSchool\CliMenu\MenuItem;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
+use PhpSchool\CliMenu\Style\ItemStyle;
 use PhpSchool\CliMenu\Style\RadioStyle;
 
 class RadioItem implements MenuItemInterface
@@ -60,7 +61,7 @@ class RadioItem implements MenuItemInterface
      */
     public function getRows(MenuStyle $style, bool $selected = false) : array
     {
-        $marker = sprintf("%s", $this->style->getMarker($this->checked));
+        $marker = sprintf("%s", $this->style->getMarker($this, $selected));
 
         $itemExtra = $this->style->getItemExtra();
 
@@ -203,15 +204,16 @@ class RadioItem implements MenuItemInterface
         $this->checked = !$this->checked;
     }
 
-    public function getStyle() : RadioStyle
+    /**
+     * @return RadioStyle
+     */
+    public function getStyle() : ItemStyle
     {
         return $this->style;
     }
 
-    public function setStyle(RadioStyle $style) : self
+    public function setStyle(RadioStyle $style) : void
     {
         $this->style = $style;
-
-        return $this;
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Style;
 
+use PhpSchool\CliMenu\MenuItem\RadioItem;
 use PhpSchool\CliMenu\Style\RadioStyle;
 use PHPUnit\Framework\TestCase;
 
@@ -16,10 +17,16 @@ class RadioStyleTest extends TestCase
 
     public function testGetMarker() : void
     {
+        $item = new RadioItem('My Radio', 'var_dump');
+        $item->setChecked();
+
         $style = new RadioStyle;
 
-        self::assertSame('[●] ', $style->getMarker(true));
-        self::assertSame('[○] ', $style->getMarker(false));
+        self::assertSame('[●] ', $style->getMarker($item, false));
+
+        $item->setUnchecked();
+
+        self::assertSame('[○] ', $style->getMarker($item, false));
     }
 
     public function testGetSetMarkerOn() : void

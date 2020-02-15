@@ -198,14 +198,15 @@ class SplitItemTest extends TestCase
             ->setSelectedMarker('= ')
             ->setUnselectedMarker('* ');
 
-        $item = new SplitItem(
-            [
-                (new SelectableItem('Item One', function () {
-                }))->setStyle($selectableStyle),
-                (new SelectableItem('Item Two', function () {
-                }))->setStyle($selectableStyle),
-            ]
-        );
+        $cb = function () {
+        };
+
+        $item1 = new SelectableItem("Item One", $cb);
+        $item1->setStyle($selectableStyle);
+        $item2 = new SelectableItem("Item Two", $cb);
+        $item2->setStyle($selectableStyle);
+
+        $item = new SplitItem([$item1, $item2]);
 
         $item->setSelectedItemIndex(0);
 
@@ -244,14 +245,15 @@ class SplitItemTest extends TestCase
         $selectableStyle = (new SelectableStyle())
             ->setUnselectedMarker('* ');
 
-        $item = new SplitItem(
-            [
-                (new SelectableItem("Item\nOne", function () {
-                }))->setStyle($selectableStyle),
-                (new SelectableItem("Item\nTwo", function () {
-                }))->setStyle($selectableStyle),
-            ]
-        );
+        $cb = function () {
+        };
+
+        $item1 = new SelectableItem("Item\nOne", $cb);
+        $item1->setStyle($selectableStyle);
+        $item2 = new SelectableItem("Item\nTwo", $cb);
+        $item2->setStyle($selectableStyle);
+
+        $item = new SplitItem([$item1, $item2]);
 
         self::assertEquals(
             [
@@ -275,14 +277,15 @@ class SplitItemTest extends TestCase
             ->setSelectedMarker('= ')
             ->setUnselectedMarker('* ');
 
-        $item = new SplitItem(
-            [
-                (new SelectableItem("Item\nOne", function () {
-                }))->setStyle($selectableStyle),
-                (new SelectableItem("Item\nTwo", function () {
-                }))->setStyle($selectableStyle),
-            ]
-        );
+        $cb = function () {
+        };
+
+        $item1 = new SelectableItem("Item\nOne", $cb);
+        $item1->setStyle($selectableStyle);
+        $item2 = new SelectableItem("Item\nTwo", $cb);
+        $item2->setStyle($selectableStyle);
+
+        $item = new SplitItem([$item1, $item2]);
         
         $item->setSelectedItemIndex(0);
 
@@ -309,14 +312,15 @@ class SplitItemTest extends TestCase
             ->setDisplaysExtra(true)
             ->setUnselectedMarker('* ');
 
-        $item = new SplitItem(
-            [
-                (new SelectableItem('Item 1', function () {
-                }, true))->setStyle($selectableStyle),
-                (new SelectableItem('Item 2', function () {
-                }, true))->setStyle($selectableStyle),
-            ]
-        );
+        $cb = function () {
+        };
+
+        $item1 = new SelectableItem('Item 1', $cb, true);
+        $item1->setStyle($selectableStyle);
+        $item2 = new SelectableItem('Item 2', $cb, true);
+        $item2->setStyle($selectableStyle);
+
+        $item = new SplitItem([$item1, $item2]);
 
         self::assertEquals(['* Item 1        [EXTRA]  * Item 2        [EXTRA]  '], $item->getRows($menuStyle));
     }
@@ -335,14 +339,15 @@ class SplitItemTest extends TestCase
             ->setDisplaysExtra(true)
             ->setUnselectedMarker('* ');
 
-        $item = new SplitItem(
-            [
-                (new SelectableItem("Item 1\nItem 1", function () {
-                }, true))->setStyle($selectableStyle),
-                (new SelectableItem("Item 2\nItem 2", function () {
-                }, true))->setStyle($selectableStyle),
-            ]
-        );
+        $cb = function () {
+        };
+
+        $item1 = new SelectableItem("Item 1\nItem 1", $cb, true);
+        $item1->setStyle($selectableStyle);
+        $item2 = new SelectableItem("Item 2\nItem 2", $cb, true);
+        $item2->setStyle($selectableStyle);
+
+        $item = new SplitItem([$item1, $item2]);
 
         self::assertEquals(
             [
@@ -367,14 +372,15 @@ class SplitItemTest extends TestCase
             ->setDisplaysExtra(true)
             ->setUnselectedMarker('* ');
 
-        $item = new SplitItem(
-            [
-                (new SelectableItem("Item 1\nItem 1", function () {
-                }))->setStyle($selectableStyle),
-                (new SelectableItem("Item 2\nItem 2", function () {
-                }, true))->setStyle($selectableStyle),
-            ]
-        );
+        $cb = function () {
+        };
+
+        $item1 = new SelectableItem("Item 1\nItem 1", $cb);
+        $item1->setStyle($selectableStyle);
+        $item2 = new SelectableItem("Item 2\nItem 2", $cb, true);
+        $item2->setStyle($selectableStyle);
+
+        $item = new SplitItem([$item1, $item2]);
 
         self::assertEquals(
             [
