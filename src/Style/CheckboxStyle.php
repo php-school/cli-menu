@@ -5,7 +5,7 @@ namespace PhpSchool\CliMenu\Style;
 use PhpSchool\CliMenu\MenuItem\CheckboxItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 
-class CheckboxStyle implements ItemStyle, Customisable
+class CheckboxStyle implements ItemStyle
 {
     private const DEFAULT_STYLES = [
         'checkedMarker' => '[✔] ',

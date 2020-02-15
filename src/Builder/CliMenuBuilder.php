@@ -17,11 +17,13 @@ use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Style\CheckboxStyle;
+use PhpSchool\CliMenu\Style\Customisable;
 use PhpSchool\CliMenu\Style\DefaultStyle;
 use PhpSchool\CliMenu\Style\RadioStyle;
 use PhpSchool\CliMenu\Style\SelectableStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\Terminal\Terminal;
+use function PhpSchool\CliMenu\Util\each;
 
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
@@ -611,24 +613,37 @@ class CliMenuBuilder
     private function propagateStyles(CliMenu $menu, array $items = []) : void
     {
         $currentItems = !empty($items) ? $items : $menu->getItems();
-
-        foreach ($currentItems as $item) {
-            if (!$item->getStyle()->hasChangedFromDefaults()) {
+        //apply menu items styles to items, if they have not changed
+        each(
+            array_filter($currentItems, function (MenuItemInterface $item) {
+                return !$item->getStyle()->hasChangedFromDefaults();
+            }),
+            function ($index, $item) use ($menu) {
                 $item->setStyle(clone $menu->getItemStyleForItem($item));
             }
+        );
 
-            // Apply current style to children, if they are not customized
-            if ($item instanceof MenuMenuItem) {
-                $subMenu = $item->getSubMenu();
-
+        //push current menu item styles to sub menus
+        each(
+            array_filter($currentItems, function (MenuItemInterface $item) {
+                return $item instanceof MenuMenuItem;
+            }),
+            function ($index, MenuMenuItem $menuItem) use ($menu) {
+                $subMenu = $menuItem->getSubMenu();
                 $subMenu->importStyles($menu);
+
                 $this->propagateStyles($subMenu);
             }
+        );
 
-            // Apply styles to SplitItem children using current $menu
-            if ($item instanceof SplitItem) {
-                $this->propagateStyles($menu, $item->getItems());
+        //push current menu item styles to SplitItem children using current $menu
+        each(
+            array_filter($currentItems, function (MenuItemInterface $item) {
+                return $item instanceof SplitItem;
+            }),
+            function ($index, SplitItem $splitItem) use ($menu) {
+                $this->propagateStyles($menu, $splitItem->getItems());
             }
-        }
+        );
     }
 }

@@ -4,7 +4,7 @@ namespace PhpSchool\CliMenu\Style;
 
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 
-class SelectableStyle implements ItemStyle, Customisable
+class SelectableStyle implements ItemStyle
 {
     private const DEFAULT_STYLES = [
         'selectedMarker' => '● ',

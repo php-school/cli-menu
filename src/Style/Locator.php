@@ -58,9 +58,9 @@ class Locator
         $this->styles = mapWithKeys(
             $this->styles,
             function ($styleClass, ItemStyle $instance) use ($other) {
-                return $instance instanceof Customisable && !$instance->hasChangedFromDefaults()
-                    ? $other->getStyle($styleClass)
-                    : $instance;
+                return $instance->hasChangedFromDefaults()
+                    ? $instance
+                    : $other->getStyle($styleClass);
             }
         );
     }
@@ -74,11 +74,6 @@ class Locator
         return $this->styles[$styleClass];
     }
 
-    /**
-     *
-     * @param ItemStyle $itemStyle
-     * @param string $styleClass
-     */
     public function setStyle(ItemStyle $itemStyle, string $styleClass) : void
     {
         if (!isset($this->styles[$styleClass])) {
