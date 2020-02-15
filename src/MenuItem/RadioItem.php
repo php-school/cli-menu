@@ -4,7 +4,6 @@ namespace PhpSchool\CliMenu\MenuItem;
 
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuStyle;
-use PhpSchool\CliMenu\Util\StringUtil;
 use PhpSchool\CliMenu\Style\ItemStyle;
 use PhpSchool\CliMenu\Style\RadioStyle;
 
@@ -61,34 +60,7 @@ class RadioItem implements MenuItemInterface
      */
     public function getRows(MenuStyle $style, bool $selected = false) : array
     {
-        $marker = sprintf("%s", $this->style->getMarker($this, $selected));
-
-        $itemExtra = $this->style->getItemExtra();
-
-        $length = $this->style->getDisplaysExtra()
-            ? $style->getContentWidth() - (mb_strlen($itemExtra) + 2)
-            : $style->getContentWidth();
-
-        $rows = explode(
-            "\n",
-            StringUtil::wordwrap(
-                sprintf('%s%s', $marker, $this->text),
-                $length,
-                sprintf("\n%s", str_repeat(' ', mb_strlen($marker)))
-            )
-        );
-
-        return array_map(function ($row, $key) use ($style, $length, $itemExtra) {
-            $text = $this->disabled ? $style->getDisabledItemText($row) : $row;
-
-            if ($key === 0) {
-                return $this->showItemExtra
-                    ? sprintf('%s%s  %s', $text, str_repeat(' ', $length - mb_strlen($row)), $itemExtra)
-                    : $text;
-            }
-
-            return $text;
-        }, $rows, array_keys($rows));
+        return (new SelectableItemRenderer())->render($style, $this, $selected, $this->disabled);
     }
 
     /**
