@@ -18,3 +18,8 @@ function each(array $array, callable $callback) : void
         $callback($k, $v);
     }
 }
+
+function max(array $items) : int
+{
+    return count($items) > 0 ? \max($items) : 0;
+}

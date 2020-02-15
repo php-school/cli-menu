@@ -9,6 +9,7 @@ use PhpSchool\CliMenu\Style\ItemStyle;
 use PhpSchool\CliMenu\Style\Selectable;
 use PhpSchool\CliMenu\Util\StringUtil;
 use function PhpSchool\CliMenu\Util\mapWithKeys;
+use function PhpSchool\CliMenu\Util\max;
 
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
@@ -336,22 +337,14 @@ class SplitItem implements MenuItemInterface
      */
     private function calculateItemExtra() : int
     {
-        $largestItemExtra = 0;
-
-        /** @var CheckboxItem|RadioItem|MenuMenuItem|SelectableItem|StaticItem $item */
-        foreach ($this->items as $item) {
-            if (!$item->getStyle()->getDisplaysExtra()) {
-                continue;
-            }
-
-            if (mb_strlen($item->getStyle()->getItemExtra()) < $largestItemExtra) {
-                continue;
-            }
-
-            $largestItemExtra = mb_strlen($item->getStyle()->getItemExtra());
-        }
-
-        return $largestItemExtra;
+        return max(array_map(
+            function (MenuItemInterface $item) {
+                return mb_strlen($item->getStyle()->getItemExtra());
+            },
+            array_filter($this->items, function (MenuItemInterface $item) {
+                return $item->getStyle()->getDisplaysExtra();
+            })
+        ));
     }
 
     /**

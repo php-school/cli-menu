@@ -8,6 +8,7 @@ use PhpSchool\CliMenu\Util\ArrayUtil;
 use PHPUnit\Framework\TestCase;
 use function PhpSchool\CliMenu\Util\each;
 use function PhpSchool\CliMenu\Util\mapWithKeys;
+use function PhpSchool\CliMenu\Util\max;
 
 class ArrayUtilTest extends TestCase
 {
@@ -46,5 +47,12 @@ class ArrayUtilTest extends TestCase
 
         each([1, 2, 3], $cb);
         self::assertEquals(3, $i);
+    }
+
+    public function testMax() : void
+    {
+        self::assertEquals(0, max([]));
+        self::assertEquals(3, max([1, 2, 3]));
+        self::assertEquals(6, max([1, 6, 3]));
     }
 }
