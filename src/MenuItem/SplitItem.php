@@ -146,10 +146,7 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
             mapWithKeys($this->items, function (int $index, MenuItemInterface $item) use ($selected, $length, $style) {
                 $isSelected = $selected && $index === $this->selectedItemIndex;
 
-                $marker = '';
-                if ($item->canSelect()) {
-                    $marker = $item->getStyle()->getMarker($item, $isSelected);
-                }
+                $marker = $item->getStyle()->getMarker($item, $isSelected);
 
                 $itemExtra = '';
                 if ($item->getStyle()->getDisplaysExtra()) {
