@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Style;
 
+use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
+
 class DefaultStyle implements ItemStyle
 {
     private const DEFAULT_STYLES = [
@@ -20,6 +22,11 @@ class DefaultStyle implements ItemStyle
     }
 
     public function getItemExtra() : string
+    {
+        return '';
+    }
+
+    public function getMarker(MenuItemInterface $style, bool $isSelected) : string
     {
         return '';
     }

@@ -2,6 +2,7 @@
 
 namespace PhpSchool\CliMenu\Style;
 
+use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\RadioItem;
 
 class RadioStyle implements ItemStyle
@@ -53,8 +54,14 @@ class RadioStyle implements ItemStyle
         return $currentValues !== array_values(self::DEFAULT_STYLES);
     }
 
-    public function getMarker(RadioItem $item, bool $selected) : string
+    public function getMarker(MenuItemInterface $item, bool $selected) : string
     {
+        if (!$item instanceof RadioItem) {
+            throw new \InvalidArgumentException(
+                sprintf('Expected an instance of: %s. Got: %s', RadioItem::class, get_class($item))
+            );
+        }
+
         return $item->getChecked() ? $this->checkedMarker : $this->uncheckedMarker;
     }
 

@@ -3,6 +3,7 @@
 namespace PhpSchool\CliMenu\Style;
 
 use PhpSchool\CliMenu\MenuItem\CheckboxItem;
+use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 
 class CheckboxStyle implements ItemStyle
 {
@@ -53,8 +54,14 @@ class CheckboxStyle implements ItemStyle
         return $currentValues !== array_values(self::DEFAULT_STYLES);
     }
 
-    public function getMarker(CheckboxItem $item, bool $selected) : string
+    public function getMarker(MenuItemInterface $item, bool $selected) : string
     {
+        if (!$item instanceof CheckboxItem) {
+            throw new \InvalidArgumentException(
+                sprintf('Expected an instance of: %s. Got: %s', CheckboxItem::class, get_class($item))
+            );
+        }
+
         return $item->getChecked() ? $this->checkedMarker : $this->uncheckedMarker;
     }
 
