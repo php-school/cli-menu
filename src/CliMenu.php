@@ -16,6 +16,8 @@ use PhpSchool\CliMenu\Dialogue\Confirm;
 use PhpSchool\CliMenu\Dialogue\Flash;
 use PhpSchool\CliMenu\Style\CheckboxStyle;
 use PhpSchool\CliMenu\Style\DefaultStyle;
+use PhpSchool\CliMenu\Style\ItemStyle;
+use PhpSchool\CliMenu\Style\Locator;
 use PhpSchool\CliMenu\Style\RadioStyle;
 use PhpSchool\CliMenu\Style\SelectableStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
@@ -40,24 +42,9 @@ class CliMenu
     protected $style;
 
     /**
-     * @var CheckboxStyle
+     * @var Locator
      */
-    private $checkboxStyle;
-
-    /**
-     * @var RadioStyle
-     */
-    private $radioStyle;
-
-    /**
-     * @var SelectableStyle
-     */
-    private $selectableStyle;
-
-    /**
-     * @var DefaultStyle
-     */
-    private $defaultStyle;
+    private $itemStyleLocator;
 
     /**
      * @var ?string
@@ -118,10 +105,8 @@ class CliMenu
         $this->items           = $items;
         $this->terminal        = $terminal ?: TerminalFactory::fromSystem();
         $this->style           = $style ?: new MenuStyle($this->terminal);
-        $this->checkboxStyle   = new CheckboxStyle();
-        $this->radioStyle      = new RadioStyle();
-        $this->selectableStyle = new SelectableStyle();
-        $this->defaultStyle    = new DefaultStyle();
+
+        $this->itemStyleLocator = new Locator();
 
         $this->selectFirstItem();
     }
@@ -668,52 +653,28 @@ class CliMenu
         $this->style = $style;
     }
 
-    public function getCheckboxStyle() : CheckboxStyle
+    public function setItemStyle(ItemStyle $style, string $styleClass)
     {
-        return $this->checkboxStyle;
+        $this->itemStyleLocator->setStyle($style, $styleClass);
     }
 
-    public function setCheckboxStyle(CheckboxStyle $style) : self
+    public function getItemStyle(string $styleClass) : ItemStyle
     {
-        $this->checkboxStyle = $style;
-
-        return $this;
+        return $this->itemStyleLocator->getStyle($styleClass);
     }
 
-    public function getRadioStyle() : RadioStyle
+    public function getItemStyleForItem(MenuItemInterface $item) : ItemStyle
     {
-        return $this->radioStyle;
+        return $this->itemStyleLocator->getStyleForMenuItem($item);
     }
 
-    public function setRadioStyle(RadioStyle $style) : self
+    public function importStyles(CliMenu $menu) : void
     {
-        $this->radioStyle = $style;
+        if (!$this->style->hasChangedFromDefaults()) {
+            $this->style = $menu->style;
+        }
 
-        return $this;
-    }
-
-    public function getSelectableStyle() : SelectableStyle
-    {
-        return $this->selectableStyle;
-    }
-
-    public function setSelectableStyle(SelectableStyle $style) : self
-    {
-        $this->selectableStyle = $style;
-
-        return $this;
-    }
-
-    public function getDefaultStyle() : DefaultStyle
-    {
-        return $this->defaultStyle;
-    }
-
-    public function setDefaultStyle(DefaultStyle $style) : self
-    {
-        $this->defaultStyle = $style;
-
-        return $this;
+        $this->itemStyleLocator->importFrom($menu->itemStyleLocator);
     }
 
     public function getCurrentFrame() : Frame

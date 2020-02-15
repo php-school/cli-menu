@@ -6,14 +6,14 @@ namespace PhpSchool\CliMenu\Style;
 
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 
-class DefaultStyle implements ItemStyle
+class DefaultStyle implements ItemStyle, Customisable
 {
     private const DEFAULT_STYLES = [
     ];
 
     public function hasChangedFromDefaults() : bool
     {
-        return false;
+        return true;
     }
 
     public function getDisplaysExtra() : bool

@@ -5,7 +5,7 @@ namespace PhpSchool\CliMenu\Style;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\RadioItem;
 
-class RadioStyle implements ItemStyle
+class RadioStyle implements ItemStyle, Customisable
 {
     private const DEFAULT_STYLES = [
         'checkedMarker' => '[●] ',
