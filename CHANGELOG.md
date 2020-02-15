@@ -14,15 +14,29 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 ## [4.0.0]
 ### Added
  - Add PHP 7.4 support (#183)
- - 
+ - CheckboxItem & RadioItem (#186, #189, #193, #194, #226)
+ - Ability to force display extra (#187)
+ - Individual style objects for each item type (#211, #212, #213, #214, #216, #230)
+ - Method getStyle() to interface PhpSchool\CliMenu\MenuItem\MenuItemInterface
  
 ### Fixed
  - Fixed item extra rendering outside of menu (#66, £184, #187)
  - Fix unresponsive menu upon closing and reopening (#198)
+ - Menu styles incorrectly propagating to submenus (#201, #210)
+ - Various issues with the menu width, when the terminal was too small (#223, #220, #219)
 
 ### Removed
- - Remove rebinding $this in builder closures so we can access the real $this (#91)
-
+ - Remove rebinding $this in builder closures so we can access the real $this (#191, #192, #196)
+ - Marker methods from PhpSchool\CliMenu\MenuStyle: 
+            #getSelectedMarker()
+            #setSelectedMarker()
+            #getUnselectedMarker()
+            #setUnselectedMarker()
+            #getMarker()
+ - PhpSchool\CliMenu\MenuItem\SelectableTrait
+ - Marker methods from PhpSchool\CliMenu\Builder\CliMenuBuilder:
+            #setUnselectedMarker()
+            #setSelectedMarker()
 
 ## [3.2.0]
 ### Added
