@@ -709,7 +709,7 @@ class CliMenu
         return $this->defaultStyle;
     }
 
-    public function setDefaultStyle(DefaultStyle $style) : DefaultStyle
+    public function setDefaultStyle(DefaultStyle $style) : self
     {
         $this->defaultStyle = $style;
 
