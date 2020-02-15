@@ -26,7 +26,7 @@ class DefaultStyle implements ItemStyle
         return '';
     }
 
-    public function getMarker(MenuItemInterface $style, bool $isSelected) : string
+    public function getMarker(MenuItemInterface $item, bool $isSelected) : string
     {
         return '';
     }
