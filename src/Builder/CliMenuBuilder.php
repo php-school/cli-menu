@@ -17,13 +17,11 @@ use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Style\CheckboxStyle;
-use PhpSchool\CliMenu\Style\Customisable;
 use PhpSchool\CliMenu\Style\DefaultStyle;
 use PhpSchool\CliMenu\Style\RadioStyle;
 use PhpSchool\CliMenu\Style\SelectableStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\Terminal\Terminal;
-use function PhpSchool\CliMenu\Util\each;
 
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
