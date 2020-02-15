@@ -22,16 +22,12 @@ class Locator
      * @var array
      */
     private $itemStyleMap = [
-        /** Static non selectable items */
         StaticItem::class => DefaultStyle::class,
         AsciiArtItem::class => DefaultStyle::class,
         LineBreakItem::class => DefaultStyle::class,
-        /** Split item */
         SplitItem::class => DefaultStyle::class,
-        /** Normal selectable items */
         SelectableItem::class => SelectableStyle::class,
         MenuMenuItem::class => SelectableStyle::class,
-        /** Toggle items */
         CheckboxItem::class => CheckboxStyle::class,
         RadioItem::class => RadioStyle::class,
     ];
@@ -79,7 +75,6 @@ class Locator
     }
 
     /**
-     * TODO: Don't accept $styleClass and figure this ourselves?
      *
      * @param ItemStyle $itemStyle
      * @param string $styleClass
@@ -91,7 +86,7 @@ class Locator
         }
 
         if (!$itemStyle instanceof $styleClass) {
-            //throw
+            throw InvalidStyle::notSubClassOf($styleClass);
         }
 
         $this->styles[$styleClass] = $itemStyle;
@@ -100,7 +95,7 @@ class Locator
     public function getStyleForMenuItem(MenuItemInterface $item) : ItemStyle
     {
         if (!isset($this->itemStyleMap[get_class($item)])) {
-            //unregistered menu item
+            throw InvalidStyle::unregisteredItem(get_class($item));
         }
 
         $styleClass = $this->itemStyleMap[get_class($item)];

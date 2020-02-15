@@ -522,7 +522,9 @@ class CliMenuBuilder
 
     public function getDefaultStyle() : DefaultStyle
     {
-        return $this->menu->getItemStyle(DefaultStyle::class);
+        $style = $this->menu->getItemStyle(DefaultStyle::class);
+        assert($style instanceof DefaultStyle);
+        return $style;
     }
 
     public function setDefaultStyle(DefaultStyle $style) : self
@@ -541,7 +543,9 @@ class CliMenuBuilder
 
     public function getSelectableStyle() : SelectableStyle
     {
-        return $this->menu->getItemStyle(SelectableStyle::class);
+        $style = $this->menu->getItemStyle(SelectableStyle::class);
+        assert($style instanceof SelectableStyle);
+        return $style;
     }
 
     public function setSelectableStyle(SelectableStyle $style) : self
@@ -560,7 +564,9 @@ class CliMenuBuilder
 
     public function getCheckboxStyle() : CheckboxStyle
     {
-        return $this->menu->getItemStyle(CheckboxStyle::class);
+        $style = $this->menu->getItemStyle(CheckboxStyle::class);
+        assert($style instanceof CheckboxStyle);
+        return $style;
     }
 
     public function setCheckboxStyle(CheckboxStyle $style) : self
@@ -579,7 +585,9 @@ class CliMenuBuilder
 
     public function getRadioStyle() : RadioStyle
     {
-        return $this->menu->getItemStyle(RadioItem::class);
+        $style = $this->menu->getItemStyle(RadioStyle::class);
+        assert($style instanceof RadioStyle);
+        return $style;
     }
 
     public function setRadioStyle(RadioStyle $style) : self

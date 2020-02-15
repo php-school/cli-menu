@@ -6,10 +6,14 @@ namespace PhpSchool\CliMenu\Util;
 
 function mapWithKeys(array $array, callable $callback) : array
 {
-    return array_combine(
+    $arr = array_combine(
         array_keys($array),
         array_map($callback, array_keys($array), $array)
     );
+
+    assert(is_array($arr));
+
+    return $arr;
 }
 
 function each(array $array, callable $callback) : void
