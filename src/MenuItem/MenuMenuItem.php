@@ -12,7 +12,7 @@ use function PhpSchool\CliMenu\Util\mapWithKeys;
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
  */
-class MenuMenuItem implements MenuItemInterface
+class MenuMenuItem implements MenuItemInterface, PropagatesStyles
 {
     /**
      * @var string
@@ -175,5 +175,14 @@ class MenuMenuItem implements MenuItemInterface
     public function setStyle(SelectableStyle $style) : void
     {
         $this->style = $style;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function propagateStyles(CliMenu $parent): void
+    {
+        $this->getSubMenu()->importStyles($parent);
+        $this->getSubMenu()->propagateStyles();
     }
 }

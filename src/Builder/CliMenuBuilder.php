@@ -516,7 +516,7 @@ class CliMenuBuilder
         }
 
         if (!$this->subMenu) {
-            $this->propagateStyles($this->menu);
+            $this->menu->propagateStyles();
         }
 
         return $this->menu;
@@ -604,46 +604,5 @@ class CliMenuBuilder
         $itemCallable($this->getRadioStyle());
 
         return $this;
-    }
-
-    /**
-     * Pass styles from current menu to sub-menu
-     * only if sub-menu style has not be customized
-     */
-    private function propagateStyles(CliMenu $menu, array $items = []) : void
-    {
-        $currentItems = !empty($items) ? $items : $menu->getItems();
-        //apply menu items styles to items, if they have not changed
-        each(
-            array_filter($currentItems, function (MenuItemInterface $item) {
-                return !$item->getStyle()->hasChangedFromDefaults();
-            }),
-            function ($index, $item) use ($menu) {
-                $item->setStyle(clone $menu->getItemStyleForItem($item));
-            }
-        );
-
-        //push current menu item styles to sub menus
-        each(
-            array_filter($currentItems, function (MenuItemInterface $item) {
-                return $item instanceof MenuMenuItem;
-            }),
-            function ($index, MenuMenuItem $menuItem) use ($menu) {
-                $subMenu = $menuItem->getSubMenu();
-                $subMenu->importStyles($menu);
-
-                $this->propagateStyles($subMenu);
-            }
-        );
-
-        //push current menu item styles to SplitItem children using current $menu
-        each(
-            array_filter($currentItems, function (MenuItemInterface $item) {
-                return $item instanceof SplitItem;
-            }),
-            function ($index, SplitItem $splitItem) use ($menu) {
-                $this->propagateStyles($menu, $splitItem->getItems());
-            }
-        );
     }
 }

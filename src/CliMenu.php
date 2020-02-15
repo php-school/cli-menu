@@ -10,21 +10,19 @@ use PhpSchool\CliMenu\Input\Password;
 use PhpSchool\CliMenu\Input\Text;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
+use PhpSchool\CliMenu\MenuItem\PropagatesStyles;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Dialogue\Confirm;
 use PhpSchool\CliMenu\Dialogue\Flash;
-use PhpSchool\CliMenu\Style\CheckboxStyle;
-use PhpSchool\CliMenu\Style\DefaultStyle;
 use PhpSchool\CliMenu\Style\ItemStyle;
 use PhpSchool\CliMenu\Style\Locator;
-use PhpSchool\CliMenu\Style\RadioStyle;
-use PhpSchool\CliMenu\Style\SelectableStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\CliMenu\Util\StringUtil as s;
 use PhpSchool\Terminal\InputCharacter;
 use PhpSchool\Terminal\NonCanonicalReader;
 use PhpSchool\Terminal\Terminal;
+use function PhpSchool\CliMenu\Util\each;
 
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
@@ -742,5 +740,26 @@ class CliMenu
         if (strpos($text, "\n") !== false) {
             throw new \InvalidArgumentException;
         }
+    }
+
+    public function propagateStyles() : void
+    {
+        each(
+            array_filter($this->items, function (MenuItemInterface $item) {
+                return !$item->getStyle()->hasChangedFromDefaults();
+            }),
+            function (int $index, $item) {
+                $item->setStyle(clone $this->getItemStyleForItem($item));
+            }
+        );
+
+        each(
+            array_filter($this->items, function (MenuItemInterface $item) {
+                return $item instanceof PropagatesStyles;
+            }),
+            function (int $index, PropagatesStyles $item) {
+                $item->propagateStyles($this);
+            }
+        );
     }
 }
