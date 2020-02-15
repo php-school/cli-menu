@@ -597,7 +597,8 @@ class CliMenuBuilder
                 $item->setStyle(clone $menu->getDefaultStyle());
             }
 
-            if (($item instanceof MenuMenuItem || $item instanceof SelectableItem) && !$item->getStyle()->hasChangedFromDefaults()) {
+            if (($item instanceof MenuMenuItem || $item instanceof SelectableItem)
+                && !$item->getStyle()->hasChangedFromDefaults()) {
                 $item->setStyle(clone $menu->getSelectableStyle());
             }
 
