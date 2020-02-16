@@ -20,11 +20,11 @@ class SelectableItemRenderer
 
         return mapWithKeys(
             $this->wrapAndIndentText($marker, $item->getText(), $availableTextWidth),
-            function (int $key, string $row) use ($menuStyle, $itemStyle, $availableTextWidth, $disabled) {
+            function (int $key, string $row) use ($menuStyle, $item, $availableTextWidth, $disabled) {
                 $text = $disabled ? $menuStyle->getDisabledItemText($row) : $row;
 
-                return $key === 0 && $itemStyle->getDisplaysExtra()
-                    ? $this->lineWithExtra($text, $availableTextWidth, $itemStyle)
+                return $key === 0 && $item->showsItemExtra()
+                    ? $this->lineWithExtra($text, $availableTextWidth, $item->getStyle())
                     : $text;
             }
         );

@@ -25,6 +25,7 @@ class SelectableItemRendererTest extends TestCase
         $item = new SelectableItem('SOME TEXT', function () {
         });
         $item->setStyle($style);
+        $item->showItemExtra();
 
         self::assertEquals(
             [
@@ -44,6 +45,7 @@ class SelectableItemRendererTest extends TestCase
         $item = new SelectableItem('SOME TEXT THAT IS MUCH LONGER THAN THE AVAILABLE WIDTH', function () {
         });
         $item->setStyle($style);
+        $item->showItemExtra();
 
         self::assertEquals(
             [
@@ -65,6 +67,7 @@ class SelectableItemRendererTest extends TestCase
         $item = new SelectableItem('SOME TEXT', function () {
         });
         $item->setStyle($style);
+        $item->showItemExtra();
 
         self::assertEquals(
             [
@@ -84,6 +87,7 @@ class SelectableItemRendererTest extends TestCase
         $item = new SelectableItem('SOME TEXT', function () {
         });
         $item->setStyle($style);
+        $item->showItemExtra();
 
         self::assertEquals(
             [
