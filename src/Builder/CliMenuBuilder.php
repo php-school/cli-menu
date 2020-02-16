@@ -507,6 +507,8 @@ class CliMenuBuilder
     {
         $this->style->setDisplaysExtra(true);
         $this->getSelectableStyle()->setDisplaysExtra(true);
+        $this->getCheckboxStyle()->setDisplaysExtra(true);
+        $this->getRadioStyle()->setDisplaysExtra(true);
 
         return $this;
     }
