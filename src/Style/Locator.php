@@ -87,6 +87,11 @@ class Locator
         $this->styles[$styleClass] = $itemStyle;
     }
 
+    public function hasStyleForMenuItem(MenuItemInterface $item) : bool
+    {
+        return isset($this->itemStyleMap[get_class($item)]);
+    }
+
     public function getStyleForMenuItem(MenuItemInterface $item) : ItemStyle
     {
         if (!isset($this->itemStyleMap[get_class($item)])) {

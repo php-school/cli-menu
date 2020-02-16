@@ -13,6 +13,7 @@ use PhpSchool\CliMenu\MenuItem\RadioItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
+use PhpSchool\CliMenu\Style\DefaultStyle;
 use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
 
@@ -956,7 +957,6 @@ class CliMenuBuilderTest extends TestCase
         self::assertTrue($menu->getStyle()->getDisplaysExtra());
     }
 
-
     private function checkMenuItems(CliMenu $menu, array $expected) : void
     {
         $this->checkItems($menu->getItems(), $expected);
@@ -986,5 +986,45 @@ class CliMenuBuilderTest extends TestCase
                 self::assertEquals($actualItem->{$getter}(), $value);
             }
         }
+    }
+
+    public function testRegisterItemStylePropagatesToSubmenus() : void
+    {
+        $myItem = new class extends LineBreakItem {
+        };
+
+        $myStyle = new class extends DefaultStyle {
+        };
+
+        $builder = new CliMenuBuilder;
+        $builder->registerItemStyle(get_class($myItem), $myStyle);
+        $builder
+            ->addSubMenu('My SubMenu', function (CliMenuBuilder $b) use ($myItem) {
+                $b->disableDefaultItems();
+                $b->addMenuItem($myItem);
+            })
+            ->addSplitItem(function (SplitItemBuilder $b) use ($myItem) {
+                $b->addSubMenu('My Split SubMenu', function (CliMenuBuilder $b) use ($myItem) {
+                    $b->addMenuItem($myItem);
+                });
+            });
+
+        $menu = $builder->build();
+        $subMenuStyleLocator = $menu
+            ->getItems()[0]
+            ->getSubMenu()
+            ->getStyleLocator();
+
+        self::assertTrue($subMenuStyleLocator->hasStyleForMenuItem($myItem));
+        self::assertSame($myStyle, $subMenuStyleLocator->getStyleForMenuItem($myItem));
+
+        $nestedSubMenuStyleLocator = $menu
+            ->getItems()[1]
+            ->getItems()[0]
+            ->getSubMenu()
+            ->getStyleLocator();
+
+        self::assertTrue($nestedSubMenuStyleLocator->hasStyleForMenuItem($myItem));
+        self::assertSame($myStyle, $nestedSubMenuStyleLocator->getStyleForMenuItem($myItem));
     }
 }

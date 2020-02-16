@@ -6,11 +6,13 @@ use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\Builder\SplitItemBuilder;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\CheckboxItem;
+use PhpSchool\CliMenu\MenuItem\LineBreakItem;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\RadioItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
+use PhpSchool\CliMenu\Style\DefaultStyle;
 use PHPUnit\Framework\TestCase;
 
 class SplitItemBuilderTest extends TestCase
@@ -190,5 +192,32 @@ class SplitItemBuilderTest extends TestCase
                 self::assertEquals($actualItem->{'get'. ucfirst($property)}(), $value);
             }
         }
+    }
+
+    public function testRegisterItemStylePropagatesToSubmenus() : void
+    {
+        $myItem = new class extends LineBreakItem {
+        };
+
+        $myStyle = new class extends DefaultStyle {
+        };
+
+        $menu = new CliMenu(null, []);
+        $builder = new SplitItemBuilder($menu);
+        $builder->registerItemStyle(get_class($myItem), $myStyle);
+        $builder->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
+            $b->disableDefaultItems();
+            $b->addItem('My Item', function () {
+            });
+        });
+
+        $item = $builder->build();
+        $styleLocator = $item
+            ->getItems()[0]
+            ->getSubMenu()
+            ->getStyleLocator();
+
+        self::assertTrue($styleLocator->hasStyleForMenuItem($myItem));
+        self::assertSame($myStyle, $styleLocator->getStyleForMenuItem($myItem));
     }
 }

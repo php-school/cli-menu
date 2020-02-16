@@ -9,6 +9,7 @@ use PhpSchool\CliMenu\Style\DefaultStyle;
 use PhpSchool\CliMenu\Style\ItemStyle;
 use PhpSchool\CliMenu\Style\Selectable;
 use PhpSchool\CliMenu\Util\StringUtil;
+use function PhpSchool\CliMenu\Util\collect;
 use function PhpSchool\CliMenu\Util\each;
 use function PhpSchool\CliMenu\Util\mapWithKeys;
 use function PhpSchool\CliMenu\Util\max;
@@ -364,22 +365,23 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
      */
     public function propagateStyles(CliMenu $parent): void
     {
-        each(
-            array_filter($this->getItems(), function (MenuItemInterface $item) {
+        collect($this->items)
+            ->filter(function (int $k, MenuItemInterface $item) use ($parent) {
+                return $parent->getStyleLocator()->hasStyleForMenuItem($item);
+            })
+            ->filter(function (int $k, MenuItemInterface $item) {
                 return !$item->getStyle()->hasChangedFromDefaults();
-            }),
-            function ($index, $item) use ($parent) {
+            })
+            ->each(function (int $k, $item) use ($parent) {
                 $item->setStyle(clone $parent->getItemStyleForItem($item));
-            }
-        );
+            });
 
-        each(
-            array_filter($this->getItems(), function (MenuItemInterface $item) {
+        collect($this->items)
+            ->filter(function (int $k, MenuItemInterface $item) {
                 return $item instanceof PropagatesStyles;
-            }),
-            function ($index, PropagatesStyles $item) use ($parent) {
+            })
+            ->each(function (int $k, $item) use ($parent) {
                 $item->propagateStyles($parent);
-            }
-        );
+            });
     }
 }
