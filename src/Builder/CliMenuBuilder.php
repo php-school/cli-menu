@@ -304,9 +304,9 @@ class CliMenuBuilder
             $builder->enableAutoShortcuts($this->autoShortcutsRegex);
         }
 
-        foreach ($this->extraItemStyles as $extraItemStyle) {
+        each($this->extraItemStyles, function (int $i, array $extraItemStyle) use ($builder) {
             $builder->registerItemStyle($extraItemStyle['class'], $extraItemStyle['style']);
-        }
+        });
 
         $callback($builder);
 
