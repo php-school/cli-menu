@@ -57,37 +57,7 @@ class SelectableItem implements MenuItemInterface
      */
     public function getRows(MenuStyle $style, bool $selected = false) : array
     {
-        $marker = sprintf("%s", $this->style->getMarker($this, $selected));
-
-        $length = $this->style->getDisplaysExtra()
-            ? $style->getContentWidth() - (mb_strlen($this->style->getItemExtra()) + 2)
-            : $style->getContentWidth();
-
-        $rows = explode(
-            "\n",
-            StringUtil::wordwrap(
-                sprintf('%s%s', $marker, $this->text),
-                $length,
-                sprintf("\n%s", str_repeat(' ', mb_strlen($marker)))
-            )
-        );
-
-        return mapWithKeys($rows, function (int $key, string $row) use ($style, $length) {
-            $text = $this->disabled ? $style->getDisabledItemText($row) : $row;
-
-            if ($key === 0) {
-                return $this->showItemExtra
-                    ? sprintf(
-                        '%s%s  %s',
-                        $text,
-                        str_repeat(' ', $length - mb_strlen($row)),
-                        $this->style->getItemExtra()
-                    )
-                    : $text;
-            }
-
-            return $text;
-        });
+        return (new SelectableItemRenderer())->render($style, $this, $selected, $this->disabled);
     }
 
     /**
