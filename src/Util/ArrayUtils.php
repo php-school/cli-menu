@@ -16,6 +16,13 @@ function mapWithKeys(array $array, callable $callback) : array
     return $arr;
 }
 
+function filter(array $array, callable $callback) : array
+{
+    return array_filter($array, function ($v, $k) use ($callback) {
+        return $callback($k, $v);
+    }, ARRAY_FILTER_USE_BOTH);
+}
+
 function each(array $array, callable $callback) : void
 {
     foreach ($array as $k => $v) {
@@ -26,4 +33,9 @@ function each(array $array, callable $callback) : void
 function max(array $items) : int
 {
     return count($items) > 0 ? \max($items) : 0;
+}
+
+function collect(array $items) : Collection
+{
+    return new Collection($items);
 }
