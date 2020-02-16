@@ -666,6 +666,11 @@ class CliMenu
         return $this->itemStyleLocator->getStyleForMenuItem($item);
     }
 
+    public function getStyleLocator() : Locator
+    {
+        return $this->itemStyleLocator;
+    }
+
     public function importStyles(CliMenu $menu) : void
     {
         if (!$this->style->hasChangedFromDefaults()) {

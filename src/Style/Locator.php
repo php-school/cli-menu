@@ -97,4 +97,14 @@ class Locator
 
         return $this->getStyle($styleClass);
     }
+
+    public function registerItemStyle(string $itemClass, ItemStyle $itemStyle) : void
+    {
+        if (isset($this->itemStyleMap[$itemClass])) {
+            throw InvalidStyle::itemAlreadyRegistered($itemClass);
+        }
+
+        $this->itemStyleMap[$itemClass] = get_class($itemStyle);
+        $this->styles[get_class($itemStyle)] = $itemStyle;
+    }
 }
