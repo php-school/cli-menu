@@ -83,7 +83,7 @@ composer require php-school/cli-menu
 ## Upgrading
 
 Please refer to the [Upgrade Documentation](UPGRADE.md) documentation to see what is required to upgrade your installed 
-`cli-menu` version. Especially from 2.* to 3.0, much has changed.
+`cli-menu` version.
 
 ## Usage
 
@@ -164,6 +164,15 @@ php basic.php
 
 #### Disabled Items & Submenus
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2174476/19047849/868fa8c0-899b-11e6-9004-811c8da6d435.png">
+
+#### Checkbox Items
+<img width="600" alt="checkbox" src="https://user-images.githubusercontent.com/2817002/74604044-62cd9200-50ba-11ea-941f-377a51c9dcfd.png">
+<img width="600" alt="checkbox-split" src="https://user-images.githubusercontent.com/2817002/74604048-63febf00-50ba-11ea-9b20-39eb3a79989d.png">
+
+#### Radio Items
+
+<img width="600" alt="radio" src="https://user-images.githubusercontent.com/2817002/74604049-652fec00-50ba-11ea-8361-faf325245793.png">
+<img width="600" alt="radio-split" src="https://user-images.githubusercontent.com/2817002/74604050-65c88280-50ba-11ea-9ee0-d4ea654e5a87.png">
 
 #### Flash Dialogue
 <img width="600" alt="submenu" src="https://cloud.githubusercontent.com/assets/2817002/19786090/1f07dad6-9c94-11e6-91b0-c20ab2e6e27d.png">
@@ -311,9 +320,8 @@ $menu = ($builder = new CliMenuBuilder)
     ->build();
 ```
 
-If you want to use the full width of the terminal and apply a margin you will need to perform a little calculation yourself
-since we use a box model like the `box-sizing: border-box;` in CSS. The example below will use the full width of the terminal plus a margin of 2 on the 
-left and right sides:
+If you want to use the full width of the terminal and apply a margin, use the terminal width, and we will do the calculations
+automatically (shrink the width based on the margin).
 
 ```php
 <?php
@@ -321,7 +329,7 @@ left and right sides:
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 
 $menu = ($builder = new CliMenuBuilder)
-    ->setWidth($builder->getTerminal()->getWidth() - 2 * 2)
+    ->setWidth($builder->getTerminal()->getWidth())
     ->setMargin(2)
     ->build();
 ```
@@ -367,8 +375,8 @@ $menu = (new CliMenuBuilder)
 
 #### Margin
 
-The margin can be customised as one value. It is only applied to the left side of the menu. It can also be
-set automatically which will center the menu nicely in the terminal.
+The margin can be customised as one value. It can also be set automatically which will center the menu nicely in the 
+terminal.
 
 Automatically center menu:
 
@@ -392,7 +400,7 @@ use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 
 $menu = (new CliMenuBuilder)
     ->setWidth(200)
-    ->setMargin(5) //5 margin left
+    ->setMargin(5)
     ->build();
 ```
 
@@ -828,6 +836,8 @@ $menu = (new CliMenuBuilder)
         $style->setUncheckedMarker('[○] ')
             ->setCheckedMarker('[●] ');
     })
+    ->addCheckboxItem('Orange juice', function () {})
+    ->addCheckboxItem('Bread', function () {})
     ->build();
 ```
 
@@ -844,6 +854,8 @@ $menu = (new CliMenuBuilder)
         $style->setUncheckedMarker('[ ] ')
             ->setCheckedMarker('[✔] ');
     })
+    ->addRadioItem('Go shopping', function () {})
+    ->addRadioItem('Go camping', function () {})
     ->build();
 ```
 
@@ -853,7 +865,7 @@ You can optionally display some arbitrary text on the right hand side of an item
 you indicate which items to display it on. We use it to display `[COMPLETED]` on completed exercises, where the menu lists
 exercises for a workshop application.
 
-Item Extra is currently limited to only `\PhpSchool\CliMenu\MenuItem\SelectableItem`.
+Item Extra is currently limited to only selectable items (menus, checkboxes & radios included)
 
 The third parameter to `addItem` is a boolean whether to show the item extra or not. It defaults to false.
 
@@ -1028,7 +1040,7 @@ use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\CliMenu;
 
 $myCallback = function(CliMenu $menu) {
-    // Do something
+    echo "Client 1\nClient 2\nClient 3\n";
 };
 
 $menu = (new CliMenuBuilder)
@@ -1060,7 +1072,7 @@ use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use PhpSchool\CliMenu\CliMenu;
 
 $myCallback = function(CliMenu $menu) {
-    // Do something
+    echo "Client 1\nClient 2\nClient 3\n";
 };
 
 $menu = (new CliMenuBuilder)
@@ -1194,7 +1206,7 @@ use PhpSchool\CliMenu\CliMenu;
 
 $itemCallable = function (CliMenu $menu) {
     $result = $menu->askNumber()
-        ->setPrompt('Enter your age')
+        ->setPromptText('Enter your age')
         ->setPlaceholderText(10)
         ->setValidationFailedText('Invalid age, try again')
         ->ask();
@@ -1411,11 +1423,6 @@ Once you get going you might just end up with something that looks a little like
 
 You can see the construction code here for more clarity on how to perform advanced configuration:
 [PHP School](https://github.com/php-school/php-workshop/blob/3240d3217bbf62b1063613fc13eb5adff2299bbe/src/Factory/MenuFactory.php)
-
-## Docs Translations 
-_(This might not be kept up-to-date since it's a community translation)_
-See this doc in [Brazilian Portuguese (pt_BR)](docs/pt_BR/README.md) 
-
 
 ## Integrations
 
