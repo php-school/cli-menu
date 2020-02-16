@@ -87,6 +87,11 @@ class Locator
         $this->styles[$styleClass] = $itemStyle;
     }
 
+    public function hasStyleForMenuItem(MenuItemInterface $item) : bool
+    {
+        return isset($this->itemStyleMap[get_class($item)]);
+    }
+
     public function getStyleForMenuItem(MenuItemInterface $item) : ItemStyle
     {
         if (!isset($this->itemStyleMap[get_class($item)])) {
@@ -96,5 +101,15 @@ class Locator
         $styleClass = $this->itemStyleMap[get_class($item)];
 
         return $this->getStyle($styleClass);
+    }
+
+    public function registerItemStyle(string $itemClass, ItemStyle $itemStyle) : void
+    {
+        if (isset($this->itemStyleMap[$itemClass])) {
+            throw InvalidStyle::itemAlreadyRegistered($itemClass);
+        }
+
+        $this->itemStyleMap[$itemClass] = get_class($itemStyle);
+        $this->styles[get_class($itemStyle)] = $itemStyle;
     }
 }

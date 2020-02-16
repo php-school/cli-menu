@@ -186,4 +186,36 @@ class LocatorTest extends TestCase
 
         self::assertSame($new, $locator->getStyle(DefaultStyle::class));
     }
+
+    public function testHasStyleForMenuItem() : void
+    {
+        $locator = new Locator();
+
+        $customClass = new class extends LineBreakItem {
+        };
+
+        self::assertTrue($locator->hasStyleForMenuItem(new LineBreakItem()));
+        self::assertFalse($locator->hasStyleForMenuItem($customClass));
+    }
+
+    public function testRegisterItemStyleThrowsExceptionIfItemAlreadyRegistered() : void
+    {
+        self::expectException(InvalidStyle::class);
+
+        (new Locator())->registerItemStyle(LineBreakItem::class, new DefaultStyle());
+    }
+
+    public function testRegisterItemStyle() : void
+    {
+        $locator = new Locator();
+
+        $customClass = new class extends LineBreakItem {
+        };
+
+        self::assertFalse($locator->hasStyleForMenuItem($customClass));
+
+        $locator->registerItemStyle(get_class($customClass), new DefaultStyle());
+
+        self::assertTrue($locator->hasStyleForMenuItem($customClass));
+    }
 }

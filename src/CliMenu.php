@@ -22,6 +22,7 @@ use PhpSchool\CliMenu\Util\StringUtil as s;
 use PhpSchool\Terminal\InputCharacter;
 use PhpSchool\Terminal\NonCanonicalReader;
 use PhpSchool\Terminal\Terminal;
+use function PhpSchool\CliMenu\Util\collect;
 use function PhpSchool\CliMenu\Util\each;
 
 /**
@@ -666,6 +667,11 @@ class CliMenu
         return $this->itemStyleLocator->getStyleForMenuItem($item);
     }
 
+    public function getStyleLocator() : Locator
+    {
+        return $this->itemStyleLocator;
+    }
+
     public function importStyles(CliMenu $menu) : void
     {
         if (!$this->style->hasChangedFromDefaults()) {
@@ -744,22 +750,24 @@ class CliMenu
 
     public function propagateStyles() : void
     {
-        each(
-            array_filter($this->items, function (MenuItemInterface $item) {
+        collect($this->items)
+            ->filter(function (int $k, MenuItemInterface $item) {
+                return $this->itemStyleLocator->hasStyleForMenuItem($item);
+            })
+            ->filter(function (int $k, MenuItemInterface $item) {
                 return !$item->getStyle()->hasChangedFromDefaults();
-            }),
-            function (int $index, $item) {
+            })
+            ->each(function (int $k, $item) {
                 $item->setStyle(clone $this->getItemStyleForItem($item));
-            }
-        );
+            });
 
-        each(
-            array_filter($this->items, function (MenuItemInterface $item) {
+
+        collect($this->items)
+            ->filter(function (int $k, MenuItemInterface $item) {
                 return $item instanceof PropagatesStyles;
-            }),
-            function (int $index, PropagatesStyles $item) {
+            })
+            ->each(function (int $k, $item) {
                 $item->propagateStyles($this);
-            }
-        );
+            });
     }
 }

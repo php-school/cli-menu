@@ -5,11 +5,14 @@ namespace PhpSchool\CliMenu\Builder;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\CheckboxItem;
 use PhpSchool\CliMenu\MenuItem\LineBreakItem;
+use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 use PhpSchool\CliMenu\MenuItem\MenuMenuItem;
 use PhpSchool\CliMenu\MenuItem\RadioItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
+use PhpSchool\CliMenu\Style\ItemStyle;
+use function \PhpSchool\CliMenu\Util\each;
 
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
@@ -41,6 +44,11 @@ class SplitItemBuilder
      * @var string
      */
     private $autoShortcutsRegex = '/\[(.)\]/';
+
+    /**
+     * @var array
+     */
+    private $extraItemStyles = [];
 
     public function __construct(CliMenu $menu)
     {
@@ -103,6 +111,10 @@ class SplitItemBuilder
             $builder->enableAutoShortcuts($this->autoShortcutsRegex);
         }
 
+        each($this->extraItemStyles, function (int $i, array $extraItemStyle) use ($builder) {
+            $builder->registerItemStyle($extraItemStyle['class'], $extraItemStyle['style']);
+        });
+
         $callback($builder);
 
         $menu = $builder->build();
@@ -113,6 +125,13 @@ class SplitItemBuilder
             $menu,
             $builder->isMenuDisabled()
         ));
+
+        return $this;
+    }
+
+    public function addMenuItem(MenuItemInterface $item) : self
+    {
+        $this->splitItem->addItem($item);
 
         return $this;
     }
@@ -131,6 +150,13 @@ class SplitItemBuilder
         if (null !== $regex) {
             $this->autoShortcutsRegex = $regex;
         }
+
+        return $this;
+    }
+
+    public function registerItemStyle(string $itemClass, ItemStyle $itemStyle) : self
+    {
+        $this->extraItemStyles[] = ['class' => $itemClass, 'style' => $itemStyle];
 
         return $this;
     }

@@ -18,10 +18,12 @@ use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Style\CheckboxStyle;
 use PhpSchool\CliMenu\Style\DefaultStyle;
+use PhpSchool\CliMenu\Style\ItemStyle;
 use PhpSchool\CliMenu\Style\RadioStyle;
 use PhpSchool\CliMenu\Style\SelectableStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\Terminal\Terminal;
+use function PhpSchool\CliMenu\Util\each;
 
 /**
  * @author Michael Woodward <mikeymike.mw@gmail.com>
@@ -79,6 +81,11 @@ class CliMenuBuilder
      * @var string
      */
     private $autoShortcutsRegex = '/\[(.)\]/';
+
+    /**
+     * @var array
+     */
+    private $extraItemStyles = [];
 
     /**
      * @var bool
@@ -187,6 +194,10 @@ class CliMenuBuilder
             $builder->enableAutoShortcuts($this->autoShortcutsRegex);
         }
 
+        each($this->extraItemStyles, function (int $i, array $extraItemStyle) use ($builder) {
+            $builder->registerItemStyle($extraItemStyle['class'], $extraItemStyle['style']);
+        });
+
         $callback($builder);
 
         $menu = $builder->build();
@@ -292,6 +303,10 @@ class CliMenuBuilder
         if ($this->autoShortcuts) {
             $builder->enableAutoShortcuts($this->autoShortcutsRegex);
         }
+
+        each($this->extraItemStyles, function (int $i, array $extraItemStyle) use ($builder) {
+            $builder->registerItemStyle($extraItemStyle['class'], $extraItemStyle['style']);
+        });
 
         $callback($builder);
 
@@ -600,6 +615,23 @@ class CliMenuBuilder
     public function modifyRadioStyle(callable $itemCallable) : self
     {
         $itemCallable($this->getRadioStyle());
+
+        return $this;
+    }
+
+    public function modifyStyle(string $styleClass, callable $itemCallable) : self
+    {
+        $itemCallable($this->menu->getItemStyle($styleClass));
+
+        return $this;
+    }
+
+    public function registerItemStyle(string $itemClass, ItemStyle $itemStyle) : self
+    {
+        $this->menu->getStyleLocator()
+            ->registerItemStyle($itemClass, $itemStyle);
+
+        $this->extraItemStyles[] = ['class' => $itemClass, 'style' => $itemStyle];
 
         return $this;
     }

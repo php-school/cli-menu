@@ -22,4 +22,9 @@ class InvalidStyle extends \RuntimeException
     {
         return new self("Menu item: '$itemClass' does not have a registered style class");
     }
+
+    public static function itemAlreadyRegistered(string $itemClass) : self
+    {
+        return new self("Menu item: '$itemClass' already has a registered style class");
+    }
 }
