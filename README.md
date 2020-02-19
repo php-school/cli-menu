@@ -1428,3 +1428,4 @@ You can see the construction code here for more clarity on how to perform advanc
 
  * [Symfony Console](https://github.com/RedAntNL/console)
  * [Laravel](https://github.com/nunomaduro/laravel-console-menu)
+ * [Laravel Artisan](https://github.com/VladReshet/ArtisanUI)
