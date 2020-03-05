@@ -39,6 +39,11 @@ class Password implements Input
      */
     private $style;
 
+    /**
+     * @var int
+     */
+    private $passwordLength = 16;
+
     public function __construct(InputIO $inputIO, MenuStyle $style)
     {
         $this->inputIO = $inputIO;
@@ -84,7 +89,7 @@ class Password implements Input
     public function setValidator(callable $validator) : Input
     {
         $this->validator = $validator;
-        
+
         return $this;
     }
 
@@ -97,15 +102,15 @@ class Password implements Input
     {
         if ($this->validator) {
             $validator = $this->validator;
-            
+
             if ($validator instanceof \Closure) {
                 $validator = $validator->bindTo($this);
             }
-            
+
             return $validator($input);
         }
 
-        return mb_strlen($input) >= 16;
+        return mb_strlen($input) >= $this->passwordLength;
     }
 
     public function filter(string $value) : string
@@ -116,5 +121,10 @@ class Password implements Input
     public function getStyle() : MenuStyle
     {
         return $this->style;
+    }
+
+    public function setPasswordLength(int $length) : int
+    {
+        return $this->passwordLength = $length;
     }
 }

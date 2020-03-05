@@ -25,7 +25,7 @@ class PasswordTest extends TestCase
     private $inputIO;
 
     /**
-     * @var Text
+     * @var Password
      */
     private $input;
 
@@ -131,9 +131,23 @@ class PasswordTest extends TestCase
         };
 
         $this->input->setValidator($customValidate);
-        
+
         self::assertTrue($this->input->validate('superstrongpassword'));
         self::assertFalse($this->input->validate('mypassword'));
         self::assertEquals('Password too generic', $this->input->getValidationFailedText());
+    }
+
+    public function testPasswordValidationWithDefaultLength() : void
+    {
+        self::assertFalse($this->input->validate(str_pad('a', 15)));
+        self::assertTrue($this->input->validate(str_pad('a', 16)));
+    }
+
+    public function testPasswordValidationWithDefinedLength() : void
+    {
+        $this->input->setPasswordLength(5);
+
+        self::assertFalse($this->input->validate(str_pad('a', 4)));
+        self::assertTrue($this->input->validate(str_pad('a', 5)));
     }
 }
