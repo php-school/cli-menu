@@ -11,6 +11,10 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ### Removed
 
+## [4.1.0]
+### Added
+ - Ability to modify password length for password input (#235)
+
 ## [4.0.0]
 ### Added
  - Add PHP 7.4 support (#183)
