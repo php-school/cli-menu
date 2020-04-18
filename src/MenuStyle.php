@@ -277,20 +277,30 @@ class MenuStyle
         return $currentValues !== array_values($defaultStyleValues);
     }
 
+    /**
+     * Get text for a disabled menu item.
+     *
+     * This sets the foreground colour to the ansi bright equivalent,
+     * and on supported terminals, adds additional dim formatting.
+     *
+     * @return string
+     */
     public function getDisabledItemText(string $text) : string
     {
         return sprintf(
-            "\033[%sm%s\033[%sm",
+            "\033[%sm\033[%sm%s\033[%sm\033[%sm",
             self::$availableOptions['dim']['set'],
+            $this->getForegroundColourCode() + 60,
             $text,
+            $this->getBackgroundColourCode(),
             self::$availableOptions['dim']['unset']
         );
     }
 
     /**
-     * Generates the ansi escape sequence to set the colours
+     * Get the ansi escape sequence for the foreground colour.
      */
-    private function generateColoursSetCode() : void
+    private function getForegroundColourCode()
     {
         if (!ctype_digit($this->fg)) {
             $fgCode = self::$availableForegroundColors[$this->fg];
@@ -298,13 +308,33 @@ class MenuStyle
             $fgCode = sprintf("38;5;%s", $this->fg);
         }
 
+        return $fgCode;
+    }
+
+    /**
+     * Get the ansi escape sequence for the background colour.
+     */
+    private function getBackgroundColourCode()
+    {
         if (!ctype_digit($this->bg)) {
             $bgCode = self::$availableBackgroundColors[$this->bg];
         } else {
             $bgCode = sprintf("48;5;%s", $this->bg);
         }
 
-        $this->coloursSetCode = sprintf("\033[%s;%sm", $fgCode, $bgCode);
+        return $bgCode;
+    }
+
+    /**
+     * Generates the ansi escape sequence to set the colours
+     */
+    private function generateColoursSetCode() : void
+    {
+        $this->coloursSetCode = sprintf(
+            "\033[%s;%sm",
+            $this->getForegroundColourCode(),
+            $this->getBackgroundColourCode()
+        );
     }
 
     /**
