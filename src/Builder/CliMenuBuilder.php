@@ -127,7 +127,7 @@ class CliMenuBuilder
         string $text,
         callable $itemCallable,
         bool $showItemExtra = false,
-        bool $disabled = false
+        $disabled = false
     ) : self {
         $this->addMenuItem(new SelectableItem($text, $itemCallable, $showItemExtra, $disabled));
 
@@ -147,7 +147,7 @@ class CliMenuBuilder
         string $text,
         callable $itemCallable,
         bool $showItemExtra = false,
-        bool $disabled = false
+        $disabled = false
     ) : self {
         $this->addMenuItem(new CheckboxItem($text, $itemCallable, $showItemExtra, $disabled));
 
@@ -158,7 +158,7 @@ class CliMenuBuilder
         string $text,
         callable $itemCallable,
         bool $showItemExtra = false,
-        bool $disabled = false
+        $disabled = false
     ) : self {
         $this->addMenuItem(new RadioItem($text, $itemCallable, $showItemExtra, $disabled));
 
