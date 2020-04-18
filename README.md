@@ -791,7 +791,6 @@ $menu = (new CliMenuBuilder)
             ->addItem('Nope can\'t see this!', $itemCallable)
             ->disableMenu();
     })
-    ->setTitle('Basic CLI Menu Disabled Items > Dynamic Submenu')
     ->addItem(
         'You can only select this item at the weekend!',
         $itemCallable,
