@@ -45,7 +45,7 @@ class RadioItem implements MenuItemInterface
         string $text,
         callable $selectAction,
         bool $showItemExtra = false,
-        bool $disabled = false
+        $disabled = false
     ) {
         $this->text = $text;
         $this->selectAction = $selectAction;
@@ -60,7 +60,7 @@ class RadioItem implements MenuItemInterface
      */
     public function getRows(MenuStyle $style, bool $selected = false) : array
     {
-        return (new SelectableItemRenderer())->render($style, $this, $selected, $this->disabled);
+        return (new SelectableItemRenderer())->render($style, $this, $selected, ! $this->canSelect());
     }
 
     /**
@@ -117,7 +117,9 @@ class RadioItem implements MenuItemInterface
      */
     public function canSelect() : bool
     {
-        return !$this->disabled;
+        return is_callable($this->disabled)
+            ? (! call_user_func($this->disabled))
+            : (! $this->disabled);
     }
 
     /**
