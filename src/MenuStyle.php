@@ -290,7 +290,7 @@ class MenuStyle
         return sprintf(
             "\033[%sm\033[%sm%s\033[%sm\033[%sm",
             self::$availableOptions['dim']['set'],
-            $this->getForegroundColourCode() + 60,
+            $this->getForegroundColourCode(true),
             $text,
             $this->getForegroundColourCode(),
             self::$availableOptions['dim']['unset']
@@ -300,33 +300,39 @@ class MenuStyle
     /**
      * Get the ansi escape sequence for the foreground colour.
      *
+     * @param bool $bright Whether to modify to the ansi bright variation
+     *
      * @return string
      */
-    private function getForegroundColourCode() : string
+    private function getForegroundColourCode(bool $bright = false) : string
     {
         if (!ctype_digit($this->fg)) {
-            $fgCode = self::$availableForegroundColors[$this->fg];
+            $fgCode = (int)self::$availableForegroundColors[$this->fg];
+            $fgCode += ($bright ? 60 : 0);
         } else {
-            $fgCode = sprintf("38;5;%s", $this->fg);
+            $fgCode = sprintf("38;5;%s", ((int)$this->fg + ($bright ? 60 : 0)));
         }
 
-        return $fgCode;
+        return (string)$fgCode;
     }
 
     /**
      * Get the ansi escape sequence for the background colour.
      *
+     * @param bool $bright Whether to modify to the ansi bright variation
+     *
      * @return string
      */
-    private function getBackgroundColourCode() : string
+    private function getBackgroundColourCode(bool $bright = false) : string
     {
         if (!ctype_digit($this->bg)) {
-            $bgCode = self::$availableBackgroundColors[$this->bg];
+            $bgCode = (int)self::$availableBackgroundColors[$this->bg];
+            $bgCode += ($bright ? 60 : 0);
         } else {
-            $bgCode = sprintf("48;5;%s", $this->bg);
+            $bgCode = sprintf("48;5;%s", ((int)$this->bg + ($bright ? 60 : 0)));
         }
 
-        return $bgCode;
+        return (string)$bgCode;
     }
 
     /**
