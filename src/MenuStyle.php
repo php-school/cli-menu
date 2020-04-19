@@ -299,8 +299,10 @@ class MenuStyle
 
     /**
      * Get the ansi escape sequence for the foreground colour.
+     *
+     * @return string
      */
-    private function getForegroundColourCode()
+    private function getForegroundColourCode() : string
     {
         if (!ctype_digit($this->fg)) {
             $fgCode = self::$availableForegroundColors[$this->fg];
@@ -313,8 +315,10 @@ class MenuStyle
 
     /**
      * Get the ansi escape sequence for the background colour.
+     *
+     * @return string
      */
-    private function getBackgroundColourCode()
+    private function getBackgroundColourCode() : string
     {
         if (!ctype_digit($this->bg)) {
             $bgCode = self::$availableBackgroundColors[$this->bg];
