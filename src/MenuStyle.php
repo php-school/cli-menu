@@ -292,7 +292,7 @@ class MenuStyle
             self::$availableOptions['dim']['set'],
             $this->getForegroundColourCode() + 60,
             $text,
-            $this->getBackgroundColourCode(),
+            $this->getForegroundColourCode(),
             self::$availableOptions['dim']['unset']
         );
     }
