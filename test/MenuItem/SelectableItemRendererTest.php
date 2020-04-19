@@ -84,16 +84,14 @@ class SelectableItemRendererTest extends TestCase
         $menuStyle->setWidth(35);
         $style = (new SelectableStyle())->setItemExtra('[DONE]');
 
-        $item = new SelectableItem('SOME TEXT', function () {
+        $item = new SelectableItem($testString = 'SOME TEXT', function () {
         });
         $item->setStyle($style);
         $item->showItemExtra();
 
         self::assertEquals(
-            [
-                "\033[2m● SOME TEXT\033[22m              [DONE]",
-            ],
-            $renderer->render($menuStyle, $item, true, true)
+            escapeshellcmd("\033[2m\033[97m● " . $testString . "\033[37m\033[22m              [DONE]"),
+            escapeshellcmd($renderer->render($menuStyle, $item, true, true)[0])
         );
     }
     public function testWrapAndIndentText() : void

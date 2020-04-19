@@ -277,14 +277,62 @@ class MenuStyle
         return $currentValues !== array_values($defaultStyleValues);
     }
 
+    /**
+     * Get text for a disabled menu item.
+     *
+     * This sets the foreground colour to the ansi bright equivalent,
+     * and on supported terminals, adds additional dim formatting.
+     *
+     * @return string
+     */
     public function getDisabledItemText(string $text) : string
     {
         return sprintf(
-            "\033[%sm%s\033[%sm",
+            "\033[%sm\033[%sm%s\033[%sm\033[%sm",
             self::$availableOptions['dim']['set'],
+            $this->getForegroundColourCode(true),
             $text,
+            $this->getForegroundColourCode(),
             self::$availableOptions['dim']['unset']
         );
+    }
+
+    /**
+     * Get the ansi escape sequence for the foreground colour.
+     *
+     * @param bool $bright Whether to modify to the ansi bright variation
+     *
+     * @return string
+     */
+    private function getForegroundColourCode(bool $bright = false) : string
+    {
+        if (!ctype_digit($this->fg)) {
+            $fgCode = (int)self::$availableForegroundColors[$this->fg];
+            $fgCode += ($bright ? 60 : 0);
+        } else {
+            $fgCode = sprintf("38;5;%s", ((int)$this->fg + ($bright ? 60 : 0)));
+        }
+
+        return (string)$fgCode;
+    }
+
+    /**
+     * Get the ansi escape sequence for the background colour.
+     *
+     * @param bool $bright Whether to modify to the ansi bright variation
+     *
+     * @return string
+     */
+    private function getBackgroundColourCode(bool $bright = false) : string
+    {
+        if (!ctype_digit($this->bg)) {
+            $bgCode = (int)self::$availableBackgroundColors[$this->bg];
+            $bgCode += ($bright ? 60 : 0);
+        } else {
+            $bgCode = sprintf("48;5;%s", ((int)$this->bg + ($bright ? 60 : 0)));
+        }
+
+        return (string)$bgCode;
     }
 
     /**
@@ -292,19 +340,11 @@ class MenuStyle
      */
     private function generateColoursSetCode() : void
     {
-        if (!ctype_digit($this->fg)) {
-            $fgCode = self::$availableForegroundColors[$this->fg];
-        } else {
-            $fgCode = sprintf("38;5;%s", $this->fg);
-        }
-
-        if (!ctype_digit($this->bg)) {
-            $bgCode = self::$availableBackgroundColors[$this->bg];
-        } else {
-            $bgCode = sprintf("48;5;%s", $this->bg);
-        }
-
-        $this->coloursSetCode = sprintf("\033[%s;%sm", $fgCode, $bgCode);
+        $this->coloursSetCode = sprintf(
+            "\033[%s;%sm",
+            $this->getForegroundColourCode(),
+            $this->getBackgroundColourCode()
+        );
     }
 
     /**
