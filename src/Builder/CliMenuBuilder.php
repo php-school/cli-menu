@@ -123,6 +123,16 @@ class CliMenuBuilder
         return $this;
     }
 
+    /**
+     * Add an item to the menu.
+     *
+     * @param string        $text
+     * @param callable      $itemCallable
+     * @param bool          $showItemExtra
+     * @param bool|callable $disabled
+     *
+     * @return $this
+     */
     public function addItem(
         string $text,
         callable $itemCallable,
@@ -143,6 +153,16 @@ class CliMenuBuilder
         return $this;
     }
 
+    /**
+     * Add a checkbox to the menu.
+     *
+     * @param string        $text
+     * @param callable      $itemCallable
+     * @param bool          $showItemExtra
+     * @param bool|callable $disabled
+     *
+     * @return $this
+     */
     public function addCheckboxItem(
         string $text,
         callable $itemCallable,
@@ -154,6 +174,16 @@ class CliMenuBuilder
         return $this;
     }
 
+    /**
+     * Add a radio button to the menu.
+     *
+     * @param string        $text
+     * @param callable      $itemCallable
+     * @param bool          $showItemExtra
+     * @param bool|callable $disabled
+     *
+     * @return $this
+     */
     public function addRadioItem(
         string $text,
         callable $itemCallable,

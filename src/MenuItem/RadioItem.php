@@ -25,7 +25,7 @@ class RadioItem implements MenuItemInterface
     private $showItemExtra;
 
     /**
-     * @var bool
+     * @var bool|callable
      */
     private $disabled;
 
@@ -41,6 +41,16 @@ class RadioItem implements MenuItemInterface
      */
     private $style;
 
+    /**
+     * RadioItem constructor.
+     *
+     * @param string        $text
+     * @param callable      $selectAction
+     * @param bool          $showItemExtra
+     * @param bool|callable $disabled
+     *
+     * @return void
+     */
     public function __construct(
         string $text,
         callable $selectAction,

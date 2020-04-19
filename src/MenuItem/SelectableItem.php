@@ -29,7 +29,7 @@ class SelectableItem implements MenuItemInterface
     private $showItemExtra;
 
     /**
-     * @var bool
+     * @var bool|callable
      */
     private $disabled;
 
@@ -38,6 +38,16 @@ class SelectableItem implements MenuItemInterface
      */
     private $style;
 
+    /**
+     * SelectableItem constructor.
+     *
+     * @param string        $text
+     * @param callable      $selectAction
+     * @param bool          $showItemExtra
+     * @param bool|callable $disabled
+     *
+     * @return void
+     */
     public function __construct(
         string $text,
         callable $selectAction,
