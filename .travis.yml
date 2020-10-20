@@ -4,6 +4,16 @@ cache:
   directories:
     - $HOME/.composer/cache/files
 
+matrix:
+  include:
+    - php: 7.2
+    - php: 7.3
+    - php: 7.4
+    - php: nightly
+      env: COMPOSER_FLAGS="--ignore-platform-reqs"
+  allow_failures:
+    - php: nightly
+
 php:
   - 7.2
   - 7.3
@@ -12,7 +22,7 @@ php:
 
 install:
   - composer self-update
-  - composer install --prefer-dist
+  - composer install --prefer-dist $COMPOSER_FLAGS
 
 before_script:
   - mkdir -p build/logs
