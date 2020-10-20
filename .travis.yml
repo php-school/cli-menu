@@ -14,12 +14,6 @@ matrix:
   allow_failures:
     - php: nightly
 
-php:
-  - 7.2
-  - 7.3
-  - 7.4
-  - nightly
-
 install:
   - composer self-update
   - composer install --prefer-dist $COMPOSER_FLAGS
