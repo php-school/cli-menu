@@ -415,7 +415,7 @@ class CliMenu
             throw new \InvalidArgumentException('Item does not exist in menu');
         }
 
-        $this->selectedItem = $key;
+        $this->selectedItem = (int) $key;
     }
 
     public function getSelectedItemIndex() : int

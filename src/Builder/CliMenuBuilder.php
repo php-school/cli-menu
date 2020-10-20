@@ -270,7 +270,7 @@ class CliMenuBuilder
                 $current = $splitItem->getSelectedItemIndex();
 
                 $splitItem->setSelectedItemIndex(
-                    array_search($item, $splitItem->getItems(), true)
+                    (int) array_search($item, $splitItem->getItems(), true)
                 );
 
                 $menu->executeAsSelected($splitItem);
