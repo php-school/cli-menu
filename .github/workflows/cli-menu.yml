@@ -8,21 +8,23 @@ on:
 
 
 jobs:
-  cli-menu-tests:
+  build:
     runs-on: ubuntu-latest
-
     strategy:
+      fail-fast: true
       matrix:
-        php-versions: [ '7.2', '7.3', '7.4' ]
-        name: PHP ${{ matrix.php-versions }}
+        php: [7.2, 7.3, 7.4]
 
+    name: PHP ${{ matrix.php-versions }}
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - name: Install PHP
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
 
       - name: Install Dependencies
         run: composer install --prefer-dist
