@@ -14,6 +14,8 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 ## [4.1.0]
 ### Added
  - Ability to modify password length for password input (#235)
+ - Improve the formatting of disabled menu items in different terminals (#236)
+ - Support for PHP8 (#240)
 
 ## [4.0.0]
 ### Added
