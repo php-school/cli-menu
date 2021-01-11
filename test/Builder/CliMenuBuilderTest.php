@@ -375,6 +375,33 @@ class CliMenuBuilderTest extends TestCase
         $this->checkMenuItems($menu, $expected);
     }
 
+    public function testAddMultipleCheckboxItems() : void
+    {
+        $callable = function () {
+        };
+
+        $builder = new CliMenuBuilder;
+        $builder->disableDefaultItems();
+        $builder->addCheckboxItems([
+            ['Item 1', $callable],
+            ['Item 2', $callable]
+        ]);
+        $menu = $builder->build();
+
+        $expected = [
+            [
+                'class' => CheckboxItem::class,
+                'text'  => 'Item 1',
+            ],
+            [
+                'class' => CheckboxItem::class,
+                'text'  => 'Item 2',
+            ],
+        ];
+
+        $this->checkMenuItems($menu, $expected);
+    }
+
     public function testAddCheckboxItem() : void
     {
         $callable = function () {
@@ -409,6 +436,33 @@ class CliMenuBuilderTest extends TestCase
         $builder->disableDefaultItems();
         $builder->addRadioItem('Item 1', $callable);
         $builder->addRadioItem('Item 2', $callable);
+        $menu = $builder->build();
+
+        $expected = [
+            [
+                'class' => RadioItem::class,
+                'text'  => 'Item 1',
+            ],
+            [
+                'class' => RadioItem::class,
+                'text'  => 'Item 2',
+            ],
+        ];
+
+        $this->checkMenuItems($menu, $expected);
+    }
+
+    public function testAddMultipleRadioItems() : void
+    {
+        $callable = function () {
+        };
+
+        $builder = new CliMenuBuilder;
+        $builder->disableDefaultItems();
+        $builder->addRadioItems([
+            ['Item 1', $callable],
+            ['Item 2', $callable],
+        ]);
         $menu = $builder->build();
 
         $expected = [

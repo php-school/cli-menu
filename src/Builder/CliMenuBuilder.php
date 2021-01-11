@@ -154,6 +154,15 @@ class CliMenuBuilder
         return $this;
     }
 
+    public function addCheckboxItems(array $items): self
+    {
+        foreach ($items as $item) {
+            $this->addCheckboxItem(...$item);
+        }
+
+        return $this;
+    }
+
     public function addRadioItem(
         string $text,
         callable $itemCallable,
@@ -161,6 +170,15 @@ class CliMenuBuilder
         bool $disabled = false
     ) : self {
         $this->addMenuItem(new RadioItem($text, $itemCallable, $showItemExtra, $disabled));
+
+        return $this;
+    }
+
+    public function addRadioItems(array $items): self
+    {
+        foreach ($items as $item) {
+            $this->addRadioItem(...$item);
+        }
 
         return $this;
     }

@@ -15,10 +15,12 @@ $menu = (new CliMenuBuilder)
     ->addSubMenu('Compiled', function (CliMenuBuilder $b) use ($itemCallable) {
         $b->setTitle('Compiled Languages')
             ->addRadioItem('Rust', $itemCallable)
-            ->addRadioItem('C++', $itemCallable)
             ->addRadioItem('Go', $itemCallable)
             ->addRadioItem('Java', $itemCallable)
-            ->addRadioItem('C', $itemCallable)
+            ->addRadioItems([
+                ['C++', $itemCallable],
+                ['C', $itemCallable]
+            ])
         ;
     })
     ->addSubMenu('Interpreted', function (CliMenuBuilder $b) use ($itemCallable) {
