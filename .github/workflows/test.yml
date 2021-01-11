@@ -34,6 +34,7 @@ jobs:
         run: |
           echo "$TERM"
           export TERM=xterm-mono
+          echo "$TERM"
 
       - name: Tests
         run: ./vendor/bin/phpunit --coverage-clover ./build/logs/clover.xml
