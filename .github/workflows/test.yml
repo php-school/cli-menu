@@ -32,6 +32,6 @@ jobs:
         run: composer update --no-interaction --no-progress
 
       - name: Tests
-        run: ./vendor/bin/phpunit --coverage-clover ./build/logs/clover.xml
+        run: ./vendor/bin/phpunit --coverage-xml ./build/logs/
 
       - uses: codecov/codecov-action@v1
