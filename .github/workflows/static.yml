@@ -1,0 +1,31 @@
+name: Static Analysis
+
+on: ['push', 'pull_request']
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['7.2', '7.3', '7.4']
+    name: Code Style
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: none
+
+      - name: Install Dependencies
+        run: composer update --no-interaction --no-progress
+
+      - name: Run PHPCS
+        run: composer run cs
+
+      - name: Run PHPStan
+        run: composer run --no-progress
