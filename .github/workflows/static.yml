@@ -19,7 +19,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           tools: composer:v2
-          coverage: none
+          coverage: xdebug
 
       - name: Install Dependencies
         run: composer update --no-interaction --no-progress
