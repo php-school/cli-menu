@@ -33,6 +33,6 @@ jobs:
       - run: export TERM=xterm-256color
 
       - name: Tests
-        run: ./vendor/bin/phpunit --coverage-clover ./build/logs/clover.xml -u NONE
+        run: ./vendor/bin/pest --coverage-clover ./build/logs/clover.xml -u NONE
 
       - uses: codecov/codecov-action@v1
