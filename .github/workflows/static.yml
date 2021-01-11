@@ -19,7 +19,8 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           tools: composer:v2
-          coverage: xdebug
+          ini-values: pcov.directory=api #optional, see above for usage.
+          coverage: pcov
 
       - name: Install Dependencies
         run: composer update --no-interaction --no-progress
