@@ -28,4 +28,4 @@ jobs:
         run: composer run cs
 
       - name: Run PHPStan
-        run: composer run --no-progress
+        run: composer run static
