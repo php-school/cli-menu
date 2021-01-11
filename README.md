@@ -575,6 +575,27 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
+You can add multiple checkbox items at once like so:
+
+```php
+<?php
+
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\CliMenu;
+
+$callable = function (CliMenu $menu) {
+    echo 'I am alive!';
+};
+
+$menu = (new CliMenuBuilder)
+    ->addCheckboxItems([
+        ['Item 1', $callable],
+        ['Item 2', $callable],
+        ['Item 3', $callable],
+    ])
+    ->build();
+```
+
 When selecting an item, it will be toggled. Notice at first each item is unchecked. After selecting one it will become
 checked.
 
@@ -594,6 +615,27 @@ $menu = (new CliMenuBuilder)
     ->addRadioItem('Item 1', $callable)
     ->addRadioItem('Item 2', $callable)
     ->addRadioItem('Item 3', $callable)
+    ->build();
+```
+
+You can add multiple radio items at once like so:
+
+```php
+<?php
+
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\CliMenu;
+
+$callable = function (CliMenu $menu) {
+    echo 'I am alive!';
+};
+
+$menu = (new CliMenuBuilder)
+    ->addRadioItems([
+        ['Item 1', $callable],
+        ['Item 2', $callable],
+        ['Item 3', $callable],
+    ])
     ->build();
 ```
 

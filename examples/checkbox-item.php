@@ -15,10 +15,12 @@ $menu = (new CliMenuBuilder)
     ->addSubMenu('Compiled', function (CliMenuBuilder $b) use ($itemCallable) {
         $b->setTitle('Compiled Languages')
             ->addCheckboxItem('Rust', $itemCallable)
-            ->addCheckboxItem('C++', $itemCallable)
             ->addCheckboxItem('Go', $itemCallable)
             ->addCheckboxItem('Java', $itemCallable)
-            ->addCheckboxItem('C', $itemCallable)
+            ->addCheckboxItems([
+                ['C++', $itemCallable],
+                ['C', $itemCallable]
+            ]);
         ;
     })
     ->addSubMenu('Interpreted', function (CliMenuBuilder $b) use ($itemCallable) {
