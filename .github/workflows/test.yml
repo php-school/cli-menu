@@ -38,6 +38,4 @@ jobs:
       - name: Tests
         run: ./vendor/bin/phpunit --coverage-clover ./build/logs/clover.xml
 
-
-
       - uses: codecov/codecov-action@v1
