@@ -2,7 +2,7 @@
 
 <phpunit colors="true">
     <testsuite name="CLI Menu Test Suite">
-        <directory>./tests</directory>
+        <directory>./test</directory>
     </testsuite>
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">
