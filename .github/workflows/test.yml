@@ -30,10 +30,14 @@ jobs:
       - name: Install PHP 7 dependencies
         run: composer update --no-interaction --no-progress
 
+      - name: Term
+        run: |
+          echo "$TERM"
+          export TERM=xterm-mono
+
       - name: Tests
         run: ./vendor/bin/phpunit --coverage-clover ./build/logs/clover.xml
 
-      - name: Term
-        run: echo "$TERM"
+
 
       - uses: codecov/codecov-action@v1
