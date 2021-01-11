@@ -33,7 +33,7 @@ jobs:
       - name: Term
         run: |
           echo "$TERM"
-          export TERM=xterm-mono
+          export TERM=xterm-256color
           echo "$TERM"
 
       - name: Tests
