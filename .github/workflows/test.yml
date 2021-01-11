@@ -33,4 +33,7 @@ jobs:
       - name: Tests
         run: ./vendor/bin/phpunit --coverage-clover ./build/logs/clover.xml
 
+      - name: Term
+        run: echo "$TERM"
+
       - uses: codecov/codecov-action@v1
