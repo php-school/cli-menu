@@ -22,8 +22,12 @@
         "php" : ">=7.1",
         "beberlei/assert": "^2.4 | ^3",
         "php-school/terminal": "^0.2.1",
-        "ext-posix": "*",
         "ext-mbstring": "*"
+    },
+    "config": {
+        "platform": {
+            "ext-posix": "*"
+        }
     },
     "autoload" : {
         "psr-4" : {
