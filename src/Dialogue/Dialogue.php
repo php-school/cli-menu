@@ -33,6 +33,11 @@ abstract class Dialogue
     protected $text;
 
     /**
+     * @var bool $cancellable
+     */
+    protected $cancellable;
+
+    /**
      * @var int
      */
     protected $x;
@@ -42,12 +47,18 @@ abstract class Dialogue
      */
     protected $y;
 
-    public function __construct(CliMenu $parentMenu, MenuStyle $menuStyle, Terminal $terminal, string $text)
-    {
+    public function __construct(
+        CliMenu $parentMenu,
+        MenuStyle $menuStyle,
+        Terminal $terminal,
+        string $text,
+        bool $cancellable
+    ) {
         $this->style        = $menuStyle;
         $this->terminal     = $terminal;
         $this->text         = $text;
         $this->parentMenu   = $parentMenu;
+        $this->cancellable  = $cancellable;
 
         $this->calculateCoordinates();
     }

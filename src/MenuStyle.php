@@ -813,6 +813,20 @@ class MenuStyle
         return sprintf("\033[%sm", $borderColourCode);
     }
 
+
+    /**
+     * Get ansi escape sequence for setting or unsetting the specified option code.
+     *
+     * @param string $string Option code (bold|dim|underscore|blink|reverse|conceal)
+     * @param bool $set Whether to set or unset the code
+     *
+     * @return string
+     */
+    public function getOptionCode(string $string, bool $set = true): string
+    {
+        return sprintf("\033[%sm", self::$availableOptions[$string][$set ? 'set' : 'unset']);
+    }
+
     /**
      * Get a string of given length consisting of 0-9
      * eg $length = 15 : 012345678901234

@@ -694,10 +694,10 @@ class CliMenu
             ->setBg('yellow')
             ->setFg('red');
 
-        return new Flash($this, $style, $this->terminal, $text);
+        return new Flash($this, $style, $this->terminal, $text, false);
     }
 
-    public function confirm(string $text, MenuStyle $style = null) : Confirm
+    public function confirm(string $text, MenuStyle $style = null, bool $cancellable = false) : Confirm
     {
         $this->guardSingleLine($text);
 
@@ -705,7 +705,7 @@ class CliMenu
             ->setBg('yellow')
             ->setFg('red');
 
-        return new Confirm($this, $style, $this->terminal, $text);
+        return new Confirm($this, $style, $this->terminal, $text, $cancellable);
     }
 
     public function askNumber(MenuStyle $style = null) : Number
