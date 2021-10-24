@@ -509,6 +509,7 @@ class MenuStyle
             );
         }
 
+        $this->paddingTopBottom = $this->paddingTopBottom >= 0 ? $this->paddingTopBottom : 0;
         $this->paddingTopBottomRows = array_fill(0, $this->paddingTopBottom, $paddingRow);
     }
 
@@ -662,6 +663,10 @@ class MenuStyle
                 -1
             );
         }
+
+        $this->borderTopWidth = $this->borderTopWidth >= 0 ? $this->borderTopWidth : 0;
+        $this->borderBottomWidth = $this->borderBottomWidth >= 0 ? $this->borderBottomWidth : 0;
+
 
         $this->borderTopRows = array_fill(0, $this->borderTopWidth, $borderRow);
         $this->borderBottomRows = array_fill(0, $this->borderBottomWidth, $borderRow);

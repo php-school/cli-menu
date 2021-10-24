@@ -108,7 +108,7 @@ class InputIO
                 },
                 $lines
             )
-        );
+        ) ? : 0;
     }
 
     private function calculateYPosition() : int

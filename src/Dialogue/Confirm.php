@@ -10,6 +10,9 @@ use PhpSchool\Terminal\NonCanonicalReader;
  */
 class Confirm extends Dialogue
 {
+    /**
+     * @var bool
+     */
     private $confirm = true;
 
     /**
@@ -33,7 +36,6 @@ class Confirm extends Dialogue
                 $this->drawDialog($confirmText, $cancelText);
             }
         }
-        return false;
     }
 
     private function drawDialog(string $confirmText = 'OK', string $cancelText = 'Cancel'): void
@@ -73,9 +75,9 @@ class Confirm extends Dialogue
             $pad = ($buttonLength - $promptWidth) / 2;
             $this->text = sprintf(
                 '%s%s%s',
-                str_repeat(' ', round($pad, 0, 2) + $this->style->getPaddingLeftRight()),
+                str_repeat(' ', intval(round($pad, 0, 2) + $this->style->getPaddingLeftRight())),
                 $this->text,
-                str_repeat(' ', round($pad, 0, 1) + $this->style->getPaddingLeftRight())
+                str_repeat(' ', intval(round($pad, 0, 1) + $this->style->getPaddingLeftRight()))
             );
             $promptWidth = mb_strlen($this->text) + 4;
         }
