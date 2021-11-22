@@ -6,7 +6,7 @@ use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 require_once(__DIR__ . '/../vendor/autoload.php');
 
 $itemCallable = function (CliMenu $menu) {
-    $continue = $menu->confirm('PHP School FTW!', null, true)
+    $continue = $menu->cancellableConfirm('PHP School FTW!', null, true)
         ->display('OK', 'Cancel');
 
     if ($continue) {

@@ -2,6 +2,7 @@
 
 namespace PhpSchool\CliMenu;
 
+use PhpSchool\CliMenu\Dialogue\CancellableConfirm;
 use PhpSchool\CliMenu\Exception\InvalidTerminalException;
 use PhpSchool\CliMenu\Exception\MenuNotOpenException;
 use PhpSchool\CliMenu\Input\InputIO;
@@ -694,10 +695,10 @@ class CliMenu
             ->setBg('yellow')
             ->setFg('red');
 
-        return new Flash($this, $style, $this->terminal, $text, false);
+        return new Flash($this, $style, $this->terminal, $text);
     }
 
-    public function confirm(string $text, MenuStyle $style = null, bool $cancellable = false) : Confirm
+    public function confirm(string $text, MenuStyle $style = null) : Confirm
     {
         $this->guardSingleLine($text);
 
@@ -705,7 +706,18 @@ class CliMenu
             ->setBg('yellow')
             ->setFg('red');
 
-        return new Confirm($this, $style, $this->terminal, $text, $cancellable);
+        return new Confirm($this, $style, $this->terminal, $text);
+    }
+
+    public function cancellableConfirm(string $text, MenuStyle $style = null) : CancellableConfirm
+    {
+        $this->guardSingleLine($text);
+
+        $style = $style ?? (new MenuStyle($this->terminal))
+                ->setBg('yellow')
+                ->setFg('red');
+
+        return new CancellableConfirm($this, $style, $this->terminal, $text);
     }
 
     public function askNumber(MenuStyle $style = null) : Number

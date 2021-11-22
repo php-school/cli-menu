@@ -51,14 +51,12 @@ abstract class Dialogue
         CliMenu $parentMenu,
         MenuStyle $menuStyle,
         Terminal $terminal,
-        string $text,
-        bool $cancellable
+        string $text
     ) {
         $this->style        = $menuStyle;
         $this->terminal     = $terminal;
         $this->text         = $text;
         $this->parentMenu   = $parentMenu;
-        $this->cancellable  = $cancellable;
 
         $this->calculateCoordinates();
     }

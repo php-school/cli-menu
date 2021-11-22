@@ -5,7 +5,6 @@ namespace PhpSchool\CliMenuTest\Dialogue;
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuStyle;
-use PhpSchool\Terminal\InputCharacter;
 use PhpSchool\Terminal\IO\BufferedOutput;
 use PhpSchool\Terminal\Terminal;
 use PHPUnit\Framework\TestCase;
@@ -153,7 +152,7 @@ class ConfirmTest extends TestCase
         $style = $this->getStyle($this->terminal);
 
         $item = new SelectableItem('Item 1', function (CliMenu $menu) {
-            $menu->confirm('PHP', null, true)
+            $menu->cancellableConfirm('PHP', null, true)
                 ->display('OK', 'Cancel');
 
             $menu->close();
@@ -177,7 +176,7 @@ class ConfirmTest extends TestCase
         $style = $this->getStyle($this->terminal);
 
         $item = new SelectableItem('Item 1', function (CliMenu $menu) {
-            $menu->confirm('PHP School Rocks FTW!', null, true)
+            $menu->cancellableConfirm('PHP School Rocks FTW!', null, true)
                 ->display('OK', 'Cancel');
 
             $menu->close();
@@ -230,7 +229,7 @@ class ConfirmTest extends TestCase
         $return = '';
 
         $item = new SelectableItem('Item 1', function (CliMenu $menu) use (&$return) {
-            $return = $menu->confirm('PHP School FTW!')
+            $return = $menu->cancellableConfirm('PHP School FTW!')
                 ->display('OK');
 
             $menu->close();
@@ -253,7 +252,7 @@ class ConfirmTest extends TestCase
         $return = '';
 
         $item = new SelectableItem('Item 1', function (CliMenu $menu) use (&$return) {
-            $return = $menu->confirm('PHP School FTW!')
+            $return = $menu->cancellableConfirm('PHP School FTW!')
                 ->display('OK', 'Cancel');
 
             $menu->close();
@@ -276,7 +275,7 @@ class ConfirmTest extends TestCase
         $return = '';
 
         $item = new SelectableItem('Item 1', function (CliMenu $menu) use (&$return) {
-            $return = $menu->confirm('PHP School FTW!', null, true)
+            $return = $menu->cancellableConfirm('PHP School FTW!', null)
                 ->display('OK', 'Cancel');
 
             $menu->close();
