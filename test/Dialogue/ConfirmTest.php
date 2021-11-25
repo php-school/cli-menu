@@ -140,6 +140,54 @@ class ConfirmTest extends TestCase
         static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
+    public function testConfirmCancellableWithShortPrompt(): void
+    {
+        $this->terminal
+            ->method('read')
+            ->will($this->onConsecutiveCalls(
+                "\n",
+                "\n"
+            ));
+
+        $style = $this->getStyle($this->terminal);
+
+        $item = new SelectableItem('Item 1', function (CliMenu $menu) {
+            $menu->cancellableConfirm('PHP', null, true)
+                ->display('OK', 'Cancel');
+
+            $menu->close();
+        });
+
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
+        $menu->open();
+
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+
+    public function testConfirmCancellableWithLongPrompt(): void
+    {
+        $this->terminal
+            ->method('read')
+            ->will($this->onConsecutiveCalls(
+                "\n",
+                "\n"
+            ));
+
+        $style = $this->getStyle($this->terminal);
+
+        $item = new SelectableItem('Item 1', function (CliMenu $menu) {
+            $menu->cancellableConfirm('PHP School Rocks FTW!', null, true)
+                ->display('OK', 'Cancel');
+
+            $menu->close();
+        });
+
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
+        $menu->open();
+
+        static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+
     public function testConfirmCanOnlyBeClosedWithEnter() : void
     {
         $this->terminal
@@ -164,6 +212,79 @@ class ConfirmTest extends TestCase
         $menu->open();
 
         static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
+    }
+
+    public function testConfirmOkNonCancellableReturnsTrue()
+    {
+        $this->terminal
+            ->method('read')
+            ->will($this->onConsecutiveCalls(
+                "\n",
+                'tab',
+                "\n"
+            ));
+
+        $style = $this->getStyle($this->terminal);
+
+        $return = '';
+
+        $item = new SelectableItem('Item 1', function (CliMenu $menu) use (&$return) {
+            $return = $menu->cancellableConfirm('PHP School FTW!')
+                ->display('OK');
+
+            $menu->close();
+        });
+
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
+        $menu->open();
+
+        static::assertTrue($return);
+    }
+
+    public function testConfirmOkCancellableReturnsTrue()
+    {
+        $this->terminal
+            ->method('read')
+            ->willReturn("\n", "\t", "\t", "\n");
+
+        $style = $this->getStyle($this->terminal);
+
+        $return = '';
+
+        $item = new SelectableItem('Item 1', function (CliMenu $menu) use (&$return) {
+            $return = $menu->cancellableConfirm('PHP School FTW!')
+                ->display('OK', 'Cancel');
+
+            $menu->close();
+        });
+
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
+        $menu->open();
+
+        static::assertTrue($return);
+    }
+
+    public function testConfirmCancelCancellableReturnsFalse()
+    {
+        $this->terminal
+            ->method('read')
+            ->willReturn("\n", "\t", "\n");
+
+        $style = $this->getStyle($this->terminal);
+
+        $return = '';
+
+        $item = new SelectableItem('Item 1', function (CliMenu $menu) use (&$return) {
+            $return = $menu->cancellableConfirm('PHP School FTW!', null)
+                ->display('OK', 'Cancel');
+
+            $menu->close();
+        });
+
+        $menu = new CliMenu('PHP School FTW', [$item], $this->terminal, $style);
+        $menu->open();
+
+        static::assertFalse($return);
     }
 
     private function getTestFile() : string

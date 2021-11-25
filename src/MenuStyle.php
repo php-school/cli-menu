@@ -509,6 +509,7 @@ class MenuStyle
             );
         }
 
+        $this->paddingTopBottom = $this->paddingTopBottom >= 0 ? $this->paddingTopBottom : 0;
         $this->paddingTopBottomRows = array_fill(0, $this->paddingTopBottom, $paddingRow);
     }
 
@@ -663,6 +664,10 @@ class MenuStyle
             );
         }
 
+        $this->borderTopWidth = $this->borderTopWidth >= 0 ? $this->borderTopWidth : 0;
+        $this->borderBottomWidth = $this->borderBottomWidth >= 0 ? $this->borderBottomWidth : 0;
+
+
         $this->borderTopRows = array_fill(0, $this->borderTopWidth, $borderRow);
         $this->borderBottomRows = array_fill(0, $this->borderBottomWidth, $borderRow);
     }
@@ -811,6 +816,20 @@ class MenuStyle
         }
 
         return sprintf("\033[%sm", $borderColourCode);
+    }
+
+
+    /**
+     * Get ansi escape sequence for setting or unsetting the specified option code.
+     *
+     * @param string $string Option code (bold|dim|underscore|blink|reverse|conceal)
+     * @param bool $set Whether to set or unset the code
+     *
+     * @return string
+     */
+    public function getOptionCode(string $string, bool $set = true): string
+    {
+        return sprintf("\033[%sm", self::$availableOptions[$string][$set ? 'set' : 'unset']);
     }
 
     /**
