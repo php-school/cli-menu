@@ -11,6 +11,11 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ### Removed
 
+## [4.2.0]
+### Added
+ - Yes/no comfirmation dialogue (#248)
+ - Ability to add multiple checkbox and radio items (#241)
+
 ## [4.1.0]
 ### Added
  - Ability to modify password length for password input (#235)
