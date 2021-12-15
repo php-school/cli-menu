@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpSchool\CliMenu;
 
 use PhpSchool\CliMenu\Exception\CannotShrinkMenuException;
@@ -300,11 +302,11 @@ class MenuStyle
     /**
      * Get the ansi escape sequence for the foreground colour.
      *
-     * @param bool $bright Whether to modify to the ansi bright variation
+     * @param bool|null $bright Whether to modify to the ansi bright variation
      *
      * @return string
      */
-    private function getForegroundColourCode(bool $bright = false) : string
+    private function getForegroundColourCode(?bool $bright = false) : string
     {
         if (!ctype_digit($this->fg)) {
             $fgCode = (int)self::$availableForegroundColors[$this->fg];
@@ -319,11 +321,11 @@ class MenuStyle
     /**
      * Get the ansi escape sequence for the background colour.
      *
-     * @param bool $bright Whether to modify to the ansi bright variation
+     * @param bool|null $bright Whether to modify to the ansi bright variation
      *
      * @return string
      */
-    private function getBackgroundColourCode(bool $bright = false) : string
+    private function getBackgroundColourCode(?bool $bright = false) : string
     {
         if (!ctype_digit($this->bg)) {
             $bgCode = (int)self::$availableBackgroundColors[$this->bg];
@@ -488,15 +490,15 @@ class MenuStyle
 
         $paddingRow = sprintf(
             "%s%s%s%s%s%s%s%s%s%s\n",
-            $this->debugMode ? $this->getDebugString($this->margin) : str_repeat(' ', $this->margin),
+            $this->debugMode ? $this->getDebugString($this->margin) : str_repeat(' ', $this->margin ?? 0),
             $borderColour,
-            str_repeat(' ', $this->borderLeftWidth),
+            str_repeat(' ', $this->borderLeftWidth ?? 0),
             $this->getColoursSetCode(),
-            str_repeat(' ', $this->paddingLeftRight),
-            str_repeat(' ', $this->contentWidth),
-            str_repeat(' ', $this->paddingLeftRight),
+            str_repeat(' ', $this->paddingLeftRight ?? 0),
+            str_repeat(' ', $this->contentWidth ?? 0),
+            str_repeat(' ', $this->paddingLeftRight ?? 0),
             $borderColour,
-            str_repeat(' ', $this->borderRightWidth),
+            str_repeat(' ', $this->borderRightWidth ?? 0),
             $this->coloursResetCode
         );
 
@@ -509,8 +511,8 @@ class MenuStyle
             );
         }
 
-        $this->paddingTopBottom = $this->paddingTopBottom >= 0 ? $this->paddingTopBottom : 0;
-        $this->paddingTopBottomRows = array_fill(0, $this->paddingTopBottom, $paddingRow);
+        $this->paddingTopBottom = max($this->paddingTopBottom, 0);
+        $this->paddingTopBottomRows = array_fill(0, $this->paddingTopBottom ?? 0, $paddingRow);
     }
 
     /**
@@ -664,12 +666,12 @@ class MenuStyle
             );
         }
 
-        $this->borderTopWidth = $this->borderTopWidth >= 0 ? $this->borderTopWidth : 0;
-        $this->borderBottomWidth = $this->borderBottomWidth >= 0 ? $this->borderBottomWidth : 0;
+        $this->borderTopWidth = max($this->borderTopWidth, 0);
+        $this->borderBottomWidth = max($this->borderBottomWidth, 0);
 
 
-        $this->borderTopRows = array_fill(0, $this->borderTopWidth, $borderRow);
-        $this->borderBottomRows = array_fill(0, $this->borderBottomWidth, $borderRow);
+        $this->borderTopRows = array_fill(0, $this->borderTopWidth ?? 0, $borderRow);
+        $this->borderBottomRows = array_fill(0, $this->borderBottomWidth ?? 0, $borderRow);
     }
 
     /**
