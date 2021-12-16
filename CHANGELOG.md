@@ -11,6 +11,10 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ### Removed
 
+## [4.2.1]
+### Fixed
+- PHP 8.1 Support (#252, #249)
+
 ## [4.2.0]
 ### Added
  - Yes/no comfirmation dialogue (#248)

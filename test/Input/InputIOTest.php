@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Input;
 
@@ -82,7 +83,8 @@ class InputIOTest extends TestCase
     public function testCustomControlFunctions() : void
     {
         $this->inputIO->registerControlCallback(InputCharacter::UP, function ($input) {
-            return ++$input;
+            $input = (int) $input;
+            return (string ) ++$input;
         });
 
         $this->terminal

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
