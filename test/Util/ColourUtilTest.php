@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Util;
 
@@ -64,7 +65,7 @@ class ColourUtilTest extends TestCase
             ->method('getColourSupport')
             ->willReturn(8);
 
-        ColourUtil::validateColour($terminal, 255, 'teal');
+        ColourUtil::validateColour($terminal, '255', 'teal');
     }
 
     public function testValidateColourWithFallbackWhenTerminalDoesNotSupport256Colours() : void
@@ -74,7 +75,7 @@ class ColourUtilTest extends TestCase
             ->method('getColourSupport')
             ->willReturn(8);
 
-        self::assertEquals('red', ColourUtil::validateColour($terminal, 255, 'red'));
+        self::assertEquals('red', ColourUtil::validateColour($terminal, '255', 'red'));
     }
 
     public function testValidateColourPicksFallbackFromPreComputedListWhenTerminalDoesNotSupport256Colours() : void
@@ -84,13 +85,13 @@ class ColourUtilTest extends TestCase
             ->method('getColourSupport')
             ->willReturn(8);
 
-        self::assertEquals('yellow', ColourUtil::validateColour($terminal, 148));
+        self::assertEquals('yellow', ColourUtil::validateColour($terminal, '148'));
     }
 
     /**
      * @dataProvider invalidColourCodeProvider
      */
-    public function testValidateColourThrowsExceptionIfInvalid256ColourCodeUsed(int $colourCode) : void
+    public function testValidateColourThrowsExceptionIfInvalid256ColourCodeUsed(string $colourCode) : void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
 
@@ -100,16 +101,16 @@ class ColourUtilTest extends TestCase
     public function invalidColourCodeProvider() : array
     {
         return [
-            [-1],
-            [256],
-            [1000],
+            ['-1'],
+            ['256'],
+            ['1000'],
         ];
     }
 
     /**
      * @dataProvider validColourCodeProvider
      */
-    public function testValidateColourWith256ColoursWhenTerminalSupports256Colours(int $colourCode) : void
+    public function testValidateColourWith256ColoursWhenTerminalSupports256Colours(string $colourCode) : void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->once())
@@ -122,10 +123,10 @@ class ColourUtilTest extends TestCase
     public function validColourCodeProvider() : array
     {
         return [
-            [0],
-            [255],
-            [1],
-            [100],
+            ['0'],
+            ['255'],
+            ['1'],
+            ['100'],
         ];
     }
 

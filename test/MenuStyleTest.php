@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest;
 
@@ -25,7 +26,7 @@ class MenuStyleTest extends TestCase
         $terminal = $this
             ->getMockBuilder(UnixTerminal::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWidth', 'getColourSupport'])
+            ->onlyMethods(['getWidth', 'getColourSupport'])
             ->getMock();
 
         $terminal
@@ -194,15 +195,15 @@ class MenuStyleTest extends TestCase
     public function test256ColoursCodes() : void
     {
         $style = $this->getMenuStyle(256);
-        $style->setBg(16, 'white');
-        $style->setFg(206, 'red');
+        $style->setBg('16', 'white');
+        $style->setFg('206', 'red');
         static::assertSame('16', $style->getBg());
         static::assertSame('206', $style->getFg());
         static::assertSame("\033[38;5;206;48;5;16m", $style->getColoursSetCode());
 
         $style = $this->getMenuStyle(8);
-        $style->setBg(16, 'white');
-        $style->setFg(206, 'red');
+        $style->setBg('16', 'white');
+        $style->setFg('206', 'red');
         static::assertSame('white', $style->getBg());
         static::assertSame('red', $style->getFg());
         static::assertSame("\033[31;47m", $style->getColoursSetCode());
@@ -214,7 +215,7 @@ class MenuStyleTest extends TestCase
         $this->expectExceptionMessage('Invalid colour code');
 
         $style = $this->getMenuStyle(256);
-        $style->setFg(512, 'white');
+        $style->setFg('512', 'white');
     }
 
     public function testSetBgThrowsExceptionWhenColourCodeIsNotInRange() : void
@@ -223,7 +224,7 @@ class MenuStyleTest extends TestCase
         $this->expectExceptionMessage('Invalid colour code');
 
         $style = $this->getMenuStyle(256);
-        $style->setBg(257, 'white');
+        $style->setBg('257', 'white');
     }
 
     public function testWidthCalculation() : void

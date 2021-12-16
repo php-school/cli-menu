@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use PhpSchool\CliMenu\Action\ExitAction;
 use PhpSchool\CliMenu\Builder\SplitItemBuilder;

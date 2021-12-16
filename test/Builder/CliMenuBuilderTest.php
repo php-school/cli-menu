@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Builder;
 
@@ -242,8 +243,8 @@ class CliMenuBuilderTest extends TestCase
             ->willReturn(256);
 
         $builder = new CliMenuBuilder($terminal);
-        $builder->setBackgroundColour(16, 'white');
-        $builder->setForegroundColour(206, 'red');
+        $builder->setBackgroundColour('16', 'white');
+        $builder->setForegroundColour('206', 'red');
         $style = $builder->build()
             ->getStyle();
 
@@ -260,8 +261,8 @@ class CliMenuBuilderTest extends TestCase
             ->willReturn(8);
 
         $builder = new CliMenuBuilder($terminal);
-        $builder->setBackgroundColour(16, 'white');
-        $builder->setForegroundColour(206, 'red');
+        $builder->setBackgroundColour('16', 'white');
+        $builder->setForegroundColour('206', 'red');
         $style = $builder->build()
             ->getStyle();
 
@@ -283,7 +284,7 @@ class CliMenuBuilderTest extends TestCase
             ->willReturn(256);
 
         $builder = new CliMenuBuilder($terminal);
-        $builder->setForegroundColour(512, 'white');
+        $builder->setForegroundColour('512', 'white');
     }
 
     public function testSetBgThrowsExceptionWhenColourCodeIsNotInRange() : void
@@ -300,7 +301,7 @@ class CliMenuBuilderTest extends TestCase
             ->willReturn(256);
 
         $builder = new CliMenuBuilder($terminal);
-        $builder->setBackgroundColour(257, 'white');
+        $builder->setBackgroundColour('257', 'white');
     }
 
     public function testDisableDefaultItems() : void
