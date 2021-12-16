@@ -310,7 +310,7 @@ class ColourUtil
     public static function validateColour(Terminal $terminal, string $colour, string $fallback = null) : string
     {
         if (!ctype_digit($colour)) {
-            return static::validateColourName($colour);
+            return self::validateColourName($colour);
         }
         
         Assertion::between($colour, 0, 255, 'Invalid colour code');
@@ -320,7 +320,7 @@ class ColourUtil
         }
 
         if ($fallback !== null) {
-            return static::validateColourName($fallback);
+            return self::validateColourName($fallback);
         }
         
         return static::map256To8((int) $colour);
