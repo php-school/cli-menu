@@ -11,13 +11,16 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ### Removed
 
-## [4.2.1]
+## [4.3.0]
 ### Fixed
-- PHP 8.1 Support (#252, #249)
+ - PHP 8.1 Support (#252, #249)
+
+### Added
+ - declare(strict_types=1) everywhere
 
 ## [4.2.0]
 ### Added
- - Yes/no comfirmation dialogue (#248)
+ - Yes/no confirmation dialogue (#248)
  - Ability to add multiple checkbox and radio items (#241)
 
 ## [4.1.0]
