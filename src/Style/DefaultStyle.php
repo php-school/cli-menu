@@ -8,9 +8,6 @@ use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 
 class DefaultStyle implements ItemStyle
 {
-    private const DEFAULT_STYLES = [
-    ];
-
     public function hasChangedFromDefaults() : bool
     {
         return true;
