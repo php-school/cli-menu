@@ -61,12 +61,12 @@ class MenuStyle
     /**
      * @var int
      */
-    protected $paddingTopBottom;
+    protected $paddingTopBottom = 0;
 
     /**
      * @var int
      */
-    protected $paddingLeftRight;
+    protected $paddingLeftRight = 0;
 
     /**
      * @var array
@@ -116,22 +116,22 @@ class MenuStyle
     /**
      * @var int
      */
-    private $borderTopWidth;
+    private $borderTopWidth = 0;
 
     /**
      * @var int
      */
-    private $borderRightWidth;
+    private $borderRightWidth = 0;
 
     /**
      * @var int
      */
-    private $borderBottomWidth;
+    private $borderBottomWidth = 0;
 
     /**
      * @var int
      */
-    private $borderLeftWidth;
+    private $borderLeftWidth = 0;
 
     /**
      * @var string
@@ -509,7 +509,7 @@ class MenuStyle
             );
         }
 
-        $this->paddingTopBottom = $this->paddingTopBottom >= 0 ? $this->paddingTopBottom : 0;
+        $this->paddingTopBottom = max($this->paddingTopBottom, 0);
         $this->paddingTopBottomRows = array_fill(0, $this->paddingTopBottom, $paddingRow);
     }
 
@@ -664,9 +664,8 @@ class MenuStyle
             );
         }
 
-        $this->borderTopWidth = $this->borderTopWidth >= 0 ? $this->borderTopWidth : 0;
-        $this->borderBottomWidth = $this->borderBottomWidth >= 0 ? $this->borderBottomWidth : 0;
-
+        $this->borderTopWidth = max($this->borderTopWidth, 0);
+        $this->borderBottomWidth = max($this->borderBottomWidth, 0);
 
         $this->borderTopRows = array_fill(0, $this->borderTopWidth, $borderRow);
         $this->borderBottomRows = array_fill(0, $this->borderBottomWidth, $borderRow);
