@@ -39,7 +39,7 @@
       * [Borders](#borders)
       * [Exit Button Text](#exit-button-text)
       * [Remove Exit Button](#remove-exit-button)
-    * [Items](#appearance)
+    * [Items](#items)
       * [Selectable Item](#selectable-item)
       * [Checkbox Item](#checkbox-item)
       * [Radio Item](#radio-item)
