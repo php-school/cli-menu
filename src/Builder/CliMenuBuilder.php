@@ -272,7 +272,7 @@ class CliMenuBuilder
             throw InvalidShortcutException::fromShortcut($match[1]);
         }
 
-        return isset($match[1]) ? strtolower($match[1]) : null;
+        return strtolower($match[1]);
     }
 
     private function processItemShortcut(MenuItemInterface $item) : void
