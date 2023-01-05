@@ -77,9 +77,6 @@ class InputIO
                     case InputCharacter::BACKSPACE:
                         if (!empty($inputValue)) {
                             $inputValue = substr($inputValue, 0, -1);
-                            if (!is_string($inputValue)) {
-                                $inputValue = '';
-                            }
                             $this->parentMenu->redraw();
                             $this->drawInput($input, $inputValue);
                         }
