@@ -312,6 +312,7 @@ class CliMenu
                     break;
             }
         }
+        unset($reader);
     }
 
     /**
