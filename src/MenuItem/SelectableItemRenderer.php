@@ -6,7 +6,6 @@ namespace PhpSchool\CliMenu\MenuItem;
 
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Style\ItemStyle;
-use PhpSchool\CliMenu\Style\Selectable;
 use PhpSchool\CliMenu\Util\StringUtil as s;
 use function PhpSchool\CliMenu\Util\mapWithKeys;
 

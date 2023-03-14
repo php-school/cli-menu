@@ -8,7 +8,6 @@ use PhpSchool\CliMenu\CliMenu;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Style\DefaultStyle;
 use PhpSchool\CliMenu\Style\ItemStyle;
-use PhpSchool\CliMenu\Style\Selectable;
 use PhpSchool\CliMenu\Util\StringUtil;
 use function PhpSchool\CliMenu\Util\collect;
 use function PhpSchool\CliMenu\Util\each;
