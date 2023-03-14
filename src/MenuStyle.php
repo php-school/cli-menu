@@ -307,7 +307,7 @@ class MenuStyle
      */
     private function getForegroundColourCode(bool $bright = false) : string
     {
-        if (!ctype_digit($this->fg)) {
+        if (!is_numeric($this->fg)) {
             $fgCode = (int)self::$availableForegroundColors[$this->fg];
             $fgCode += ($bright ? 60 : 0);
         } else {
@@ -326,7 +326,7 @@ class MenuStyle
      */
     private function getBackgroundColourCode(bool $bright = false) : string
     {
-        if (!ctype_digit($this->bg)) {
+        if (!is_numeric($this->bg)) {
             $bgCode = (int)self::$availableBackgroundColors[$this->bg];
             $bgCode += ($bright ? 60 : 0);
         } else {
@@ -809,7 +809,7 @@ class MenuStyle
 
     public function getBorderColourCode() : string
     {
-        if (!ctype_digit($this->borderColour)) {
+        if (!is_numeric($this->borderColour)) {
             $borderColourCode = self::$availableBackgroundColors[$this->borderColour];
         } else {
             $borderColourCode = sprintf("48;5;%s", $this->borderColour);
