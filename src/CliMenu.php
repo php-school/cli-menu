@@ -569,7 +569,7 @@ class CliMenu
                 $invertedColoursSetCode,
                 str_repeat(' ', $this->style->getPaddingLeftRight()),
                 $row,
-                str_repeat(' ', $this->style->getRightHandPadding(mb_strlen(s::stripAnsiEscapeSequence($row)))),
+                str_repeat(' ', $this->style->getRightHandPadding(mb_strwidth(s::stripAnsiEscapeSequence($row)))),
                 $invertedColoursUnsetCode,
                 $borderColour,
                 str_repeat(' ', $this->style->getBorderRightWidth()),

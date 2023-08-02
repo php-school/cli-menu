@@ -111,12 +111,12 @@ class Password implements Input
             return $validator($input);
         }
 
-        return mb_strlen($input) >= $this->passwordLength;
+        return mb_strwidth($input) >= $this->passwordLength;
     }
 
     public function filter(string $value) : string
     {
-        return str_repeat('*', mb_strlen($value));
+        return str_repeat('*', mb_strwidth($value));
     }
 
     public function getStyle() : MenuStyle

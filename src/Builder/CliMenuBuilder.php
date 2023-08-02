@@ -268,7 +268,7 @@ class CliMenuBuilder
             return null;
         }
 
-        if (mb_strlen($match[1]) > 1) {
+        if (mb_strwidth($match[1]) > 1) {
             throw InvalidShortcutException::fromShortcut($match[1]);
         }
 

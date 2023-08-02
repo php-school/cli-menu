@@ -127,7 +127,7 @@ class AsciiArtItem implements MenuItemInterface
      */
     private function calculateArtLength() : void
     {
-        $this->artLength = (int) max(array_map('mb_strlen', explode("\n", $this->text)));
+        $this->artLength = (int) max(array_map('mb_strwidth', explode("\n", $this->text)));
     }
 
     /**

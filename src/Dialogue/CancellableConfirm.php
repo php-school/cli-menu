@@ -45,10 +45,10 @@ class CancellableConfirm extends Dialogue
 
         $this->terminal->moveCursorToRow($this->y);
 
-        $promptWidth = mb_strlen($this->text) + 4;
+        $promptWidth = mb_strwidth($this->text) + 4;
 
-        $buttonLength = mb_strlen($confirmText) + 6;
-        $buttonLength += mb_strlen($cancelText) + 7;
+        $buttonLength = mb_strwidth($confirmText) + 6;
+        $buttonLength += mb_strwidth($cancelText) + 7;
 
         $confirmButton = sprintf(
             '%s%s < %s > %s%s',
@@ -78,7 +78,7 @@ class CancellableConfirm extends Dialogue
                 $this->text,
                 str_repeat(' ', intval(round($pad, 0, 1) + $this->style->getPaddingLeftRight()))
             );
-            $promptWidth = mb_strlen($this->text) + 4;
+            $promptWidth = mb_strwidth($this->text) + 4;
         }
 
         $leftFill = (int) (($promptWidth / 2) - ($buttonLength / 2));

@@ -36,7 +36,7 @@ class SelectableItemRenderer
             s::wordwrap(
                 "{$marker}{$text}",
                 $availableWidth,
-                sprintf("\n%s", $this->emptyString(mb_strlen($marker)))
+                sprintf("\n%s", $this->emptyString(mb_strwidth($marker)))
             )
         );
     }
@@ -59,7 +59,7 @@ class SelectableItemRenderer
     public function getAvailableTextWidth(MenuStyle $menuStyle, ItemStyle $itemStyle) : int
     {
         return $itemStyle->getDisplaysExtra()
-            ? $menuStyle->getContentWidth() - (mb_strlen($itemStyle->getItemExtra()) + 2)
+            ? $menuStyle->getContentWidth() - (mb_strwidth($itemStyle->getItemExtra()) + 2)
             : $menuStyle->getContentWidth();
     }
 }
