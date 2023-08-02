@@ -18,7 +18,7 @@ class StringUtil
             $break,
             array_map(function (string $line) use ($width, $break) {
                 $line = rtrim($line);
-                if (mb_strlen($line) <= $width) {
+                if (mb_strwidth($line) <= $width) {
                     return $line;
                 }
                 
@@ -26,7 +26,7 @@ class StringUtil
                 $line   = '';
                 $actual = '';
                 foreach ($words as $word) {
-                    if (mb_strlen($actual . $word) <= $width) {
+                    if (mb_strwidth($actual . $word) <= $width) {
                         $actual .= $word . ' ';
                     } else {
                         if ($actual !== '') {
@@ -47,6 +47,6 @@ class StringUtil
 
     public static function length(string $str, bool $ignoreAnsiEscapeSequence = true) : int
     {
-        return mb_strlen($ignoreAnsiEscapeSequence ? self::stripAnsiEscapeSequence($str) : $str);
+        return mb_strwidth($ignoreAnsiEscapeSequence ? self::stripAnsiEscapeSequence($str) : $str);
     }
 }

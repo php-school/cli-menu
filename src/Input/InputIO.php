@@ -107,7 +107,7 @@ class InputIO
         return max(
             array_map(
                 function (string $line) {
-                    return mb_strlen($line);
+                    return mb_strwidth($line);
                 },
                 $lines
             )
@@ -171,7 +171,7 @@ class InputIO
             ]
         );
 
-        $textLength = mb_strlen(StringUtil::stripAnsiEscapeSequence($text));
+        $textLength = mb_strwidth(StringUtil::stripAnsiEscapeSequence($text));
         $leftFill   = (int) (($width / 2) - ($textLength / 2));
         $rightFill  = (int) ceil($width - $leftFill - $textLength);
 

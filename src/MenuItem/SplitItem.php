@@ -154,7 +154,7 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
                     $itemExtraVal = $item->getStyle()->getItemExtra();
                     $itemExtra = $item->showsItemExtra()
                         ? sprintf('  %s', $itemExtraVal)
-                        : sprintf('  %s', str_repeat(' ', mb_strlen($itemExtraVal)));
+                        : sprintf('  %s', str_repeat(' ', mb_strwidth($itemExtraVal)));
                 }
 
                 return $this->buildCell(
@@ -163,7 +163,7 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
                         StringUtil::wordwrap(
                             sprintf('%s%s', $marker, $item->getText()),
                             $length,
-                            sprintf("\n%s", str_repeat(' ', mb_strlen($marker)))
+                            sprintf("\n%s", str_repeat(' ', mb_strwidth($marker)))
                         )
                     ),
                     $length,
@@ -226,8 +226,8 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
                 '%s%s%s%s%s%s',
                 $invertedColoursSetCode,
                 $row,
-                str_repeat(' ', $length - mb_strlen($row)),
-                $index === 0 ? $itemExtra : str_repeat(' ', mb_strlen($itemExtra)),
+                str_repeat(' ', $length - mb_strwidth($row)),
+                $index === 0 ? $itemExtra : str_repeat(' ', mb_strwidth($itemExtra)),
                 $invertedColoursUnsetCode,
                 str_repeat(' ', $this->gutter)
             );
@@ -339,7 +339,7 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
     {
         return max(array_map(
             function (MenuItemInterface $item) {
-                return mb_strlen($item->getStyle()->getItemExtra());
+                return mb_strwidth($item->getStyle()->getItemExtra());
             },
             array_filter($this->items, function (MenuItemInterface $item) {
                 return $item->getStyle()->getDisplaysExtra();
