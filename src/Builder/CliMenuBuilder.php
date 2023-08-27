@@ -205,7 +205,7 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function addSubMenu(string $text, \Closure $callback) : self
+    public function addSubMenu(string $text, callable $callback) : self
     {
         $builder = self::newSubMenu($this->terminal);
 
