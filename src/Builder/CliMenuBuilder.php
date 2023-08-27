@@ -315,7 +315,7 @@ class CliMenuBuilder
         }
     }
 
-    public function addSplitItem(\Closure $callback) : self
+    public function addSplitItem(callable $callback) : self
     {
         $builder = new SplitItemBuilder($this->menu);
 
