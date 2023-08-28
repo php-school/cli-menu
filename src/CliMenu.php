@@ -50,6 +50,11 @@ class CliMenu
     /**
      * @var ?string
      */
+    protected $header;
+
+    /**
+     * @var ?string
+     */
     protected $title;
 
     /**
@@ -141,6 +146,11 @@ class CliMenu
         if (!$this->terminal->isInteractive()) {
             throw new InvalidTerminalException('Terminal is not interactive (TTY)');
         }
+    }
+
+    public function setHedader(string $header) : void
+    {
+        $this->header = $header;
     }
 
     public function setTitle(string $title) : void
@@ -493,7 +503,12 @@ class CliMenu
     {
         $frame = new Frame;
 
-        $frame->newLine(2);
+        if ($this->header) {
+            $frame -> addRow($this->header);
+        }
+        else {
+            $frame->newLine(2);
+        }
 
         if ($this->style->getBorderTopWidth() > 0) {
             $frame->addRows($this->style->getBorderTopRows());

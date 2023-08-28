@@ -108,6 +108,13 @@ class CliMenuBuilder
         return $instance;
     }
 
+    public function setHeader(string $header) : self
+    {
+        $this->menu->setHeader($header);
+
+        return $this;
+    }
+
     public function setTitle(string $title) : self
     {
         $this->menu->setTitle($title);
