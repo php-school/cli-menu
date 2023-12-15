@@ -160,6 +160,16 @@ class MenuStyle
     private $debugMode = false;
 
     /**
+     * @var int
+     */
+    protected $frameTopNewlines = 2;
+
+    /**
+     * @var int
+     */
+    protected $frameBottomNewlines = 2;
+
+    /**
      * Default Values
      *
      * @var array
@@ -816,6 +826,32 @@ class MenuStyle
         }
 
         return sprintf("\033[%sm", $borderColourCode);
+    }
+
+    public function getFrameTopNewlines() : int
+    {
+        return $this->frameTopNewlines;
+    }
+
+    public function getFrameBottomNewlines() : int
+    {
+        return $this->frameBottomNewlines;
+    }
+
+    public function setFrameTopNewlines(int $lines) : self
+    {
+        Assertion::greaterOrEqualThan($lines, 0);
+        $this->frameTopNewlines = $lines;
+
+        return $this;
+    }
+
+    public function setFrameBottomNewlines(int $lines) : self
+    {
+        Assertion::greaterOrEqualThan($lines, 0);
+        $this->frameBottomNewlines = $lines;
+
+        return $this;
     }
 
 
