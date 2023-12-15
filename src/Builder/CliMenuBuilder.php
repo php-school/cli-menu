@@ -494,6 +494,14 @@ class CliMenuBuilder
         return $this;
     }
 
+    public function setFrameNewlines(int $top, int $bottom) : self
+    {
+        $this->style->setFrameTopNewlines($top);
+        $this->style->setFrameBottomNewlines($bottom);
+
+        return $this;
+    }
+
     public function getStyle() : MenuStyle
     {
         return $this->style;
