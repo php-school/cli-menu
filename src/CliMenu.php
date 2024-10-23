@@ -296,7 +296,9 @@ class CliMenu
                 continue;
             }
 
-            switch ($char->getControl()) {
+            $controlChar = $char->getControl();
+
+            switch ($controlChar) {
                 case InputCharacter::UP:
                 case InputCharacter::DOWN:
                     $this->moveSelectionVertically($char->getControl());
@@ -309,6 +311,11 @@ class CliMenu
                     break;
                 case InputCharacter::ENTER:
                     $this->executeCurrentItem();
+                    break;
+                default:
+                    if (isset($this->customControlMappings[$controlChar])) {
+                        $this->customControlMappings[$controlChar]($this);
+                    }
                     break;
             }
         }
@@ -374,7 +381,7 @@ class CliMenu
                     : (int) reset($itemKeys);
             }
         } while (!$item->canSelectIndex($selectedItemIndex));
-        
+
         $item->setSelectedItemIndex($selectedItemIndex);
     }
 
@@ -541,7 +548,7 @@ class CliMenu
     protected function drawMenuItem(MenuItemInterface $item, bool $selected = false) : array
     {
         $rows = $item->getRows($this->style, $selected);
-        
+
         if ($item instanceof SplitItem) {
             $selected = false;
         }
@@ -586,7 +593,7 @@ class CliMenu
         if ($this->isOpen()) {
             return;
         }
-        
+
         if (count($this->items) === 0) {
             throw new \RuntimeException('Menu must have at least 1 item before it can be opened');
         }
