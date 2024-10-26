@@ -499,8 +499,11 @@ class CliMenu
     protected function draw() : void
     {
         $frame = new Frame;
-
-        $frame->newLine(2);
+        
+        $lines = $this->style->getFrameTopNewlines();
+        if ($lines>0) {
+            $frame->newLine($lines);
+        }
 
         if ($this->style->getBorderTopWidth() > 0) {
             $frame->addRows($this->style->getBorderTopRows());
@@ -528,7 +531,10 @@ class CliMenu
             $frame->addRows($this->style->getBorderBottomRows());
         }
 
-        $frame->newLine(2);
+        $lines = $this->style->getFrameBottomNewlines();
+        if ($lines>0) {
+            $frame->newLine($lines);
+        }
 
         $this->terminal->moveCursorToTop();
         foreach ($frame->getRows() as $row) {

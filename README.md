@@ -404,6 +404,19 @@ $menu = (new CliMenuBuilder)
     ->build();
 ```
 
+You can also change the number of newlines before and after the menu acting sort like a vertical margin:
+
+```php
+<?php
+
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+
+$menu = (new CliMenuBuilder)
+    ->setWidth(200)
+    ->setFrameNewlines(5, 2) // top, bottom
+    ->build();
+```
+
 #### Borders
 
 Borders can be customised just like CSS borders. We can add any amount of border to either side, left, right top or 
