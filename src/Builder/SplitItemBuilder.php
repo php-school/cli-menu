@@ -144,7 +144,7 @@ class SplitItemBuilder
         return $this;
     }
 
-    public function enableAutoShortcuts(string $regex = null) : self
+    public function enableAutoShortcuts(?string $regex = null) : self
     {
         $this->autoShortcuts = true;
 

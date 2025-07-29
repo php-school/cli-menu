@@ -307,7 +307,7 @@ class ColourUtil
      * Check if $colour exists
      * If it's a 256-colours code and $terminal doesn't support it, returns a fallback value
      */
-    public static function validateColour(Terminal $terminal, string $colour, string $fallback = null) : string
+    public static function validateColour(Terminal $terminal, string $colour, ?string $fallback = null) : string
     {
         if (!is_numeric($colour)) {
             return self::validateColourName($colour);

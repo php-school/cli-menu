@@ -108,7 +108,7 @@ abstract class Dialogue
     /**
      * Write some text at a particular column
      */
-    protected function write(string $text, int $column = null) : void
+    protected function write(string $text, ?int $column = null) : void
     {
         $this->terminal->moveCursorToColumn($column ?: $this->x);
         $this->terminal->write($text);
