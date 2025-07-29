@@ -227,7 +227,7 @@ class MenuStyle
     /**
      * Initialise style
      */
-    public function __construct(Terminal $terminal = null)
+    public function __construct(?Terminal $terminal = null)
     {
         $this->terminal = $terminal ?: TerminalFactory::fromSystem();
 
@@ -401,7 +401,7 @@ class MenuStyle
         return $this->fg;
     }
 
-    public function setFg(string $fg, string $fallback = null) : self
+    public function setFg(string $fg, ?string $fallback = null) : self
     {
         $this->fg = ColourUtil::validateColour(
             $this->terminal,
@@ -418,7 +418,7 @@ class MenuStyle
         return $this->bg;
     }
 
-    public function setBg(string $bg, string $fallback = null) : self
+    public function setBg(string $bg, ?string $fallback = null) : self
     {
         $this->bg = ColourUtil::validateColour(
             $this->terminal,
@@ -522,7 +522,7 @@ class MenuStyle
         return $this->paddingTopBottomRows;
     }
 
-    public function setPadding(int $topBottom, int $leftRight = null) : self
+    public function setPadding(int $topBottom, ?int $leftRight = null) : self
     {
         if ($leftRight === null) {
             $leftRight = $topBottom;
@@ -700,7 +700,7 @@ class MenuStyle
         $rightWidth = null,
         $bottomWidth = null,
         $leftWidth = null,
-        string $colour = null
+        ?string $colour = null
     ) : self {
         if (!is_int($rightWidth)) {
             $colour = $rightWidth;
@@ -768,7 +768,7 @@ class MenuStyle
         return $this;
     }
 
-    public function setBorderColour(string $colour, string $fallback = null) : self
+    public function setBorderColour(string $colour, ?string $fallback = null) : self
     {
         $this->borderColour = ColourUtil::validateColour(
             $this->terminal,

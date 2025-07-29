@@ -99,8 +99,8 @@ class CliMenu
     public function __construct(
         ?string $title,
         array $items,
-        Terminal $terminal = null,
-        MenuStyle $style = null
+        ?Terminal $terminal = null,
+        ?MenuStyle $style = null
     ) {
         $this->title           = $title;
         $this->items           = $items;
@@ -696,7 +696,7 @@ class CliMenu
         return $this->currentFrame;
     }
 
-    public function flash(string $text, MenuStyle $style = null) : Flash
+    public function flash(string $text, ?MenuStyle $style = null) : Flash
     {
         $this->guardSingleLine($text);
 
@@ -707,7 +707,7 @@ class CliMenu
         return new Flash($this, $style, $this->terminal, $text);
     }
 
-    public function confirm(string $text, MenuStyle $style = null) : Confirm
+    public function confirm(string $text, ?MenuStyle $style = null) : Confirm
     {
         $this->guardSingleLine($text);
 
@@ -718,7 +718,7 @@ class CliMenu
         return new Confirm($this, $style, $this->terminal, $text);
     }
 
-    public function cancellableConfirm(string $text, MenuStyle $style = null) : CancellableConfirm
+    public function cancellableConfirm(string $text, ?MenuStyle $style = null) : CancellableConfirm
     {
         $this->guardSingleLine($text);
 
@@ -729,7 +729,7 @@ class CliMenu
         return new CancellableConfirm($this, $style, $this->terminal, $text);
     }
 
-    public function askNumber(MenuStyle $style = null) : Number
+    public function askNumber(?MenuStyle $style = null) : Number
     {
         $this->assertOpen();
 
@@ -740,7 +740,7 @@ class CliMenu
         return new Number(new InputIO($this, $this->terminal), $style);
     }
 
-    public function askText(MenuStyle $style = null) : Text
+    public function askText(?MenuStyle $style = null) : Text
     {
         $this->assertOpen();
 
@@ -751,7 +751,7 @@ class CliMenu
         return new Text(new InputIO($this, $this->terminal), $style);
     }
 
-    public function askPassword(MenuStyle $style = null) : Password
+    public function askPassword(?MenuStyle $style = null) : Password
     {
         $this->assertOpen();
 

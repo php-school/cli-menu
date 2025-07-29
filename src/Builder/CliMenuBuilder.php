@@ -93,7 +93,7 @@ class CliMenuBuilder
      */
     private $subMenu = false;
 
-    public function __construct(Terminal $terminal = null)
+    public function __construct(?Terminal $terminal = null)
     {
         $this->terminal = $terminal ?? TerminalFactory::fromSystem();
         $this->style    = new MenuStyle($this->terminal);
@@ -249,7 +249,7 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function enableAutoShortcuts(string $regex = null) : self
+    public function enableAutoShortcuts(?string $regex = null) : self
     {
         $this->autoShortcuts = true;
 
@@ -373,14 +373,14 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function setBackgroundColour(string $colour, string $fallback = null) : self
+    public function setBackgroundColour(string $colour, ?string $fallback = null) : self
     {
         $this->style->setBg($colour, $fallback);
 
         return $this;
     }
 
-    public function setForegroundColour(string $colour, string $fallback = null) : self
+    public function setForegroundColour(string $colour, ?string $fallback = null) : self
     {
         $this->style->setFg($colour, $fallback);
 
@@ -394,7 +394,7 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function setPadding(int $topBottom, int $leftRight = null) : self
+    public function setPadding(int $topBottom, ?int $leftRight = null) : self
     {
         $this->style->setPadding($topBottom, $leftRight);
 
@@ -452,7 +452,7 @@ class CliMenuBuilder
      * @param int|string|null $bottom
      * @param int|string|null $left
      */
-    public function setBorder(int $top, $right = null, $bottom = null, $left = null, string $colour = null) : self
+    public function setBorder(int $top, $right = null, $bottom = null, $left = null, ?string $colour = null) : self
     {
         $this->style->setBorder($top, $right, $bottom, $left, $colour);
 
@@ -487,7 +487,7 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function setBorderColour(string $colour, string $fallback = null) : self
+    public function setBorderColour(string $colour, ?string $fallback = null) : self
     {
         $this->style->setBorderColour($colour, $fallback);
 
