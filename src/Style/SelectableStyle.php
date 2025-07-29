@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Style;
@@ -14,25 +15,13 @@ class SelectableStyle implements ItemStyle
         'displaysExtra' => false,
     ];
 
-    /**
-     * @var string
-     */
-    private $selectedMarker;
+    private string $selectedMarker;
 
-    /**
-     * @var string
-     */
-    private $unselectedMarker;
+    private string $unselectedMarker;
 
-    /**
-     * @var string
-     */
-    private $itemExtra;
+    private string $itemExtra;
 
-    /**
-     * @var bool
-     */
-    private $displaysExtra;
+    private bool $displaysExtra;
 
     public function __construct()
     {
@@ -42,7 +31,7 @@ class SelectableStyle implements ItemStyle
         $this->displaysExtra = self::DEFAULT_STYLES['displaysExtra'];
     }
 
-    public function hasChangedFromDefaults() : bool
+    public function hasChangedFromDefaults(): bool
     {
         $currentValues = [
             $this->selectedMarker,
@@ -54,41 +43,41 @@ class SelectableStyle implements ItemStyle
         return $currentValues !== array_values(self::DEFAULT_STYLES);
     }
 
-    public function getMarker(MenuItemInterface $item, bool $selected) : string
+    public function getMarker(MenuItemInterface $item, bool $selected): string
     {
         return $selected ? $this->selectedMarker : $this->unselectedMarker;
     }
 
-    public function getSelectedMarker() : string
+    public function getSelectedMarker(): string
     {
         return $this->selectedMarker;
     }
 
-    public function setSelectedMarker(string $marker) : self
+    public function setSelectedMarker(string $marker): self
     {
         $this->selectedMarker = $marker;
 
         return $this;
     }
 
-    public function getUnselectedMarker() : string
+    public function getUnselectedMarker(): string
     {
         return $this->unselectedMarker;
     }
 
-    public function setUnselectedMarker(string $marker) : self
+    public function setUnselectedMarker(string $marker): self
     {
         $this->unselectedMarker = $marker;
 
         return $this;
     }
 
-    public function getItemExtra() : string
+    public function getItemExtra(): string
     {
         return $this->itemExtra;
     }
 
-    public function setItemExtra(string $itemExtra) : self
+    public function setItemExtra(string $itemExtra): self
     {
         $this->itemExtra = $itemExtra;
 
@@ -98,12 +87,12 @@ class SelectableStyle implements ItemStyle
         return $this;
     }
 
-    public function getDisplaysExtra() : bool
+    public function getDisplaysExtra(): bool
     {
         return $this->displaysExtra;
     }
 
-    public function setDisplaysExtra(bool $displaysExtra) : self
+    public function setDisplaysExtra(bool $displaysExtra): self
     {
         $this->displaysExtra = $displaysExtra;
 

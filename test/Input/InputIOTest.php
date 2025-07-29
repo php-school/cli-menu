@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Input;
@@ -42,14 +43,14 @@ class InputIOTest extends TestCase
      */
     private $inputIO;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->terminal = $this->createMock(Terminal::class);
         $this->terminal
             ->method('getWidth')
             ->willReturn(100);
 
-        $this->output   = new BufferedOutput;
+        $this->output   = new BufferedOutput();
         $this->menu     = $this->createMock(CliMenu::class);
         $this->style    = new MenuStyle($this->terminal);
         $this->inputIO  = new InputIO($this->menu, $this->terminal);
@@ -66,7 +67,7 @@ class InputIOTest extends TestCase
             ->willReturn($parentStyle);
     }
 
-    public function testEnterReturnsOutputIfValid() : void
+    public function testEnterReturnsOutputIfValid(): void
     {
         $this->terminal
             ->expects($this->exactly(2))
@@ -80,7 +81,7 @@ class InputIOTest extends TestCase
         echo $this->output->fetch();
     }
 
-    public function testCustomControlFunctions() : void
+    public function testCustomControlFunctions(): void
     {
         $this->inputIO->registerControlCallback(InputCharacter::UP, function ($input) {
             $input = (int) $input;
@@ -97,7 +98,7 @@ class InputIOTest extends TestCase
         self::assertEquals('11', $result->fetch());
     }
 
-    public function testBackspaceDeletesPreviousCharacter() : void
+    public function testBackspaceDeletesPreviousCharacter(): void
     {
         $this->terminal
             ->expects($this->exactly(6))
@@ -109,10 +110,10 @@ class InputIOTest extends TestCase
         self::assertEquals('1', $result->fetch());
     }
 
-    public function testValidationErrorCausesErrorMessageToBeDisplayed() : void
+    public function testValidationErrorCausesErrorMessageToBeDisplayed(): void
     {
         $input = new class ($this->inputIO, $this->style) extends Text {
-            public function validate(string $input) : bool
+            public function validate(string $input): bool
             {
                 return $input[-1] === 'p';
             }

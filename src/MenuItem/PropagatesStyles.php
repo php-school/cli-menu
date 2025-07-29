@@ -12,5 +12,5 @@ interface PropagatesStyles
      * Push the parents styles to any
      * child items or menus.
      */
-    public function propagateStyles(CliMenu $parent) : void;
+    public function propagateStyles(CliMenu $parent): void;
 }

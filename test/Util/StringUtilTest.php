@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Util;
@@ -13,7 +14,7 @@ class StringUtilTest extends TestCase
 {
     protected $dummyText;
 
-    protected function setup() : void
+    protected function setup(): void
     {
         parent::setUp();
 
@@ -25,7 +26,7 @@ class StringUtilTest extends TestCase
             'mollit anim id est laborum';
     }
 
-    public function testItWrapsAsExpectedTo80Length() : void
+    public function testItWrapsAsExpectedTo80Length(): void
     {
 
         $result = StringUtil::wordwrap($this->dummyText, 80);
@@ -39,7 +40,7 @@ class StringUtilTest extends TestCase
         self::assertEquals($expected, $result);
     }
 
-    public function testItWrapsAsExpectedTo60Length() : void
+    public function testItWrapsAsExpectedTo60Length(): void
     {
 
         $result = StringUtil::wordwrap($this->dummyText, 60);
@@ -55,10 +56,10 @@ class StringUtilTest extends TestCase
         self::assertEquals($expected, $result);
     }
 
-    public function testItCanUseACustomBreakCharacter() : void
+    public function testItCanUseACustomBreakCharacter(): void
     {
         $result = StringUtil::wordwrap($this->dummyText, 60, 'H');
-        
+
         $expected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sedH" .
             "do eiusmod tempor incididunt ut labore et dolore magnaH" .
             "aliqua. Ut enim ad minim veniam, quis nostrud exercitationH" .
@@ -71,7 +72,7 @@ class StringUtilTest extends TestCase
         self::assertEquals($expected, $result);
     }
 
-    public function testItCanStripAnsiEscapeSequence() : void
+    public function testItCanStripAnsiEscapeSequence(): void
     {
         $result = StringUtil::stripAnsiEscapeSequence("\x1b[7mfoo\x1b[0m");
         $this->assertEquals('foo', $result);
@@ -83,17 +84,17 @@ class StringUtilTest extends TestCase
         $this->assertEquals('foobarbaz!!!', $result);
     }
 
-    public function testSplitItemBug() : void
+    public function testSplitItemBug(): void
     {
         $test = 'Item three I guess it isn\'t that bad, is it ?';
-        
+
         self::assertEquals(
             "Item three\nI guess it\nisn't that\nbad, is it\n?",
             StringUtil::wordwrap($test, 11)
         );
     }
 
-    public function testLengthIgnoresAnsiEscapeSequences() : void
+    public function testLengthIgnoresAnsiEscapeSequences(): void
     {
         $result = StringUtil::length("\x1b[7mfoo\x1b[0m");
         $this->assertEquals(3, $result);
@@ -105,7 +106,7 @@ class StringUtilTest extends TestCase
         $this->assertEquals(12, $result);
     }
 
-    public function testLengthIncludingAnsiEscapeSequences() : void
+    public function testLengthIncludingAnsiEscapeSequences(): void
     {
         $result = StringUtil::length("\x1b[7mfoo\x1b[0m", false);
         $this->assertEquals(11, $result);

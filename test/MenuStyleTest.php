@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest;
@@ -17,12 +18,12 @@ use PHPUnit\Framework\TestCase;
  */
 class MenuStyleTest extends TestCase
 {
-    private function getMenuStyle(int $colours = 8, int $width = 500) : MenuStyle
+    private function getMenuStyle(int $colours = 8, int $width = 500): MenuStyle
     {
         return new MenuStyle($this->getMockTerminal($colours, $width));
     }
 
-    private function getMockTerminal(int $colours, int $width) : MockObject
+    private function getMockTerminal(int $colours, int $width): MockObject
     {
         $terminal = $this
             ->getMockBuilder(UnixTerminal::class)
@@ -41,7 +42,7 @@ class MenuStyleTest extends TestCase
         return $terminal;
     }
 
-    public function testMenuStyleCanBeInstantiatedByCliMenuBuilder() : void
+    public function testMenuStyleCanBeInstantiatedByCliMenuBuilder(): void
     {
         $builder = new CliMenuBuilder();
         $menu    = $builder->build();
@@ -56,27 +57,27 @@ class MenuStyleTest extends TestCase
         self::assertSame(MenuStyle::class, get_class($style));
     }
 
-    public function testGetColoursSetCode() : void
+    public function testGetColoursSetCode(): void
     {
         self::assertSame("\e[37;44m", $this->getMenuStyle()->getColoursSetCode());
     }
 
-    public function testGetColoursResetCode() : void
+    public function testGetColoursResetCode(): void
     {
         self::assertSame("\e[0m", $this->getMenuStyle()->getColoursResetCode());
     }
 
-    public function testGetInvertedColoursSetCode() : void
+    public function testGetInvertedColoursSetCode(): void
     {
         self::assertSame("\e[7m", $this->getMenuStyle()->getInvertedColoursSetCode());
     }
 
-    public function testGetInvertedColoursUnsetCode() : void
+    public function testGetInvertedColoursUnsetCode(): void
     {
         self::assertSame("\e[27m", $this->getMenuStyle()->getInvertedColoursUnsetCode());
     }
 
-    public function testGetterAndSetters() : void
+    public function testGetterAndSetters(): void
     {
         $style = $this->getMenuStyle();
 
@@ -126,7 +127,7 @@ class MenuStyleTest extends TestCase
         self::assertSame('green', $style->getBorderColour());
     }
 
-    public function testSetBorderShorthandFunction() : void
+    public function testSetBorderShorthandFunction(): void
     {
         $style = $this->getMenuStyle();
         $style->setBorder(3);
@@ -193,7 +194,7 @@ class MenuStyleTest extends TestCase
         static::assertSame('red', $style->getBorderColour());
     }
 
-    public function test256ColoursCodes() : void
+    public function test256ColoursCodes(): void
     {
         $style = $this->getMenuStyle(256);
         $style->setBg('16', 'white');
@@ -210,7 +211,7 @@ class MenuStyleTest extends TestCase
         static::assertSame("\033[31;47m", $style->getColoursSetCode());
     }
 
-    public function testSetFgThrowsExceptionWhenColourCodeIsNotInRange() : void
+    public function testSetFgThrowsExceptionWhenColourCodeIsNotInRange(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid colour code');
@@ -219,7 +220,7 @@ class MenuStyleTest extends TestCase
         $style->setFg('512', 'white');
     }
 
-    public function testSetBgThrowsExceptionWhenColourCodeIsNotInRange() : void
+    public function testSetBgThrowsExceptionWhenColourCodeIsNotInRange(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid colour code');
@@ -228,7 +229,7 @@ class MenuStyleTest extends TestCase
         $style->setBg('257', 'white');
     }
 
-    public function testWidthCalculation() : void
+    public function testWidthCalculation(): void
     {
         $style = $this->getMenuStyle();
         $style->setPadding(0);
@@ -249,7 +250,7 @@ class MenuStyleTest extends TestCase
         static::assertSame(286, $style->getContentWidth());
     }
 
-    public function testRightHandPaddingCalculation() : void
+    public function testRightHandPaddingCalculation(): void
     {
         $style = $this->getMenuStyle();
         $style->setPadding(0);
@@ -269,7 +270,7 @@ class MenuStyleTest extends TestCase
         static::assertSame(241, $style->getRightHandPadding(50));
     }
 
-    public function testRightHandPaddingReturnsZeroWhenContentLengthTooLong() : void
+    public function testRightHandPaddingReturnsZeroWhenContentLengthTooLong(): void
     {
         $style = $this->getMenuStyle();
         $style->setPadding(0);
@@ -282,7 +283,7 @@ class MenuStyleTest extends TestCase
         self::assertEquals(0, $style->getRightHandPadding(150));
     }
 
-    public function testRightHandPaddingReturnsZeroWhenContentLengthTooLongBecauseOfBorder() : void
+    public function testRightHandPaddingReturnsZeroWhenContentLengthTooLongBecauseOfBorder(): void
     {
         $style = $this->getMenuStyle();
         $style->setPadding(10);
@@ -298,7 +299,7 @@ class MenuStyleTest extends TestCase
         self::assertEquals(0, $style->getRightHandPadding(100));
     }
 
-    public function testMargin() : void
+    public function testMargin(): void
     {
         $style = $this->getMenuStyle();
 
@@ -309,7 +310,7 @@ class MenuStyleTest extends TestCase
         self::assertSame(5, $style->getMargin());
     }
 
-    public function testSetMarginWhenWidthIsLargerThanTerminal() : void
+    public function testSetMarginWhenWidthIsLargerThanTerminal(): void
     {
         $style = $this->getMenuStyle();
         $style->setWidth(600);
@@ -323,7 +324,7 @@ class MenuStyleTest extends TestCase
         self::assertSame(430, $style->getWidth());
     }
 
-    public function testMarginAutoCenters() : void
+    public function testMarginAutoCenters(): void
     {
         $style = $this->getMenuStyle();
 
@@ -335,7 +336,7 @@ class MenuStyleTest extends TestCase
         self::assertSame(290, $style->getContentWidth());
     }
 
-    public function testSetMarginAutoWhenWidthIsLargerThanTerminal() : void
+    public function testSetMarginAutoWhenWidthIsLargerThanTerminal(): void
     {
         $style = $this->getMenuStyle();
         $style->setWidth(600);
@@ -345,7 +346,7 @@ class MenuStyleTest extends TestCase
         self::assertSame(500, $style->getWidth());
     }
 
-    public function testModifyWidthWhenMarginAutoIsEnabledRecalculatesMargin() : void
+    public function testModifyWidthWhenMarginAutoIsEnabledRecalculatesMargin(): void
     {
         $style = $this->getMenuStyle();
 
@@ -362,7 +363,7 @@ class MenuStyleTest extends TestCase
         self::assertSame(390, $style->getContentWidth());
     }
 
-    public function testSetBgRecalculatesPaddingTopAndBottomRows() : void
+    public function testSetBgRecalculatesPaddingTopAndBottomRows(): void
     {
         $style = $this->getMenuStyle();
         $style->setWidth(30);
@@ -380,7 +381,7 @@ class MenuStyleTest extends TestCase
         );
     }
 
-    public function testSetWidthRecalculatesPaddingTopAndBottomRows() : void
+    public function testSetWidthRecalculatesPaddingTopAndBottomRows(): void
     {
         $style = $this->getMenuStyle();
         $style->setWidth(30);
@@ -398,7 +399,7 @@ class MenuStyleTest extends TestCase
         );
     }
 
-    public function testSetPaddingRecalculatesPaddingTopAndBottomRows() : void
+    public function testSetPaddingRecalculatesPaddingTopAndBottomRows(): void
     {
         $style = $this->getMenuStyle();
         $style->setWidth(30);
@@ -420,7 +421,7 @@ class MenuStyleTest extends TestCase
         );
     }
 
-    public function testSetPaddingTopAndBottomRecalculatesPaddingTopAndBottomRows() : void
+    public function testSetPaddingTopAndBottomRecalculatesPaddingTopAndBottomRows(): void
     {
         $style = $this->getMenuStyle();
         $style->setWidth(30);
@@ -441,7 +442,7 @@ class MenuStyleTest extends TestCase
         );
     }
 
-    public function testSetPaddingLeftAndRightRecalculatesPaddingTopAndBottomRows() : void
+    public function testSetPaddingLeftAndRightRecalculatesPaddingTopAndBottomRows(): void
     {
         $style = $this->getMenuStyle();
         $style->setWidth(30);
@@ -459,7 +460,7 @@ class MenuStyleTest extends TestCase
         );
     }
 
-    public function testSetMarginRecalculatesPaddingTopAndBottomRows() : void
+    public function testSetMarginRecalculatesPaddingTopAndBottomRows(): void
     {
         $style = $this->getMenuStyle();
         $style->setWidth(30);
@@ -477,7 +478,7 @@ class MenuStyleTest extends TestCase
         );
     }
 
-    public function testSetBorderRecalculatesPaddingTopAndBottomRows() : void
+    public function testSetBorderRecalculatesPaddingTopAndBottomRows(): void
     {
         $style = $this->getMenuStyle();
         $style->setWidth(30);
@@ -496,7 +497,7 @@ class MenuStyleTest extends TestCase
         );
     }
 
-    public function testSetBorderRightRecalculatesPaddingTopAndBottomRows() : void
+    public function testSetBorderRightRecalculatesPaddingTopAndBottomRows(): void
     {
         $style = $this->getMenuStyle();
         $style->setWidth(30);
@@ -515,7 +516,7 @@ class MenuStyleTest extends TestCase
         );
     }
 
-    public function testSetBorderLeftRecalculatesPaddingTopAndBottomRows() : void
+    public function testSetBorderLeftRecalculatesPaddingTopAndBottomRows(): void
     {
         $style = $this->getMenuStyle();
         $style->setWidth(30);
@@ -525,7 +526,7 @@ class MenuStyleTest extends TestCase
             ["  \033[37;44m                              \033[0m\n"],
             $style->getPaddingTopBottomRows()
         );
-        
+
         $style->setBorderLeftWidth(1);
 
         self::assertEquals(
@@ -534,7 +535,7 @@ class MenuStyleTest extends TestCase
         );
     }
 
-    public function testSetBorderColourRecalculatesPaddingTopAndBottomRows() : void
+    public function testSetBorderColourRecalculatesPaddingTopAndBottomRows(): void
     {
         $style = $this->getMenuStyle();
         $style->setWidth(30);
@@ -544,7 +545,7 @@ class MenuStyleTest extends TestCase
             ["  \033[41m \e[37;44m                            \033[41m \033[0m\n"],
             $style->getPaddingTopBottomRows()
         );
-        
+
         $style->setBorderColour('green');
 
         self::assertEquals(
@@ -554,32 +555,32 @@ class MenuStyleTest extends TestCase
     }
 
     #[DataProvider('belowZeroProvider')]
-    public function testSetWidthThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
+    public function testSetWidthThrowsExceptionIfValueIsNotZeroOrAbove(int $value): void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
 
         $this->getMenuStyle()->setWidth($value);
     }
 
-    public static function belowZeroProvider() : array
+    public static function belowZeroProvider(): array
     {
         return [[-1], [-2], [-10]];
     }
 
-    public function testSetPaddingWithUniversalValue() : void
+    public function testSetPaddingWithUniversalValue(): void
     {
         $style = $this->getMenuStyle();
 
         self::assertEquals(1, $style->getPaddingTopBottom());
         self::assertEquals(2, $style->getPaddingLeftRight());
-        
+
         $style->setPadding(10);
 
         self::assertEquals(10, $style->getPaddingTopBottom());
         self::assertEquals(10, $style->getPaddingLeftRight());
     }
 
-    public function testSetPaddingWithXAndYValues() : void
+    public function testSetPaddingWithXAndYValues(): void
     {
         $style = $this->getMenuStyle();
 
@@ -592,7 +593,7 @@ class MenuStyleTest extends TestCase
         self::assertEquals(6, $style->getPaddingLeftRight());
     }
 
-    public function testSetPaddingTopAndBottom() : void
+    public function testSetPaddingTopAndBottom(): void
     {
         $style = $this->getMenuStyle();
 
@@ -603,19 +604,19 @@ class MenuStyleTest extends TestCase
         self::assertEquals(5, $style->getPaddingTopBottom());
     }
 
-    public function testSetPaddingLeftAndRight() : void
+    public function testSetPaddingLeftAndRight(): void
     {
         $style = $this->getMenuStyle();
-        
+
         self::assertEquals(2, $style->getPaddingLeftRight());
-        
+
         $style->setPaddingLeftRight(4);
-        
+
         self::assertEquals(4, $style->getPaddingLeftRight());
     }
 
     #[DataProvider('belowZeroProvider')]
-    public function testSetPaddingTopAndBottomThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
+    public function testSetPaddingTopAndBottomThrowsExceptionIfValueIsNotZeroOrAbove(int $value): void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
 
@@ -623,7 +624,7 @@ class MenuStyleTest extends TestCase
     }
 
     #[DataProvider('belowZeroProvider')]
-    public function testSetPaddingLeftAndRightThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
+    public function testSetPaddingLeftAndRightThrowsExceptionIfValueIsNotZeroOrAbove(int $value): void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
 
@@ -631,7 +632,7 @@ class MenuStyleTest extends TestCase
     }
 
     #[DataProvider('belowZeroProvider')]
-    public function testSetPaddingThrowsExceptionIfTopBottomValueIsNotZeroOrAbove(int $value) : void
+    public function testSetPaddingThrowsExceptionIfTopBottomValueIsNotZeroOrAbove(int $value): void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
 
@@ -639,7 +640,7 @@ class MenuStyleTest extends TestCase
     }
 
     #[DataProvider('belowZeroProvider')]
-    public function testSetPaddingThrowsExceptionIfLeftRightValueIsNotZeroOrAbove(int $value) : void
+    public function testSetPaddingThrowsExceptionIfLeftRightValueIsNotZeroOrAbove(int $value): void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
 
@@ -647,14 +648,14 @@ class MenuStyleTest extends TestCase
     }
 
     #[DataProvider('belowZeroProvider')]
-    public function testSetMarginThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
+    public function testSetMarginThrowsExceptionIfValueIsNotZeroOrAbove(int $value): void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
 
         $this->getMenuStyle()->setMargin($value);
     }
 
-    public function testHasChangedFromDefaultsReturnsFalseWhenAutoShrunk() : void
+    public function testHasChangedFromDefaultsReturnsFalseWhenAutoShrunk(): void
     {
         $terminal = $this
             ->getMockBuilder(UnixTerminal::class)
@@ -672,7 +673,7 @@ class MenuStyleTest extends TestCase
         self::assertFalse($menuStyle->hasChangedFromDefaults());
     }
 
-    public function testDebugMode() : void
+    public function testDebugMode(): void
     {
         $style = $this->getMenuStyle(8, 40);
 
@@ -705,7 +706,7 @@ class MenuStyleTest extends TestCase
     }
 
     #[DataProvider('cannotShrinkProvider')]
-    public function testSetWidthThrowsExceptionIfMenuTooWideAndMarginConsumesTerminal(int $margin) : void
+    public function testSetWidthThrowsExceptionIfMenuTooWideAndMarginConsumesTerminal(int $margin): void
     {
         $this->expectException(CannotShrinkMenuException::class);
         $this->expectExceptionMessage(
@@ -717,7 +718,7 @@ class MenuStyleTest extends TestCase
         $style->setWidth(10);
     }
 
-    public static function cannotShrinkProvider() : array
+    public static function cannotShrinkProvider(): array
     {
         return [[50], [51], [100]];
     }

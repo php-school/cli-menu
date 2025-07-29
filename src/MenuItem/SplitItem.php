@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\MenuItem;
@@ -9,6 +10,7 @@ use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Style\DefaultStyle;
 use PhpSchool\CliMenu\Style\ItemStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
+
 use function PhpSchool\CliMenu\Util\collect;
 use function PhpSchool\CliMenu\Util\each;
 use function PhpSchool\CliMenu\Util\mapWithKeys;
@@ -20,32 +22,20 @@ use function PhpSchool\CliMenu\Util\max;
 class SplitItem implements MenuItemInterface, PropagatesStyles
 {
     /**
-     * @var array
+     * @var list<MenuItemInterface>
      */
-    private $items = [];
+    private array $items = [];
+
+    private int|null $selectedItemIndex;
+
+    private bool $canBeSelected = true;
+
+    private int $gutter = 2;
+
+    private DefaultStyle $style;
 
     /**
-     * @var int|null
-     */
-    private $selectedItemIndex;
-
-    /**
-     * @var bool
-     */
-    private $canBeSelected = true;
-
-    /**
-     * @var int
-     */
-    private $gutter = 2;
-
-    /**
-     * @var DefaultStyle
-     */
-    private $style;
-
-    /**
-     * @var array
+     * @var list<class-string<MenuItemInterface>>
      */
     private static $blacklistedItems = [
         \PhpSchool\CliMenu\MenuItem\AsciiArtItem::class,
@@ -53,6 +43,9 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
         \PhpSchool\CliMenu\MenuItem\SplitItem::class,
     ];
 
+    /**
+     * @param list<MenuItemInterface> $items
+     */
     public function __construct(array $items = [])
     {
         $this->addItems($items);
@@ -61,18 +54,18 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
         $this->style = new DefaultStyle();
     }
 
-    public function getGutter() : int
+    public function getGutter(): int
     {
         return $this->gutter;
     }
 
-    public function setGutter(int $gutter) : void
+    public function setGutter(int $gutter): void
     {
         Assertion::greaterOrEqualThan($gutter, 0);
         $this->gutter = $gutter;
     }
 
-    public function addItem(MenuItemInterface $item) : self
+    public function addItem(MenuItemInterface $item): self
     {
         foreach (self::$blacklistedItems as $bl) {
             if ($item instanceof $bl) {
@@ -84,16 +77,22 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
         return $this;
     }
 
-    public function addItems(array $items) : self
+    /**
+     * @param list<MenuItemInterface> $items
+     */
+    public function addItems(array $items): self
     {
         foreach ($items as $item) {
             $this->addItem($item);
         }
-            
+
         return $this;
     }
 
-    public function setItems(array $items) : self
+    /**
+     * @param list<MenuItemInterface> $items
+     */
+    public function setItems(array $items): self
     {
         $this->items = [];
         $this->addItems($items);
@@ -103,7 +102,7 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
     /**
      * Select default item
      */
-    private function setDefaultSelectedItem() : void
+    private function setDefaultSelectedItem(): void
     {
         foreach ($this->items as $index => $item) {
             if ($item->canSelect()) {
@@ -118,16 +117,17 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
     }
 
     /**
-     * The output text for the item
+     * The output text for the
+     * @return list<string>
      */
-    public function getRows(MenuStyle $style, bool $selected = false) : array
+    public function getRows(MenuStyle $style, bool $selected = false): array
     {
         $numberOfItems = count($this->items);
 
         if ($numberOfItems === 0) {
             throw new \RuntimeException(sprintf('There should be at least one item added to: %s', __CLASS__));
         }
-        
+
         if (!$selected) {
             $this->setDefaultSelectedItem();
         }
@@ -142,7 +142,7 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
         $length = (int) $length;
 
         $missingLength = $style->getContentWidth() % $numberOfItems;
-        
+
         return $this->buildRows(
             mapWithKeys($this->items, function (int $index, MenuItemInterface $item) use ($selected, $length, $style) {
                 $isSelected = $selected && $index === $this->selectedItemIndex;
@@ -178,19 +178,26 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
         );
     }
 
-    private function buildRows(array $cells, int $missingLength, int $length, int $largestItemExtra) : array
+    /**
+     * @param array<int, array<string>> $cells
+     * @return list<string>
+     */
+    private function buildRows(array $cells, int $missingLength, int $length, int $largestItemExtra): array
     {
         $extraPadLength = $largestItemExtra > 0 ? 2 + $largestItemExtra : 0;
-        
+
         return array_map(
             function ($i) use ($cells, $length, $missingLength, $extraPadLength) {
                 return $this->buildRow($cells, $i, $length, $missingLength, $extraPadLength);
             },
-            range(0, max(array_map('count', $cells)) - 1)
+            range(0, max(array_values(array_map(count(...), $cells))) - 1)
         );
     }
 
-    private function buildRow(array $cells, int $index, int $length, int $missingLength, int $extraPadLength) : string
+    /**
+     * @param array<int, array<string>> $cells
+     */
+    private function buildRow(array $cells, int $index, int $length, int $missingLength, int $extraPadLength): string
     {
         return sprintf(
             '%s%s',
@@ -207,14 +214,18 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
         );
     }
 
+    /**
+     * @param array<string> $content
+     * @return array<string>
+     */
     private function buildCell(
         array $content,
         int $length,
         MenuStyle $style,
         bool $isSelected,
         string $itemExtra
-    ) : array {
-        return array_map(function ($row, $index) use ($length, $style, $isSelected, $itemExtra) {
+    ): array {
+        return array_map(function (string $row, int $index) use ($length, $style, $isSelected, $itemExtra) {
             $invertedColoursSetCode = $isSelected
                 ? $style->getInvertedColoursSetCode()
                 : '';
@@ -238,7 +249,7 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
      * Is there an item with this index and can it be
      * selected?
      */
-    public function canSelectIndex(int $index) : bool
+    public function canSelectIndex(int $index): bool
     {
         return isset($this->items[$index]) && $this->items[$index]->canSelect();
     }
@@ -247,12 +258,12 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
      * Set the item index which should be selected. If the item does
      * not exist then throw an exception.
      */
-    public function setSelectedItemIndex(int $index) : void
+    public function setSelectedItemIndex(int $index): void
     {
         if (!isset($this->items[$index])) {
             throw new \InvalidArgumentException(sprintf('Index: "%s" does not exist', $index));
         }
-        
+
         $this->selectedItemIndex = $index;
     }
 
@@ -260,7 +271,7 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
      * Get the currently select item index.
      * May be null in case of no selectable item.
      */
-    public function getSelectedItemIndex() : ?int
+    public function getSelectedItemIndex(): ?int
     {
         return $this->selectedItemIndex;
     }
@@ -269,16 +280,19 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
      * Get the currently selected item - if no items are selectable
      * then throw an exception.
      */
-    public function getSelectedItem() : MenuItemInterface
+    public function getSelectedItem(): MenuItemInterface
     {
         if (null === $this->selectedItemIndex) {
             throw new \RuntimeException('No item is selected');
         }
-        
+
         return $this->items[$this->selectedItemIndex];
     }
 
-    public function getItems() : array
+    /**
+     * @return list<MenuItemInterface>
+     */
+    public function getItems(): array
     {
         return $this->items;
     }
@@ -287,7 +301,7 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
      * Can the item be selected
      * In this case, it indicates if at least 1 item inside the SplitItem can be selected
      */
-    public function canSelect() : bool
+    public function canSelect(): bool
     {
         return $this->canBeSelected;
     }
@@ -295,7 +309,7 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
     /**
      * Execute the items callable if required
      */
-    public function getSelectAction() : ?callable
+    public function getSelectAction(): ?callable
     {
         return null;
     }
@@ -303,7 +317,7 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
     /**
      * Whether or not the menu item is showing the menustyle extra value
      */
-    public function showsItemExtra() : bool
+    public function showsItemExtra(): bool
     {
         return false;
     }
@@ -311,7 +325,7 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
     /**
      * Enable showing item extra
      */
-    public function showItemExtra() : void
+    public function showItemExtra(): void
     {
         //noop
     }
@@ -319,7 +333,7 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
     /**
      * Disable showing item extra
      */
-    public function hideItemExtra() : void
+    public function hideItemExtra(): void
     {
         //noop
     }
@@ -327,7 +341,7 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
     /**
      * Nothing to return with SplitItem
      */
-    public function getText() : string
+    public function getText(): string
     {
         throw new \BadMethodCallException(sprintf('Not supported on: %s', __CLASS__));
     }
@@ -335,16 +349,16 @@ class SplitItem implements MenuItemInterface, PropagatesStyles
     /**
      * Finds largest itemExtra value in items
      */
-    private function calculateItemExtra() : int
+    private function calculateItemExtra(): int
     {
-        return max(array_map(
+        return max(array_values(array_map(
             function (MenuItemInterface $item) {
                 return mb_strwidth($item->getStyle()->getItemExtra());
             },
             array_filter($this->items, function (MenuItemInterface $item) {
                 return $item->getStyle()->getDisplaysExtra();
             })
-        ));
+        )));
     }
 
     /**

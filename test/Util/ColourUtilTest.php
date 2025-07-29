@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Util;
@@ -13,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ColourUtilTest extends TestCase
 {
-    public function testAvailableColours() : void
+    public function testAvailableColours(): void
     {
         self::assertSame(
             [
@@ -31,15 +32,15 @@ class ColourUtilTest extends TestCase
         );
     }
 
-    public function testMap256To8ThrowsExceptionIfCodeNotValid() : void
+    public function testMap256To8ThrowsExceptionIfCodeNotValid(): void
     {
         self::expectException(\InvalidArgumentException::class);
         self::expectExceptionMessage('Invalid colour code');
-        
+
         ColourUtil::map256To8(512);
     }
 
-    public function testMap256To8() : void
+    public function testMap256To8(): void
     {
         self::assertEquals('white', ColourUtil::map256To8(255));
         self::assertEquals('magenta', ColourUtil::map256To8(213));
@@ -48,16 +49,16 @@ class ColourUtilTest extends TestCase
         self::assertEquals('green', ColourUtil::map256To8(64));
     }
 
-    public function testValidateColourThrowsExceptionIfColourNot256AndNot8() : void
+    public function testValidateColourThrowsExceptionIfColourNot256AndNot8(): void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
-        
+
         $terminal = $this->createMock(Terminal::class);
 
         ColourUtil::validateColour($terminal, 'teal');
     }
-    
-    public function testValidateColourThrowsExceptionIfFallbackNotValidWhenTerminalDoesNotSupport256Colours() : void
+
+    public function testValidateColourThrowsExceptionIfFallbackNotValidWhenTerminalDoesNotSupport256Colours(): void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
 
@@ -69,7 +70,7 @@ class ColourUtilTest extends TestCase
         ColourUtil::validateColour($terminal, '255', 'teal');
     }
 
-    public function testValidateColourWithFallbackWhenTerminalDoesNotSupport256Colours() : void
+    public function testValidateColourWithFallbackWhenTerminalDoesNotSupport256Colours(): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->once())
@@ -79,7 +80,7 @@ class ColourUtilTest extends TestCase
         self::assertEquals('red', ColourUtil::validateColour($terminal, '255', 'red'));
     }
 
-    public function testValidateColourPicksFallbackFromPreComputedListWhenTerminalDoesNotSupport256Colours() : void
+    public function testValidateColourPicksFallbackFromPreComputedListWhenTerminalDoesNotSupport256Colours(): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->once())
@@ -90,14 +91,14 @@ class ColourUtilTest extends TestCase
     }
 
     #[DataProvider('invalidColourCodeProvider')]
-    public function testValidateColourThrowsExceptionIfInvalid256ColourCodeUsed(string $colourCode) : void
+    public function testValidateColourThrowsExceptionIfInvalid256ColourCodeUsed(string $colourCode): void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
 
         ColourUtil::validateColour($this->createMock(Terminal::class), $colourCode);
     }
 
-    public static function invalidColourCodeProvider() : array
+    public static function invalidColourCodeProvider(): array
     {
         return [
             ['-1'],
@@ -107,17 +108,17 @@ class ColourUtilTest extends TestCase
     }
 
     #[DataProvider('validColourCodeProvider')]
-    public function testValidateColourWith256ColoursWhenTerminalSupports256Colours(string $colourCode) : void
+    public function testValidateColourWith256ColoursWhenTerminalSupports256Colours(string $colourCode): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->once())
             ->method('getColourSupport')
             ->willReturn(256);
-        
+
         self::assertEquals($colourCode, ColourUtil::validateColour($terminal, $colourCode));
     }
 
-    public static function validColourCodeProvider() : array
+    public static function validColourCodeProvider(): array
     {
         return [
             ['0'],
@@ -127,7 +128,7 @@ class ColourUtilTest extends TestCase
         ];
     }
 
-    public function testValidateColourWithValid8ColourName() : void
+    public function testValidateColourWithValid8ColourName(): void
     {
         self::assertEquals('red', ColourUtil::validateColour($this->createMock(Terminal::class), 'red'));
     }

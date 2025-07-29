@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Builder;
@@ -24,24 +25,24 @@ use PHPUnit\Framework\TestCase;
  */
 class CliMenuBuilderTest extends TestCase
 {
-    public function testDefaultItems() : void
+    public function testDefaultItems(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $menu = $builder->build();
-        
+
         $expected = [
             [
                 'class' => SelectableItem::class,
                 'text'  => 'Exit',
             ],
         ];
-        
+
         $this->checkMenuItems($menu, $expected);
     }
 
-    public function testModifyExitButtonText() : void
+    public function testModifyExitButtonText(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->setExitButtonText('RELEASE ME');
         $menu = $builder->build();
 
@@ -55,14 +56,14 @@ class CliMenuBuilderTest extends TestCase
         $this->checkMenuItems($menu, $expected);
     }
 
-    public function testModifyStyles() : void
+    public function testModifyStyles(): void
     {
         $terminal = static::createMock(Terminal::class);
         $terminal
             ->expects($this->any())
             ->method('getWidth')
             ->willReturn(200);
-        
+
         $builder = new CliMenuBuilder($terminal);
         $builder->setBackgroundColour('red');
         $builder->setForegroundColour('red');
@@ -85,7 +86,7 @@ class CliMenuBuilderTest extends TestCase
         self::assertEquals('-', $style->getTitleSeparator());
     }
 
-    public function testSetBorderShorthandFunction() : void
+    public function testSetBorderShorthandFunction(): void
     {
         $terminal = static::createMock(Terminal::class);
         $terminal
@@ -182,9 +183,9 @@ class CliMenuBuilderTest extends TestCase
         self::assertEquals('green', $style->getBorderColour());
     }
 
-    public function testSetBorderTopWidth() : void
+    public function testSetBorderTopWidth(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->setBorderTopWidth(5);
 
         $style = $builder->build()->getStyle();
@@ -192,9 +193,9 @@ class CliMenuBuilderTest extends TestCase
         self::assertEquals(5, $style->getBorderTopWidth());
     }
 
-    public function testSetBorderRightWidth() : void
+    public function testSetBorderRightWidth(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->setBorderRightWidth(6);
 
         $style = $builder->build()->getStyle();
@@ -202,9 +203,9 @@ class CliMenuBuilderTest extends TestCase
         self::assertEquals(6, $style->getBorderRightWidth());
     }
 
-    public function testSetBorderBottomWidth() : void
+    public function testSetBorderBottomWidth(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->setBorderBottomWidth(7);
 
         $style = $builder->build()->getStyle();
@@ -212,9 +213,9 @@ class CliMenuBuilderTest extends TestCase
         self::assertEquals(7, $style->getBorderBottomWidth());
     }
 
-    public function testSetBorderLeftWidth() : void
+    public function testSetBorderLeftWidth(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->setBorderLeftWidth(8);
 
         $style = $builder->build()->getStyle();
@@ -222,17 +223,17 @@ class CliMenuBuilderTest extends TestCase
         self::assertEquals(8, $style->getBorderLeftWidth());
     }
 
-    public function testSetBorderColour() : void
+    public function testSetBorderColour(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->setBorderColour('red');
 
         $style = $builder->build()->getStyle();
 
         self::assertEquals('red', $style->getBorderColour());
     }
-    
-    public function test256ColoursCodes() : void
+
+    public function test256ColoursCodes(): void
     {
         $terminal = static::createMock(Terminal::class);
         $terminal
@@ -271,7 +272,7 @@ class CliMenuBuilderTest extends TestCase
         self::assertEquals('red', $style->getFg());
     }
 
-    public function testSetFgThrowsExceptionWhenColourCodeIsNotInRange() : void
+    public function testSetFgThrowsExceptionWhenColourCodeIsNotInRange(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid colour code');
@@ -288,7 +289,7 @@ class CliMenuBuilderTest extends TestCase
         $builder->setForegroundColour('512', 'white');
     }
 
-    public function testSetBgThrowsExceptionWhenColourCodeIsNotInRange() : void
+    public function testSetBgThrowsExceptionWhenColourCodeIsNotInRange(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid colour code');
@@ -305,32 +306,32 @@ class CliMenuBuilderTest extends TestCase
         $builder->setBackgroundColour('257', 'white');
     }
 
-    public function testDisableDefaultItems() : void
+    public function testDisableDefaultItems(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
-        
+
         $menu = $builder->build();
 
         self::assertEquals([], $menu->getItems());
     }
 
-    public function testSetTitle() : void
+    public function testSetTitle(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->setTitle('title');
-        
+
         $menu = $builder->build();
 
         self::assertEquals('title', $menu->getTitle());
     }
 
-    public function testAddItem() : void
+    public function testAddItem(): void
     {
         $callable = function () {
         };
-        
-        $builder = new CliMenuBuilder;
+
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
         $builder->addItem('Item 1', $callable);
         $builder->addItem('Item 2', $callable);
@@ -346,16 +347,16 @@ class CliMenuBuilderTest extends TestCase
                 'text'  => 'Item 2',
             ],
         ];
-        
+
         $this->checkMenuItems($menu, $expected);
     }
 
-    public function testAddMultipleItems() : void
+    public function testAddMultipleItems(): void
     {
         $callable = function () {
         };
 
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
         $builder->addItems([
             ['Item 1', $callable],
@@ -377,12 +378,12 @@ class CliMenuBuilderTest extends TestCase
         $this->checkMenuItems($menu, $expected);
     }
 
-    public function testAddMultipleCheckboxItems() : void
+    public function testAddMultipleCheckboxItems(): void
     {
         $callable = function () {
         };
 
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
         $builder->addCheckboxItems([
             ['Item 1', $callable],
@@ -404,12 +405,12 @@ class CliMenuBuilderTest extends TestCase
         $this->checkMenuItems($menu, $expected);
     }
 
-    public function testAddCheckboxItem() : void
+    public function testAddCheckboxItem(): void
     {
         $callable = function () {
         };
 
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
         $builder->addCheckboxItem('Item 1', $callable);
         $builder->addCheckboxItem('Item 2', $callable);
@@ -429,12 +430,12 @@ class CliMenuBuilderTest extends TestCase
         $this->checkMenuItems($menu, $expected);
     }
 
-    public function testAddRadioItem() : void
+    public function testAddRadioItem(): void
     {
         $callable = function () {
         };
 
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
         $builder->addRadioItem('Item 1', $callable);
         $builder->addRadioItem('Item 2', $callable);
@@ -454,12 +455,12 @@ class CliMenuBuilderTest extends TestCase
         $this->checkMenuItems($menu, $expected);
     }
 
-    public function testAddMultipleRadioItems() : void
+    public function testAddMultipleRadioItems(): void
     {
         $callable = function () {
         };
 
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
         $builder->addRadioItems([
             ['Item 1', $callable],
@@ -481,27 +482,27 @@ class CliMenuBuilderTest extends TestCase
         $this->checkMenuItems($menu, $expected);
     }
 
-    public function testAddStaticItem() : void
+    public function testAddStaticItem(): void
     {
 
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
         $builder->addStaticItem('Static Item 1');
         $menu = $builder->build();
-        
+
         $expected = [
             [
                 'class' => StaticItem::class,
                 'text'  => 'Static Item 1',
             ]
         ];
-        
+
         $this->checkMenuItems($menu, $expected);
     }
 
-    public function testAddLineBreakItem() : void
+    public function testAddLineBreakItem(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
         $builder->addLineBreak('Line Break Item 1');
         $menu = $builder->build();
@@ -517,9 +518,9 @@ class CliMenuBuilderTest extends TestCase
         $this->checkMenuItems($menu, $expected);
     }
 
-    public function testAddLineBreakItemWithNumLines() : void
+    public function testAddLineBreakItemWithNumLines(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
         $builder->addLineBreak('Line Break Item 1', 3);
         $menu = $builder->build();
@@ -535,9 +536,9 @@ class CliMenuBuilderTest extends TestCase
         $this->checkMenuItems($menu, $expected);
     }
 
-    public function testAsciiArtWithDefaultPosition() : void
+    public function testAsciiArtWithDefaultPosition(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
         $builder->addAsciiArt("//\n//");
         $menu = $builder->build();
@@ -553,9 +554,9 @@ class CliMenuBuilderTest extends TestCase
         $this->checkMenuItems($menu, $expected);
     }
 
-    public function testAsciiArtWithSpecificPosition() : void
+    public function testAsciiArtWithSpecificPosition(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
         $builder->addAsciiArt("//\n//", AsciiArtItem::POSITION_LEFT);
         $menu = $builder->build();
@@ -571,9 +572,9 @@ class CliMenuBuilderTest extends TestCase
         $this->checkMenuItems($menu, $expected);
     }
 
-    public function testAsciiArtWithAlt() : void
+    public function testAsciiArtWithAlt(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
         $builder->addAsciiArt("//\n//", AsciiArtItem::POSITION_LEFT, 'Some ALT');
         $menu = $builder->build();
@@ -590,15 +591,15 @@ class CliMenuBuilderTest extends TestCase
         $this->checkMenuItems($menu, $expected);
     }
 
-    public function testAddSubMenu() : void
+    public function testAddSubMenu(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
         $builder->addSubMenu('My SubMenu', function () {
         });
-        
+
         $menu = $builder->build();
-        
+
         $this->checkMenuItems($menu, [
             [
                 'class' => MenuMenuItem::class
@@ -606,11 +607,11 @@ class CliMenuBuilderTest extends TestCase
         ]);
     }
 
-    public function testAddSubMenuWithBuilder() : void
+    public function testAddSubMenuWithBuilder(): void
     {
-        $subMenuBuilder = new CliMenuBuilder;
-        
-        $builder = new CliMenuBuilder;
+        $subMenuBuilder = new CliMenuBuilder();
+
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
         $builder->addSubMenuFromBuilder('My SubMenu', $subMenuBuilder);
 
@@ -623,11 +624,11 @@ class CliMenuBuilderTest extends TestCase
         ]);
     }
 
-    public function testAddSubMenuUsesTextParameterAsMenuItemText() : void
+    public function testAddSubMenuUsesTextParameterAsMenuItemText(): void
     {
-        $subMenuBuilder = new CliMenuBuilder;
+        $subMenuBuilder = new CliMenuBuilder();
 
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
         $builder->addSubMenuFromBuilder('My SubMenu', $subMenuBuilder);
 
@@ -636,7 +637,7 @@ class CliMenuBuilderTest extends TestCase
         self::assertEquals('My SubMenu', $menu->getItems()[0]->getText());
     }
 
-    public function testSubMenuInheritsParentsStyle() : void
+    public function testSubMenuInheritsParentsStyle(): void
     {
         $terminal = self::createMock(Terminal::class);
         $terminal
@@ -666,7 +667,7 @@ class CliMenuBuilderTest extends TestCase
         self::assertEquals($menu->getStyle(), $subMenu2->getStyle());
     }
 
-    public function testSplitItemSubMenuInheritsParentsStyle() : void
+    public function testSplitItemSubMenuInheritsParentsStyle(): void
     {
         $terminal = self::createMock(Terminal::class);
         $terminal
@@ -699,7 +700,7 @@ class CliMenuBuilderTest extends TestCase
         self::assertEquals($menu->getStyle(), $subMenu->getStyle());
     }
 
-    public function testSubMenuIgnoresParentsStyleIfCustomAndPassesToChildren() : void
+    public function testSubMenuIgnoresParentsStyleIfCustomAndPassesToChildren(): void
     {
         $terminal = self::createMock(Terminal::class);
         $terminal
@@ -728,9 +729,9 @@ class CliMenuBuilderTest extends TestCase
         self::assertSame('yellow', $subMenu2->getStyle()->getBg());
     }
 
-    public function testSubMenuDoesNotInheritsParentsStyleWhenSubMenuStyleHasAlterations() : void
+    public function testSubMenuDoesNotInheritsParentsStyleWhenSubMenuStyleHasAlterations(): void
     {
-        $menu = (new CliMenuBuilder)
+        $menu = (new CliMenuBuilder())
             ->setBackgroundColour('green')
             ->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
                 $b->addItem('Some Item', function () {
@@ -743,9 +744,9 @@ class CliMenuBuilderTest extends TestCase
         self::assertSame('green', $menu->getStyle()->getBg());
     }
 
-    public function testSubMenuDefaultItems() : void
+    public function testSubMenuDefaultItems(): void
     {
-        $menu = (new CliMenuBuilder)
+        $menu = (new CliMenuBuilder())
             ->disableDefaultItems()
             ->addSubMenu('My SubMenu', function () {
             })
@@ -765,16 +766,16 @@ class CliMenuBuilderTest extends TestCase
         $this->checkMenuItems($menu->getItems()[0]->getSubMenu(), $expected);
     }
 
-    public function testModifyExitAndGoBackTextOnSubMenu() : void
+    public function testModifyExitAndGoBackTextOnSubMenu(): void
     {
-        $menu = (new CliMenuBuilder)
+        $menu = (new CliMenuBuilder())
             ->disableDefaultItems()
             ->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
                 $b->setExitButtonText("Won't you stay a little while longer?")
                     ->setGoBackButtonText("Don't click this - it's definitely not a go back button");
             })
             ->build();
-                
+
 
         $expected = [
             [
@@ -790,42 +791,42 @@ class CliMenuBuilderTest extends TestCase
         $this->checkMenuItems($menu->getItems()[0]->getSubMenu(), $expected);
     }
 
-    public function testDisableDefaultItemsDisablesExitAndGoBackOnSubMenu() : void
+    public function testDisableDefaultItemsDisablesExitAndGoBackOnSubMenu(): void
     {
-        $menu = (new CliMenuBuilder)
+        $menu = (new CliMenuBuilder())
             ->disableDefaultItems()
             ->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
                 $b->disableDefaultItems();
             })
             ->build();
-                
+
         self::assertEquals($menu->getItems()[0]->getSubMenu()->getItems(), []);
     }
 
-    public function testThrowsExceptionWhenDisablingRootMenu() : void
+    public function testThrowsExceptionWhenDisablingRootMenu(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('You can\'t disable the root menu');
 
-        (new CliMenuBuilder)->disableMenu();
+        (new CliMenuBuilder())->disableMenu();
     }
 
     #[DataProvider('marginBelowZeroProvider')]
-    public function testSetMarginThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
+    public function testSetMarginThrowsExceptionIfValueIsNotZeroOrAbove(int $value): void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
-        
-        
-        (new CliMenuBuilder)->setMargin($value)->build();
+
+
+        (new CliMenuBuilder())->setMargin($value)->build();
     }
 
-    public static function marginBelowZeroProvider() : array
+    public static function marginBelowZeroProvider(): array
     {
         return [[-1], [-2], [-10]];
     }
 
     #[DataProvider('marginAboveZeroProvider')]
-    public function testSetMarginAcceptsZeroAndPositiveIntegers(int $value) : void
+    public function testSetMarginAcceptsZeroAndPositiveIntegers(int $value): void
     {
         $terminal = self::createMock(Terminal::class);
         $terminal
@@ -834,16 +835,16 @@ class CliMenuBuilderTest extends TestCase
             ->willReturn(200);
 
         $menu = (new CliMenuBuilder($terminal))->setMargin($value)->build();
-        
+
         self::assertSame($value, $menu->getStyle()->getMargin());
     }
 
-    public static function marginAboveZeroProvider() : array
+    public static function marginAboveZeroProvider(): array
     {
         return [[0], [1], [10], [50]];
     }
 
-    public function testSetMarginAutoAutomaticallyCalculatesMarginToCenter() : void
+    public function testSetMarginAutoAutomaticallyCalculatesMarginToCenter(): void
     {
         $terminal = self::createMock(Terminal::class);
         $terminal
@@ -856,11 +857,11 @@ class CliMenuBuilderTest extends TestCase
             ->setMarginAuto()
             ->setWidth(100)
             ->build();
-        
+
         self::assertSame(50, $menu->getStyle()->getMargin());
     }
 
-    public function testSetMarginAutoOverwritesSetMargin() : void
+    public function testSetMarginAutoOverwritesSetMargin(): void
     {
         $terminal = self::createMock(Terminal::class);
         $terminal
@@ -878,7 +879,7 @@ class CliMenuBuilderTest extends TestCase
         self::assertSame(50, $menu->getStyle()->getMargin());
     }
 
-    public function testSetMarginManuallyOverwritesSetMarginAuto() : void
+    public function testSetMarginManuallyOverwritesSetMarginAuto(): void
     {
         $terminal = self::createMock(Terminal::class);
         $terminal
@@ -896,20 +897,20 @@ class CliMenuBuilderTest extends TestCase
         self::assertSame(10, $menu->getStyle()->getMargin());
     }
 
-    public function testSetPaddingWithUniversalValue() : void
+    public function testSetPaddingWithUniversalValue(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->setPadding(3);
 
         $style = $builder->build()->getStyle();
-        
+
         self::assertEquals(3, $style->getPaddingTopBottom());
         self::assertEquals(3, $style->getPaddingLeftRight());
     }
 
-    public function testSetPaddingWithXAndYValues() : void
+    public function testSetPaddingWithXAndYValues(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->setPadding(2, 3);
 
         $style = $builder->build()->getStyle();
@@ -918,9 +919,9 @@ class CliMenuBuilderTest extends TestCase
         self::assertEquals(3, $style->getPaddingLeftRight());
     }
 
-    public function testSetPaddingTopAndBottom() : void
+    public function testSetPaddingTopAndBottom(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->setPaddingTopBottom(2);
 
         $style = $builder->build()->getStyle();
@@ -928,9 +929,9 @@ class CliMenuBuilderTest extends TestCase
         self::assertEquals(2, $style->getPaddingTopBottom());
     }
 
-    public function testSetPaddingLeftAndRight() : void
+    public function testSetPaddingLeftAndRight(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->setPaddingLeftRight(3);
 
         $style = $builder->build()->getStyle();
@@ -938,9 +939,9 @@ class CliMenuBuilderTest extends TestCase
         self::assertEquals(3, $style->getPaddingLeftRight());
     }
 
-    public function testAddSubMenuWithClosureBinding() : void
+    public function testAddSubMenuWithClosureBinding(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
         $builder->addSubMenu('My SubMenu', function (CliMenuBuilder $b) {
             $b->disableDefaultItems();
@@ -960,9 +961,9 @@ class CliMenuBuilderTest extends TestCase
         $this->checkMenuItems($menu->getItems()[0]->getSubMenu(), $expected);
     }
 
-    public function testAddSplitItemWithClosureBinding() : void
+    public function testAddSplitItemWithClosureBinding(): void
     {
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->disableDefaultItems();
         $builder->addSplitItem(function (SplitItemBuilder $b) {
             $b->addItem('My Item', function () {
@@ -981,11 +982,11 @@ class CliMenuBuilderTest extends TestCase
         $this->checkItems($menu->getItems()[0]->getItems(), $expected);
     }
 
-    public function testDisplayExtraForcesExtraToBeDisplayedWhenNoItemsDisplayExtra() : void
+    public function testDisplayExtraForcesExtraToBeDisplayedWhenNoItemsDisplayExtra(): void
     {
         $cb = function () {
         };
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->addItem('Item 1', $cb);
         $builder->addItem('Item 2', $cb);
         $builder->displayExtra();
@@ -995,11 +996,11 @@ class CliMenuBuilderTest extends TestCase
         self::assertTrue($menu->getStyle()->getDisplaysExtra());
     }
 
-    public function testModifyingItemExtraForcesExtraToBeDisplayedWhenNoItemsDisplayExtra() : void
+    public function testModifyingItemExtraForcesExtraToBeDisplayedWhenNoItemsDisplayExtra(): void
     {
         $cb = function () {
         };
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->addItem('Item 1', $cb);
         $builder->addItem('Item 2', $cb);
         $builder->setItemExtra('DONE');
@@ -1009,12 +1010,12 @@ class CliMenuBuilderTest extends TestCase
         self::assertTrue($menu->getStyle()->getDisplaysExtra());
     }
 
-    private function checkMenuItems(CliMenu $menu, array $expected) : void
+    private function checkMenuItems(CliMenu $menu, array $expected): void
     {
         $this->checkItems($menu->getItems(), $expected);
     }
 
-    private function checkItems(array $actualItems, array $expected) : void
+    private function checkItems(array $actualItems, array $expected): void
     {
         $propMap = [
             'breakChar' => 'getText',
@@ -1040,15 +1041,15 @@ class CliMenuBuilderTest extends TestCase
         }
     }
 
-    public function testRegisterItemStylePropagatesToSubmenus() : void
+    public function testRegisterItemStylePropagatesToSubmenus(): void
     {
-        $myItem = new class extends LineBreakItem {
+        $myItem = new class () extends LineBreakItem {
         };
 
-        $myStyle = new class extends DefaultStyle {
+        $myStyle = new class () extends DefaultStyle {
         };
 
-        $builder = new CliMenuBuilder;
+        $builder = new CliMenuBuilder();
         $builder->registerItemStyle(get_class($myItem), $myStyle);
         $builder
             ->addSubMenu('My SubMenu', function (CliMenuBuilder $b) use ($myItem) {

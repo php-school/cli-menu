@@ -10,17 +10,17 @@ use PHPUnit\Framework\TestCase;
 
 class CheckboxStyleTest extends TestCase
 {
-    public function testHasChangedFromDefaultsWhenNoStylesChanged() : void
+    public function testHasChangedFromDefaultsWhenNoStylesChanged(): void
     {
         self::assertFalse((new CheckboxStyle())->hasChangedFromDefaults());
     }
 
-    public function testGetMarker() : void
+    public function testGetMarker(): void
     {
         $item = new CheckboxItem('My Checkbox', 'var_dump');
         $item->setChecked();
 
-        $style = new CheckboxStyle;
+        $style = new CheckboxStyle();
 
         self::assertSame('[✔] ', $style->getMarker($item, false));
 
@@ -29,9 +29,9 @@ class CheckboxStyleTest extends TestCase
         self::assertSame('[ ] ', $style->getMarker($item, false));
     }
 
-    public function testGetSetMarkerOn() : void
+    public function testGetSetMarkerOn(): void
     {
-        $style = new CheckboxStyle;
+        $style = new CheckboxStyle();
 
         self::assertSame('[✔] ', $style->getCheckedMarker());
 
@@ -41,9 +41,9 @@ class CheckboxStyleTest extends TestCase
         self::assertTrue($style->hasChangedFromDefaults());
     }
 
-    public function testGetSetMarkerOff() : void
+    public function testGetSetMarkerOff(): void
     {
-        $style = new CheckboxStyle;
+        $style = new CheckboxStyle();
 
         self::assertSame('[ ] ', $style->getUncheckedMarker());
 
@@ -53,9 +53,9 @@ class CheckboxStyleTest extends TestCase
         self::assertTrue($style->hasChangedFromDefaults());
     }
 
-    public function testGetSetItemExtra() : void
+    public function testGetSetItemExtra(): void
     {
-        $style = new CheckboxStyle;
+        $style = new CheckboxStyle();
 
         self::assertSame('✔', $style->getItemExtra());
 
@@ -65,18 +65,18 @@ class CheckboxStyleTest extends TestCase
         self::assertTrue($style->hasChangedFromDefaults());
     }
 
-    public function testModifyingItemExtraForcesExtraToBeDisplayedWhenNoItemsDisplayExtra() : void
+    public function testModifyingItemExtraForcesExtraToBeDisplayedWhenNoItemsDisplayExtra(): void
     {
-        $style = new CheckboxStyle;
+        $style = new CheckboxStyle();
         self::assertFalse($style->getDisplaysExtra());
 
         $style->setItemExtra('[!EXTRA]!');
         self::assertTrue($style->getDisplaysExtra());
     }
 
-    public function testGetSetDisplayExtra() : void
+    public function testGetSetDisplayExtra(): void
     {
-        $style = new CheckboxStyle;
+        $style = new CheckboxStyle();
 
         self::assertFalse($style->getDisplaysExtra());
 

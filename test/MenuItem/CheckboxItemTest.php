@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\MenuItem;
@@ -11,14 +12,14 @@ use PHPUnit\Framework\TestCase;
 
 class CheckboxItemTest extends TestCase
 {
-    public function testCanSelectIsTrue() : void
+    public function testCanSelectIsTrue(): void
     {
         $item = new CheckboxItem('Item', function () {
         });
         $this->assertTrue($item->canSelect());
     }
 
-    public function testGetSelectAction() : void
+    public function testGetSelectAction(): void
     {
         $callable = function () {
             return 'callable is called';
@@ -32,7 +33,7 @@ class CheckboxItemTest extends TestCase
         $this->assertSame($callable(), $item->getSelectAction()($cliMenu));
     }
 
-    public function testSelectActionTogglesItem() : void
+    public function testSelectActionTogglesItem(): void
     {
         $callable = function () {
         };
@@ -50,7 +51,7 @@ class CheckboxItemTest extends TestCase
         self::assertTrue($item->getChecked());
     }
 
-    public function testShowsItemExtra() : void
+    public function testShowsItemExtra(): void
     {
         $item = new CheckboxItem('Item', function () {
         });
@@ -61,14 +62,14 @@ class CheckboxItemTest extends TestCase
         $this->assertTrue($item->showsItemExtra());
     }
 
-    public function testGetText() : void
+    public function testGetText(): void
     {
         $item = new CheckboxItem('Item', function () {
         });
         $this->assertEquals('Item', $item->getText());
     }
 
-    public function testGetRows() : void
+    public function testGetRows(): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->any())->method('getWidth')->willReturn(100);
@@ -88,7 +89,7 @@ class CheckboxItemTest extends TestCase
         $this->assertEquals(['[✔] Item'], $itemChecked->getRows($menuStyle, true));
     }
 
-    public function testSetText() : void
+    public function testSetText(): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->any())->method('getWidth')->willReturn(100);
@@ -110,7 +111,7 @@ class CheckboxItemTest extends TestCase
         $this->assertEquals(['[✔] New Text'], $itemChecked->getRows($menuStyle, true));
     }
 
-    public function testTogglesMarker() : void
+    public function testTogglesMarker(): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->any())->method('getWidth')->willReturn(100);
@@ -134,7 +135,7 @@ class CheckboxItemTest extends TestCase
         $this->assertEquals(['[ ] Item'], $itemChecked->getRows($menuStyle, true));
     }
 
-    public function testGetRowsWithItemExtra() : void
+    public function testGetRowsWithItemExtra(): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->any())->method('getWidth')->willReturn(100);
@@ -151,7 +152,7 @@ class CheckboxItemTest extends TestCase
         $this->assertEquals(['[ ] Item     [EXTRA]'], $item->getRows($menuStyle));
     }
 
-    public function testGetRowsWithMultipleLinesWithItemExtra() : void
+    public function testGetRowsWithMultipleLinesWithItemExtra(): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->any())->method('getWidth')->willReturn(100);
@@ -174,7 +175,7 @@ class CheckboxItemTest extends TestCase
         );
     }
 
-    public function testHideAndShowItemExtra() : void
+    public function testHideAndShowItemExtra(): void
     {
         $item = new CheckboxItem('Item', function () {
         });

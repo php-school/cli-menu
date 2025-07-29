@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\MenuItem;
@@ -13,14 +14,14 @@ use PHPUnit\Framework\TestCase;
  */
 class SelectableItemTest extends TestCase
 {
-    public function testCanSelectIsTrue() : void
+    public function testCanSelectIsTrue(): void
     {
         $item = new SelectableItem('Item', function () {
         });
         $this->assertTrue($item->canSelect());
     }
 
-    public function testGetSelectAction() : void
+    public function testGetSelectAction(): void
     {
         $callable = function () {
         };
@@ -28,7 +29,7 @@ class SelectableItemTest extends TestCase
         $this->assertSame($callable, $item->getSelectAction());
     }
 
-    public function testShowsItemExtra() : void
+    public function testShowsItemExtra(): void
     {
         $item = new SelectableItem('Item', function () {
         });
@@ -39,14 +40,14 @@ class SelectableItemTest extends TestCase
         $this->assertTrue($item->showsItemExtra());
     }
 
-    public function testGetText() : void
+    public function testGetText(): void
     {
         $item = new SelectableItem('Item', function () {
         });
         $this->assertEquals('Item', $item->getText());
     }
 
-    public function testGetRows() : void
+    public function testGetRows(): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->any())->method('getWidth')->willReturn(100);
@@ -54,7 +55,7 @@ class SelectableItemTest extends TestCase
         $menuStyle = new MenuStyle($terminal);
         $menuStyle->setPaddingLeftRight(0);
         $menuStyle->setWidth(10);
-        
+
         $item = new SelectableItem('Item', function () {
         });
         $this->assertEquals(['○ Item'], $item->getRows($menuStyle));
@@ -62,7 +63,7 @@ class SelectableItemTest extends TestCase
         $this->assertEquals(['● Item'], $item->getRows($menuStyle, true));
     }
 
-    public function testSetText() : void
+    public function testSetText(): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->any())->method('getWidth')->willReturn(100);
@@ -79,7 +80,7 @@ class SelectableItemTest extends TestCase
         $this->assertEquals(['● New Text'], $item->getRows($menuStyle, true));
     }
 
-    public function testGetRowsWithUnSelectedMarker() : void
+    public function testGetRowsWithUnSelectedMarker(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -96,7 +97,7 @@ class SelectableItemTest extends TestCase
         $this->assertEquals(['* Item'], $item->getRows($menuStyle, false));
     }
 
-    public function testGetRowsWithSelectedMarker() : void
+    public function testGetRowsWithSelectedMarker(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -112,7 +113,7 @@ class SelectableItemTest extends TestCase
         $this->assertEquals(['= Item'], $item->getRows($menuStyle, true));
     }
 
-    public function testGetRowsWithItemExtra() : void
+    public function testGetRowsWithItemExtra(): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->any())->method('getWidth')->willReturn(100);
@@ -130,7 +131,7 @@ class SelectableItemTest extends TestCase
         $this->assertEquals(['* Item       [EXTRA]'], $item->getRows($menuStyle));
     }
 
-    public function testGetRowsWithMultipleLinesWithItemExtra() : void
+    public function testGetRowsWithMultipleLinesWithItemExtra(): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->any())->method('getWidth')->willReturn(100);
@@ -154,7 +155,7 @@ class SelectableItemTest extends TestCase
         );
     }
 
-    public function testHideAndShowItemExtra() : void
+    public function testHideAndShowItemExtra(): void
     {
         $item = new SelectableItem('Item', function () {
         });

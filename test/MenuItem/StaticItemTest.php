@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\MenuItem;
@@ -12,48 +13,48 @@ use PHPUnit\Framework\TestCase;
  */
 class StaticItemTest extends TestCase
 {
-    public function testCanSelectIsFalse() : void
+    public function testCanSelectIsFalse(): void
     {
         $item = new StaticItem('Item 1');
         $this->assertFalse($item->canSelect());
     }
 
-    public function testGetSelectActionReturnsNull() : void
+    public function testGetSelectActionReturnsNull(): void
     {
         $item = new StaticItem('Item 1');
         $this->assertNull($item->getSelectAction());
     }
 
-    public function testShowsItemExtraReturnsFalse() : void
+    public function testShowsItemExtraReturnsFalse(): void
     {
         $item = new StaticItem('Item 1');
         $this->assertFalse($item->showsItemExtra());
     }
 
-    public function testGetText() : void
+    public function testGetText(): void
     {
         $item = new StaticItem('Item 1');
         $this->assertEquals('Item 1', $item->getText());
     }
 
-    public function testGetRowsWithContentWhichFitsOnOneLine() : void
+    public function testGetRowsWithContentWhichFitsOnOneLine(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
-        
+
         $menuStyle
             ->expects($this->once())
             ->method('getContentWidth')
             ->willReturn(20);
 
         $item = new StaticItem('CONTENT 1 LINE');
-        
+
         $this->assertEquals(
             ['CONTENT 1 LINE'],
             $item->getRows($menuStyle)
         );
     }
 
-    public function testGetRowsWithContentWhichDoesNotFitOnOneLineIsWrapped() : void
+    public function testGetRowsWithContentWhichDoesNotFitOnOneLineIsWrapped(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -70,10 +71,10 @@ class StaticItemTest extends TestCase
         );
     }
 
-    public function testSetText() : void
+    public function testSetText(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
-        
+
         $menuStyle
             ->expects($this->once())
             ->method('getContentWidth')
@@ -81,14 +82,14 @@ class StaticItemTest extends TestCase
 
         $item = new StaticItem('CONTENT');
         $item->setText('CONTENT 2 LINES');
-        
+
         $this->assertEquals(
             ['CONTENT 2', 'LINES'],
             $item->getRows($menuStyle)
         );
     }
 
-    public function testHideAndShowItemExtraHasNoEffect() : void
+    public function testHideAndShowItemExtraHasNoEffect(): void
     {
         $item = new StaticItem('CONTENT 1 LINE');
 

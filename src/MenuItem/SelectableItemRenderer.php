@@ -7,17 +7,21 @@ namespace PhpSchool\CliMenu\MenuItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Style\ItemStyle;
 use PhpSchool\CliMenu\Util\StringUtil as s;
+
 use function PhpSchool\CliMenu\Util\mapWithKeys;
 
 class SelectableItemRenderer
 {
-    public function render(MenuStyle $menuStyle, MenuItemInterface $item, bool $selected, bool $disabled) : array
+    /**
+     * @return list<string>
+     */
+    public function render(MenuStyle $menuStyle, MenuItemInterface $item, bool $selected, bool $disabled): array
     {
         $itemStyle = $item->getStyle();
         $marker = $itemStyle->getMarker($item, $selected);
         $availableTextWidth = $this->getAvailableTextWidth($menuStyle, $itemStyle);
 
-        return mapWithKeys(
+        return array_values(mapWithKeys(
             $this->wrapAndIndentText($marker, $item->getText(), $availableTextWidth),
             function (int $key, string $row) use ($menuStyle, $item, $availableTextWidth, $disabled) {
                 $text = $disabled ? $menuStyle->getDisabledItemText($row) : $row;
@@ -26,10 +30,13 @@ class SelectableItemRenderer
                     ? $this->lineWithExtra($text, $availableTextWidth, $item->getStyle())
                     : $text;
             }
-        );
+        ));
     }
 
-    public function wrapAndIndentText(string $marker, string $text, int $availableWidth) : array
+    /**
+     * @return list<string>
+     */
+    public function wrapAndIndentText(string $marker, string $text, int $availableWidth): array
     {
         return explode(
             "\n",
@@ -41,7 +48,7 @@ class SelectableItemRenderer
         );
     }
 
-    public function lineWithExtra(string $text, int $availableWidth, ItemStyle $itemStyle) : string
+    public function lineWithExtra(string $text, int $availableWidth, ItemStyle $itemStyle): string
     {
         return sprintf(
             '%s%s  %s',
@@ -51,12 +58,12 @@ class SelectableItemRenderer
         );
     }
 
-    public function emptyString(int $numCharacters) : string
+    public function emptyString(int $numCharacters): string
     {
         return str_repeat(' ', $numCharacters);
     }
 
-    public function getAvailableTextWidth(MenuStyle $menuStyle, ItemStyle $itemStyle) : int
+    public function getAvailableTextWidth(MenuStyle $menuStyle, ItemStyle $itemStyle): int
     {
         return $itemStyle->getDisplaysExtra()
             ? $menuStyle->getContentWidth() - (mb_strwidth($itemStyle->getItemExtra()) + 2)

@@ -25,8 +25,8 @@ jobs:
       - name: Install Dependencies
         run: composer update --no-interaction --no-progress
 
-      - name: Run PHPCS
-        run: composer run cs
+      - name: Run cs fixer
+        run: composer run cs-dry-run
 
       - name: Run PHPStan
         run: composer run static

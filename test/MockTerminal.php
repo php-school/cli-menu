@@ -8,7 +8,6 @@ use PhpSchool\Terminal\Terminal;
 
 class MockTerminal implements Terminal
 {
-
     /**
      * @inheritDoc
      */

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Input;
@@ -11,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 class InputResultTest extends TestCase
 {
-    public function testFetch() : void
+    public function testFetch(): void
     {
         static::assertEquals('my-password', (new InputResult('my-password'))->fetch());
     }

@@ -27,7 +27,7 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/php.json"
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-      - name: Install dependencies
+      - name: Install cdependencies
         run: composer update --no-interaction --no-progress
 
       - name: Tests

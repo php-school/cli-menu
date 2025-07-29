@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Util;
@@ -12,7 +13,7 @@ class StringUtil
      * Minimal multi-byte wordwrap implementation
      * which also takes break length into consideration
      */
-    public static function wordwrap(string $string, int $width, string $break = "\n") : string
+    public static function wordwrap(string $string, int $width, string $break = "\n"): string
     {
         return implode(
             $break,
@@ -21,7 +22,7 @@ class StringUtil
                 if (mb_strwidth($line) <= $width) {
                     return $line;
                 }
-                
+
                 $words  = explode(' ', $line);
                 $line   = '';
                 $actual = '';
@@ -40,12 +41,12 @@ class StringUtil
         );
     }
 
-    public static function stripAnsiEscapeSequence(string $str) : string
+    public static function stripAnsiEscapeSequence(string $str): string
     {
         return (string) preg_replace('/\x1b[^m]*m/', '', $str);
     }
 
-    public static function length(string $str, bool $ignoreAnsiEscapeSequence = true) : int
+    public static function length(string $str, bool $ignoreAnsiEscapeSequence = true): int
     {
         return mb_strwidth($ignoreAnsiEscapeSequence ? self::stripAnsiEscapeSequence($str) : $str);
     }

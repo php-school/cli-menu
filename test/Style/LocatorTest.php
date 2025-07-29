@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 
 class LocatorTest extends TestCase
 {
-    public function testImportIgnoresOtherWhenStylesModified() : void
+    public function testImportIgnoresOtherWhenStylesModified(): void
     {
         $locator = new Locator();
 
@@ -49,7 +49,7 @@ class LocatorTest extends TestCase
         self::assertSame($radioStyle, $locator->getStyle(RadioStyle::class));
     }
 
-    public function testImportStylesWhenOneStyleNotModified() : void
+    public function testImportStylesWhenOneStyleNotModified(): void
     {
         $locator = new Locator();
 
@@ -73,7 +73,7 @@ class LocatorTest extends TestCase
         self::assertSame($otherLocator->getStyle(SelectableStyle::class), $locator->getStyle(SelectableStyle::class));
     }
 
-    public function testImportStylesWhenStyleNotModified() : void
+    public function testImportStylesWhenStyleNotModified(): void
     {
         $locator = new Locator();
 
@@ -94,18 +94,18 @@ class LocatorTest extends TestCase
         self::assertSame($otherLocator->getStyle(RadioStyle::class), $locator->getStyle(RadioStyle::class));
     }
 
-    public function testGetStyleForMenuItemThrowsExceptionIfItemNotRegistered() : void
+    public function testGetStyleForMenuItemThrowsExceptionIfItemNotRegistered(): void
     {
         self::expectException(InvalidStyle::class);
 
-        $myItem = new class extends LineBreakItem {
+        $myItem = new class () extends LineBreakItem {
         };
 
         $locator = new Locator();
         $locator->getStyleForMenuItem($myItem);
     }
 
-    public static function itemStyleProvider() : array
+    public static function itemStyleProvider(): array
     {
         $action = function () {
         };
@@ -122,14 +122,14 @@ class LocatorTest extends TestCase
     }
 
     #[DataProvider('itemStyleProvider')]
-    public function testGetStyleForMenuItem(string $expectedStyleClass, MenuItemInterface $menuItem) : void
+    public function testGetStyleForMenuItem(string $expectedStyleClass, MenuItemInterface $menuItem): void
     {
         $locator = new Locator();
 
         self::assertInstanceOf($expectedStyleClass, $locator->getStyleForMenuItem($menuItem));
     }
 
-    public function testGetStyleThrowsExceptionIfStyleClassNotRegistered() : void
+    public function testGetStyleThrowsExceptionIfStyleClassNotRegistered(): void
     {
         self::expectException(InvalidStyle::class);
 
@@ -137,7 +137,7 @@ class LocatorTest extends TestCase
         $locator->getStyle('NonExistingStyleClass');
     }
 
-    public static function styleProvider() : array
+    public static function styleProvider(): array
     {
         return [
             [DefaultStyle::class],
@@ -149,14 +149,14 @@ class LocatorTest extends TestCase
     }
 
     #[DataProvider('styleProvider')]
-    public function testGetStyle(string $styleClass) : void
+    public function testGetStyle(string $styleClass): void
     {
         $locator = new Locator();
 
         self::assertInstanceOf($styleClass, $locator->getStyle($styleClass));
     }
 
-    public function testSetStyleThrowsExceptionIfStyleClassNotRegistered() : void
+    public function testSetStyleThrowsExceptionIfStyleClassNotRegistered(): void
     {
         self::expectException(InvalidStyle::class);
 
@@ -164,18 +164,18 @@ class LocatorTest extends TestCase
         $locator->setStyle(new DefaultStyle(), 'NonExistingStyleClass');
     }
 
-    public function testSetStyleThrowsExceptionIfStyleNotInstanceOfStyleClass() : void
+    public function testSetStyleThrowsExceptionIfStyleNotInstanceOfStyleClass(): void
     {
         self::expectException(InvalidStyle::class);
 
-        $invalidStyle = new class extends SelectableStyle {
+        $invalidStyle = new class () extends SelectableStyle {
         };
 
         $locator = new Locator();
         $locator->setStyle($invalidStyle, DefaultStyle::class);
     }
 
-    public function testSetStyle() : void
+    public function testSetStyle(): void
     {
         $locator = new Locator();
 
@@ -184,29 +184,29 @@ class LocatorTest extends TestCase
         self::assertSame($new, $locator->getStyle(DefaultStyle::class));
     }
 
-    public function testHasStyleForMenuItem() : void
+    public function testHasStyleForMenuItem(): void
     {
         $locator = new Locator();
 
-        $customClass = new class extends LineBreakItem {
+        $customClass = new class () extends LineBreakItem {
         };
 
         self::assertTrue($locator->hasStyleForMenuItem(new LineBreakItem()));
         self::assertFalse($locator->hasStyleForMenuItem($customClass));
     }
 
-    public function testRegisterItemStyleThrowsExceptionIfItemAlreadyRegistered() : void
+    public function testRegisterItemStyleThrowsExceptionIfItemAlreadyRegistered(): void
     {
         self::expectException(InvalidStyle::class);
 
         (new Locator())->registerItemStyle(LineBreakItem::class, new DefaultStyle());
     }
 
-    public function testRegisterItemStyle() : void
+    public function testRegisterItemStyle(): void
     {
         $locator = new Locator();
 
-        $customClass = new class extends LineBreakItem {
+        $customClass = new class () extends LineBreakItem {
         };
 
         self::assertFalse($locator->hasStyleForMenuItem($customClass));

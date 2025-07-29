@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Input;
@@ -31,7 +32,7 @@ class PasswordTest extends TestCase
      */
     private $input;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->terminal = $this->createMock(Terminal::class);
         $menu           = $this->createMock(CliMenu::class);
@@ -41,7 +42,7 @@ class PasswordTest extends TestCase
         $this->input    = new Password($this->inputIO, $style);
     }
 
-    public function testGetSetPromptText() : void
+    public function testGetSetPromptText(): void
     {
         static::assertEquals('Enter password:', $this->input->getPromptText());
 
@@ -49,7 +50,7 @@ class PasswordTest extends TestCase
         static::assertEquals('Password please:', $this->input->getPromptText());
     }
 
-    public function testGetSetValidationFailedText() : void
+    public function testGetSetValidationFailedText(): void
     {
         static::assertEquals('Invalid password, try again', $this->input->getValidationFailedText());
 
@@ -57,7 +58,7 @@ class PasswordTest extends TestCase
         static::assertEquals('Failed!', $this->input->getValidationFailedText());
     }
 
-    public function testGetSetPlaceholderText() : void
+    public function testGetSetPlaceholderText(): void
     {
         static::assertEquals('', $this->input->getPlaceholderText());
 
@@ -66,12 +67,12 @@ class PasswordTest extends TestCase
     }
 
     #[DataProvider('validateProvider')]
-    public function testValidate(string $value, bool $result) : void
+    public function testValidate(string $value, bool $result): void
     {
         static::assertEquals($this->input->validate($value), $result);
     }
 
-    public static function validateProvider() : array
+    public static function validateProvider(): array
     {
         return [
             ['10', false],
@@ -80,12 +81,12 @@ class PasswordTest extends TestCase
         ];
     }
 
-    public function testFilterConcealsPassword() : void
+    public function testFilterConcealsPassword(): void
     {
         static::assertEquals('****', $this->input->filter('pppp'));
     }
 
-    public function testAskPassword() : void
+    public function testAskPassword(): void
     {
         $this->terminal
             ->expects($this->exactly(17))
@@ -96,10 +97,10 @@ class PasswordTest extends TestCase
     }
 
     #[DataProvider('customValidateProvider')]
-    public function testValidateWithCustomValidator(string $value, bool $result) : void
+    public function testValidateWithCustomValidator(string $value, bool $result): void
     {
         $customValidate = function ($input) {
-              return preg_match('/\d/', $input) && preg_match('/[a-zA-Z]/', $input);
+            return preg_match('/\d/', $input) && preg_match('/[a-zA-Z]/', $input);
         };
 
         $this->input->setValidator($customValidate);
@@ -107,7 +108,7 @@ class PasswordTest extends TestCase
         static::assertEquals($this->input->validate($value), $result);
     }
 
-    public static function customValidateProvider() : array
+    public static function customValidateProvider(): array
     {
         return [
             ['10', false],
@@ -118,7 +119,7 @@ class PasswordTest extends TestCase
         ];
     }
 
-    public function testWithCustomValidatorAndCustomValidationMessage() : void
+    public function testWithCustomValidatorAndCustomValidationMessage(): void
     {
         $customValidate = function ($input) {
             if ($input === 'mypassword') {
@@ -135,13 +136,13 @@ class PasswordTest extends TestCase
         self::assertEquals('Password too generic', $this->input->getValidationFailedText());
     }
 
-    public function testPasswordValidationWithDefaultLength() : void
+    public function testPasswordValidationWithDefaultLength(): void
     {
         self::assertFalse($this->input->validate(str_pad('a', 15)));
         self::assertTrue($this->input->validate(str_pad('a', 16)));
     }
 
-    public function testPasswordValidationWithDefinedLength() : void
+    public function testPasswordValidationWithDefinedLength(): void
     {
         $this->input->setPasswordLength(5);
 

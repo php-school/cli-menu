@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\MenuItem;
@@ -13,34 +14,20 @@ class CheckboxItem implements MenuItemInterface
     /**
      * @var string
      */
-    private $text;
+    private string $text;
 
-    /**
-     * @var callable
-     */
-    private $selectAction;
+    private \Closure $selectAction;
 
-    /**
-     * @var bool
-     */
-    private $showItemExtra;
+    private bool $showItemExtra;
 
-    /**
-     * @var bool
-     */
-    private $disabled;
+    private bool $disabled;
 
     /**
      * The current checkbox state
-     *
-     * @var bool
      */
-    private $checked = false;
+    private bool $checked = false;
 
-    /**
-     * @var CheckboxStyle
-     */
-    private $style;
+    private CheckboxStyle $style;
 
     public function __construct(
         string $text,
@@ -49,7 +36,7 @@ class CheckboxItem implements MenuItemInterface
         bool $disabled = false
     ) {
         $this->text = $text;
-        $this->selectAction = $selectAction;
+        $this->selectAction = $selectAction(...);
         $this->showItemExtra = $showItemExtra;
         $this->disabled = $disabled;
 
@@ -59,7 +46,7 @@ class CheckboxItem implements MenuItemInterface
     /**
      * The output text for the item
      */
-    public function getRows(MenuStyle $style, bool $selected = false) : array
+    public function getRows(MenuStyle $style, bool $selected = false): array
     {
         return (new SelectableItemRenderer())->render($style, $this, $selected, $this->disabled);
     }
@@ -67,7 +54,7 @@ class CheckboxItem implements MenuItemInterface
     /**
      * Return the raw string of text
      */
-    public function getText() : string
+    public function getText(): string
     {
         return $this->text;
     }
@@ -75,7 +62,7 @@ class CheckboxItem implements MenuItemInterface
     /**
      * Set the raw string of text
      */
-    public function setText(string $text) : void
+    public function setText(string $text): void
     {
         $this->text = $text;
     }
@@ -83,7 +70,7 @@ class CheckboxItem implements MenuItemInterface
     /**
      * Execute the items callable if required
      */
-    public function getSelectAction() : ?callable
+    public function getSelectAction(): ?callable
     {
         return function (CliMenu $cliMenu) {
             $this->toggle();
@@ -96,7 +83,7 @@ class CheckboxItem implements MenuItemInterface
     /**
      * Can the item be selected
      */
-    public function canSelect() : bool
+    public function canSelect(): bool
     {
         return !$this->disabled;
     }
@@ -104,7 +91,7 @@ class CheckboxItem implements MenuItemInterface
     /**
      * Whether or not we are showing item extra
      */
-    public function showsItemExtra() : bool
+    public function showsItemExtra(): bool
     {
         return $this->showItemExtra;
     }
@@ -112,7 +99,7 @@ class CheckboxItem implements MenuItemInterface
     /**
      * Enable showing item extra
      */
-    public function showItemExtra() : void
+    public function showItemExtra(): void
     {
         $this->showItemExtra = true;
     }
@@ -120,7 +107,7 @@ class CheckboxItem implements MenuItemInterface
     /**
      * Disable showing item extra
      */
-    public function hideItemExtra() : void
+    public function hideItemExtra(): void
     {
         $this->showItemExtra = false;
     }
@@ -128,7 +115,7 @@ class CheckboxItem implements MenuItemInterface
     /**
      * Whether or not the item is checked
      */
-    public function getChecked() : bool
+    public function getChecked(): bool
     {
         return $this->checked;
     }
@@ -136,7 +123,7 @@ class CheckboxItem implements MenuItemInterface
     /**
      * Sets checked state to true
      */
-    public function setChecked() : void
+    public function setChecked(): void
     {
         $this->checked = true;
     }
@@ -144,7 +131,7 @@ class CheckboxItem implements MenuItemInterface
     /**
      * Sets checked state to false
      */
-    public function setUnchecked() : void
+    public function setUnchecked(): void
     {
         $this->checked = false;
     }
@@ -152,7 +139,7 @@ class CheckboxItem implements MenuItemInterface
     /**
      * Toggles checked state
      */
-    public function toggle() : void
+    public function toggle(): void
     {
         $this->checked = !$this->checked;
     }
@@ -160,12 +147,12 @@ class CheckboxItem implements MenuItemInterface
     /**
      * @return CheckboxStyle
      */
-    public function getStyle() : ItemStyle
+    public function getStyle(): ItemStyle
     {
         return $this->style;
     }
 
-    public function setStyle(CheckboxStyle $style) : void
+    public function setStyle(CheckboxStyle $style): void
     {
         $this->style = $style;
     }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\MenuItem;
@@ -16,34 +17,19 @@ class AsciiArtItem implements MenuItemInterface
     /**
      * Possible positions of the ascii art
      */
-    const POSITION_CENTER = 'center';
-    const POSITION_LEFT   = 'left';
-    const POSITION_RIGHT  = 'right';
+    public const POSITION_CENTER = 'center';
+    public const POSITION_LEFT   = 'left';
+    public const POSITION_RIGHT  = 'right';
 
-    /**
-     * @var string
-     */
-    private $text;
+    private string $text;
 
-    /**
-     * @var string
-     */
-    private $position;
+    private string $position;
 
-    /**
-     * @var string
-     */
-    private $alternateText;
+    private string$alternateText;
 
-    /**
-     * @var int
-     */
-    private $artLength;
+    private int $artLength;
 
-    /**
-     * @var DefaultStyle
-     */
-    private $style;
+    private DefaultStyle $style;
 
     public function __construct(string $text, string $position = self::POSITION_CENTER, string $alt = '')
     {
@@ -59,7 +45,7 @@ class AsciiArtItem implements MenuItemInterface
     /**
      * The output text for the item
      */
-    public function getRows(MenuStyle $style, bool $selected = false) : array
+    public function getRows(MenuStyle $style, bool $selected = false): array
     {
         if ($this->artLength > $style->getContentWidth()) {
             $alternate = new StaticItem($this->alternateText);
@@ -89,7 +75,7 @@ class AsciiArtItem implements MenuItemInterface
     /**
      * Can the item be selected
      */
-    public function canSelect() : bool
+    public function canSelect(): bool
     {
         return false;
     }
@@ -97,7 +83,7 @@ class AsciiArtItem implements MenuItemInterface
     /**
      * Execute the items callable if required
      */
-    public function getSelectAction() : ?callable
+    public function getSelectAction(): ?callable
     {
         return null;
     }
@@ -105,7 +91,7 @@ class AsciiArtItem implements MenuItemInterface
     /**
      * Return the raw string of text
      */
-    public function getText() : string
+    public function getText(): string
     {
         return $this->text;
     }
@@ -113,7 +99,7 @@ class AsciiArtItem implements MenuItemInterface
     /**
      * Set the raw string of text
      */
-    public function setText(string $text) : void
+    public function setText(string $text): void
     {
         $this->text = implode("\n", array_map(function (string $line) {
             return rtrim($line, ' ');
@@ -125,7 +111,7 @@ class AsciiArtItem implements MenuItemInterface
     /**
      * Calculate the length of the art
      */
-    private function calculateArtLength() : void
+    private function calculateArtLength(): void
     {
         $this->artLength = (int) max(array_map('mb_strwidth', explode("\n", $this->text)));
     }
@@ -133,17 +119,17 @@ class AsciiArtItem implements MenuItemInterface
     /**
      * Return the length of the art
      */
-    public function getArtLength() : int
+    public function getArtLength(): int
     {
         return $this->artLength;
     }
 
-    public function getPosition() : string
+    public function getPosition(): string
     {
         return $this->position;
     }
 
-    public function getAlternateText() : string
+    public function getAlternateText(): string
     {
         return $this->alternateText;
     }
@@ -151,7 +137,7 @@ class AsciiArtItem implements MenuItemInterface
     /**
      * Whether or not the menu item is showing the menustyle extra value
      */
-    public function showsItemExtra() : bool
+    public function showsItemExtra(): bool
     {
         return false;
     }
@@ -159,7 +145,7 @@ class AsciiArtItem implements MenuItemInterface
     /**
      * Enable showing item extra
      */
-    public function showItemExtra() : void
+    public function showItemExtra(): void
     {
         //noop
     }
@@ -167,7 +153,7 @@ class AsciiArtItem implements MenuItemInterface
     /**
      * Disable showing item extra
      */
-    public function hideItemExtra() : void
+    public function hideItemExtra(): void
     {
         //noop
     }
@@ -175,12 +161,12 @@ class AsciiArtItem implements MenuItemInterface
     /**
      * @return DefaultStyle
      */
-    public function getStyle() : ItemStyle
+    public function getStyle(): ItemStyle
     {
         return $this->style;
     }
 
-    public function setStyle(DefaultStyle $style) : void
+    public function setStyle(DefaultStyle $style): void
     {
         $this->style = $style;
     }

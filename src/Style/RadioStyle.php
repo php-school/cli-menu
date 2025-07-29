@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Style;
@@ -15,25 +16,13 @@ class RadioStyle implements ItemStyle
         'displaysExtra' => false,
     ];
 
-    /**
-     * @var string
-     */
-    private $checkedMarker;
+    private string $checkedMarker;
 
-    /**
-     * @var string
-     */
-    private $uncheckedMarker;
+    private string $uncheckedMarker;
 
-    /**
-     * @var string
-     */
-    private $itemExtra;
+    private string $itemExtra;
 
-    /**
-     * @var bool
-     */
-    private $displaysExtra;
+    private bool $displaysExtra;
 
     public function __construct()
     {
@@ -43,7 +32,7 @@ class RadioStyle implements ItemStyle
         $this->displaysExtra = self::DEFAULT_STYLES['displaysExtra'];
     }
 
-    public function hasChangedFromDefaults() : bool
+    public function hasChangedFromDefaults(): bool
     {
         $currentValues = [
             $this->checkedMarker,
@@ -55,7 +44,7 @@ class RadioStyle implements ItemStyle
         return $currentValues !== array_values(self::DEFAULT_STYLES);
     }
 
-    public function getMarker(MenuItemInterface $item, bool $selected) : string
+    public function getMarker(MenuItemInterface $item, bool $selected): string
     {
         if (!$item instanceof RadioItem) {
             throw new \InvalidArgumentException(
@@ -66,36 +55,36 @@ class RadioStyle implements ItemStyle
         return $item->getChecked() ? $this->checkedMarker : $this->uncheckedMarker;
     }
 
-    public function getCheckedMarker() : string
+    public function getCheckedMarker(): string
     {
         return $this->checkedMarker;
     }
 
-    public function setCheckedMarker(string $marker) : self
+    public function setCheckedMarker(string $marker): self
     {
         $this->checkedMarker = $marker;
 
         return $this;
     }
 
-    public function getUncheckedMarker() : string
+    public function getUncheckedMarker(): string
     {
         return $this->uncheckedMarker;
     }
 
-    public function setUncheckedMarker(string $marker) : self
+    public function setUncheckedMarker(string $marker): self
     {
         $this->uncheckedMarker = $marker;
 
         return $this;
     }
 
-    public function getItemExtra() : string
+    public function getItemExtra(): string
     {
         return $this->itemExtra;
     }
 
-    public function setItemExtra(string $itemExtra) : self
+    public function setItemExtra(string $itemExtra): self
     {
         $this->itemExtra = $itemExtra;
 
@@ -105,12 +94,12 @@ class RadioStyle implements ItemStyle
         return $this;
     }
 
-    public function getDisplaysExtra() : bool
+    public function getDisplaysExtra(): bool
     {
         return $this->displaysExtra;
     }
 
-    public function setDisplaysExtra(bool $displaysExtra) : self
+    public function setDisplaysExtra(bool $displaysExtra): self
     {
         $this->displaysExtra = $displaysExtra;
 

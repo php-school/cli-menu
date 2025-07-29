@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu;
@@ -17,20 +18,11 @@ use Assert\Assertion;
  */
 class MenuStyle
 {
-    /**
-     * @var Terminal
-     */
-    protected $terminal;
+    protected Terminal $terminal;
 
-    /**
-     * @var string
-     */
-    protected $fg;
+    protected string $fg;
 
-    /**
-     * @var string
-     */
-    protected $bg;
+    protected string $bg;
 
     /**
      * The width of the menu. Including borders and padding.
@@ -40,131 +32,90 @@ class MenuStyle
      * circumstance that the terminal is smaller then the
      * requested width.
      *
-     * @var int
      */
-    protected $width;
+    protected int $width;
 
     /**
      * In case the requested width is wider than the terminal
      * then we shrink the width to fit the terminal. We keep
      * the requested size in case the margins are changed and
      * we need to recalculate the width.
-     *
-     * @var int
      */
-    private $requestedWidth;
+    private int $requestedWidth;
+
+    protected int $margin = 0;
+
+    protected int $paddingTopBottom = 0;
+
+    protected int $paddingLeftRight = 0;
 
     /**
-     * @var int
+     * @var list<string>
      */
-    protected $margin = 0;
+    private array $paddingTopBottomRows = [];
+
+    protected int $contentWidth;
+
+    private string $itemExtra;
+
+    private bool $displaysExtra;
+
+    private string $titleSeparator;
+
+    private string $coloursSetCode;
+
+    private string $invertedColoursSetCode = "\033[7m";
+
+    private string $invertedColoursUnsetCode = "\033[27m";
+
+    private string $coloursResetCode = "\033[0m";
+
+    private int $borderTopWidth = 0;
+
+    private int $borderRightWidth = 0;
+
+    private int $borderBottomWidth = 0;
+
+    private int $borderLeftWidth = 0;
+
+    private string $borderColour = 'white';
 
     /**
-     * @var int
+     * @var list<string>
      */
-    protected $paddingTopBottom = 0;
+    private array $borderTopRows = [];
 
     /**
-     * @var int
+     * @var list<string>
      */
-    protected $paddingLeftRight = 0;
+    private array $borderBottomRows = [];
 
-    /**
-     * @var array
-     */
-    private $paddingTopBottomRows = [];
+    private bool $marginAuto = false;
 
-    /**
-     * @var int
-     */
-    protected $contentWidth;
-
-    /**
-     * @var string
-     */
-    private $itemExtra;
-
-    /**
-     * @var bool
-     */
-    private $displaysExtra;
-
-    /**
-     * @var string
-     */
-    private $titleSeparator;
-
-    /**
-     * @var string
-     */
-    private $coloursSetCode;
-
-    /**
-     * @var string
-     */
-    private $invertedColoursSetCode = "\033[7m";
-
-    /**
-     * @var string
-     */
-    private $invertedColoursUnsetCode = "\033[27m";
-
-    /**
-     * @var string
-     */
-    private $coloursResetCode = "\033[0m";
-
-    /**
-     * @var int
-     */
-    private $borderTopWidth = 0;
-
-    /**
-     * @var int
-     */
-    private $borderRightWidth = 0;
-
-    /**
-     * @var int
-     */
-    private $borderBottomWidth = 0;
-
-    /**
-     * @var int
-     */
-    private $borderLeftWidth = 0;
-
-    /**
-     * @var string
-     */
-    private $borderColour = 'white';
-
-    /**
-     * @var array
-     */
-    private $borderTopRows = [];
-
-    /**
-     * @var array
-     */
-    private $borderBottomRows = [];
-
-    /**
-     * @var bool
-     */
-    private $marginAuto = false;
-
-    /**
-     * @var bool
-     */
-    private $debugMode = false;
+    private bool $debugMode = false;
 
     /**
      * Default Values
      *
-     * @var array
+     * @var array{
+     *     fg: string,
+     *     bg: string,
+     *     width: int,
+     *     paddingTopBottom: int,
+     *     paddingLeftRight: int,
+     *     margin: int,
+     *     itemExtra: string,
+     *     displaysExtra: bool,
+     *     titleSeparator: string,
+     *     borderTopWidth: int,
+     *     borderRightWidth: int,
+     *     borderBottomWidth: int,
+     *     borderLeftWidth: int,
+     *     borderColour: string,
+     *     marginAuto: bool
+     * }
      */
-    private static $defaultStyleValues = [
+    private static array $defaultStyleValues = [
         'fg' => 'white',
         'bg' => 'blue',
         'width' => 100,
@@ -183,9 +134,9 @@ class MenuStyle
     ];
 
     /**
-     * @var array
+     * @var array<string, int>
      */
-    private static $availableForegroundColors = [
+    private static array $availableForegroundColors = [
         'black'   => 30,
         'red'     => 31,
         'green'   => 32,
@@ -198,9 +149,9 @@ class MenuStyle
     ];
 
     /**
-     * @var array
+     * @var array<string, int>
      */
-    private static $availableBackgroundColors = [
+    private static array $availableBackgroundColors = [
         'black'   => 40,
         'red'     => 41,
         'green'   => 42,
@@ -213,9 +164,9 @@ class MenuStyle
     ];
 
     /**
-     * @var array
+     * @var array<string, array{set: int, unset: int}>
      */
-    private static $availableOptions = [
+    private static array $availableOptions = [
         'bold'       => ['set' => 1, 'unset' => 22],
         'dim'        => ['set' => 2, 'unset' => 22],
         'underscore' => ['set' => 4, 'unset' => 24],
@@ -250,7 +201,7 @@ class MenuStyle
         $this->setBorderColour(self::$defaultStyleValues['borderColour']);
     }
 
-    public function hasChangedFromDefaults() : bool
+    public function hasChangedFromDefaults(): bool
     {
         $currentValues = [
             $this->fg,
@@ -286,7 +237,7 @@ class MenuStyle
      *
      * @return string
      */
-    public function getDisabledItemText(string $text) : string
+    public function getDisabledItemText(string $text): string
     {
         return sprintf(
             "\033[%sm\033[%sm%s\033[%sm\033[%sm",
@@ -305,7 +256,7 @@ class MenuStyle
      *
      * @return string
      */
-    private function getForegroundColourCode(bool $bright = false) : string
+    private function getForegroundColourCode(bool $bright = false): string
     {
         if (!is_numeric($this->fg)) {
             $fgCode = (int)self::$availableForegroundColors[$this->fg];
@@ -324,7 +275,7 @@ class MenuStyle
      *
      * @return string
      */
-    private function getBackgroundColourCode(bool $bright = false) : string
+    private function getBackgroundColourCode(bool $bright = false): string
     {
         if (!is_numeric($this->bg)) {
             $bgCode = (int)self::$availableBackgroundColors[$this->bg];
@@ -339,7 +290,7 @@ class MenuStyle
     /**
      * Generates the ansi escape sequence to set the colours
      */
-    private function generateColoursSetCode() : void
+    private function generateColoursSetCode(): void
     {
         $this->coloursSetCode = sprintf(
             "\033[%s;%sm",
@@ -351,7 +302,7 @@ class MenuStyle
     /**
      * Get the colour code for Bg and Fg
      */
-    public function getColoursSetCode() : string
+    public function getColoursSetCode(): string
     {
         return $this->coloursSetCode;
     }
@@ -359,7 +310,7 @@ class MenuStyle
     /**
      * Get the inverted escape sequence (used for selected elements)
      */
-    public function getInvertedColoursSetCode() : string
+    public function getInvertedColoursSetCode(): string
     {
         return $this->invertedColoursSetCode;
     }
@@ -367,7 +318,7 @@ class MenuStyle
     /**
      * Get the inverted escape sequence (used for selected elements)
      */
-    public function getInvertedColoursUnsetCode() : string
+    public function getInvertedColoursUnsetCode(): string
     {
         return $this->invertedColoursUnsetCode;
     }
@@ -375,7 +326,7 @@ class MenuStyle
     /**
      * Get the escape sequence used to reset colours to default
      */
-    public function getColoursResetCode() : string
+    public function getColoursResetCode(): string
     {
         return $this->coloursResetCode;
     }
@@ -385,7 +336,7 @@ class MenuStyle
      *
      * The content width is menu width minus borders and padding.
      */
-    protected function calculateContentWidth() : void
+    protected function calculateContentWidth(): void
     {
         $this->contentWidth = $this->width
             - ($this->paddingLeftRight * 2)
@@ -396,12 +347,12 @@ class MenuStyle
         }
     }
 
-    public function getFg() : string
+    public function getFg(): string
     {
         return $this->fg;
     }
 
-    public function setFg(string $fg, ?string $fallback = null) : self
+    public function setFg(string $fg, ?string $fallback = null): self
     {
         $this->fg = ColourUtil::validateColour(
             $this->terminal,
@@ -413,12 +364,12 @@ class MenuStyle
         return $this;
     }
 
-    public function getBg() : string
+    public function getBg(): string
     {
         return $this->bg;
     }
 
-    public function setBg(string $bg, ?string $fallback = null) : self
+    public function setBg(string $bg, ?string $fallback = null): self
     {
         $this->bg = ColourUtil::validateColour(
             $this->terminal,
@@ -432,12 +383,12 @@ class MenuStyle
         return $this;
     }
 
-    public function getWidth() : int
+    public function getWidth(): int
     {
         return $this->width;
     }
 
-    public function setWidth(int $width) : self
+    public function setWidth(int $width): self
     {
         Assertion::greaterOrEqualThan($width, 0);
 
@@ -456,7 +407,7 @@ class MenuStyle
         return $this;
     }
 
-    private function maybeShrinkWidth(int $margin, int $width) : int
+    private function maybeShrinkWidth(int $margin, int $width): int
     {
         if ($width + ($margin * 2) >= $this->terminal->getWidth()) {
             $width = $this->terminal->getWidth() - ($margin * 2);
@@ -469,17 +420,17 @@ class MenuStyle
         return $width;
     }
 
-    public function getPaddingTopBottom() : int
+    public function getPaddingTopBottom(): int
     {
         return $this->paddingTopBottom;
     }
 
-    public function getPaddingLeftRight() : int
+    public function getPaddingLeftRight(): int
     {
         return $this->paddingLeftRight;
     }
 
-    private function generatePaddingTopBottomRows() : void
+    private function generatePaddingTopBottomRows(): void
     {
         if ($this->borderLeftWidth || $this->borderRightWidth) {
             $borderColour = $this->getBorderColourCode();
@@ -515,14 +466,14 @@ class MenuStyle
     }
 
     /**
-     * @return array
+     * @return list<string>
      */
-    public function getPaddingTopBottomRows() : array
+    public function getPaddingTopBottomRows(): array
     {
         return $this->paddingTopBottomRows;
     }
 
-    public function setPadding(int $topBottom, ?int $leftRight = null) : self
+    public function setPadding(int $topBottom, ?int $leftRight = null): self
     {
         if ($leftRight === null) {
             $leftRight = $topBottom;
@@ -537,7 +488,7 @@ class MenuStyle
         return $this;
     }
 
-    public function setPaddingTopBottom(int $topBottom) : self
+    public function setPaddingTopBottom(int $topBottom): self
     {
         Assertion::greaterOrEqualThan($topBottom, 0);
         $this->paddingTopBottom = $topBottom;
@@ -547,7 +498,7 @@ class MenuStyle
         return $this;
     }
 
-    public function setPaddingLeftRight(int $leftRight) : self
+    public function setPaddingLeftRight(int $leftRight): self
     {
         Assertion::greaterOrEqualThan($leftRight, 0);
         $this->paddingLeftRight = $leftRight;
@@ -558,12 +509,12 @@ class MenuStyle
         return $this;
     }
 
-    public function getMargin() : int
+    public function getMargin(): int
     {
         return $this->margin;
     }
 
-    public function setMarginAuto() : self
+    public function setMarginAuto(): self
     {
         $this->marginAuto = true;
         $this->margin = 0;
@@ -573,12 +524,12 @@ class MenuStyle
         return $this;
     }
 
-    private function calculateMarginAuto(int $width) : void
+    private function calculateMarginAuto(int $width): void
     {
         $this->margin = (int) floor(($this->terminal->getWidth() - ($width)) / 2);
     }
 
-    public function setMargin(int $margin) : self
+    public function setMargin(int $margin): self
     {
         Assertion::greaterOrEqualThan($margin, 0);
 
@@ -592,7 +543,7 @@ class MenuStyle
         return $this;
     }
 
-    public function getContentWidth() : int
+    public function getContentWidth(): int
     {
         return $this->contentWidth;
     }
@@ -600,7 +551,7 @@ class MenuStyle
     /**
      * Get padding for right had side of content
      */
-    public function getRightHandPadding(int $contentLength) : int
+    public function getRightHandPadding(int $contentLength): int
     {
         $rightPadding = $this->getContentWidth() - $contentLength + $this->getPaddingLeftRight();
 
@@ -611,43 +562,43 @@ class MenuStyle
         return $rightPadding;
     }
 
-    public function setItemExtra(string $itemExtra) : self
+    public function setItemExtra(string $itemExtra): self
     {
         $this->itemExtra = $itemExtra;
 
         return $this;
     }
 
-    public function getItemExtra() : string
+    public function getItemExtra(): string
     {
         return $this->itemExtra;
     }
 
-    public function getDisplaysExtra() : bool
+    public function getDisplaysExtra(): bool
     {
         return $this->displaysExtra;
     }
 
-    public function setDisplaysExtra(bool $displaysExtra) : self
+    public function setDisplaysExtra(bool $displaysExtra): self
     {
         $this->displaysExtra = $displaysExtra;
 
         return $this;
     }
 
-    public function getTitleSeparator() : string
+    public function getTitleSeparator(): string
     {
         return $this->titleSeparator;
     }
 
-    public function setTitleSeparator(string $actionSeparator) : self
+    public function setTitleSeparator(string $actionSeparator): self
     {
         $this->titleSeparator = $actionSeparator;
 
         return $this;
     }
 
-    private function generateBorderRows() : void
+    private function generateBorderRows(): void
     {
         $borderRow = sprintf(
             "%s%s%s%s\n",
@@ -673,17 +624,17 @@ class MenuStyle
     }
 
     /**
-     * @return array
+     * @return list<string>
      */
-    public function getBorderTopRows() : array
+    public function getBorderTopRows(): array
     {
         return $this->borderTopRows;
     }
 
     /**
-     * @return array
+     * @return list<string>
      */
-    public function getBorderBottomRows() : array
+    public function getBorderBottomRows(): array
     {
         return $this->borderBottomRows;
     }
@@ -701,7 +652,7 @@ class MenuStyle
         $bottomWidth = null,
         $leftWidth = null,
         ?string $colour = null
-    ) : self {
+    ): self {
         if (!is_int($rightWidth)) {
             $colour = $rightWidth;
             $rightWidth = $bottomWidth = $leftWidth = $topWidth;
@@ -730,7 +681,7 @@ class MenuStyle
         return $this;
     }
 
-    public function setBorderTopWidth(int $width) : self
+    public function setBorderTopWidth(int $width): self
     {
         $this->borderTopWidth = $width;
 
@@ -739,7 +690,7 @@ class MenuStyle
         return $this;
     }
 
-    public function setBorderRightWidth(int $width) : self
+    public function setBorderRightWidth(int $width): self
     {
         $this->borderRightWidth = $width;
         $this->calculateContentWidth();
@@ -749,7 +700,7 @@ class MenuStyle
         return $this;
     }
 
-    public function setBorderBottomWidth(int $width) : self
+    public function setBorderBottomWidth(int $width): self
     {
         $this->borderBottomWidth = $width;
 
@@ -758,7 +709,7 @@ class MenuStyle
         return $this;
     }
 
-    public function setBorderLeftWidth(int $width) : self
+    public function setBorderLeftWidth(int $width): self
     {
         $this->borderLeftWidth = $width;
         $this->calculateContentWidth();
@@ -768,7 +719,7 @@ class MenuStyle
         return $this;
     }
 
-    public function setBorderColour(string $colour, ?string $fallback = null) : self
+    public function setBorderColour(string $colour, ?string $fallback = null): self
     {
         $this->borderColour = ColourUtil::validateColour(
             $this->terminal,
@@ -782,32 +733,32 @@ class MenuStyle
         return $this;
     }
 
-    public function getBorderTopWidth() : int
+    public function getBorderTopWidth(): int
     {
         return $this->borderTopWidth;
     }
 
-    public function getBorderRightWidth() : int
+    public function getBorderRightWidth(): int
     {
         return $this->borderRightWidth;
     }
 
-    public function getBorderBottomWidth() : int
+    public function getBorderBottomWidth(): int
     {
         return $this->borderBottomWidth;
     }
 
-    public function getBorderLeftWidth() : int
+    public function getBorderLeftWidth(): int
     {
         return $this->borderLeftWidth;
     }
 
-    public function getBorderColour() : string
+    public function getBorderColour(): string
     {
         return $this->borderColour;
     }
 
-    public function getBorderColourCode() : string
+    public function getBorderColourCode(): string
     {
         if (!is_numeric($this->borderColour)) {
             $borderColourCode = self::$availableBackgroundColors[$this->borderColour];
@@ -836,7 +787,7 @@ class MenuStyle
      * Get a string of given length consisting of 0-9
      * eg $length = 15 : 012345678901234
      */
-    private function getDebugString(int $length) : string
+    private function getDebugString(int $length): string
     {
         $nums = [];
         for ($i = 0, $j = 0; $i < $length; $i++, $j++) {

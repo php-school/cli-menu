@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\MenuItem;
@@ -7,6 +8,7 @@ use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Style\ItemStyle;
 use PhpSchool\CliMenu\Util\StringUtil;
 use PhpSchool\CliMenu\Style\SelectableStyle;
+
 use function PhpSchool\CliMenu\Util\mapWithKeys;
 
 /**
@@ -17,27 +19,15 @@ class SelectableItem implements MenuItemInterface
     /**
      * @var string
      */
-    private $text;
+    private string $text;
 
-    /**
-     * @var callable
-     */
-    private $selectAction;
+    private \Closure $selectAction;
 
-    /**
-     * @var bool
-     */
-    private $showItemExtra;
+    private bool $showItemExtra;
 
-    /**
-     * @var bool
-     */
-    private $disabled;
+    private bool $disabled;
 
-    /**
-     * @var SelectableStyle
-     */
-    private $style;
+    private SelectableStyle $style;
 
     public function __construct(
         string $text,
@@ -46,7 +36,7 @@ class SelectableItem implements MenuItemInterface
         bool $disabled = false
     ) {
         $this->text = $text;
-        $this->selectAction = $selectAction;
+        $this->selectAction = $selectAction(...);
         $this->showItemExtra = $showItemExtra;
         $this->disabled = $disabled;
 
@@ -56,7 +46,7 @@ class SelectableItem implements MenuItemInterface
     /**
      * The output text for the item
      */
-    public function getRows(MenuStyle $style, bool $selected = false) : array
+    public function getRows(MenuStyle $style, bool $selected = false): array
     {
         return (new SelectableItemRenderer())->render($style, $this, $selected, $this->disabled);
     }
@@ -64,7 +54,7 @@ class SelectableItem implements MenuItemInterface
     /**
      * Return the raw string of text
      */
-    public function getText() : string
+    public function getText(): string
     {
         return $this->text;
     }
@@ -72,7 +62,7 @@ class SelectableItem implements MenuItemInterface
     /**
      * Set the raw string of text
      */
-    public function setText(string $text) : void
+    public function setText(string $text): void
     {
         $this->text = $text;
     }
@@ -80,7 +70,7 @@ class SelectableItem implements MenuItemInterface
     /**
      * Execute the items callable if required
      */
-    public function getSelectAction() : ?callable
+    public function getSelectAction(): ?callable
     {
         return $this->selectAction;
     }
@@ -88,7 +78,7 @@ class SelectableItem implements MenuItemInterface
     /**
      * Can the item be selected
      */
-    public function canSelect() : bool
+    public function canSelect(): bool
     {
         return !$this->disabled;
     }
@@ -96,7 +86,7 @@ class SelectableItem implements MenuItemInterface
     /**
      * Whether or not we are showing item extra
      */
-    public function showsItemExtra() : bool
+    public function showsItemExtra(): bool
     {
         return $this->showItemExtra;
     }
@@ -104,7 +94,7 @@ class SelectableItem implements MenuItemInterface
     /**
      * Enable showing item extra
      */
-    public function showItemExtra() : void
+    public function showItemExtra(): void
     {
         $this->showItemExtra = true;
     }
@@ -112,7 +102,7 @@ class SelectableItem implements MenuItemInterface
     /**
      * Disable showing item extra
      */
-    public function hideItemExtra() : void
+    public function hideItemExtra(): void
     {
         $this->showItemExtra = false;
     }
@@ -120,12 +110,12 @@ class SelectableItem implements MenuItemInterface
     /**
      * @return SelectableStyle
      */
-    public function getStyle() : ItemStyle
+    public function getStyle(): ItemStyle
     {
         return $this->style;
     }
 
-    public function setStyle(SelectableStyle $style) : void
+    public function setStyle(SelectableStyle $style): void
     {
         $this->style = $style;
     }

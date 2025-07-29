@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest;
@@ -30,9 +31,9 @@ class CliMenuTest extends TestCase
      */
     private $output;
 
-    public function setUp() : void
+    public function setUp(): void
     {
-        $this->output = new BufferedOutput;
+        $this->output = new BufferedOutput();
         $this->terminal = $this->createMock(Terminal::class);
 
         $this->terminal->expects($this->any())
@@ -50,7 +51,7 @@ class CliMenuTest extends TestCase
             });
     }
 
-    public function testGetMenuStyle() : void
+    public function testGetMenuStyle(): void
     {
         $menu = new CliMenu('PHP School FTW', []);
         self::assertInstanceOf(MenuStyle::class, $menu->getStyle());
@@ -60,7 +61,7 @@ class CliMenuTest extends TestCase
         self::assertSame($style, $menu->getStyle());
     }
 
-    public function testReDrawThrowsExceptionIfMenuNotOpen() : void
+    public function testReDrawThrowsExceptionIfMenuNotOpen(): void
     {
         $menu = new CliMenu('PHP School FTW', []);
 
@@ -69,7 +70,7 @@ class CliMenuTest extends TestCase
         $menu->redraw();
     }
 
-    public function testSimpleOpenClose() : void
+    public function testSimpleOpenClose(): void
     {
         $this->terminal->expects($this->once())
             ->method('read')
@@ -87,7 +88,7 @@ class CliMenuTest extends TestCase
         self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testSimpleOpenCloseWithBorders() : void
+    public function testSimpleOpenCloseWithBorders(): void
     {
         $this->terminal->expects($this->once())
             ->method('read')
@@ -106,7 +107,7 @@ class CliMenuTest extends TestCase
         self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testSimpleOpenCloseWithLeftAndRightBorders() : void
+    public function testSimpleOpenCloseWithLeftAndRightBorders(): void
     {
         $this->terminal->expects($this->once())
             ->method('read')
@@ -127,7 +128,7 @@ class CliMenuTest extends TestCase
         self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testSimpleOpenCloseWithMarginAutoAndBorders() : void
+    public function testSimpleOpenCloseWithMarginAutoAndBorders(): void
     {
         $this->terminal->expects($this->once())
             ->method('read')
@@ -148,7 +149,7 @@ class CliMenuTest extends TestCase
         self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testSimpleOpenCloseWithPaddingTopAndBottom() : void
+    public function testSimpleOpenCloseWithPaddingTopAndBottom(): void
     {
         $this->terminal->expects($this->once())
             ->method('read')
@@ -167,7 +168,7 @@ class CliMenuTest extends TestCase
         self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testSimpleOpenCloseWithPaddingLeftAndRight() : void
+    public function testSimpleOpenCloseWithPaddingLeftAndRight(): void
     {
         $this->terminal->expects($this->once())
             ->method('read')
@@ -186,7 +187,7 @@ class CliMenuTest extends TestCase
         self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testSimpleOpenCloseWithDifferentXAndYPadding() : void
+    public function testSimpleOpenCloseWithDifferentXAndYPadding(): void
     {
         $this->terminal->expects($this->once())
             ->method('read')
@@ -206,7 +207,7 @@ class CliMenuTest extends TestCase
         self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testReDrawReDrawsImmediately() : void
+    public function testReDrawReDrawsImmediately(): void
     {
         $this->terminal->expects($this->once())
             ->method('read')
@@ -226,7 +227,7 @@ class CliMenuTest extends TestCase
         self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testRedrawClearsTerminalFirstIfOptionIsPassed() : void
+    public function testRedrawClearsTerminalFirstIfOptionIsPassed(): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->any())
@@ -278,13 +279,13 @@ class CliMenuTest extends TestCase
         static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testGetItems() : void
+    public function testGetItems(): void
     {
         $item1 = new LineBreakItem();
         $item2 = new LineBreakItem();
 
 
-        $style = $this->getStyle($terminal = new MockTerminal);
+        $style = $this->getStyle($terminal = new MockTerminal());
 
         $menu = new CliMenu(
             'PHP School FTW',
@@ -299,12 +300,12 @@ class CliMenuTest extends TestCase
         self::assertSame([$item1, $item2], $menu->getItems());
     }
 
-    public function testRemoveItem() : void
+    public function testRemoveItem(): void
     {
         $item1 = new LineBreakItem();
         $item2 = new LineBreakItem();
 
-        $style = $this->getStyle($terminal = new MockTerminal);
+        $style = $this->getStyle($terminal = new MockTerminal());
 
         $menu = new CliMenu(
             'PHP School FTW',
@@ -324,7 +325,7 @@ class CliMenuTest extends TestCase
         self::assertContains($item2, $menu->getItems());
     }
 
-    public function testRemoveItemThrowsExceptionWhenItemDoesntExistInMenu() : void
+    public function testRemoveItemThrowsExceptionWhenItemDoesntExistInMenu(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -335,21 +336,21 @@ class CliMenuTest extends TestCase
         $menu->removeItem($item1);
     }
 
-    public function testFlashThrowsExceptionIfParameterContainsNewline() : void
+    public function testFlashThrowsExceptionIfParameterContainsNewline(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $menu = new CliMenu('PHP School FTW', []);
         $menu->flash("Foo\nBar");
     }
 
-    public function testConfirmThrowsExceptionIfParameterContainsNewline() : void
+    public function testConfirmThrowsExceptionIfParameterContainsNewline(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $menu = new CliMenu('PHP School FTW', []);
         $menu->confirm("Foo\nBar");
     }
 
-    public function testThrowsExceptionIfTerminalIsNotValidTTY() : void
+    public function testThrowsExceptionIfTerminalIsNotValidTTY(): void
     {
         $this->expectException(\PhpSchool\CliMenu\Exception\InvalidTerminalException::class);
 
@@ -367,7 +368,7 @@ class CliMenuTest extends TestCase
         $menu->open();
     }
 
-    public function testOpenThrowsExceptionIfNoItemsInMenu() : void
+    public function testOpenThrowsExceptionIfNoItemsInMenu(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Menu must have at least 1 item before it can be opened');
@@ -375,13 +376,13 @@ class CliMenuTest extends TestCase
         (new CliMenu('PHP School FTW', [], $this->terminal))->open();
     }
 
-    public function testGetTerminal() : void
+    public function testGetTerminal(): void
     {
         $menu = new CliMenu('PHP School FTW', []);
         self::assertInstanceOf(UnixTerminal::class, $menu->getTerminal());
     }
 
-    public function testAddItem() : void
+    public function testAddItem(): void
     {
         $menu = new CliMenu('PHP School FTW', []);
 
@@ -396,7 +397,7 @@ class CliMenuTest extends TestCase
         $this->assertCount(1, $menu->getItems());
     }
 
-    public function testAddItems() : void
+    public function testAddItems(): void
     {
         $menu = new CliMenu('PHP School FTW', []);
 
@@ -415,7 +416,7 @@ class CliMenuTest extends TestCase
         $this->assertCount(2, $menu->getItems());
     }
 
-    public function testSetItems() : void
+    public function testSetItems(): void
     {
         $menu = new CliMenu('PHP School FTW', []);
 
@@ -447,7 +448,7 @@ class CliMenuTest extends TestCase
         $this->assertSame([$item3, $item4], $menu->getItems());
     }
 
-    public function testAskNumberThrowsExceptionIfMenuNotOpen() : void
+    public function testAskNumberThrowsExceptionIfMenuNotOpen(): void
     {
         $menu = new CliMenu('PHP School FTW', []);
 
@@ -456,7 +457,7 @@ class CliMenuTest extends TestCase
         $menu->askNumber();
     }
 
-    public function testAskNumberStyle() : void
+    public function testAskNumberStyle(): void
     {
         $terminal = $this->createMock(Terminal::class);
 
@@ -485,7 +486,7 @@ class CliMenuTest extends TestCase
         self::assertEquals('red', $number->getStyle()->getFg());
     }
 
-    public function testAskTextThrowsExceptionIfMenuNotOpen() : void
+    public function testAskTextThrowsExceptionIfMenuNotOpen(): void
     {
         $menu = new CliMenu('PHP School FTW', []);
 
@@ -494,7 +495,7 @@ class CliMenuTest extends TestCase
         $menu->askText();
     }
 
-    public function testAskTextStyle() : void
+    public function testAskTextStyle(): void
     {
         $terminal = $this->createMock(Terminal::class);
 
@@ -523,7 +524,7 @@ class CliMenuTest extends TestCase
         self::assertEquals('red', $text->getStyle()->getFg());
     }
 
-    public function testAskPasswordThrowsExceptionIfMenuNotOpen() : void
+    public function testAskPasswordThrowsExceptionIfMenuNotOpen(): void
     {
         $menu = new CliMenu('PHP School FTW', []);
 
@@ -532,7 +533,7 @@ class CliMenuTest extends TestCase
         $menu->askPassword();
     }
 
-    public function testAskPasswordStyle() : void
+    public function testAskPasswordStyle(): void
     {
         $terminal = $this->createMock(Terminal::class);
 
@@ -561,7 +562,7 @@ class CliMenuTest extends TestCase
         self::assertEquals('red', $password->getStyle()->getFg());
     }
 
-    public function testAddCustomControlMappingThrowsExceptionWhenOverwritingExistingDefaultControls() : void
+    public function testAddCustomControlMappingThrowsExceptionWhenOverwritingExistingDefaultControls(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot rebind this input');
@@ -571,7 +572,7 @@ class CliMenuTest extends TestCase
         });
     }
 
-    public function testAddCustomControlMappingThrowsExceptionWhenAttemptingToOverwriteAddedCustomControlMap() : void
+    public function testAddCustomControlMappingThrowsExceptionWhenAttemptingToOverwriteAddedCustomControlMap(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot rebind this input');
@@ -583,7 +584,7 @@ class CliMenuTest extends TestCase
         });
     }
 
-    public function testAddCustomControlMapping() : void
+    public function testAddCustomControlMapping(): void
     {
         $this->terminal->expects($this->once())
             ->method('read')
@@ -604,7 +605,7 @@ class CliMenuTest extends TestCase
     }
 
 
-    public function testAddCustomControlMappingWithControlChar() : void
+    public function testAddCustomControlMappingWithControlChar(): void
     {
         $this->terminal->expects($this->once())
             ->method('read')
@@ -624,7 +625,7 @@ class CliMenuTest extends TestCase
         self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testAddCustomControlMappingsThrowsExceptionWhenOverwritingExistingDefaultControls() : void
+    public function testAddCustomControlMappingsThrowsExceptionWhenOverwritingExistingDefaultControls(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot rebind this input');
@@ -636,7 +637,7 @@ class CliMenuTest extends TestCase
         ]);
     }
 
-    public function testAddCustomControlMappingsThrowsExceptionWhenAttemptingToOverwriteAddedCustomControlMap() : void
+    public function testAddCustomControlMappingsThrowsExceptionWhenAttemptingToOverwriteAddedCustomControlMap(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot rebind this input');
@@ -652,7 +653,7 @@ class CliMenuTest extends TestCase
         ]);
     }
 
-    public function testAddCustomControlMappings() : void
+    public function testAddCustomControlMappings(): void
     {
         $this->terminal->expects($this->any())
             ->method('read')
@@ -678,7 +679,7 @@ class CliMenuTest extends TestCase
         self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testRemoveCustomControlMappingThrowsExceptionIfNoSuchMappingExists() : void
+    public function testRemoveCustomControlMappingThrowsExceptionIfNoSuchMappingExists(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('This input is not registered');
@@ -687,7 +688,7 @@ class CliMenuTest extends TestCase
         $menu->removeCustomControlMapping('c');
     }
 
-    public function testRemoveCustomControlMapping() : void
+    public function testRemoveCustomControlMapping(): void
     {
         $action = function (CliMenu $menu) {
             $menu->close();
@@ -701,7 +702,7 @@ class CliMenuTest extends TestCase
         self::assertSame([], $menu->getCustomControlMappings());
     }
 
-    public function testSplitItemWithNoSelectableItemsScrollingVertically() : void
+    public function testSplitItemWithNoSelectableItemsScrollingVertically(): void
     {
         $this->terminal->expects($this->exactly(3))
             ->method('read')
@@ -721,7 +722,7 @@ class CliMenuTest extends TestCase
         self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testSplitItemWithSelectableItemsScrollingVertical() : void
+    public function testSplitItemWithSelectableItemsScrollingVertical(): void
     {
         $this->terminal->expects($this->exactly(4))
             ->method('read')
@@ -748,7 +749,7 @@ class CliMenuTest extends TestCase
         self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testSplitItemWithSelectableItemsScrollingRight() : void
+    public function testSplitItemWithSelectableItemsScrollingRight(): void
     {
         $this->terminal->expects($this->exactly(6))
             ->method('read')
@@ -775,7 +776,7 @@ class CliMenuTest extends TestCase
         self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testSplitItemWithSelectableItemsScrollingLeft() : void
+    public function testSplitItemWithSelectableItemsScrollingLeft(): void
     {
         $this->terminal->expects($this->exactly(6))
             ->method('read')
@@ -806,7 +807,7 @@ class CliMenuTest extends TestCase
         self::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testSplitItemWithSelectableAndStaticItemsScrollingHorizontally() : void
+    public function testSplitItemWithSelectableAndStaticItemsScrollingHorizontally(): void
     {
         $this->terminal->expects($this->exactly(6))
             ->method('read')
@@ -838,7 +839,7 @@ class CliMenuTest extends TestCase
     }
 
 
-    public function testSelectableCallableReceivesSelectableAndNotSplitItem() : void
+    public function testSelectableCallableReceivesSelectableAndNotSplitItem(): void
     {
         $this->terminal->expects($this->exactly(1))
             ->method('read')
@@ -866,7 +867,7 @@ class CliMenuTest extends TestCase
         self::assertSame($expectedSelectedItem, $actualSelectedItem);
     }
 
-    public function testAddItemSelectsFirstSelectableItemWhenItemsExistButNoneAreSelectable() : void
+    public function testAddItemSelectsFirstSelectableItemWhenItemsExistButNoneAreSelectable(): void
     {
         $menu = new CliMenu('PHP School FTW', [], $this->terminal);
         $menu->addItem(new StaticItem('No Selectable'));
@@ -883,7 +884,7 @@ class CliMenuTest extends TestCase
         self::assertEquals($item, $menu->getSelectedItem());
     }
 
-    public function testAddItemsSelectsFirstSelectableItemWhenItemsExistButNoneAreSelectable() : void
+    public function testAddItemsSelectsFirstSelectableItemWhenItemsExistButNoneAreSelectable(): void
     {
         $menu = new CliMenu('PHP School FTW', [], $this->terminal);
         $menu->addItem(new StaticItem('No Selectable'));
@@ -900,7 +901,7 @@ class CliMenuTest extends TestCase
         self::assertEquals($item, $menu->getSelectedItem());
     }
 
-    public function testSetItemsReSelectsFirstSelectableItem() : void
+    public function testSetItemsReSelectsFirstSelectableItem(): void
     {
         $menu = new CliMenu('PHP School FTW', [], $this->terminal);
         $menu->addItem(new StaticItem('No Selectable'));
@@ -915,7 +916,7 @@ class CliMenuTest extends TestCase
         self::assertEquals($item2, $menu->getSelectedItem());
     }
 
-    public function testRemoveItemReSelectsFirstSelectableItemIfSelectedItemRemoved() : void
+    public function testRemoveItemReSelectsFirstSelectableItemIfSelectedItemRemoved(): void
     {
         $menu = new CliMenu('PHP School FTW', [], $this->terminal);
         $menu->addItem(new StaticItem('No Selectable'));
@@ -946,7 +947,7 @@ class CliMenuTest extends TestCase
         self::assertEquals($item2, $menu->getSelectedItem());
     }
 
-    public function testGetSelectedItemThrowsExceptionIfNoSelectedItem() : void
+    public function testGetSelectedItemThrowsExceptionIfNoSelectedItem(): void
     {
         self::expectException(\RuntimeException::class);
         self::expectExceptionMessage('No selected item');
@@ -956,7 +957,7 @@ class CliMenuTest extends TestCase
         $menu->getSelectedItem();
     }
 
-    public function testMenuCanOpenAndFunctionWithoutAnySelectableItems() : void
+    public function testMenuCanOpenAndFunctionWithoutAnySelectableItems(): void
     {
         $this->terminal->expects($this->exactly(3))
             ->method('read')
@@ -970,7 +971,7 @@ class CliMenuTest extends TestCase
         self::assertCount(1, $menu->getItems());
     }
 
-    public function testSetSelectedItemThrowsExceptionIfItemDoesNotExistInMenu() : void
+    public function testSetSelectedItemThrowsExceptionIfItemDoesNotExistInMenu(): void
     {
         $menu = new CliMenu('PHP School FTW', [], $this->terminal);
         $menu->addItem($item1 = new SelectableItem('Selectable 1', function () {
@@ -986,7 +987,7 @@ class CliMenuTest extends TestCase
         $menu->setSelectedItem($item3);
     }
 
-    public function testSetSelectedItem() : void
+    public function testSetSelectedItem(): void
     {
         $menu = new CliMenu('PHP School FTW', [], $this->terminal);
         $menu->addItem($item1 = new SelectableItem('Selectable 1', function () {
@@ -999,7 +1000,7 @@ class CliMenuTest extends TestCase
         self::assertSame($item2, $menu->getSelectedItem());
     }
 
-    public function testGetSelectedItemIndexThrowsExceptionIfNoItemSelected() : void
+    public function testGetSelectedItemIndexThrowsExceptionIfNoItemSelected(): void
     {
         $menu = new CliMenu('PHP School FTW', [], $this->terminal);
 
@@ -1007,7 +1008,7 @@ class CliMenuTest extends TestCase
         $menu->getSelectedItemIndex();
     }
 
-    public function testGetSelectedItemIndex() : void
+    public function testGetSelectedItemIndex(): void
     {
         $menu = new CliMenu('PHP School FTW', [], $this->terminal);
         $menu->addItem($item1 = new SelectableItem('Selectable 1', function () {
@@ -1020,7 +1021,7 @@ class CliMenuTest extends TestCase
         self::assertSame(1, $menu->getSelectedItemIndex());
     }
 
-    public function testGetItemByIndexThrowsExceptionIfItemDoesNotExistInMenu() : void
+    public function testGetItemByIndexThrowsExceptionIfItemDoesNotExistInMenu(): void
     {
         $menu = new CliMenu('PHP School FTW', [], $this->terminal);
 
@@ -1028,7 +1029,7 @@ class CliMenuTest extends TestCase
         $menu->getItemByIndex(3);
     }
 
-    public function testGetItemByIndex() : void
+    public function testGetItemByIndex(): void
     {
         $menu = new CliMenu('PHP School FTW', [], $this->terminal);
 
@@ -1042,12 +1043,12 @@ class CliMenuTest extends TestCase
         self::assertSame($item2, $menu->getItemByIndex(1));
     }
 
-    private function getTestFile() : string
+    private function getTestFile(): string
     {
         return sprintf('%s/res/%s.txt', __DIR__, $this->name());
     }
 
-    private function getStyle(Terminal $terminal) : MenuStyle
+    private function getStyle(Terminal $terminal): MenuStyle
     {
         return new MenuStyle($terminal);
     }

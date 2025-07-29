@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Util;
@@ -9,9 +10,9 @@ use PhpSchool\Terminal\Terminal;
 class ColourUtil
 {
     /**
-     * @var array
+     * @var list<string>
      */
-    private static $defaultColoursNames = [
+    private static array $defaultColoursNames = [
         'black',
         'red',
         'green',
@@ -24,9 +25,9 @@ class ColourUtil
     ];
 
     /**
-     * @var array
+     * @var array<int, string>
      */
-    private static $coloursMap = [
+    private static array $coloursMap = [
         0 => 'black',
         1 => 'red',
         2 => 'green',
@@ -285,7 +286,10 @@ class ColourUtil
         255 => 'white',
     ];
 
-    public static function getDefaultColourNames() : array
+    /**
+     * @return list<string>
+     */
+    public static function getDefaultColourNames(): array
     {
         return self::$defaultColoursNames;
     }
@@ -294,7 +298,7 @@ class ColourUtil
      * Simple function to transform a 8-bit (256 colours) colour code
      * to one of the default 8 colors available in the terminal
      */
-    public static function map256To8(int $colourCode) : string
+    public static function map256To8(int $colourCode): string
     {
         if (!isset(self::$coloursMap[$colourCode])) {
             throw new \InvalidArgumentException('Invalid colour code');
@@ -307,14 +311,14 @@ class ColourUtil
      * Check if $colour exists
      * If it's a 256-colours code and $terminal doesn't support it, returns a fallback value
      */
-    public static function validateColour(Terminal $terminal, string $colour, ?string $fallback = null) : string
+    public static function validateColour(Terminal $terminal, string $colour, ?string $fallback = null): string
     {
         if (!is_numeric($colour)) {
             return self::validateColourName($colour);
         }
-        
+
         Assertion::between($colour, 0, 255, 'Invalid colour code');
-        
+
         if ($terminal->getColourSupport() >= 256) {
             return $colour;
         }
@@ -322,11 +326,11 @@ class ColourUtil
         if ($fallback !== null) {
             return self::validateColourName($fallback);
         }
-        
+
         return static::map256To8((int) $colour);
     }
-    
-    private static function validateColourName(string $colourName) : string
+
+    private static function validateColourName(string $colourName): string
     {
         Assertion::inArray($colourName, static::getDefaultColourNames());
         return $colourName;

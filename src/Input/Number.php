@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Input;
@@ -11,35 +12,17 @@ use PhpSchool\Terminal\InputCharacter;
  */
 class Number implements Input
 {
-    /**
-     * @var InputIO
-     */
-    private $inputIO;
+    private InputIO $inputIO;
 
-    /**
-     * @var string
-     */
-    private $promptText = 'Enter a number:';
+    private string $promptText = 'Enter a number:';
 
-    /**
-     * @var string
-     */
-    private $validationFailedText = 'Not a valid number, try again';
+    private string $validationFailedText = 'Not a valid number, try again';
 
-    /**
-     * @var string
-     */
-    private $placeholderText = '';
+    private string $placeholderText = '';
 
-    /**
-     * @var null|callable
-     */
-    private $validator;
+    private \Closure|null $validator = null;
 
-    /**
-     * @var MenuStyle
-     */
-    private $style;
+    private MenuStyle $style;
 
     public function __construct(InputIO $inputIO, MenuStyle $style)
     {
@@ -47,50 +30,54 @@ class Number implements Input
         $this->style = $style;
     }
 
-    public function setPromptText(string $promptText) : Input
+    public function setPromptText(string $promptText): Input
     {
         $this->promptText = $promptText;
 
         return $this;
     }
 
-    public function getPromptText() : string
+    public function getPromptText(): string
     {
         return $this->promptText;
     }
 
-    public function setValidationFailedText(string $validationFailedText) : Input
+    public function setValidationFailedText(string $validationFailedText): Input
     {
         $this->validationFailedText = $validationFailedText;
 
         return $this;
     }
 
-    public function getValidationFailedText() : string
+    public function getValidationFailedText(): string
     {
         return $this->validationFailedText;
     }
 
-    public function setPlaceholderText(string $placeholderText) : Input
+    public function setPlaceholderText(string $placeholderText): Input
     {
         $this->placeholderText = $placeholderText;
 
         return $this;
     }
 
-    public function getPlaceholderText() : string
+    public function getPlaceholderText(): string
     {
         return $this->placeholderText;
     }
 
-    public function setValidator(callable $validator) : Input
+    public function setValidator(callable $validator): Input
     {
-        $this->validator = $validator;
-        
+        if ($validator instanceof \Closure) {
+            $validator = $validator->bindTo($this);
+        }
+
+        $this->validator = $validator(...);
+
         return $this;
     }
 
-    public function ask() : InputResult
+    public function ask(): InputResult
     {
         $this->inputIO->registerControlCallback(InputCharacter::UP, function (string $input) {
             return $this->validate($input) ? (string) ((int) $input + 1) : $input;
@@ -103,27 +90,23 @@ class Number implements Input
         return $this->inputIO->collect($this);
     }
 
-    public function validate(string $input) : bool
+    public function validate(string $input): bool
     {
         if ($this->validator) {
             $validator = $this->validator;
-            
-            if ($validator instanceof \Closure) {
-                $validator = $validator->bindTo($this);
-            }
-            
+
             return $validator($input);
         }
 
         return (bool) preg_match('/^-?\d+$/', $input);
     }
 
-    public function filter(string $value) : string
+    public function filter(string $value): string
     {
         return $value;
     }
 
-    public function getStyle() : MenuStyle
+    public function getStyle(): MenuStyle
     {
         return $this->style;
     }

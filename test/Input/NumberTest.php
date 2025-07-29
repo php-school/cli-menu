@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Input;
@@ -31,7 +32,7 @@ class NumberTest extends TestCase
      */
     private $input;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->terminal = $this->createMock(Terminal::class);
         $menu           = $this->createMock(CliMenu::class);
@@ -41,7 +42,7 @@ class NumberTest extends TestCase
         $this->input    = new Number($this->inputIO, $style);
     }
 
-    public function testGetSetPromptText() : void
+    public function testGetSetPromptText(): void
     {
         static::assertEquals('Enter a number:', $this->input->getPromptText());
 
@@ -49,7 +50,7 @@ class NumberTest extends TestCase
         static::assertEquals('Number please:', $this->input->getPromptText());
     }
 
-    public function testGetSetValidationFailedText() : void
+    public function testGetSetValidationFailedText(): void
     {
         static::assertEquals('Not a valid number, try again', $this->input->getValidationFailedText());
 
@@ -57,7 +58,7 @@ class NumberTest extends TestCase
         static::assertEquals('Failed!', $this->input->getValidationFailedText());
     }
 
-    public function testGetSetPlaceholderText() : void
+    public function testGetSetPlaceholderText(): void
     {
         static::assertEquals('', $this->input->getPlaceholderText());
 
@@ -66,12 +67,12 @@ class NumberTest extends TestCase
     }
 
     #[DataProvider('validateProvider')]
-    public function testValidate(string $value, bool $result) : void
+    public function testValidate(string $value, bool $result): void
     {
         static::assertEquals($this->input->validate($value), $result);
     }
 
-    public static function validateProvider() : array
+    public static function validateProvider(): array
     {
         return [
             ['10', true],
@@ -88,12 +89,12 @@ class NumberTest extends TestCase
         ];
     }
 
-    public function testFilterReturnsInputAsIs() : void
+    public function testFilterReturnsInputAsIs(): void
     {
         static::assertEquals('9999', $this->input->filter('9999'));
     }
 
-    public function testUpKeyIncrementsNumber() : void
+    public function testUpKeyIncrementsNumber(): void
     {
         $this->terminal
             ->expects($this->exactly(4))
@@ -103,7 +104,7 @@ class NumberTest extends TestCase
         self::assertEquals(11, $this->input->ask()->fetch());
     }
 
-    public function testDownKeyDecrementsNumber() : void
+    public function testDownKeyDecrementsNumber(): void
     {
         $this->terminal
             ->expects($this->exactly(4))

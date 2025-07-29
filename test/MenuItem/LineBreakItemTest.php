@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\MenuItem;
@@ -12,31 +13,31 @@ use PHPUnit\Framework\TestCase;
  */
 class LineBreakItemTest extends TestCase
 {
-    public function testCanSelectIsFalse() : void
+    public function testCanSelectIsFalse(): void
     {
         $item = new LineBreakItem('*');
         $this->assertFalse($item->canSelect());
     }
 
-    public function testGetSelectActionReturnsNull() : void
+    public function testGetSelectActionReturnsNull(): void
     {
         $item = new LineBreakItem('*');
         $this->assertNull($item->getSelectAction());
     }
 
-    public function testShowsItemExtraReturnsFalse() : void
+    public function testShowsItemExtraReturnsFalse(): void
     {
         $item = new LineBreakItem('*');
         $this->assertFalse($item->showsItemExtra());
     }
 
-    public function testGetText() : void
+    public function testGetText(): void
     {
         $item = new LineBreakItem('*');
         $this->assertEquals('*', $item->getText());
     }
 
-    public function testGetRowsRepeatsCharForMenuWidth() : void
+    public function testGetRowsRepeatsCharForMenuWidth(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -49,7 +50,7 @@ class LineBreakItemTest extends TestCase
         $this->assertEquals(['**********'], $item->getRows($menuStyle));
     }
 
-    public function testGetRowsRepeatsCharForMenuWidthMultiLines() : void
+    public function testGetRowsRepeatsCharForMenuWidthMultiLines(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -62,7 +63,7 @@ class LineBreakItemTest extends TestCase
         $this->assertEquals(['**********', '**********', '**********'], $item->getRows($menuStyle));
     }
 
-    public function testGetRowsWithPhraseThatDoesNotFitInWidthEvenlyIsTrimmed() : void
+    public function testGetRowsWithPhraseThatDoesNotFitInWidthEvenlyIsTrimmed(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -70,7 +71,7 @@ class LineBreakItemTest extends TestCase
             ->expects($this->any())
             ->method('getContentWidth')
             ->willReturn(5);
-        
+
         //ABC should be repeated but ABCABC is 6 and the allowed length is 5
         //so ABCABC is trimmed to ABCAB
 
@@ -78,7 +79,7 @@ class LineBreakItemTest extends TestCase
         $this->assertEquals(['ABCAB', 'ABCAB', 'ABCAB'], $item->getRows($menuStyle));
     }
 
-    public function testGetRowsWithMultiByteChars() : void
+    public function testGetRowsWithMultiByteChars(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -91,7 +92,7 @@ class LineBreakItemTest extends TestCase
         $this->assertEquals(['❅❅❅❅❅', '❅❅❅❅❅'], $item->getRows($menuStyle));
     }
 
-    public function testSetText() : void
+    public function testSetText(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -105,7 +106,7 @@ class LineBreakItemTest extends TestCase
         $this->assertEquals(['❅-❅-❅', '❅-❅-❅'], $item->getRows($menuStyle));
     }
 
-    public function testHideAndShowItemExtraHasNoEffect() : void
+    public function testHideAndShowItemExtraHasNoEffect(): void
     {
         $item = new LineBreakItem('*');
 

@@ -8,22 +8,22 @@ use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 
 class DefaultStyle implements ItemStyle
 {
-    public function hasChangedFromDefaults() : bool
+    public function hasChangedFromDefaults(): bool
     {
         return true;
     }
 
-    public function getDisplaysExtra() : bool
+    public function getDisplaysExtra(): bool
     {
         return false;
     }
 
-    public function getItemExtra() : string
+    public function getItemExtra(): string
     {
         return '';
     }
 
-    public function getMarker(MenuItemInterface $item, bool $isSelected) : string
+    public function getMarker(MenuItemInterface $item, bool $isSelected): string
     {
         return '';
     }

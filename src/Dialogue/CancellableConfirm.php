@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Dialogue;
@@ -11,15 +12,12 @@ use PhpSchool\Terminal\NonCanonicalReader;
  */
 class CancellableConfirm extends Dialogue
 {
-    /**
-     * @var bool
-     */
-    private $confirm = true;
+    private bool $confirm = true;
 
     /**
      * Display confirmation with a button with the given text
      */
-    public function display(string $confirmText = 'OK', string $cancelText = 'Cancel') : bool
+    public function display(string $confirmText = 'OK', string $cancelText = 'Cancel'): bool
     {
         $this->drawDialog($confirmText, $cancelText);
 

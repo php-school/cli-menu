@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Dialogue;
@@ -14,7 +15,7 @@ class Flash extends Dialogue
      * Flash a message on top of the menu which
      * disappears on any keystroke.
      */
-    public function display() : void
+    public function display(): void
     {
         $this->assertMenuOpen();
 

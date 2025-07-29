@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class CannotShrinkMenuExceptionTest extends TestCase
 {
-    public function testException() : void
+    public function testException(): void
     {
         $e = CannotShrinkMenuException::fromMarginAndTerminalWidth(10, 15);
         $this->assertEquals(

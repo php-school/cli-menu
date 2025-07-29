@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Input;
@@ -8,17 +9,14 @@ namespace PhpSchool\CliMenu\Input;
  */
 class InputResult
 {
-    /**
-     * @var string
-     */
-    private $input;
+    private string $input;
 
     public function __construct(string $input)
     {
         $this->input = $input;
     }
 
-    public function fetch() : string
+    public function fetch(): string
     {
         return $this->input;
     }
