@@ -17,20 +17,11 @@ use Assert\Assertion;
  */
 class MenuStyle
 {
-    /**
-     * @var Terminal
-     */
-    protected $terminal;
+    protected Terminal $terminal;
 
-    /**
-     * @var string
-     */
-    protected $fg;
+    protected string $fg;
 
-    /**
-     * @var string
-     */
-    protected $bg;
+    protected string $bg;
 
     /**
      * The width of the menu. Including borders and padding.
@@ -40,129 +31,88 @@ class MenuStyle
      * circumstance that the terminal is smaller then the
      * requested width.
      *
-     * @var int
      */
-    protected $width;
+    protected int $width;
 
     /**
      * In case the requested width is wider than the terminal
      * then we shrink the width to fit the terminal. We keep
      * the requested size in case the margins are changed and
      * we need to recalculate the width.
-     *
-     * @var int
      */
-    private $requestedWidth;
+    private int $requestedWidth;
+
+    protected int $margin = 0;
+
+    protected int $paddingTopBottom = 0;
+
+    protected int $paddingLeftRight = 0;
 
     /**
-     * @var int
+     * @var list<string>
      */
-    protected $margin = 0;
+    private array $paddingTopBottomRows = [];
+
+    protected int $contentWidth;
+
+    private string $itemExtra;
+
+    private bool $displaysExtra;
+
+    private string $titleSeparator;
+
+    private string $coloursSetCode;
+
+    private string $invertedColoursSetCode = "\033[7m";
+
+    private string $invertedColoursUnsetCode = "\033[27m";
+
+    private string $coloursResetCode = "\033[0m";
+
+    private int $borderTopWidth = 0;
+
+    private int $borderRightWidth = 0;
+
+    private int $borderBottomWidth = 0;
+
+    private int $borderLeftWidth = 0;
+
+    private string $borderColour = 'white';
 
     /**
-     * @var int
+     * @var list<string>
      */
-    protected $paddingTopBottom = 0;
+    private array $borderTopRows = [];
 
     /**
-     * @var int
+     * @var list<string>
      */
-    protected $paddingLeftRight = 0;
+    private array $borderBottomRows = [];
 
-    /**
-     * @var array
-     */
-    private $paddingTopBottomRows = [];
+    private bool $marginAuto = false;
 
-    /**
-     * @var int
-     */
-    protected $contentWidth;
-
-    /**
-     * @var string
-     */
-    private $itemExtra;
-
-    /**
-     * @var bool
-     */
-    private $displaysExtra;
-
-    /**
-     * @var string
-     */
-    private $titleSeparator;
-
-    /**
-     * @var string
-     */
-    private $coloursSetCode;
-
-    /**
-     * @var string
-     */
-    private $invertedColoursSetCode = "\033[7m";
-
-    /**
-     * @var string
-     */
-    private $invertedColoursUnsetCode = "\033[27m";
-
-    /**
-     * @var string
-     */
-    private $coloursResetCode = "\033[0m";
-
-    /**
-     * @var int
-     */
-    private $borderTopWidth = 0;
-
-    /**
-     * @var int
-     */
-    private $borderRightWidth = 0;
-
-    /**
-     * @var int
-     */
-    private $borderBottomWidth = 0;
-
-    /**
-     * @var int
-     */
-    private $borderLeftWidth = 0;
-
-    /**
-     * @var string
-     */
-    private $borderColour = 'white';
-
-    /**
-     * @var array
-     */
-    private $borderTopRows = [];
-
-    /**
-     * @var array
-     */
-    private $borderBottomRows = [];
-
-    /**
-     * @var bool
-     */
-    private $marginAuto = false;
-
-    /**
-     * @var bool
-     */
-    private $debugMode = false;
+    private bool $debugMode = false;
 
     /**
      * Default Values
      *
-     * @var array
+     * @var array{
+     *     fg: string,
+     *     bg: string,
+     *     width: int,
+     *     paddingTopBottom: int,
+     *     paddingLeftRight: int,
+     *     margin: int,
+     *     itemExtra: string,
+     *     displaysExtra: bool,
+     *     titleSeparator: string,
+     *     borderTopWidth: int,
+     *     borderRightWidth: int,
+     *     borderBottomWidth: int,
+     *     borderLeftWidth: int,
+     *     borderColour: string,
+     *     marginAuto: bool
+     * }
      */
     private static $defaultStyleValues = [
         'fg' => 'white',
@@ -183,7 +133,7 @@ class MenuStyle
     ];
 
     /**
-     * @var array
+     * @var array<string, int>
      */
     private static $availableForegroundColors = [
         'black'   => 30,
@@ -198,7 +148,7 @@ class MenuStyle
     ];
 
     /**
-     * @var array
+     * @var array<string, int>
      */
     private static $availableBackgroundColors = [
         'black'   => 40,
@@ -213,7 +163,7 @@ class MenuStyle
     ];
 
     /**
-     * @var array
+     * @var array<string, array{set: int, unset: int}>
      */
     private static $availableOptions = [
         'bold'       => ['set' => 1, 'unset' => 22],
@@ -515,7 +465,7 @@ class MenuStyle
     }
 
     /**
-     * @return array
+     * @return list<string>
      */
     public function getPaddingTopBottomRows() : array
     {
@@ -673,7 +623,7 @@ class MenuStyle
     }
 
     /**
-     * @return array
+     * @return list<string>
      */
     public function getBorderTopRows() : array
     {
@@ -681,7 +631,7 @@ class MenuStyle
     }
 
     /**
-     * @return array
+     * @return list<string>
      */
     public function getBorderBottomRows() : array
     {

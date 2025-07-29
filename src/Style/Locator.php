@@ -19,7 +19,7 @@ use function PhpSchool\CliMenu\Util\mapWithKeys;
 class Locator
 {
     /**
-     * @var array
+     * @var array<class-string, class-string>
      */
     private $itemStyleMap = [
         StaticItem::class => DefaultStyle::class,
@@ -33,7 +33,7 @@ class Locator
     ];
 
     /**
-     * @var array
+     * @var array<class-string, ItemStyle>
      */
     private $styles;
 
@@ -74,6 +74,9 @@ class Locator
         return $this->styles[$styleClass];
     }
 
+    /**
+     * @param class-string $styleClass
+     */
     public function setStyle(ItemStyle $itemStyle, string $styleClass) : void
     {
         if (!isset($this->styles[$styleClass])) {
@@ -103,6 +106,9 @@ class Locator
         return $this->getStyle($styleClass);
     }
 
+    /**
+     * @param class-string $itemClass
+     */
     public function registerItemStyle(string $itemClass, ItemStyle $itemStyle) : void
     {
         if (isset($this->itemStyleMap[$itemClass])) {

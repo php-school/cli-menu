@@ -32,66 +32,38 @@ use function PhpSchool\CliMenu\Util\each;
  */
 class CliMenuBuilder
 {
-    /**
-     * @var CliMenu
-     */
-    private $menu;
+    private CliMenu $menu;
 
-    /**
-     * @var string
-     */
-    private $goBackButtonText = 'Go Back';
+    private string $goBackButtonText = 'Go Back';
 
-    /**
-     * @var string
-     */
-    private $exitButtonText = 'Exit';
+    private string $exitButtonText = 'Exit';
 
-    /**
-     * @var MenuStyle
-     */
-    private $style;
+    private MenuStyle $style;
 
-    /**
-     * @var Terminal
-     */
-    private $terminal;
+    private Terminal $terminal;
 
-    /**
-     * @var bool
-     */
-    private $disableDefaultItems = false;
+    private bool $disableDefaultItems = false;
 
-    /**
-     * @var bool
-     */
-    private $disabled = false;
+    private bool $disabled = false;
 
     /**
      * Whether or not to auto create keyboard shortcuts for items
      * when they contain square brackets. Eg: [M]y item
-     *
-     * @var bool
      */
-    private $autoShortcuts = false;
+    private bool $autoShortcuts = false;
 
     /**
      * Regex to auto match for shortcuts defaults to looking
      * for a single character encased in square brackets
-     *
-     * @var string
      */
-    private $autoShortcutsRegex = '/\[(.)\]/';
+    private string $autoShortcutsRegex = '/\[(.)\]/';
 
     /**
-     * @var array
+     * @var list<array{class: class-string<MenuItemInterface>, style: ItemStyle}>
      */
-    private $extraItemStyles = [];
+    private array $extraItemStyles = [];
 
-    /**
-     * @var bool
-     */
-    private $subMenu = false;
+    private bool $subMenu = false;
 
     public function __construct(?Terminal $terminal = null)
     {
@@ -135,6 +107,9 @@ class CliMenuBuilder
         return $this;
     }
 
+    /**
+     * @param list<array{0: string, 1: callable}> $items
+     */
     public function addItems(array $items) : self
     {
         foreach ($items as $item) {
@@ -155,6 +130,9 @@ class CliMenuBuilder
         return $this;
     }
 
+    /**
+     * @param list<array{0: string, 1: callable}> $items
+     */
     public function addCheckboxItems(array $items): self
     {
         foreach ($items as $item) {
@@ -175,6 +153,9 @@ class CliMenuBuilder
         return $this;
     }
 
+    /**
+     * @param list<array{0: string, 1: callable}> $items
+     */
     public function addRadioItems(array $items): self
     {
         foreach ($items as $item) {
@@ -504,6 +485,9 @@ class CliMenuBuilder
         return $this->terminal;
     }
 
+    /**
+     * @return list<MenuItemInterface>
+     */
     private function getDefaultItems() : array
     {
         $actions = [];
@@ -532,6 +516,9 @@ class CliMenuBuilder
         return $this;
     }
 
+    /**
+     * @param array<MenuItemInterface> $items
+     */
     private function itemsHaveExtra(array $items) : bool
     {
         return !empty(array_filter($items, function (MenuItemInterface $item) {
@@ -647,6 +634,9 @@ class CliMenuBuilder
         return $this;
     }
 
+    /**
+     * @param class-string<MenuItemInterface> $itemClass
+     */
     public function registerItemStyle(string $itemClass, ItemStyle $itemStyle) : self
     {
         $this->menu->getStyleLocator()

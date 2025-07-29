@@ -9,7 +9,7 @@ use PhpSchool\Terminal\Terminal;
 class ColourUtil
 {
     /**
-     * @var array
+     * @var list<string>
      */
     private static $defaultColoursNames = [
         'black',
@@ -24,7 +24,7 @@ class ColourUtil
     ];
 
     /**
-     * @var array
+     * @var array<int, string>
      */
     private static $coloursMap = [
         0 => 'black',
@@ -285,6 +285,9 @@ class ColourUtil
         255 => 'white',
     ];
 
+    /**
+     * @return list<string>
+     */
     public static function getDefaultColourNames() : array
     {
         return self::$defaultColoursNames;

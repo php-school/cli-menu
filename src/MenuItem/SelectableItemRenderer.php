@@ -11,13 +11,16 @@ use function PhpSchool\CliMenu\Util\mapWithKeys;
 
 class SelectableItemRenderer
 {
+    /**
+     * @return list<string>
+     */
     public function render(MenuStyle $menuStyle, MenuItemInterface $item, bool $selected, bool $disabled) : array
     {
         $itemStyle = $item->getStyle();
         $marker = $itemStyle->getMarker($item, $selected);
         $availableTextWidth = $this->getAvailableTextWidth($menuStyle, $itemStyle);
 
-        return mapWithKeys(
+        return array_values(mapWithKeys(
             $this->wrapAndIndentText($marker, $item->getText(), $availableTextWidth),
             function (int $key, string $row) use ($menuStyle, $item, $availableTextWidth, $disabled) {
                 $text = $disabled ? $menuStyle->getDisabledItemText($row) : $row;
@@ -26,9 +29,12 @@ class SelectableItemRenderer
                     ? $this->lineWithExtra($text, $availableTextWidth, $item->getStyle())
                     : $text;
             }
-        );
+        ));
     }
 
+    /**
+     * @return list<string>
+     */
     public function wrapAndIndentText(string $marker, string $text, int $availableWidth) : array
     {
         return explode(

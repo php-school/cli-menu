@@ -12,9 +12,9 @@ namespace PhpSchool\CliMenu;
 class Frame implements \Countable
 {
     /**
-     * @var array
+     * @var list<string>
      */
-    private $rows = [];
+    private array $rows = [];
 
     public function newLine(int $count = 1) : void
     {
@@ -23,6 +23,9 @@ class Frame implements \Countable
         }
     }
 
+    /**
+     * @param list<string> $rows
+     */
     public function addRows(array $rows = []) : void
     {
         foreach ($rows as $row) {
@@ -40,6 +43,9 @@ class Frame implements \Countable
         return count($this->rows);
     }
 
+    /**
+     * @return list<string>
+     */
     public function getRows() : array
     {
         return $this->rows;

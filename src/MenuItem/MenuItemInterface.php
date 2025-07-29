@@ -13,6 +13,8 @@ interface MenuItemInterface
 {
     /**
      * The output text for the item
+     *
+     * @return list<string>
      */
     public function getRows(MenuStyle $style, bool $selected = false) : array;
 

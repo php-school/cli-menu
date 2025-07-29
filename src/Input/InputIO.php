@@ -14,20 +14,14 @@ use PhpSchool\Terminal\Terminal;
  */
 class InputIO
 {
-    /**
-     * @var CliMenu
-     */
-    private $parentMenu;
+    private CliMenu $parentMenu;
 
-    /**
-     * @var Terminal
-     */
-    private $terminal;
+    private Terminal $terminal;
 
     /**
      * @var callable[][]
      */
-    private $callbacks = [];
+    private array $callbacks = [];
 
     public function __construct(CliMenu $parentMenu, Terminal $terminal)
     {
@@ -102,6 +96,9 @@ class InputIO
         $this->callbacks[$control][] = $callback;
     }
 
+    /**
+     * @param non-empty-list<string> $lines
+     */
     private function getInputWidth(array $lines) : int
     {
         return max(

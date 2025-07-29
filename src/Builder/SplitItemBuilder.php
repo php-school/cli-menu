@@ -12,6 +12,7 @@ use PhpSchool\CliMenu\MenuItem\RadioItem;
 use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
+use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Style\ItemStyle;
 use function \PhpSchool\CliMenu\Util\each;
 
@@ -20,36 +21,26 @@ use function \PhpSchool\CliMenu\Util\each;
  */
 class SplitItemBuilder
 {
-    /**
-     * @var CliMenu
-     */
-    private $menu;
+    private CliMenu $menu;
+
+    private SplitItem $splitItem;
 
     /**
-     * @var SplitItem
-     */
-    private $splitItem;
-
-    /**
-     * Whether or not to auto create keyboard shortcuts for items
+     * Whether to auto create keyboard shortcuts for items
      * when they contain square brackets. Eg: [M]y item
-     *
-     * @var bool
      */
-    private $autoShortcuts = false;
+    private bool $autoShortcuts = false;
 
     /**
      * Regex to auto match for shortcuts defaults to looking
      * for a single character encased in square brackets
-     *
-     * @var string
      */
-    private $autoShortcutsRegex = '/\[(.)\]/';
+    private string $autoShortcutsRegex = '/\[(.)\]/';
 
     /**
-     * @var array
+     * @var list<array{class: class-string<MenuItemInterface>, style: ItemStyle}>
      */
-    private $extraItemStyles = [];
+    private array $extraItemStyles = [];
 
     public function __construct(CliMenu $menu)
     {
@@ -155,6 +146,9 @@ class SplitItemBuilder
         return $this;
     }
 
+    /**
+     * @param class-string<MenuItemInterface> $itemClass
+     */
     public function registerItemStyle(string $itemClass, ItemStyle $itemStyle) : self
     {
         $this->extraItemStyles[] = ['class' => $itemClass, 'style' => $itemStyle];

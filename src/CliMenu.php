@@ -32,50 +32,29 @@ use function PhpSchool\CliMenu\Util\each;
  */
 class CliMenu
 {
-    /**
-     * @var Terminal
-     */
-    protected $terminal;
+    protected Terminal $terminal;
+
+    protected MenuStyle $style;
+
+    private Locator $itemStyleLocator;
+
+    protected string|null $title;
 
     /**
-     * @var MenuStyle
+     * @var array<int, MenuItemInterface>
      */
-    protected $style;
+    protected array $items = [];
+
+    protected int|null $selectedItem = null;
+
+    protected bool $open = false;
+
+    protected CliMenu|null $parent;
 
     /**
-     * @var Locator
+     * @var array<string, InputCharacter::*>
      */
-    private $itemStyleLocator;
-
-    /**
-     * @var ?string
-     */
-    protected $title;
-
-    /**
-     * @var MenuItemInterface[]
-     */
-    protected $items = [];
-
-    /**
-     * @var int|null
-     */
-    protected $selectedItem;
-
-    /**
-     * @var bool
-     */
-    protected $open = false;
-
-    /**
-     * @var CliMenu|null
-     */
-    protected $parent;
-
-    /**
-     * @var array
-     */
-    protected $defaultControlMappings = [
+    protected array $defaultControlMappings = [
         '^P' => InputCharacter::UP,
         'k'  => InputCharacter::UP,
         '^K' => InputCharacter::DOWN,
@@ -87,15 +66,15 @@ class CliMenu
     ];
 
     /**
-     * @var array
+     * @var array<string, callable>
      */
-    protected $customControlMappings = [];
+    protected array $customControlMappings = [];
+
+    private Frame $currentFrame;
 
     /**
-     * @var Frame
+     * @param list<MenuItemInterface> $items
      */
-    private $currentFrame;
-
     public function __construct(
         ?string $title,
         array $items,
@@ -185,6 +164,8 @@ class CliMenu
 
     /**
      * Add multiple Items to the menu
+     *
+     * @param list<MenuItemInterface> $items
      */
     public function addItems(array $items) : void
     {
@@ -197,6 +178,8 @@ class CliMenu
 
     /**
      * Set Items of the menu
+     *
+     * @param list<MenuItemInterface> $items
      */
     public function setItems(array $items) : void
     {
@@ -231,6 +214,9 @@ class CliMenu
 
     /**
      * Set default control mappings
+     *
+     * @param array<string, InputCharacter::*> $defaultControlMappings
+     *
      */
     public function setDefaultControlMappings(array $defaultControlMappings) : void
     {
@@ -249,6 +235,9 @@ class CliMenu
         $this->customControlMappings[$input] = $callable;
     }
 
+    /**
+     * @return array<string, callable>
+     */
     public function getCustomControlMappings() : array
     {
         return $this->customControlMappings;
@@ -256,6 +245,8 @@ class CliMenu
 
     /**
      * Shorthand function to add multiple custom control mapping at once
+     *
+     * @param array<string, callable> $map
      */
     public function addCustomControlMappings(array $map) : void
     {
@@ -344,7 +335,7 @@ class CliMenu
                 ? $this->selectedItem--
                 : $this->selectedItem++;
 
-            if ($this->selectedItem !== null && !array_key_exists($this->selectedItem, $this->items)) {
+            if (!array_key_exists($this->selectedItem, $this->items)) {
                 $this->selectedItem  = $direction === 'UP'
                     ? (int) end($itemKeys)
                     : (int) reset($itemKeys);
@@ -544,6 +535,8 @@ class CliMenu
 
     /**
      * Draw a menu item
+     *
+     * @return list<string>
      */
     protected function drawMenuItem(MenuItemInterface $item, bool $selected = false) : array
     {
@@ -662,6 +655,9 @@ class CliMenu
         $this->style = $style;
     }
 
+    /**
+     * @param class-string $styleClass
+     */
     public function setItemStyle(ItemStyle $style, string $styleClass) : void
     {
         $this->itemStyleLocator->setStyle($style, $styleClass);
