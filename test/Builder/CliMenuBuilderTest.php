@@ -16,6 +16,7 @@ use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Style\DefaultStyle;
 use PhpSchool\Terminal\Terminal;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -60,7 +61,7 @@ class CliMenuBuilderTest extends TestCase
         $terminal
             ->expects($this->any())
             ->method('getWidth')
-            ->will($this->returnValue(200));
+            ->willReturn(200);
         
         $builder = new CliMenuBuilder($terminal);
         $builder->setBackgroundColour('red');
@@ -90,7 +91,7 @@ class CliMenuBuilderTest extends TestCase
         $terminal
             ->expects($this->any())
             ->method('getWidth')
-            ->will($this->returnValue(200));
+            ->willReturn(200);
 
         $style = (new CliMenuBuilder($terminal))
             ->setBorder(2)
@@ -641,7 +642,7 @@ class CliMenuBuilderTest extends TestCase
         $terminal
             ->expects($this->any())
             ->method('getWidth')
-            ->will($this->returnValue(200));
+            ->willReturn(200);
 
         $menu = (new CliMenuBuilder($terminal))
             ->setBackgroundColour('green')
@@ -671,7 +672,7 @@ class CliMenuBuilderTest extends TestCase
         $terminal
             ->expects($this->any())
             ->method('getWidth')
-            ->will($this->returnValue(200));
+            ->willReturn(200);
 
         $menu = (new CliMenuBuilder($terminal))
             ->setBackgroundColour('green')
@@ -704,7 +705,7 @@ class CliMenuBuilderTest extends TestCase
         $terminal
             ->expects($this->any())
             ->method('getWidth')
-            ->will($this->returnValue(200));
+            ->willReturn(200);
 
         $menu = (new CliMenuBuilder($terminal))
             ->setBackgroundColour('green')
@@ -809,9 +810,7 @@ class CliMenuBuilderTest extends TestCase
         (new CliMenuBuilder)->disableMenu();
     }
 
-    /**
-     * @dataProvider marginBelowZeroProvider
-     */
+    #[DataProvider('marginBelowZeroProvider')]
     public function testSetMarginThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
@@ -820,28 +819,26 @@ class CliMenuBuilderTest extends TestCase
         (new CliMenuBuilder)->setMargin($value)->build();
     }
 
-    public function marginBelowZeroProvider() : array
+    public static function marginBelowZeroProvider() : array
     {
         return [[-1], [-2], [-10]];
     }
 
-    /**
-     * @dataProvider marginAboveZeroProvider
-     */
+    #[DataProvider('marginAboveZeroProvider')]
     public function testSetMarginAcceptsZeroAndPositiveIntegers(int $value) : void
     {
         $terminal = self::createMock(Terminal::class);
         $terminal
             ->expects($this->any())
             ->method('getWidth')
-            ->will($this->returnValue(200));
+            ->willReturn(200);
 
         $menu = (new CliMenuBuilder($terminal))->setMargin($value)->build();
         
         self::assertSame($value, $menu->getStyle()->getMargin());
     }
 
-    public function marginAboveZeroProvider() : array
+    public static function marginAboveZeroProvider() : array
     {
         return [[0], [1], [10], [50]];
     }
@@ -852,7 +849,7 @@ class CliMenuBuilderTest extends TestCase
         $terminal
             ->expects($this->any())
             ->method('getWidth')
-            ->will($this->returnValue(200));
+            ->willReturn(200);
 
         $builder = new CliMenuBuilder($terminal);
         $menu = $builder
@@ -869,7 +866,7 @@ class CliMenuBuilderTest extends TestCase
         $terminal
             ->expects($this->any())
             ->method('getWidth')
-            ->will($this->returnValue(200));
+            ->willReturn(200);
 
         $builder = new CliMenuBuilder($terminal);
         $menu = $builder
@@ -887,7 +884,7 @@ class CliMenuBuilderTest extends TestCase
         $terminal
             ->expects($this->any())
             ->method('getWidth')
-            ->will($this->returnValue(200));
+            ->willReturn(200);
 
         $builder = new CliMenuBuilder($terminal);
         $menu = $builder

@@ -40,19 +40,19 @@ class ConfirmTest extends TestCase
 
         $this->terminal->expects($this->any())
             ->method('write')
-            ->will($this->returnCallback(function ($buffer) {
+            ->willReturnCallback(function ($buffer) {
                 $this->output->write($buffer);
-            }));
+            });
     }
 
     public function testConfirmWithOddLengthConfirmAndButton() : void
     {
         $this->terminal
             ->method('read')
-            ->will($this->onConsecutiveCalls(
+            ->willReturnOnConsecutiveCalls(
                 "\n",
                 "\n"
-            ));
+            );
 
         $style = $this->getStyle($this->terminal);
 
@@ -73,10 +73,10 @@ class ConfirmTest extends TestCase
     {
         $this->terminal
             ->method('read')
-            ->will($this->onConsecutiveCalls(
+            ->willReturnOnConsecutiveCalls(
                 "\n",
                 "\n"
-            ));
+            );
 
         $style = $this->getStyle($this->terminal);
 
@@ -97,10 +97,10 @@ class ConfirmTest extends TestCase
     {
         $this->terminal
             ->method('read')
-            ->will($this->onConsecutiveCalls(
+            ->willReturnOnConsecutiveCalls(
                 "\n",
                 "\n"
-            ));
+            );
 
         $style = $this->getStyle($this->terminal);
 
@@ -121,10 +121,10 @@ class ConfirmTest extends TestCase
     {
         $this->terminal
             ->method('read')
-            ->will($this->onConsecutiveCalls(
+            ->willReturnOnConsecutiveCalls(
                 "\n",
                 "\n"
-            ));
+            );
 
         $style = $this->getStyle($this->terminal);
 
@@ -145,10 +145,10 @@ class ConfirmTest extends TestCase
     {
         $this->terminal
             ->method('read')
-            ->will($this->onConsecutiveCalls(
+            ->willReturnOnConsecutiveCalls(
                 "\n",
                 "\n"
-            ));
+            );
 
         $style = $this->getStyle($this->terminal);
 
@@ -169,10 +169,10 @@ class ConfirmTest extends TestCase
     {
         $this->terminal
             ->method('read')
-            ->will($this->onConsecutiveCalls(
+            ->willReturnOnConsecutiveCalls(
                 "\n",
                 "\n"
-            ));
+            );
 
         $style = $this->getStyle($this->terminal);
 
@@ -193,12 +193,12 @@ class ConfirmTest extends TestCase
     {
         $this->terminal
             ->method('read')
-            ->will($this->onConsecutiveCalls(
+            ->willReturnOnConsecutiveCalls(
                 "\n",
                 'up',
                 'down',
                 "\n"
-            ));
+            );
 
         $style = $this->getStyle($this->terminal);
 
@@ -219,11 +219,11 @@ class ConfirmTest extends TestCase
     {
         $this->terminal
             ->method('read')
-            ->will($this->onConsecutiveCalls(
+            ->willReturnOnConsecutiveCalls(
                 "\n",
                 'tab',
                 "\n"
-            ));
+            );
 
         $style = $this->getStyle($this->terminal);
 
@@ -290,7 +290,7 @@ class ConfirmTest extends TestCase
 
     private function getTestFile() : string
     {
-        return sprintf('%s/../res/%s.txt', __DIR__, $this->getName());
+        return sprintf('%s/../res/%s.txt', __DIR__, $this->name());
     }
 
     private function getStyle(Terminal $terminal) : MenuStyle

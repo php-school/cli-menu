@@ -8,6 +8,7 @@ use PhpSchool\CliMenu\Input\InputIO;
 use PhpSchool\CliMenu\Input\Password;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\Terminal\Terminal;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -64,15 +65,13 @@ class PasswordTest extends TestCase
         static::assertEquals('***', $this->input->getPlaceholderText());
     }
 
-    /**
-     * @dataProvider validateProvider
-     */
+    #[DataProvider('validateProvider')]
     public function testValidate(string $value, bool $result) : void
     {
         static::assertEquals($this->input->validate($value), $result);
     }
 
-    public function validateProvider() : array
+    public static function validateProvider() : array
     {
         return [
             ['10', false],
@@ -96,9 +95,7 @@ class PasswordTest extends TestCase
         self::assertEquals('1234567891234567', $this->input->ask()->fetch());
     }
 
-    /**
-     * @dataProvider customValidateProvider
-     */
+    #[DataProvider('customValidateProvider')]
     public function testValidateWithCustomValidator(string $value, bool $result) : void
     {
         $customValidate = function ($input) {
@@ -110,7 +107,7 @@ class PasswordTest extends TestCase
         static::assertEquals($this->input->validate($value), $result);
     }
 
-    public function customValidateProvider() : array
+    public static function customValidateProvider() : array
     {
         return [
             ['10', false],

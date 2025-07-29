@@ -19,6 +19,7 @@ use PhpSchool\CliMenu\Style\Exception\InvalidStyle;
 use PhpSchool\CliMenu\Style\Locator;
 use PhpSchool\CliMenu\Style\RadioStyle;
 use PhpSchool\CliMenu\Style\SelectableStyle;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class LocatorTest extends TestCase
@@ -104,7 +105,7 @@ class LocatorTest extends TestCase
         $locator->getStyleForMenuItem($myItem);
     }
 
-    public function itemStyleProvider() : array
+    public static function itemStyleProvider() : array
     {
         $action = function () {
         };
@@ -120,9 +121,7 @@ class LocatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider itemStyleProvider
-     */
+    #[DataProvider('itemStyleProvider')]
     public function testGetStyleForMenuItem(string $expectedStyleClass, MenuItemInterface $menuItem) : void
     {
         $locator = new Locator();
@@ -138,7 +137,7 @@ class LocatorTest extends TestCase
         $locator->getStyle('NonExistingStyleClass');
     }
 
-    public function styleProvider() : array
+    public static function styleProvider() : array
     {
         return [
             [DefaultStyle::class],
@@ -149,9 +148,7 @@ class LocatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider styleProvider
-     */
+    #[DataProvider('styleProvider')]
     public function testGetStyle(string $styleClass) : void
     {
         $locator = new Locator();

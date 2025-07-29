@@ -86,7 +86,7 @@ class SelectableItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
 
         $item = new SelectableItem('Item', function () {
         });
@@ -103,7 +103,7 @@ class SelectableItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
 
         $item = new SelectableItem('Item', function () {
         });

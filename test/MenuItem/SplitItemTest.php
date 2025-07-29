@@ -15,6 +15,7 @@ use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Style\SelectableStyle;
 use PhpSchool\Terminal\Terminal;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,10 +23,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SplitItemTest extends TestCase
 {
-   
-    /**
-     * @dataProvider blacklistedItemProvider
-     */
+
+    #[DataProvider('blacklistedItemProvider')]
     public function testConstructWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem) : void
     {
         self::expectExceptionMessage(\InvalidArgumentException::class);
@@ -34,9 +33,7 @@ class SplitItemTest extends TestCase
         new SplitItem([$menuItem]);
     }
 
-    /**
-     * @dataProvider blacklistedItemProvider
-     */
+    #[DataProvider('blacklistedItemProvider')]
     public function testAddItemsWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem) : void
     {
         self::expectExceptionMessage(\InvalidArgumentException::class);
@@ -45,9 +42,7 @@ class SplitItemTest extends TestCase
         (new SplitItem([]))->addItems([$menuItem]);
     }
 
-    /**
-     * @dataProvider blacklistedItemProvider
-     */
+    #[DataProvider('blacklistedItemProvider')]
     public function testAddItemWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem) : void
     {
         self::expectExceptionMessage(\InvalidArgumentException::class);
@@ -56,9 +51,7 @@ class SplitItemTest extends TestCase
         (new SplitItem([]))->addItem($menuItem);
     }
 
-    /**
-     * @dataProvider blacklistedItemProvider
-     */
+    #[DataProvider('blacklistedItemProvider')]
     public function testSetItemsWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem) : void
     {
         self::expectExceptionMessage(\InvalidArgumentException::class);
@@ -67,7 +60,7 @@ class SplitItemTest extends TestCase
         (new SplitItem([]))->setItems([$menuItem]);
     }
 
-    public function blacklistedItemProvider() : array
+    public static function blacklistedItemProvider() : array
     {
         return [
             [new AsciiArtItem('( ︶︿︶)_╭∩╮')],
@@ -147,7 +140,7 @@ class SplitItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(30));
+            ->willReturn(30);
         
         $item = new SplitItem([new StaticItem('One'), new StaticItem('Two')]);
 
@@ -161,7 +154,7 @@ class SplitItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(20));
+            ->willReturn(20);
 
         $item = new SplitItem([new StaticItem('One Two'), new StaticItem('Three')]);
 
@@ -172,16 +165,14 @@ class SplitItemTest extends TestCase
         self::assertEquals(['One       Three     ', 'Two                 '], $item->getRows($menuStyle));
     }
 
-    /**
-     * @dataProvider belowZeroProvider
-     */
+    #[DataProvider('belowZeroProvider')]
     public function testSetGutterThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
         $item = new SplitItem();
         $item->setGutter($value);
     }
-    public function belowZeroProvider() : array
+    public static function belowZeroProvider() : array
     {
         return [[-1], [-2], [-10]];
     }
@@ -193,7 +184,7 @@ class SplitItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(30));
+            ->willReturn(30);
 
         $selectableStyle = (new SelectableStyle())
             ->setSelectedMarker('= ')
@@ -221,7 +212,7 @@ class SplitItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(30));
+            ->willReturn(30);
 
         $item = new SplitItem([new StaticItem("Item\nOne"), new StaticItem("Item\nTwo")]);
 
@@ -241,7 +232,7 @@ class SplitItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(30));
+            ->willReturn(30);
 
         $selectableStyle = (new SelectableStyle())
             ->setUnselectedMarker('* ');
@@ -272,7 +263,7 @@ class SplitItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(30));
+            ->willReturn(30);
 
         $selectableStyle = (new SelectableStyle())
             ->setSelectedMarker('= ')
@@ -486,7 +477,7 @@ class SplitItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(30));
+            ->willReturn(30);
 
         $checkboxItem1 = new CheckboxItem('Item One', function () {
         });
@@ -523,7 +514,7 @@ class SplitItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(30));
+            ->willReturn(30);
 
         $radioItem1 = new RadioItem('Item One', function () {
         });

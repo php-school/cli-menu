@@ -90,7 +90,7 @@ class MenuMenuItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
 
         $subMenu = $this->getMockBuilder(CliMenu::class)
             ->disableOriginalConstructor()

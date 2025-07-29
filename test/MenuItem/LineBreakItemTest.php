@@ -43,7 +43,7 @@ class LineBreakItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
 
         $item = new LineBreakItem('*');
         $this->assertEquals(['**********'], $item->getRows($menuStyle));
@@ -56,7 +56,7 @@ class LineBreakItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
 
         $item = new LineBreakItem('*', 3);
         $this->assertEquals(['**********', '**********', '**********'], $item->getRows($menuStyle));
@@ -69,7 +69,7 @@ class LineBreakItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(5));
+            ->willReturn(5);
         
         //ABC should be repeated but ABCABC is 6 and the allowed length is 5
         //so ABCABC is trimmed to ABCAB
@@ -85,7 +85,7 @@ class LineBreakItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(5));
+            ->willReturn(5);
 
         $item = new LineBreakItem('❅', 2);
         $this->assertEquals(['❅❅❅❅❅', '❅❅❅❅❅'], $item->getRows($menuStyle));
@@ -98,7 +98,7 @@ class LineBreakItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(5));
+            ->willReturn(5);
 
         $item = new LineBreakItem('ABC', 2);
         $item->setText('❅-');

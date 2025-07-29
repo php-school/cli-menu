@@ -45,9 +45,9 @@ class CliMenuTest extends TestCase
 
         $this->terminal->expects($this->any())
             ->method('write')
-            ->will($this->returnCallback(function ($buffer) {
+            ->willReturnCallback(function ($buffer) {
                 $this->output->write($buffer);
-            }));
+            });
     }
 
     public function testGetMenuStyle() : void
@@ -239,9 +239,9 @@ class CliMenuTest extends TestCase
 
         $terminal->expects($this->any())
             ->method('write')
-            ->will($this->returnCallback(function ($buffer) {
+            ->willReturnCallback(function ($buffer) {
                 $this->output->write($buffer);
-            }));
+            });
 
         $terminal->expects($this->exactly(3))
             ->method('read')
@@ -1044,7 +1044,7 @@ class CliMenuTest extends TestCase
 
     private function getTestFile() : string
     {
-        return sprintf('%s/res/%s.txt', __DIR__, $this->getName());
+        return sprintf('%s/res/%s.txt', __DIR__, $this->name());
     }
 
     private function getStyle(Terminal $terminal) : MenuStyle

@@ -49,7 +49,7 @@ class AsciiArtItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
 
         $item = new AsciiArtItem("//\n//", AsciiArtItem::POSITION_LEFT);
         $this->assertEquals(
@@ -68,7 +68,7 @@ class AsciiArtItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
 
         $item = new AsciiArtItem("//\n//", AsciiArtItem::POSITION_RIGHT);
         $this->assertEquals(
@@ -87,7 +87,7 @@ class AsciiArtItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
 
         $item = new AsciiArtItem("//\n//", AsciiArtItem::POSITION_CENTER);
         $this->assertEquals(
@@ -106,7 +106,7 @@ class AsciiArtItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(11));
+            ->willReturn(11);
 
         $item = new AsciiArtItem("//\n//", AsciiArtItem::POSITION_CENTER);
         $this->assertEquals(
@@ -136,7 +136,7 @@ class AsciiArtItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
         
         $item = new AsciiArtItem('TOO LONG. SO SO LONG.', AsciiArtItem::POSITION_CENTER, 'my alt');
         
@@ -150,7 +150,7 @@ class AsciiArtItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(15));
+            ->willReturn(15);
         
         $item = new AsciiArtItem('NOT TOO LONG            ', AsciiArtItem::POSITION_LEFT, 'my alt');
         
@@ -164,7 +164,7 @@ class AsciiArtItemTest extends TestCase
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(30));
+            ->willReturn(30);
 
         $art = <<<ART
         _ __ _
@@ -196,7 +196,7 @@ ART;
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(30));
+            ->willReturn(30);
 
         $art = <<<ART
         _ __ _
@@ -228,7 +228,7 @@ ART;
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(30));
+            ->willReturn(30);
         
         $art = <<<ART
         _ __ _        
@@ -259,7 +259,7 @@ ART;
         $menuStyle
             ->expects($this->any())
             ->method('getContentWidth')
-            ->will($this->returnValue(30));
+            ->willReturn(30);
         
         $art = <<<ART
         _ __ _        
