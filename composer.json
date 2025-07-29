@@ -37,6 +37,10 @@
         "psr-4": { "PhpSchool\\CliMenuTest\\": "test/" }
     },
     "scripts" : {
+        "cs-dry-run" : [
+            "php-cs-fixer check src --rules=@PSR12",
+            "php-cs-fixer check test --rules=@PSR12"
+        ],
         "cs" : [
             "php-cs-fixer fix src --rules=@PSR12",
             "php-cs-fixer fix test --rules=@PSR12"
