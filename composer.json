@@ -19,7 +19,7 @@
         "phpstan/phpstan": "^1.2.0"
     },
     "require": {
-        "php" : ">=8.2",
+        "php" : ">=8.1",
         "beberlei/assert": "^2.4 | ^3",
         "php-school/terminal": "^0.2.1",
         "ext-posix": "*",

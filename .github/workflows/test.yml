@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['8.2', '8.3', '8.4']
+        php: ['8.1', '8.2', '8.3', '8.4']
 
     name: PHP ${{ matrix.php }}
 
@@ -27,7 +27,7 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/php.json"
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-      - name: Install dependencies
+      - name: Install PHP 7 dependencies
         run: composer update --no-interaction --no-progress
 
       - name: Tests
