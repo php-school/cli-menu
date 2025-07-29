@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Builder;
@@ -18,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 class SplitItemBuilderTest extends TestCase
 {
-    public function testAddItem() : void
+    public function testAddItem(): void
     {
         $callable = function () {
         };
@@ -43,7 +44,7 @@ class SplitItemBuilderTest extends TestCase
         $this->checkItemItems($item, $expected);
     }
 
-    public function testAddCheckboxItem() : void
+    public function testAddCheckboxItem(): void
     {
         $callable = function () {
         };
@@ -68,7 +69,7 @@ class SplitItemBuilderTest extends TestCase
         $this->checkItemItems($item, $expected);
     }
 
-    public function testAddRadioItem() : void
+    public function testAddRadioItem(): void
     {
         $callable = function () {
         };
@@ -93,7 +94,7 @@ class SplitItemBuilderTest extends TestCase
         $this->checkItemItems($item, $expected);
     }
 
-    public function testAddStaticItem() : void
+    public function testAddStaticItem(): void
     {
 
         $menu = new CliMenu(null, []);
@@ -111,7 +112,7 @@ class SplitItemBuilderTest extends TestCase
         $this->checkItemItems($item, $expected);
     }
 
-    public function testAddSubMenu() : void
+    public function testAddSubMenu(): void
     {
         $menu = new CliMenu(null, []);
         $builder = new SplitItemBuilder($menu);
@@ -127,7 +128,7 @@ class SplitItemBuilderTest extends TestCase
         ]);
     }
 
-    public function testAddSubMenuUsesTextParameterAsMenuItemText() : void
+    public function testAddSubMenuUsesTextParameterAsMenuItemText(): void
     {
         $menu = new CliMenu(null, []);
         $builder = new SplitItemBuilder($menu);
@@ -139,7 +140,7 @@ class SplitItemBuilderTest extends TestCase
         self::assertEquals('My SubMenu', $item->getItems()[0]->getText());
     }
 
-    public function testSetGutter() : void
+    public function testSetGutter(): void
     {
         $menu = new CliMenu(null, []);
         $builder = new SplitItemBuilder($menu);
@@ -149,7 +150,7 @@ class SplitItemBuilderTest extends TestCase
         self::assertEquals(4, $item->getGutter());
     }
 
-    public function testAddSubMenuWithClosureBinding() : void
+    public function testAddSubMenuWithClosureBinding(): void
     {
         $menu = new CliMenu(null, []);
         $builder = new SplitItemBuilder($menu);
@@ -174,12 +175,12 @@ class SplitItemBuilderTest extends TestCase
         );
     }
 
-    private function checkItemItems(SplitItem $item, array $expected) : void
+    private function checkItemItems(SplitItem $item, array $expected): void
     {
         $this->checkItems($item->getItems(), $expected);
     }
 
-    private function checkItems(array $actualItems, array $expected) : void
+    private function checkItems(array $actualItems, array $expected): void
     {
         self::assertCount(count($expected), $actualItems);
 
@@ -195,12 +196,12 @@ class SplitItemBuilderTest extends TestCase
         }
     }
 
-    public function testRegisterItemStylePropagatesToSubmenus() : void
+    public function testRegisterItemStylePropagatesToSubmenus(): void
     {
-        $myItem = new class extends LineBreakItem {
+        $myItem = new class () extends LineBreakItem {
         };
 
-        $myStyle = new class extends DefaultStyle {
+        $myStyle = new class () extends DefaultStyle {
         };
 
         $menu = new CliMenu(null, []);

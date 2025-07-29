@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest;
@@ -11,45 +12,45 @@ use PHPUnit\Framework\TestCase;
  */
 class FrameTest extends TestCase
 {
-    public function testNewLine() : void
+    public function testNewLine(): void
     {
-        $frame = new Frame;
+        $frame = new Frame();
         $frame->newLine();
 
         $this->assertEquals(["\n"], $frame->getRows());
 
-        $frame = new Frame;
+        $frame = new Frame();
         $frame->newLine(1);
 
         $this->assertEquals(["\n"], $frame->getRows());
 
-        $frame = new Frame;
+        $frame = new Frame();
         $frame->newLine(2);
 
         $this->assertEquals(["\n", "\n"], $frame->getRows());
     }
 
-    public function testAddRows() : void
+    public function testAddRows(): void
     {
-        $frame = new Frame;
+        $frame = new Frame();
         $frame->addRows(['one', 'two']);
         $this->assertEquals(['one', 'two'], $frame->getRows());
         $frame->addRows(['three']);
         $this->assertEquals(['one', 'two', 'three'], $frame->getRows());
     }
 
-    public function testAddRow() : void
+    public function testAddRow(): void
     {
-        $frame = new Frame;
+        $frame = new Frame();
         $frame->addRow('one');
         $this->assertEquals(['one'], $frame->getRows());
         $frame->addRow('two');
         $this->assertEquals(['one', 'two'], $frame->getRows());
     }
 
-    public function testCount() : void
+    public function testCount(): void
     {
-        $frame = new Frame;
+        $frame = new Frame();
         $frame->addRow('one');
         $this->assertEquals(['one'], $frame->getRows());
         $this->assertCount(1, $frame);
@@ -58,9 +59,9 @@ class FrameTest extends TestCase
         $this->assertCount(2, $frame);
     }
 
-    public function testAll() : void
+    public function testAll(): void
     {
-        $frame = new Frame;
+        $frame = new Frame();
         $frame->addRow('one');
         $frame->addRows(["two", "three"]);
         $frame->newLine(2);

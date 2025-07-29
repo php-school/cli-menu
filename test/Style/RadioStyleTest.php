@@ -10,17 +10,17 @@ use PHPUnit\Framework\TestCase;
 
 class RadioStyleTest extends TestCase
 {
-    public function testHasChangedFromDefaultsWhenNoStylesChanged() : void
+    public function testHasChangedFromDefaultsWhenNoStylesChanged(): void
     {
         self::assertFalse((new RadioStyle())->hasChangedFromDefaults());
     }
 
-    public function testGetMarker() : void
+    public function testGetMarker(): void
     {
         $item = new RadioItem('My Radio', 'var_dump');
         $item->setChecked();
 
-        $style = new RadioStyle;
+        $style = new RadioStyle();
 
         self::assertSame('[●] ', $style->getMarker($item, false));
 
@@ -29,9 +29,9 @@ class RadioStyleTest extends TestCase
         self::assertSame('[○] ', $style->getMarker($item, false));
     }
 
-    public function testGetSetMarkerOn() : void
+    public function testGetSetMarkerOn(): void
     {
-        $style = new RadioStyle;
+        $style = new RadioStyle();
 
         self::assertSame('[●] ', $style->getCheckedMarker());
 
@@ -41,9 +41,9 @@ class RadioStyleTest extends TestCase
         self::assertTrue($style->hasChangedFromDefaults());
     }
 
-    public function testGetSetMarkerOff() : void
+    public function testGetSetMarkerOff(): void
     {
-        $style = new RadioStyle;
+        $style = new RadioStyle();
 
         self::assertSame('[○] ', $style->getUncheckedMarker());
 
@@ -53,9 +53,9 @@ class RadioStyleTest extends TestCase
         self::assertTrue($style->hasChangedFromDefaults());
     }
 
-    public function testGetSetItemExtra() : void
+    public function testGetSetItemExtra(): void
     {
-        $style = new RadioStyle;
+        $style = new RadioStyle();
 
         self::assertSame('✔', $style->getItemExtra());
 
@@ -65,18 +65,18 @@ class RadioStyleTest extends TestCase
         self::assertTrue($style->hasChangedFromDefaults());
     }
 
-    public function testModifyingItemExtraForcesExtraToBeDisplayedWhenNoItemsDisplayExtra() : void
+    public function testModifyingItemExtraForcesExtraToBeDisplayedWhenNoItemsDisplayExtra(): void
     {
-        $style = new RadioStyle;
+        $style = new RadioStyle();
         self::assertFalse($style->getDisplaysExtra());
 
         $style->setItemExtra('[!EXTRA]!');
         self::assertTrue($style->getDisplaysExtra());
     }
 
-    public function testGetSetDisplayExtra() : void
+    public function testGetSetDisplayExtra(): void
     {
-        $style = new RadioStyle;
+        $style = new RadioStyle();
 
         self::assertFalse($style->getDisplaysExtra());
 

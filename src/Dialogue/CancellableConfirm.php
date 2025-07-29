@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Dialogue;
@@ -19,7 +20,7 @@ class CancellableConfirm extends Dialogue
     /**
      * Display confirmation with a button with the given text
      */
-    public function display(string $confirmText = 'OK', string $cancelText = 'Cancel') : bool
+    public function display(string $confirmText = 'OK', string $cancelText = 'Cancel'): bool
     {
         $this->drawDialog($confirmText, $cancelText);
 

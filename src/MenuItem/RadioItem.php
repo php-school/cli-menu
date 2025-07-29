@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\MenuItem;
@@ -59,7 +60,7 @@ class RadioItem implements MenuItemInterface
     /**
      * The output text for the item
      */
-    public function getRows(MenuStyle $style, bool $selected = false) : array
+    public function getRows(MenuStyle $style, bool $selected = false): array
     {
         return (new SelectableItemRenderer())->render($style, $this, $selected, $this->disabled);
     }
@@ -67,7 +68,7 @@ class RadioItem implements MenuItemInterface
     /**
      * Return the raw string of text
      */
-    public function getText() : string
+    public function getText(): string
     {
         return $this->text;
     }
@@ -75,7 +76,7 @@ class RadioItem implements MenuItemInterface
     /**
      * Set the raw string of text
      */
-    public function setText(string $text) : void
+    public function setText(string $text): void
     {
         $this->text = $text;
     }
@@ -83,7 +84,7 @@ class RadioItem implements MenuItemInterface
     /**
      * Execute the items callable if required
      */
-    public function getSelectAction() : ?callable
+    public function getSelectAction(): ?callable
     {
         return function (CliMenu $cliMenu) {
             $parentItem = $cliMenu->getItemByIndex($cliMenu->getSelectedItemIndex());
@@ -116,7 +117,7 @@ class RadioItem implements MenuItemInterface
     /**
      * Can the item be selected
      */
-    public function canSelect() : bool
+    public function canSelect(): bool
     {
         return !$this->disabled;
     }
@@ -124,7 +125,7 @@ class RadioItem implements MenuItemInterface
     /**
      * Whether or not we are showing item extra
      */
-    public function showsItemExtra() : bool
+    public function showsItemExtra(): bool
     {
         return $this->showItemExtra;
     }
@@ -132,7 +133,7 @@ class RadioItem implements MenuItemInterface
     /**
      * Enable showing item extra
      */
-    public function showItemExtra() : void
+    public function showItemExtra(): void
     {
         $this->showItemExtra = true;
     }
@@ -140,7 +141,7 @@ class RadioItem implements MenuItemInterface
     /**
      * Disable showing item extra
      */
-    public function hideItemExtra() : void
+    public function hideItemExtra(): void
     {
         $this->showItemExtra = false;
     }
@@ -148,7 +149,7 @@ class RadioItem implements MenuItemInterface
     /**
      * Whether or not the item is checked
      */
-    public function getChecked() : bool
+    public function getChecked(): bool
     {
         return $this->checked;
     }
@@ -156,7 +157,7 @@ class RadioItem implements MenuItemInterface
     /**
      * Sets checked state to true
      */
-    public function setChecked() : void
+    public function setChecked(): void
     {
         $this->checked = true;
     }
@@ -164,7 +165,7 @@ class RadioItem implements MenuItemInterface
     /**
      * Sets checked state to false
      */
-    public function setUnchecked() : void
+    public function setUnchecked(): void
     {
         $this->checked = false;
     }
@@ -172,7 +173,7 @@ class RadioItem implements MenuItemInterface
     /**
      * Toggles checked state
      */
-    public function toggle() : void
+    public function toggle(): void
     {
         $this->checked = !$this->checked;
     }
@@ -180,12 +181,12 @@ class RadioItem implements MenuItemInterface
     /**
      * @return RadioStyle
      */
-    public function getStyle() : ItemStyle
+    public function getStyle(): ItemStyle
     {
         return $this->style;
     }
 
-    public function setStyle(RadioStyle $style) : void
+    public function setStyle(RadioStyle $style): void
     {
         $this->style = $style;
     }

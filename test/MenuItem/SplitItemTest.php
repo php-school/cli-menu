@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\MenuItem;
@@ -23,18 +24,17 @@ use PHPUnit\Framework\TestCase;
  */
 class SplitItemTest extends TestCase
 {
-
     #[DataProvider('blacklistedItemProvider')]
-    public function testConstructWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem) : void
+    public function testConstructWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem): void
     {
         self::expectExceptionMessage(\InvalidArgumentException::class);
         self::expectExceptionMessage(sprintf('Cannot add a %s to a SplitItem', get_class($menuItem)));
-        
+
         new SplitItem([$menuItem]);
     }
 
     #[DataProvider('blacklistedItemProvider')]
-    public function testAddItemsWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem) : void
+    public function testAddItemsWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem): void
     {
         self::expectExceptionMessage(\InvalidArgumentException::class);
         self::expectExceptionMessage(sprintf('Cannot add a %s to a SplitItem', get_class($menuItem)));
@@ -43,7 +43,7 @@ class SplitItemTest extends TestCase
     }
 
     #[DataProvider('blacklistedItemProvider')]
-    public function testAddItemWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem) : void
+    public function testAddItemWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem): void
     {
         self::expectExceptionMessage(\InvalidArgumentException::class);
         self::expectExceptionMessage(sprintf('Cannot add a %s to a SplitItem', get_class($menuItem)));
@@ -52,7 +52,7 @@ class SplitItemTest extends TestCase
     }
 
     #[DataProvider('blacklistedItemProvider')]
-    public function testSetItemsWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem) : void
+    public function testSetItemsWithBlacklistedItemTypeThrowsException(MenuItemInterface $menuItem): void
     {
         self::expectExceptionMessage(\InvalidArgumentException::class);
         self::expectExceptionMessage(sprintf('Cannot add a %s to a SplitItem', get_class($menuItem)));
@@ -60,7 +60,7 @@ class SplitItemTest extends TestCase
         (new SplitItem([]))->setItems([$menuItem]);
     }
 
-    public static function blacklistedItemProvider() : array
+    public static function blacklistedItemProvider(): array
     {
         return [
             [new AsciiArtItem('( ︶︿︶)_╭∩╮')],
@@ -69,13 +69,13 @@ class SplitItemTest extends TestCase
         ];
     }
 
-    public function testAddItem() : void
+    public function testAddItem(): void
     {
         $item1 = new StaticItem('One');
         $item2 = new StaticItem('Two');
         $splitItem = new SplitItem();
         $splitItem->addItem($item1);
-        
+
         self::assertEquals([$item1], $splitItem->getItems());
 
         $splitItem->addItem($item2);
@@ -83,7 +83,7 @@ class SplitItemTest extends TestCase
         self::assertEquals([$item1, $item2], $splitItem->getItems());
     }
 
-    public function testAddItems() : void
+    public function testAddItems(): void
     {
         $item1 = new StaticItem('One');
         $item2 = new StaticItem('Two');
@@ -91,13 +91,13 @@ class SplitItemTest extends TestCase
         $splitItem->addItems([$item1]);
 
         self::assertEquals([$item1], $splitItem->getItems());
-        
+
         $splitItem->addItems([$item2]);
 
         self::assertEquals([$item1, $item2], $splitItem->getItems());
     }
 
-    public function testSetItems() : void
+    public function testSetItems(): void
     {
         $item1 = new StaticItem('One');
         $item2 = new StaticItem('Two');
@@ -108,21 +108,21 @@ class SplitItemTest extends TestCase
         self::assertEquals([$item2, $item3], $splitItem->getItems());
     }
 
-    public function testGetItems() : void
+    public function testGetItems(): void
     {
         $item = new StaticItem('test');
-        
+
         self::assertEquals([], (new SplitItem([]))->getItems());
         self::assertEquals([$item], (new SplitItem([$item]))->getItems());
     }
 
-    public function testGetSelectActionReturnsNull() : void
+    public function testGetSelectActionReturnsNull(): void
     {
         $item = new SplitItem([]);
         $this->assertNull($item->getSelectAction());
     }
 
-    public function testHideAndShowItemExtraHasNoEffect() : void
+    public function testHideAndShowItemExtraHasNoEffect(): void
     {
         $item = new SplitItem([]);
 
@@ -133,7 +133,7 @@ class SplitItemTest extends TestCase
         $this->assertFalse($item->showsItemExtra());
     }
 
-    public function testGetRowsWithStaticItems() : void
+    public function testGetRowsWithStaticItems(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -141,13 +141,13 @@ class SplitItemTest extends TestCase
             ->expects($this->any())
             ->method('getContentWidth')
             ->willReturn(30);
-        
+
         $item = new SplitItem([new StaticItem('One'), new StaticItem('Two')]);
 
         self::assertEquals(['One            Two            '], $item->getRows($menuStyle));
     }
 
-    public function testSetGutter() : void
+    public function testSetGutter(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -166,18 +166,18 @@ class SplitItemTest extends TestCase
     }
 
     #[DataProvider('belowZeroProvider')]
-    public function testSetGutterThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
+    public function testSetGutterThrowsExceptionIfValueIsNotZeroOrAbove(int $value): void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
         $item = new SplitItem();
         $item->setGutter($value);
     }
-    public static function belowZeroProvider() : array
+    public static function belowZeroProvider(): array
     {
         return [[-1], [-2], [-10]];
     }
 
-    public function testGetRowsWithOneItemSelected() : void
+    public function testGetRowsWithOneItemSelected(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -205,7 +205,7 @@ class SplitItemTest extends TestCase
         self::assertEquals(['= Item One     * Item Two     '], $item->getRows($menuStyle, true));
     }
 
-    public function testGetRowsWithMultipleLineStaticItems() : void
+    public function testGetRowsWithMultipleLineStaticItems(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -225,7 +225,7 @@ class SplitItemTest extends TestCase
         );
     }
 
-    public function testGetRowsWithMultipleLinesWithUnSelectedMarker() : void
+    public function testGetRowsWithMultipleLinesWithUnSelectedMarker(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -256,7 +256,7 @@ class SplitItemTest extends TestCase
         );
     }
 
-    public function testGetRowsWithMultipleLinesWithOneItemSelected() : void
+    public function testGetRowsWithMultipleLinesWithOneItemSelected(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -278,7 +278,7 @@ class SplitItemTest extends TestCase
         $item2->setStyle($selectableStyle);
 
         $item = new SplitItem([$item1, $item2]);
-        
+
         $item->setSelectedItemIndex(0);
 
         self::assertEquals(
@@ -290,7 +290,7 @@ class SplitItemTest extends TestCase
         );
     }
 
-    public function testGetRowsWithItemExtra() : void
+    public function testGetRowsWithItemExtra(): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->any())->method('getWidth')->willReturn(100);
@@ -317,7 +317,7 @@ class SplitItemTest extends TestCase
         self::assertEquals(['* Item 1        [EXTRA]  * Item 2        [EXTRA]  '], $item->getRows($menuStyle));
     }
 
-    public function testGetRowsWithMultipleLinesWithItemExtra() : void
+    public function testGetRowsWithMultipleLinesWithItemExtra(): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->any())->method('getWidth')->willReturn(100);
@@ -350,7 +350,7 @@ class SplitItemTest extends TestCase
         );
     }
 
-    public function testGetRowsWithMultipleLinesWithItemExtraOnOne() : void
+    public function testGetRowsWithMultipleLinesWithItemExtraOnOne(): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal->expects($this->any())->method('getWidth')->willReturn(100);
@@ -382,45 +382,45 @@ class SplitItemTest extends TestCase
             $item->getRows($menuStyle)
         );
     }
-    
-    public function testGetTextThrowsAnException() : void
+
+    public function testGetTextThrowsAnException(): void
     {
         self::expectException(\BadMethodCallException::class);
         self::expectExceptionMessage(sprintf('Not supported on: %s', SplitItem::class));
-        
+
         (new SplitItem([]))->getText();
     }
 
-    public function testGetRowsThrowsAnExceptionIfNoItemsWereAdded() : void
+    public function testGetRowsThrowsAnExceptionIfNoItemsWereAdded(): void
     {
         self::expectException(\RuntimeException::class);
         self::expectExceptionMessage(sprintf('There should be at least one item added to: %s', SplitItem::class));
-        
+
         (new SplitItem([]))->getRows($this->createMock(MenuStyle::class));
     }
 
-    public function testCanBeSelectedReturnsTrueWhenItContainsSelectableItems() : void
+    public function testCanBeSelectedReturnsTrueWhenItContainsSelectableItems(): void
     {
         self::assertTrue((new SplitItem([new SelectableItem('One', 'strlen')]))->canSelect());
     }
 
-    public function testCanBeSelectedReturnsFalseWhenItContainsNoSelectableItems() : void
+    public function testCanBeSelectedReturnsFalseWhenItContainsNoSelectableItems(): void
     {
         self::assertFalse((new SplitItem([new StaticItem('One')]))->canSelect());
     }
 
-    public function testGetSelectedItemIndexWhenSelectableItemExists() : void
+    public function testGetSelectedItemIndexWhenSelectableItemExists(): void
     {
         $item1 = new StaticItem('One');
         $item2 = new SelectableItem('Two', function () {
         });
-        
+
         $splitItem = new SplitItem([$item1, $item2]);
-        
+
         self::assertEquals(1, $splitItem->getSelectedItemIndex());
     }
 
-    public function testGetSelectedItemIndexWhenNoSelectableItemExists() : void
+    public function testGetSelectedItemIndexWhenNoSelectableItemExists(): void
     {
         $item1 = new StaticItem('One');
         $splitItem = new SplitItem([$item1]);
@@ -428,15 +428,15 @@ class SplitItemTest extends TestCase
         self::assertNull($splitItem->getSelectedItemIndex());
     }
 
-    public function testSetSelectedItemIndexThrowsExceptionIsIndexDoesNotExist() : void
+    public function testSetSelectedItemIndexThrowsExceptionIsIndexDoesNotExist(): void
     {
         self::expectException(\InvalidArgumentException::class);
         self::expectExceptionMessage('Index: "2" does not exist');
-        
+
         (new SplitItem([]))->setSelectedItemIndex(2);
     }
 
-    public function testGetSelectedItemReturnsItem() : void
+    public function testGetSelectedItemReturnsItem(): void
     {
         $item1 = new StaticItem('One');
         $item2 = new SelectableItem('Two', function () {
@@ -446,31 +446,31 @@ class SplitItemTest extends TestCase
         self::assertSame($item2, $splitItem->getSelectedItem());
     }
 
-    public function testGetSelectedItemThrowsExceptionWhenNoSelectableItemExists() : void
+    public function testGetSelectedItemThrowsExceptionWhenNoSelectableItemExists(): void
     {
         self::expectException(\RuntimeException::class);
         self::expectExceptionMessage('No item is selected');
-        
+
         $item1 = new StaticItem('One');
 
         $splitItem = new SplitItem([$item1]);
         self::assertSame($splitItem, $splitItem->getSelectedItem());
     }
 
-    public function testCanSelectIndex() : void
+    public function testCanSelectIndex(): void
     {
         $item1 = new StaticItem('One');
         $item2 = new SelectableItem('Two', function () {
         });
 
         $splitItem = new SplitItem([$item1, $item2]);
-        
+
         self::assertFalse($splitItem->canSelectIndex(0));
         self::assertFalse($splitItem->canSelectIndex(5));
         self::assertTrue($splitItem->canSelectIndex(1));
     }
 
-    public function testCheckboxItem() : void
+    public function testCheckboxItem(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -507,7 +507,7 @@ class SplitItemTest extends TestCase
         self::assertEquals(['[✔] Item One   [ ] Item Two   '], $item->getRows($menuStyle, true));
     }
 
-    public function testRadioItem() : void
+    public function testRadioItem(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 

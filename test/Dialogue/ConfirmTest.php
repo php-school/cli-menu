@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Dialogue;
@@ -25,9 +26,9 @@ class ConfirmTest extends TestCase
      */
     private $output;
 
-    public function setUp() : void
+    public function setUp(): void
     {
-        $this->output = new BufferedOutput;
+        $this->output = new BufferedOutput();
         $this->terminal = $this->createMock(Terminal::class);
 
         $this->terminal->expects($this->any())
@@ -45,7 +46,7 @@ class ConfirmTest extends TestCase
             });
     }
 
-    public function testConfirmWithOddLengthConfirmAndButton() : void
+    public function testConfirmWithOddLengthConfirmAndButton(): void
     {
         $this->terminal
             ->method('read')
@@ -69,7 +70,7 @@ class ConfirmTest extends TestCase
         static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testConfirmWithEvenLengthConfirmAndButton() : void
+    public function testConfirmWithEvenLengthConfirmAndButton(): void
     {
         $this->terminal
             ->method('read')
@@ -93,7 +94,7 @@ class ConfirmTest extends TestCase
         static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testConfirmWithEvenLengthConfirmAndOddLengthButton() : void
+    public function testConfirmWithEvenLengthConfirmAndOddLengthButton(): void
     {
         $this->terminal
             ->method('read')
@@ -117,7 +118,7 @@ class ConfirmTest extends TestCase
         static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testConfirmWithOddLengthConfirmAndEvenLengthButton() : void
+    public function testConfirmWithOddLengthConfirmAndEvenLengthButton(): void
     {
         $this->terminal
             ->method('read')
@@ -189,7 +190,7 @@ class ConfirmTest extends TestCase
         static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testConfirmCanOnlyBeClosedWithEnter() : void
+    public function testConfirmCanOnlyBeClosedWithEnter(): void
     {
         $this->terminal
             ->method('read')
@@ -288,12 +289,12 @@ class ConfirmTest extends TestCase
         static::assertFalse($return);
     }
 
-    private function getTestFile() : string
+    private function getTestFile(): string
     {
         return sprintf('%s/../res/%s.txt', __DIR__, $this->name());
     }
 
-    private function getStyle(Terminal $terminal) : MenuStyle
+    private function getStyle(Terminal $terminal): MenuStyle
     {
         return new MenuStyle($terminal);
     }

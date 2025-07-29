@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\MenuItem;
@@ -53,7 +54,7 @@ class MenuMenuItem implements MenuItemInterface, PropagatesStyles
     /**
      * The output text for the item
      */
-    public function getRows(MenuStyle $style, bool $selected = false) : array
+    public function getRows(MenuStyle $style, bool $selected = false): array
     {
         return (new SelectableItemRenderer())->render($style, $this, $selected, $this->disabled);
     }
@@ -61,7 +62,7 @@ class MenuMenuItem implements MenuItemInterface, PropagatesStyles
     /**
      * Return the raw string of text
      */
-    public function getText() : string
+    public function getText(): string
     {
         return $this->text;
     }
@@ -69,7 +70,7 @@ class MenuMenuItem implements MenuItemInterface, PropagatesStyles
     /**
      * Set the raw string of text
      */
-    public function setText(string $text) : void
+    public function setText(string $text): void
     {
         $this->text = $text;
     }
@@ -77,7 +78,7 @@ class MenuMenuItem implements MenuItemInterface, PropagatesStyles
     /**
      * Execute the items callable if required
      */
-    public function getSelectAction() : ?callable
+    public function getSelectAction(): ?callable
     {
         return function (CliMenu $menu) {
             $this->showSubMenu($menu);
@@ -87,7 +88,7 @@ class MenuMenuItem implements MenuItemInterface, PropagatesStyles
     /**
      * Returns the sub menu
      */
-    public function getSubMenu() : CliMenu
+    public function getSubMenu(): CliMenu
     {
         return $this->subMenu;
     }
@@ -95,7 +96,7 @@ class MenuMenuItem implements MenuItemInterface, PropagatesStyles
     /**
      * Display the sub menu
      */
-    public function showSubMenu(CliMenu $parentMenu) : void
+    public function showSubMenu(CliMenu $parentMenu): void
     {
         $parentMenu->closeThis();
         $this->subMenu->open();
@@ -104,7 +105,7 @@ class MenuMenuItem implements MenuItemInterface, PropagatesStyles
     /**
      * Can the item be selected
      */
-    public function canSelect() : bool
+    public function canSelect(): bool
     {
         return !$this->disabled;
     }
@@ -112,7 +113,7 @@ class MenuMenuItem implements MenuItemInterface, PropagatesStyles
     /**
      * Enable showing item extra
      */
-    public function showItemExtra() : void
+    public function showItemExtra(): void
     {
         $this->showItemExtra = true;
     }
@@ -120,7 +121,7 @@ class MenuMenuItem implements MenuItemInterface, PropagatesStyles
     /**
      * Whether or not we are showing item extra
      */
-    public function showsItemExtra() : bool
+    public function showsItemExtra(): bool
     {
         return $this->showItemExtra;
     }
@@ -128,7 +129,7 @@ class MenuMenuItem implements MenuItemInterface, PropagatesStyles
     /**
      * Disable showing item extra
      */
-    public function hideItemExtra() : void
+    public function hideItemExtra(): void
     {
         $this->showItemExtra = false;
     }
@@ -136,12 +137,12 @@ class MenuMenuItem implements MenuItemInterface, PropagatesStyles
     /**
      * @return SelectableStyle
      */
-    public function getStyle() : ItemStyle
+    public function getStyle(): ItemStyle
     {
         return $this->style;
     }
 
-    public function setStyle(SelectableStyle $style) : void
+    public function setStyle(SelectableStyle $style): void
     {
         $this->style = $style;
     }

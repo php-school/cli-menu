@@ -14,6 +14,7 @@ use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\Style\Exception\InvalidStyle;
+
 use function PhpSchool\CliMenu\Util\mapWithKeys;
 
 class Locator
@@ -53,7 +54,7 @@ class Locator
      *
      * @param Locator $other
      */
-    public function importFrom(self $other) : void
+    public function importFrom(self $other): void
     {
         $this->styles = mapWithKeys(
             $this->styles,
@@ -65,7 +66,7 @@ class Locator
         );
     }
 
-    public function getStyle(string $styleClass) : ItemStyle
+    public function getStyle(string $styleClass): ItemStyle
     {
         if (!isset($this->styles[$styleClass])) {
             throw InvalidStyle::unregisteredStyle($styleClass);
@@ -77,7 +78,7 @@ class Locator
     /**
      * @param class-string $styleClass
      */
-    public function setStyle(ItemStyle $itemStyle, string $styleClass) : void
+    public function setStyle(ItemStyle $itemStyle, string $styleClass): void
     {
         if (!isset($this->styles[$styleClass])) {
             throw InvalidStyle::unregisteredStyle($styleClass);
@@ -90,12 +91,12 @@ class Locator
         $this->styles[$styleClass] = $itemStyle;
     }
 
-    public function hasStyleForMenuItem(MenuItemInterface $item) : bool
+    public function hasStyleForMenuItem(MenuItemInterface $item): bool
     {
         return isset($this->itemStyleMap[get_class($item)]);
     }
 
-    public function getStyleForMenuItem(MenuItemInterface $item) : ItemStyle
+    public function getStyleForMenuItem(MenuItemInterface $item): ItemStyle
     {
         if (!isset($this->itemStyleMap[get_class($item)])) {
             throw InvalidStyle::unregisteredItem(get_class($item));
@@ -109,7 +110,7 @@ class Locator
     /**
      * @param class-string $itemClass
      */
-    public function registerItemStyle(string $itemClass, ItemStyle $itemStyle) : void
+    public function registerItemStyle(string $itemClass, ItemStyle $itemStyle): void
     {
         if (isset($this->itemStyleMap[$itemClass])) {
             throw InvalidStyle::itemAlreadyRegistered($itemClass);

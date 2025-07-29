@@ -8,11 +8,11 @@ use PhpSchool\CliMenu\MenuItem\MenuItemInterface;
 
 interface ItemStyle
 {
-    public function hasChangedFromDefaults() : bool;
+    public function hasChangedFromDefaults(): bool;
 
-    public function getDisplaysExtra() : bool;
+    public function getDisplaysExtra(): bool;
 
-    public function getItemExtra() : string;
+    public function getItemExtra(): string;
 
-    public function getMarker(MenuItemInterface $menuItem, bool $isSelected) : string;
+    public function getMarker(MenuItemInterface $menuItem, bool $isSelected): string;
 }

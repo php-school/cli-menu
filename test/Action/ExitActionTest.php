@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Action;
@@ -12,18 +13,18 @@ use PHPUnit\Framework\TestCase;
  */
 class ExitActionTest extends TestCase
 {
-    public function testExitActionClosesMenu() : void
+    public function testExitActionClosesMenu(): void
     {
         $menu = $this->getMockBuilder(CliMenu::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
-        $action = new ExitAction;
-        
+
+        $action = new ExitAction();
+
         $menu
             ->expects($this->once())
             ->method('close');
-        
+
         $action->__invoke($menu);
     }
 }

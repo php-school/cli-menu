@@ -10,31 +10,31 @@ use PHPUnit\Framework\TestCase;
 
 class DefaultStyleTest extends TestCase
 {
-    public function testHasChangedFromDefaultsWhenNoStylesChanged() : void
+    public function testHasChangedFromDefaultsWhenNoStylesChanged(): void
     {
         self::assertTrue((new DefaultStyle())->hasChangedFromDefaults());
     }
 
-    public function testGetMarker() : void
+    public function testGetMarker(): void
     {
         $item = new LineBreakItem('X');
-        $style = new DefaultStyle;
+        $style = new DefaultStyle();
 
         self::assertSame('', $style->getMarker($item, false));
         self::assertSame('', $style->getMarker($item, true));
     }
 
-    public function testGetSetItemExtra() : void
+    public function testGetSetItemExtra(): void
     {
-        $style = new DefaultStyle;
+        $style = new DefaultStyle();
 
         self::assertSame('', $style->getItemExtra());
     }
 
 
-    public function testGetSetDisplayExtra() : void
+    public function testGetSetDisplayExtra(): void
     {
-        $style = new DefaultStyle;
+        $style = new DefaultStyle();
 
         self::assertFalse($style->getDisplaysExtra());
     }

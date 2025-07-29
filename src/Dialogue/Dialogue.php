@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Dialogue;
@@ -65,17 +66,17 @@ abstract class Dialogue
     /**
      * @throws MenuNotOpenException
      */
-    protected function assertMenuOpen() : void
+    protected function assertMenuOpen(): void
     {
         if (!$this->parentMenu->isOpen()) {
-            throw new MenuNotOpenException;
+            throw new MenuNotOpenException();
         }
     }
 
     /**
      * Calculate the co-ordinates to write the messages
      */
-    protected function calculateCoordinates() : void
+    protected function calculateCoordinates(): void
     {
         //y
         $textLines = count(explode("\n", $this->text)) + 2;
@@ -91,7 +92,7 @@ abstract class Dialogue
     /**
      * Write an empty row
      */
-    protected function emptyRow() : void
+    protected function emptyRow(): void
     {
         $this->write(
             sprintf(
@@ -108,13 +109,13 @@ abstract class Dialogue
     /**
      * Write some text at a particular column
      */
-    protected function write(string $text, ?int $column = null) : void
+    protected function write(string $text, ?int $column = null): void
     {
         $this->terminal->moveCursorToColumn($column ?: $this->x);
         $this->terminal->write($text);
     }
 
-    public function getStyle() : MenuStyle
+    public function getStyle(): MenuStyle
     {
         return $this->style;
     }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\MenuItem;
@@ -33,7 +34,7 @@ class StaticItem implements MenuItemInterface
     /**
      * The output text for the item
      */
-    public function getRows(MenuStyle $style, bool $selected = false) : array
+    public function getRows(MenuStyle $style, bool $selected = false): array
     {
         return explode("\n", StringUtil::wordwrap($this->text, $style->getContentWidth()));
     }
@@ -41,7 +42,7 @@ class StaticItem implements MenuItemInterface
     /**
      * Return the raw string of text
      */
-    public function getText() : string
+    public function getText(): string
     {
         return $this->text;
     }
@@ -49,7 +50,7 @@ class StaticItem implements MenuItemInterface
     /**
      * Set the raw string of text
      */
-    public function setText(string $text) : void
+    public function setText(string $text): void
     {
         $this->text = $text;
     }
@@ -57,7 +58,7 @@ class StaticItem implements MenuItemInterface
     /**
      * Execute the items callable if required
      */
-    public function getSelectAction() : ?callable
+    public function getSelectAction(): ?callable
     {
         return null;
     }
@@ -65,7 +66,7 @@ class StaticItem implements MenuItemInterface
     /**
      * Can the item be selected
      */
-    public function canSelect() : bool
+    public function canSelect(): bool
     {
         return false;
     }
@@ -73,7 +74,7 @@ class StaticItem implements MenuItemInterface
     /**
      * Whether or not we are showing item extra
      */
-    public function showsItemExtra() : bool
+    public function showsItemExtra(): bool
     {
         return false;
     }
@@ -81,7 +82,7 @@ class StaticItem implements MenuItemInterface
     /**
      * Enable showing item extra
      */
-    public function showItemExtra() : void
+    public function showItemExtra(): void
     {
         //noop
     }
@@ -89,7 +90,7 @@ class StaticItem implements MenuItemInterface
     /**
      * Disable showing item extra
      */
-    public function hideItemExtra() : void
+    public function hideItemExtra(): void
     {
         //noop
     }
@@ -97,12 +98,12 @@ class StaticItem implements MenuItemInterface
     /**
      * @return DefaultStyle
      */
-    public function getStyle() : ItemStyle
+    public function getStyle(): ItemStyle
     {
         return $this->style;
     }
 
-    public function setStyle(DefaultStyle $style) : void
+    public function setStyle(DefaultStyle $style): void
     {
         $this->style = $style;
     }

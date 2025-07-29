@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Builder;
@@ -14,7 +15,8 @@ use PhpSchool\CliMenu\MenuItem\SplitItem;
 use PhpSchool\CliMenu\MenuItem\StaticItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\CliMenu\Style\ItemStyle;
-use function \PhpSchool\CliMenu\Util\each;
+
+use function PhpSchool\CliMenu\Util\each;
 
 /**
  * @author Aydin Hassan <aydin@hotmail.co.uk>
@@ -53,7 +55,7 @@ class SplitItemBuilder
         callable $itemCallable,
         bool $showItemExtra = false,
         bool $disabled = false
-    ) : self {
+    ): self {
         $this->splitItem->addItem(new SelectableItem($text, $itemCallable, $showItemExtra, $disabled));
 
         return $this;
@@ -64,7 +66,7 @@ class SplitItemBuilder
         callable $itemCallable,
         bool $showItemExtra = false,
         bool $disabled = false
-    ) : self {
+    ): self {
         $this->splitItem->addItem(new CheckboxItem($text, $itemCallable, $showItemExtra, $disabled));
 
         return $this;
@@ -75,27 +77,27 @@ class SplitItemBuilder
         callable $itemCallable,
         bool $showItemExtra = false,
         bool $disabled = false
-    ) : self {
+    ): self {
         $this->splitItem->addItem(new RadioItem($text, $itemCallable, $showItemExtra, $disabled));
 
         return $this;
     }
 
-    public function addStaticItem(string $text) : self
+    public function addStaticItem(string $text): self
     {
         $this->splitItem->addItem(new StaticItem($text));
 
         return $this;
     }
 
-    public function addLineBreak(string $breakChar = ' ', int $lines = 1) : self
+    public function addLineBreak(string $breakChar = ' ', int $lines = 1): self
     {
         $this->splitItem->addItem(new LineBreakItem($breakChar, $lines));
 
         return $this;
     }
 
-    public function addSubMenu(string $text, \Closure $callback) : self
+    public function addSubMenu(string $text, \Closure $callback): self
     {
         $builder = CliMenuBuilder::newSubMenu($this->menu->getTerminal());
 
@@ -121,21 +123,21 @@ class SplitItemBuilder
         return $this;
     }
 
-    public function addMenuItem(MenuItemInterface $item) : self
+    public function addMenuItem(MenuItemInterface $item): self
     {
         $this->splitItem->addItem($item);
 
         return $this;
     }
 
-    public function setGutter(int $gutter) : self
+    public function setGutter(int $gutter): self
     {
         $this->splitItem->setGutter($gutter);
 
         return $this;
     }
 
-    public function enableAutoShortcuts(?string $regex = null) : self
+    public function enableAutoShortcuts(?string $regex = null): self
     {
         $this->autoShortcuts = true;
 
@@ -149,14 +151,14 @@ class SplitItemBuilder
     /**
      * @param class-string<MenuItemInterface> $itemClass
      */
-    public function registerItemStyle(string $itemClass, ItemStyle $itemStyle) : self
+    public function registerItemStyle(string $itemClass, ItemStyle $itemStyle): self
     {
         $this->extraItemStyles[] = ['class' => $itemClass, 'style' => $itemStyle];
 
         return $this;
     }
 
-    public function build() : SplitItem
+    public function build(): SplitItem
     {
         return $this->splitItem;
     }

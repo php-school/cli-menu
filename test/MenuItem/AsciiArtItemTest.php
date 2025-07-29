@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\MenuItem;
@@ -12,37 +13,37 @@ use PHPUnit\Framework\TestCase;
  */
 class AsciiArtItemTest extends TestCase
 {
-    public function testCanSelectIsFalse() : void
+    public function testCanSelectIsFalse(): void
     {
         $item = new AsciiArtItem('////\\\\');
         $this->assertFalse($item->canSelect());
     }
 
-    public function testGetSelectActionReturnsNull() : void
+    public function testGetSelectActionReturnsNull(): void
     {
         $item = new AsciiArtItem('////\\\\');
         $this->assertNull($item->getSelectAction());
     }
 
-    public function testShowsItemExtraReturnsFalse() : void
+    public function testShowsItemExtraReturnsFalse(): void
     {
         $item = new AsciiArtItem('////\\\\');
         $this->assertFalse($item->showsItemExtra());
     }
 
-    public function testGetText() : void
+    public function testGetText(): void
     {
         $item = new AsciiArtItem('////\\\\');
         $this->assertEquals('////\\\\', $item->getText());
     }
 
-    public function testGetArtLength() : void
+    public function testGetArtLength(): void
     {
         $item = new AsciiArtItem("//\n//\n///");
         $this->assertEquals(3, $item->getArtLength());
     }
 
-    public function testGetRowsLeftAligned() : void
+    public function testGetRowsLeftAligned(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -61,7 +62,7 @@ class AsciiArtItemTest extends TestCase
         );
     }
 
-    public function testGetRowsRightAligned() : void
+    public function testGetRowsRightAligned(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -80,7 +81,7 @@ class AsciiArtItemTest extends TestCase
         );
     }
 
-    public function testGetRowsCenterAligned() : void
+    public function testGetRowsCenterAligned(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -99,7 +100,7 @@ class AsciiArtItemTest extends TestCase
         );
     }
 
-    public function testGetRowsCenterAlignedWithOddWidth() : void
+    public function testGetRowsCenterAlignedWithOddWidth(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -118,7 +119,7 @@ class AsciiArtItemTest extends TestCase
         );
     }
 
-    public function testHideAndShowItemExtraHasNoEffect() : void
+    public function testHideAndShowItemExtraHasNoEffect(): void
     {
         $item = new AsciiArtItem("//\n//", AsciiArtItem::POSITION_CENTER);
 
@@ -129,7 +130,7 @@ class AsciiArtItemTest extends TestCase
         $this->assertFalse($item->showsItemExtra());
     }
 
-    public function testGetRowsReturnsStaticAltItemWhenWidthIsTooSmall() : void
+    public function testGetRowsReturnsStaticAltItemWhenWidthIsTooSmall(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -137,13 +138,13 @@ class AsciiArtItemTest extends TestCase
             ->expects($this->any())
             ->method('getContentWidth')
             ->willReturn(10);
-        
+
         $item = new AsciiArtItem('TOO LONG. SO SO LONG.', AsciiArtItem::POSITION_CENTER, 'my alt');
-        
+
         self::assertSame(['my alt'], $item->getRows($menuStyle));
     }
 
-    public function testGetRowsDoesNotReturnsStaticAltItemWhenOnlySpacesOverflow() : void
+    public function testGetRowsDoesNotReturnsStaticAltItemWhenOnlySpacesOverflow(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -151,13 +152,13 @@ class AsciiArtItemTest extends TestCase
             ->expects($this->any())
             ->method('getContentWidth')
             ->willReturn(15);
-        
+
         $item = new AsciiArtItem('NOT TOO LONG            ', AsciiArtItem::POSITION_LEFT, 'my alt');
-        
+
         self::assertSame(['NOT TOO LONG'], $item->getRows($menuStyle));
     }
 
-    public function testWithRealAsciiArtCenterAligned() : void
+    public function testWithRealAsciiArtCenterAligned(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -189,7 +190,7 @@ ART;
         );
     }
 
-    public function testWithRealAsciiArtRightAligned() : void
+    public function testWithRealAsciiArtRightAligned(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -221,7 +222,7 @@ ART;
         );
     }
 
-    public function testWithRealAsciiArtCenterAlignedWithWhiteSpaceAtTheEndOfEachLine() : void
+    public function testWithRealAsciiArtCenterAlignedWithWhiteSpaceAtTheEndOfEachLine(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -229,7 +230,7 @@ ART;
             ->expects($this->any())
             ->method('getContentWidth')
             ->willReturn(30);
-        
+
         $art = <<<ART
         _ __ _        
        / |..| \       
@@ -252,7 +253,7 @@ ART;
         );
     }
 
-    public function testSetText() : void
+    public function testSetText(): void
     {
         $menuStyle = $this->createMock(MenuStyle::class);
 
@@ -260,7 +261,7 @@ ART;
             ->expects($this->any())
             ->method('getContentWidth')
             ->willReturn(30);
-        
+
         $art = <<<ART
         _ __ _        
        / |..| \       

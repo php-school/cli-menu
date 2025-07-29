@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu;
@@ -24,6 +25,7 @@ use PhpSchool\CliMenu\Util\StringUtil as s;
 use PhpSchool\Terminal\InputCharacter;
 use PhpSchool\Terminal\NonCanonicalReader;
 use PhpSchool\Terminal\Terminal;
+
 use function PhpSchool\CliMenu\Util\collect;
 use function PhpSchool\CliMenu\Util\each;
 
@@ -49,7 +51,7 @@ class CliMenu
 
     protected bool $open = false;
 
-    protected CliMenu|null $parent;
+    protected CliMenu|null $parent = null;
 
     /**
      * @var array<string, InputCharacter::*>
@@ -94,7 +96,7 @@ class CliMenu
     /**
      * Configure the terminal to work with CliMenu
      */
-    protected function configureTerminal() : void
+    protected function configureTerminal(): void
     {
         $this->assertTerminalIsValidTTY();
 
@@ -107,7 +109,7 @@ class CliMenu
     /**
      * Revert changes made to the terminal
      */
-    protected function tearDownTerminal() : void
+    protected function tearDownTerminal(): void
     {
         $this->terminal->restoreOriginalConfiguration();
         $this->terminal->enableCanonicalMode();
@@ -115,39 +117,39 @@ class CliMenu
         $this->terminal->enableCursor();
     }
 
-    private function assertTerminalIsValidTTY() : void
+    private function assertTerminalIsValidTTY(): void
     {
         if (!$this->terminal->isInteractive()) {
             throw new InvalidTerminalException('Terminal is not interactive (TTY)');
         }
     }
 
-    public function setTitle(string $title) : void
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    public function getTitle() : ?string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setParent(CliMenu $parent) : void
+    public function setParent(CliMenu $parent): void
     {
         $this->parent = $parent;
     }
 
-    public function getParent() : ?CliMenu
+    public function getParent(): ?CliMenu
     {
         return $this->parent;
     }
 
-    public function getTerminal() : Terminal
+    public function getTerminal(): Terminal
     {
         return $this->terminal;
     }
 
-    public function isOpen() : bool
+    public function isOpen(): bool
     {
         return $this->open;
     }
@@ -155,7 +157,7 @@ class CliMenu
     /**
      * Add a new Item to the menu
      */
-    public function addItem(MenuItemInterface $item) : void
+    public function addItem(MenuItemInterface $item): void
     {
         $this->items[] = $item;
 
@@ -167,7 +169,7 @@ class CliMenu
      *
      * @param list<MenuItemInterface> $items
      */
-    public function addItems(array $items) : void
+    public function addItems(array $items): void
     {
         foreach ($items as $item) {
             $this->items[] = $item;
@@ -181,7 +183,7 @@ class CliMenu
      *
      * @param list<MenuItemInterface> $items
      */
-    public function setItems(array $items) : void
+    public function setItems(array $items): void
     {
         $this->selectedItem = null;
         $this->items = $items;
@@ -192,7 +194,7 @@ class CliMenu
     /**
      * Set the selected pointer to the first selectable item
      */
-    private function selectFirstItem() : void
+    private function selectFirstItem(): void
     {
         if (null === $this->selectedItem) {
             foreach ($this->items as $key => $item) {
@@ -207,7 +209,7 @@ class CliMenu
     /**
      * Disables the built-in VIM control mappings
      */
-    public function disableDefaultControlMappings() : void
+    public function disableDefaultControlMappings(): void
     {
         $this->defaultControlMappings = [];
     }
@@ -218,7 +220,7 @@ class CliMenu
      * @param array<string, InputCharacter::*> $defaultControlMappings
      *
      */
-    public function setDefaultControlMappings(array $defaultControlMappings) : void
+    public function setDefaultControlMappings(array $defaultControlMappings): void
     {
         $this->defaultControlMappings = $defaultControlMappings;
     }
@@ -226,7 +228,7 @@ class CliMenu
     /**
      * Adds a custom control mapping
      */
-    public function addCustomControlMapping(string $input, callable $callable) : void
+    public function addCustomControlMapping(string $input, callable $callable): void
     {
         if (isset($this->defaultControlMappings[$input]) || isset($this->customControlMappings[$input])) {
             throw new \InvalidArgumentException('Cannot rebind this input');
@@ -238,7 +240,7 @@ class CliMenu
     /**
      * @return array<string, callable>
      */
-    public function getCustomControlMappings() : array
+    public function getCustomControlMappings(): array
     {
         return $this->customControlMappings;
     }
@@ -248,7 +250,7 @@ class CliMenu
      *
      * @param array<string, callable> $map
      */
-    public function addCustomControlMappings(array $map) : void
+    public function addCustomControlMappings(array $map): void
     {
         foreach ($map as $input => $callable) {
             $this->addCustomControlMapping($input, $callable);
@@ -258,7 +260,7 @@ class CliMenu
     /**
      * Removes a custom control mapping
      */
-    public function removeCustomControlMapping(string $input) : void
+    public function removeCustomControlMapping(string $input): void
     {
         if (!isset($this->customControlMappings[$input])) {
             throw new \InvalidArgumentException('This input is not registered');
@@ -270,7 +272,7 @@ class CliMenu
     /**
      * Display menu and capture input
      */
-    private function display() : void
+    private function display(): void
     {
         $this->draw();
 
@@ -316,7 +318,7 @@ class CliMenu
     /**
      * Move the selection in a given direction, up / down
      */
-    protected function moveSelectionVertically(string $direction) : void
+    protected function moveSelectionVertically(string $direction): void
     {
         $itemKeys = array_keys($this->items);
 
@@ -346,7 +348,7 @@ class CliMenu
     /**
      * Move the selection in a given direction, left / right
      */
-    protected function moveSelectionHorizontally(string $direction) : void
+    protected function moveSelectionHorizontally(string $direction): void
     {
         if (!$this->items[$this->selectedItem] instanceof SplitItem) {
             return;
@@ -387,7 +389,7 @@ class CliMenu
      *
      * @return bool
      */
-    private function canSelect() : bool
+    private function canSelect(): bool
     {
         return $this->items[$this->selectedItem]->canSelect();
     }
@@ -396,7 +398,7 @@ class CliMenu
      * Retrieve the item the user actually selected
      *
      */
-    public function getSelectedItem() : MenuItemInterface
+    public function getSelectedItem(): MenuItemInterface
     {
         if (null === $this->selectedItem) {
             throw new \RuntimeException('No selected item');
@@ -408,7 +410,7 @@ class CliMenu
             : $item;
     }
 
-    public function setSelectedItem(MenuItemInterface $item) : void
+    public function setSelectedItem(MenuItemInterface $item): void
     {
         $key = array_search($item, $this->items, true);
 
@@ -419,7 +421,7 @@ class CliMenu
         $this->selectedItem = (int) $key;
     }
 
-    public function getSelectedItemIndex() : int
+    public function getSelectedItemIndex(): int
     {
         if (null === $this->selectedItem) {
             throw new \RuntimeException('No selected item');
@@ -428,7 +430,7 @@ class CliMenu
         return $this->selectedItem;
     }
 
-    public function getItemByIndex(int $index) : MenuItemInterface
+    public function getItemByIndex(int $index): MenuItemInterface
     {
         if (!isset($this->items[$index])) {
             throw new \RuntimeException('Item with index does not exist');
@@ -437,7 +439,7 @@ class CliMenu
         return $this->items[$index];
     }
 
-    public function executeAsSelected(MenuItemInterface $item) : void
+    public function executeAsSelected(MenuItemInterface $item): void
     {
         $current = $this->items[$this->selectedItem];
         $this->setSelectedItem($item);
@@ -448,7 +450,7 @@ class CliMenu
     /**
      * Execute the current item
      */
-    protected function executeCurrentItem() : void
+    protected function executeCurrentItem(): void
     {
         $item = $this->getSelectedItem();
 
@@ -467,7 +469,7 @@ class CliMenu
      *
      * Redraw the menu
      */
-    public function redraw(bool $clear = false) : void
+    public function redraw(bool $clear = false): void
     {
         if ($clear) {
             $this->terminal->clear();
@@ -477,19 +479,19 @@ class CliMenu
         $this->draw();
     }
 
-    private function assertOpen() : void
+    private function assertOpen(): void
     {
         if (!$this->isOpen()) {
-            throw new MenuNotOpenException;
+            throw new MenuNotOpenException();
         }
     }
 
     /**
      * Draw the menu to STDOUT
      */
-    protected function draw() : void
+    protected function draw(): void
     {
-        $frame = new Frame;
+        $frame = new Frame();
 
         $frame->newLine(2);
 
@@ -538,7 +540,7 @@ class CliMenu
      *
      * @return list<string>
      */
-    protected function drawMenuItem(MenuItemInterface $item, bool $selected = false) : array
+    protected function drawMenuItem(MenuItemInterface $item, bool $selected = false): array
     {
         $rows = $item->getRows($this->style, $selected);
 
@@ -581,7 +583,7 @@ class CliMenu
     /**
      * @throws InvalidTerminalException
      */
-    public function open() : void
+    public function open(): void
     {
         if ($this->isOpen()) {
             return;
@@ -601,7 +603,7 @@ class CliMenu
      *
      * @throws InvalidTerminalException
      */
-    public function close() : void
+    public function close(): void
     {
         $menu = $this;
 
@@ -613,7 +615,7 @@ class CliMenu
         $this->tearDownTerminal();
     }
 
-    public function closeThis() : void
+    public function closeThis(): void
     {
         $this->terminal->clean();
         $this->terminal->moveCursorToTop();
@@ -623,12 +625,12 @@ class CliMenu
     /**
      * @return MenuItemInterface[]
      */
-    public function getItems() : array
+    public function getItems(): array
     {
         return $this->items;
     }
 
-    public function removeItem(MenuItemInterface $item) : void
+    public function removeItem(MenuItemInterface $item): void
     {
         $key = array_search($item, $this->items, true);
 
@@ -645,12 +647,12 @@ class CliMenu
         }
     }
 
-    public function getStyle() : MenuStyle
+    public function getStyle(): MenuStyle
     {
         return $this->style;
     }
 
-    public function setStyle(MenuStyle $style) : void
+    public function setStyle(MenuStyle $style): void
     {
         $this->style = $style;
     }
@@ -658,27 +660,27 @@ class CliMenu
     /**
      * @param class-string $styleClass
      */
-    public function setItemStyle(ItemStyle $style, string $styleClass) : void
+    public function setItemStyle(ItemStyle $style, string $styleClass): void
     {
         $this->itemStyleLocator->setStyle($style, $styleClass);
     }
 
-    public function getItemStyle(string $styleClass) : ItemStyle
+    public function getItemStyle(string $styleClass): ItemStyle
     {
         return $this->itemStyleLocator->getStyle($styleClass);
     }
 
-    public function getItemStyleForItem(MenuItemInterface $item) : ItemStyle
+    public function getItemStyleForItem(MenuItemInterface $item): ItemStyle
     {
         return $this->itemStyleLocator->getStyleForMenuItem($item);
     }
 
-    public function getStyleLocator() : Locator
+    public function getStyleLocator(): Locator
     {
         return $this->itemStyleLocator;
     }
 
-    public function importStyles(CliMenu $menu) : void
+    public function importStyles(CliMenu $menu): void
     {
         if (!$this->style->hasChangedFromDefaults()) {
             $this->style = $menu->style;
@@ -687,12 +689,12 @@ class CliMenu
         $this->itemStyleLocator->importFrom($menu->itemStyleLocator);
     }
 
-    public function getCurrentFrame() : Frame
+    public function getCurrentFrame(): Frame
     {
         return $this->currentFrame;
     }
 
-    public function flash(string $text, ?MenuStyle $style = null) : Flash
+    public function flash(string $text, ?MenuStyle $style = null): Flash
     {
         $this->guardSingleLine($text);
 
@@ -703,7 +705,7 @@ class CliMenu
         return new Flash($this, $style, $this->terminal, $text);
     }
 
-    public function confirm(string $text, ?MenuStyle $style = null) : Confirm
+    public function confirm(string $text, ?MenuStyle $style = null): Confirm
     {
         $this->guardSingleLine($text);
 
@@ -714,7 +716,7 @@ class CliMenu
         return new Confirm($this, $style, $this->terminal, $text);
     }
 
-    public function cancellableConfirm(string $text, ?MenuStyle $style = null) : CancellableConfirm
+    public function cancellableConfirm(string $text, ?MenuStyle $style = null): CancellableConfirm
     {
         $this->guardSingleLine($text);
 
@@ -725,7 +727,7 @@ class CliMenu
         return new CancellableConfirm($this, $style, $this->terminal, $text);
     }
 
-    public function askNumber(?MenuStyle $style = null) : Number
+    public function askNumber(?MenuStyle $style = null): Number
     {
         $this->assertOpen();
 
@@ -736,7 +738,7 @@ class CliMenu
         return new Number(new InputIO($this, $this->terminal), $style);
     }
 
-    public function askText(?MenuStyle $style = null) : Text
+    public function askText(?MenuStyle $style = null): Text
     {
         $this->assertOpen();
 
@@ -747,7 +749,7 @@ class CliMenu
         return new Text(new InputIO($this, $this->terminal), $style);
     }
 
-    public function askPassword(?MenuStyle $style = null) : Password
+    public function askPassword(?MenuStyle $style = null): Password
     {
         $this->assertOpen();
 
@@ -758,14 +760,14 @@ class CliMenu
         return new Password(new InputIO($this, $this->terminal), $style);
     }
 
-    private function guardSingleLine(string $text) : void
+    private function guardSingleLine(string $text): void
     {
         if (strpos($text, "\n") !== false) {
-            throw new \InvalidArgumentException;
+            throw new \InvalidArgumentException();
         }
     }
 
-    public function propagateStyles() : void
+    public function propagateStyles(): void
     {
         collect($this->items)
             ->filter(function (int $k, MenuItemInterface $item) {

@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class CollectionTest extends TestCase
 {
-    public function testCollection() : void
+    public function testCollection(): void
     {
         $result = (new Collection([1, 2, 3, 4, 5, 6]))
             ->filter(function ($k, $v) {

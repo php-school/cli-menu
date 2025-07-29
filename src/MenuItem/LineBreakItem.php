@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\MenuItem;
@@ -39,7 +40,7 @@ class LineBreakItem implements MenuItemInterface
     /**
      * The output text for the item
      */
-    public function getRows(MenuStyle $style, bool $selected = false) : array
+    public function getRows(MenuStyle $style, bool $selected = false): array
     {
         return explode(
             "\n",
@@ -53,7 +54,7 @@ class LineBreakItem implements MenuItemInterface
     /**
      * Can the item be selected
      */
-    public function canSelect() : bool
+    public function canSelect(): bool
     {
         return false;
     }
@@ -61,7 +62,7 @@ class LineBreakItem implements MenuItemInterface
     /**
      * Execute the items callable if required
      */
-    public function getSelectAction() : ?callable
+    public function getSelectAction(): ?callable
     {
         return null;
     }
@@ -69,7 +70,7 @@ class LineBreakItem implements MenuItemInterface
     /**
      * Return the raw string of text
      */
-    public function getText() : string
+    public function getText(): string
     {
         return $this->breakChar;
     }
@@ -77,7 +78,7 @@ class LineBreakItem implements MenuItemInterface
     /**
      * Set the raw string of text
      */
-    public function setText(string $text) : void
+    public function setText(string $text): void
     {
         $this->breakChar = $text;
     }
@@ -85,12 +86,12 @@ class LineBreakItem implements MenuItemInterface
     /**
      * Whether or not the menu item is showing the menustyle extra value
      */
-    public function showsItemExtra() : bool
+    public function showsItemExtra(): bool
     {
         return false;
     }
 
-    public function getLines() : int
+    public function getLines(): int
     {
         return $this->lines;
     }
@@ -98,7 +99,7 @@ class LineBreakItem implements MenuItemInterface
     /**
      * Enable showing item extra
      */
-    public function showItemExtra() : void
+    public function showItemExtra(): void
     {
         //noop
     }
@@ -106,7 +107,7 @@ class LineBreakItem implements MenuItemInterface
     /**
      * Disable showing item extra
      */
-    public function hideItemExtra() : void
+    public function hideItemExtra(): void
     {
         //noop
     }
@@ -114,12 +115,12 @@ class LineBreakItem implements MenuItemInterface
     /**
      * @return DefaultStyle
      */
-    public function getStyle() : ItemStyle
+    public function getStyle(): ItemStyle
     {
         return $this->style;
     }
 
-    public function setStyle(DefaultStyle $style) : void
+    public function setStyle(DefaultStyle $style): void
     {
         $this->style = $style;
     }

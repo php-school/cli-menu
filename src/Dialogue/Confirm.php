@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Dialogue;
@@ -11,11 +12,10 @@ use PhpSchool\Terminal\NonCanonicalReader;
  */
 class Confirm extends Dialogue
 {
-
     /**
      * Display confirmation with a button with the given text
      */
-    public function display(string $confirmText = 'OK') : void
+    public function display(string $confirmText = 'OK'): void
     {
         $this->assertMenuOpen();
 

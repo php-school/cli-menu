@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Dialogue;
@@ -26,9 +27,9 @@ class FlashTest extends TestCase
      */
     private $output;
 
-    public function setUp() : void
+    public function setUp(): void
     {
-        $this->output = new BufferedOutput;
+        $this->output = new BufferedOutput();
         $this->terminal = $this->createMock(Terminal::class);
 
         $this->terminal->expects($this->any())
@@ -46,7 +47,7 @@ class FlashTest extends TestCase
             });
     }
 
-    public function testFlashWithOddLength() : void
+    public function testFlashWithOddLength(): void
     {
         $this->terminal
             ->method('read')
@@ -70,7 +71,7 @@ class FlashTest extends TestCase
         static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function testFlashWithEvenLength() : void
+    public function testFlashWithEvenLength(): void
     {
         $this->terminal
             ->method('read')
@@ -95,7 +96,7 @@ class FlashTest extends TestCase
     }
 
     #[DataProvider('keyProvider')]
-    public function testFlashCanBeClosedWithAnyKey(string $key) : void
+    public function testFlashCanBeClosedWithAnyKey(string $key): void
     {
         $this->terminal
             ->method('read')
@@ -116,7 +117,7 @@ class FlashTest extends TestCase
         static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public static function keyProvider() : array
+    public static function keyProvider(): array
     {
         return [
             ["\n"],
@@ -126,12 +127,12 @@ class FlashTest extends TestCase
         ];
     }
 
-    private function getTestFile() : string
+    private function getTestFile(): string
     {
         return sprintf('%s/../res/%s.txt', __DIR__, $this->name());
     }
 
-    private function getStyle(Terminal $terminal) : MenuStyle
+    private function getStyle(Terminal $terminal): MenuStyle
     {
         return new MenuStyle($terminal);
     }

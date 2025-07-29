@@ -8,7 +8,7 @@ use InvalidArgumentException;
 
 class CannotShrinkMenuException extends InvalidArgumentException
 {
-    public static function fromMarginAndTerminalWidth(int $margin, int $terminalWidth) : self
+    public static function fromMarginAndTerminalWidth(int $margin, int $terminalWidth): self
     {
         return new self(
             sprintf(

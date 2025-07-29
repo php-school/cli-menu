@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Input;
@@ -29,13 +30,13 @@ class InputIO
         $this->parentMenu   = $parentMenu;
     }
 
-    public function collect(Input $input) : InputResult
+    public function collect(Input $input): InputResult
     {
         $this->drawInput($input, $input->getPlaceholderText());
 
         $inputValue = $input->getPlaceholderText();
         $havePlaceHolderValue = !empty($inputValue);
-        
+
         $originalValue = $inputValue;
 
         $reader = new NonCanonicalReader($this->terminal);
@@ -68,6 +69,7 @@ class InputIO
                             continue 2;
                         }
 
+                        // no break
                     case InputCharacter::BACKSPACE:
                         if (!empty($inputValue)) {
                             $inputValue = substr($inputValue, 0, -1);
@@ -87,7 +89,7 @@ class InputIO
         }
     }
 
-    public function registerControlCallback(string $control, callable $callback) : void
+    public function registerControlCallback(string $control, callable $callback): void
     {
         if (!isset($this->callbacks[$control])) {
             $this->callbacks[$control] = [];
@@ -99,7 +101,7 @@ class InputIO
     /**
      * @param non-empty-list<string> $lines
      */
-    private function getInputWidth(array $lines) : int
+    private function getInputWidth(array $lines): int
     {
         return max(
             array_map(
@@ -108,24 +110,24 @@ class InputIO
                 },
                 $lines
             )
-        ) ? : 0;
+        ) ?: 0;
     }
 
-    private function calculateYPosition() : int
+    private function calculateYPosition(): int
     {
         $lines = 5; //1. empty 2. prompt text 3. empty 4. input 5. empty
 
-        return (int) (ceil($this->parentMenu->getCurrentFrame()->count() / 2) - ceil($lines /2) + 1);
+        return (int) (ceil($this->parentMenu->getCurrentFrame()->count() / 2) - ceil($lines / 2) + 1);
     }
 
-    private function calculateYPositionWithError() : int
+    private function calculateYPositionWithError(): int
     {
         $lines = 7; //1. empty 2. prompt text 3. empty 4. input 5. empty 6. error 7. empty
 
-        return (int) (ceil($this->parentMenu->getCurrentFrame()->count() / 2) - ceil($lines /2) + 1);
+        return (int) (ceil($this->parentMenu->getCurrentFrame()->count() / 2) - ceil($lines / 2) + 1);
     }
 
-    private function calculateXPosition(Input $input, string $userInput) : int
+    private function calculateXPosition(Input $input, string $userInput): int
     {
         $width = $this->getInputWidth(
             [
@@ -142,7 +144,7 @@ class InputIO
         return (int) ($parentHalfWidth - $halfWidth);
     }
 
-    private function drawLine(Input $input, string $userInput, string $text) : void
+    private function drawLine(Input $input, string $userInput, string $text): void
     {
         $this->terminal->moveCursorToColumn($this->calculateXPosition($input, $userInput));
 
@@ -158,7 +160,7 @@ class InputIO
         $this->terminal->write($line);
     }
 
-    private function drawCenteredLine(Input $input, string $userInput, string $text) : void
+    private function drawCenteredLine(Input $input, string $userInput, string $text): void
     {
         $width = $this->getInputWidth(
             [
@@ -184,7 +186,7 @@ class InputIO
         );
     }
 
-    private function drawEmptyLine(Input $input, string $userInput) : void
+    private function drawEmptyLine(Input $input, string $userInput): void
     {
         $width = $this->getInputWidth(
             [
@@ -201,7 +203,7 @@ class InputIO
         );
     }
 
-    private function drawInput(Input $input, string $userInput) : void
+    private function drawInput(Input $input, string $userInput): void
     {
         $this->terminal->moveCursorToRow($this->calculateYPosition());
 
@@ -212,7 +214,7 @@ class InputIO
         $this->drawEmptyLine($input, $userInput);
     }
 
-    private function drawInputWithError(Input $input, string $userInput) : void
+    private function drawInputWithError(Input $input, string $userInput): void
     {
         $this->terminal->moveCursorToRow($this->calculateYPositionWithError());
 
@@ -229,7 +231,7 @@ class InputIO
         $this->drawEmptyLine($input, $userInput);
     }
 
-    private function drawTitle(Input $input, string $userInput) : void
+    private function drawTitle(Input $input, string $userInput): void
     {
 
         $this->drawCenteredLine(
@@ -239,7 +241,7 @@ class InputIO
         );
     }
 
-    private function drawInputField(Input $input, string $userInput) : void
+    private function drawInputField(Input $input, string $userInput): void
     {
         $this->drawCenteredLine(
             $input,

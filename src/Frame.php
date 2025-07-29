@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu;
@@ -16,7 +17,7 @@ class Frame implements \Countable
      */
     private array $rows = [];
 
-    public function newLine(int $count = 1) : void
+    public function newLine(int $count = 1): void
     {
         foreach (range(1, $count) as $i) {
             $this->rows[] = "\n";
@@ -26,19 +27,19 @@ class Frame implements \Countable
     /**
      * @param list<string> $rows
      */
-    public function addRows(array $rows = []) : void
+    public function addRows(array $rows = []): void
     {
         foreach ($rows as $row) {
             $this->rows[] = $row;
         }
     }
 
-    public function addRow(string $row) : void
+    public function addRow(string $row): void
     {
         $this->rows[] = $row;
     }
 
-    public function count() : int
+    public function count(): int
     {
         return count($this->rows);
     }
@@ -46,7 +47,7 @@ class Frame implements \Countable
     /**
      * @return list<string>
      */
-    public function getRows() : array
+    public function getRows(): array
     {
         return $this->rows;
     }

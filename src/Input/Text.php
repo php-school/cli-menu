@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Input;
@@ -46,75 +47,75 @@ class Text implements Input
         $this->style = $style;
     }
 
-    public function setPromptText(string $promptText) : Input
+    public function setPromptText(string $promptText): Input
     {
         $this->promptText = $promptText;
 
         return $this;
     }
 
-    public function getPromptText() : string
+    public function getPromptText(): string
     {
         return $this->promptText;
     }
 
-    public function setValidationFailedText(string $validationFailedText) : Input
+    public function setValidationFailedText(string $validationFailedText): Input
     {
         $this->validationFailedText = $validationFailedText;
 
         return $this;
     }
 
-    public function getValidationFailedText() : string
+    public function getValidationFailedText(): string
     {
         return $this->validationFailedText;
     }
 
-    public function setPlaceholderText(string $placeholderText) : Input
+    public function setPlaceholderText(string $placeholderText): Input
     {
         $this->placeholderText = $placeholderText;
 
         return $this;
     }
 
-    public function getPlaceholderText() : string
+    public function getPlaceholderText(): string
     {
         return $this->placeholderText;
     }
 
-    public function setValidator(callable $validator) : Input
+    public function setValidator(callable $validator): Input
     {
         $this->validator = $validator;
-        
+
         return $this;
     }
 
-    public function ask() : InputResult
+    public function ask(): InputResult
     {
         return $this->inputIO->collect($this);
     }
 
-    public function validate(string $input) : bool
+    public function validate(string $input): bool
     {
         if ($this->validator) {
             $validator = $this->validator;
-            
+
             if ($validator instanceof \Closure) {
                 $validator = $validator->bindTo($this);
             }
-            
+
             return $validator($input);
         }
 
         return !empty($input);
     }
 
-    public function filter(string $value) : string
+    public function filter(string $value): string
     {
         return $value;
     }
 
-    public function getStyle() : MenuStyle
+    public function getStyle(): MenuStyle
     {
         return $this->style;
     }

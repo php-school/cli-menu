@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Action;
@@ -12,31 +13,31 @@ use PHPUnit\Framework\TestCase;
  */
 class GoBackActionTest extends TestCase
 {
-    public function testGoBackActionClosesMenuAndOpensParentIfMenuHasAParent() : void
+    public function testGoBackActionClosesMenuAndOpensParentIfMenuHasAParent(): void
     {
         $parent = $this->getMockBuilder(CliMenu::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $menu = $this->getMockBuilder(CliMenu::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
-        $action = new GoBackAction;
-        
+
+        $action = new GoBackAction();
+
         $menu
             ->expects($this->once())
             ->method('getParent')
             ->willReturn($parent);
-        
+
         $menu
             ->expects($this->once())
             ->method('closeThis');
-        
+
         $parent
             ->expects($this->once())
             ->method('open');
-        
+
         $action->__invoke($menu);
     }
 }

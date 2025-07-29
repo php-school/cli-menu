@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenuTest\Input;
@@ -31,7 +32,7 @@ class TextTest extends TestCase
      */
     private $input;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->terminal = $this->createMock(Terminal::class);
         $menu           = $this->createMock(CliMenu::class);
@@ -41,7 +42,7 @@ class TextTest extends TestCase
         $this->input    = new Text($this->inputIO, $style);
     }
 
-    public function testGetSetPromptText() : void
+    public function testGetSetPromptText(): void
     {
         static::assertEquals('Enter text:', $this->input->getPromptText());
 
@@ -49,7 +50,7 @@ class TextTest extends TestCase
         static::assertEquals('Text please:', $this->input->getPromptText());
     }
 
-    public function testGetSetValidationFailedText() : void
+    public function testGetSetValidationFailedText(): void
     {
         static::assertEquals('Invalid, try again', $this->input->getValidationFailedText());
 
@@ -57,7 +58,7 @@ class TextTest extends TestCase
         static::assertEquals('Failed!', $this->input->getValidationFailedText());
     }
 
-    public function testGetSetPlaceholderText() : void
+    public function testGetSetPlaceholderText(): void
     {
         static::assertEquals('', $this->input->getPlaceholderText());
 
@@ -66,12 +67,12 @@ class TextTest extends TestCase
     }
 
     #[DataProvider('validateProvider')]
-    public function testValidate(string $value, bool $result) : void
+    public function testValidate(string $value, bool $result): void
     {
         static::assertEquals($this->input->validate($value), $result);
     }
 
-    public static function validateProvider() : array
+    public static function validateProvider(): array
     {
         return [
             ['', false],
@@ -80,12 +81,12 @@ class TextTest extends TestCase
         ];
     }
 
-    public function testFilterReturnsInputAsIs() : void
+    public function testFilterReturnsInputAsIs(): void
     {
         static::assertEquals('9999', $this->input->filter('9999'));
     }
 
-    public function testAskText() : void
+    public function testAskText(): void
     {
         $this->terminal
             ->expects($this->exactly(10))

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Terminal;
@@ -13,8 +14,8 @@ use PhpSchool\Terminal\UnixTerminal;
  */
 class TerminalFactory
 {
-    public static function fromSystem() : Terminal
+    public static function fromSystem(): Terminal
     {
-        return new UnixTerminal(new ResourceInputStream, new ResourceOutputStream);
+        return new UnixTerminal(new ResourceInputStream(), new ResourceOutputStream());
     }
 }

@@ -13,7 +13,7 @@ namespace PhpSchool\CliMenu\Util;
  * @param callable(TKey, TItem): TItemNew $callback
  * @return array<TKey, TItemNew>
  */
-function mapWithKeys(array $array, callable $callback) : array
+function mapWithKeys(array $array, callable $callback): array
 {
     return array_combine(
         array_keys($array),
@@ -29,7 +29,7 @@ function mapWithKeys(array $array, callable $callback) : array
  * @param callable(TKey, TItem): bool $callback
  * @return array<TKey, TItem>
  */
-function filter(array $array, callable $callback) : array
+function filter(array $array, callable $callback): array
 {
     return array_filter($array, function ($v, $k) use ($callback) {
         return $callback($k, $v);
@@ -43,7 +43,7 @@ function filter(array $array, callable $callback) : array
  * @param array<TKey, TItem> $array
  * @param callable(TKey, TItem): void $callback
  */
-function each(array $array, callable $callback) : void
+function each(array $array, callable $callback): void
 {
     foreach ($array as $k => $v) {
         $callback($k, $v);
@@ -53,7 +53,7 @@ function each(array $array, callable $callback) : void
 /**
  * @param list<int> $items
  */
-function max(array $items) : int
+function max(array $items): int
 {
     return count($items) > 0 ? \max($items) : 0;
 }
@@ -65,7 +65,7 @@ function max(array $items) : int
  * @param array<TKey, TItem> $items
  * @return Collection<TKey, TItem>
  */
-function collect(array $items) : Collection
+function collect(array $items): Collection
 {
     return new Collection($items);
 }

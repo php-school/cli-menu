@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Builder;
@@ -24,6 +25,7 @@ use PhpSchool\CliMenu\Style\RadioStyle;
 use PhpSchool\CliMenu\Style\SelectableStyle;
 use PhpSchool\CliMenu\Terminal\TerminalFactory;
 use PhpSchool\Terminal\Terminal;
+
 use function PhpSchool\CliMenu\Util\each;
 
 /**
@@ -72,7 +74,7 @@ class CliMenuBuilder
         $this->menu     = new CliMenu(null, [], $this->terminal, $this->style);
     }
 
-    public static function newSubMenu(Terminal $terminal) : self
+    public static function newSubMenu(Terminal $terminal): self
     {
         $instance = new self($terminal);
         $instance->subMenu = true;
@@ -80,14 +82,14 @@ class CliMenuBuilder
         return $instance;
     }
 
-    public function setTitle(string $title) : self
+    public function setTitle(string $title): self
     {
         $this->menu->setTitle($title);
 
         return $this;
     }
 
-    public function addMenuItem(MenuItemInterface $item) : self
+    public function addMenuItem(MenuItemInterface $item): self
     {
         $this->menu->addItem($item);
 
@@ -101,7 +103,7 @@ class CliMenuBuilder
         callable $itemCallable,
         bool $showItemExtra = false,
         bool $disabled = false
-    ) : self {
+    ): self {
         $this->addMenuItem(new SelectableItem($text, $itemCallable, $showItemExtra, $disabled));
 
         return $this;
@@ -110,7 +112,7 @@ class CliMenuBuilder
     /**
      * @param list<array{0: string, 1: callable}> $items
      */
-    public function addItems(array $items) : self
+    public function addItems(array $items): self
     {
         foreach ($items as $item) {
             $this->addItem(...$item);
@@ -124,7 +126,7 @@ class CliMenuBuilder
         callable $itemCallable,
         bool $showItemExtra = false,
         bool $disabled = false
-    ) : self {
+    ): self {
         $this->addMenuItem(new CheckboxItem($text, $itemCallable, $showItemExtra, $disabled));
 
         return $this;
@@ -147,7 +149,7 @@ class CliMenuBuilder
         callable $itemCallable,
         bool $showItemExtra = false,
         bool $disabled = false
-    ) : self {
+    ): self {
         $this->addMenuItem(new RadioItem($text, $itemCallable, $showItemExtra, $disabled));
 
         return $this;
@@ -165,28 +167,28 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function addStaticItem(string $text) : self
+    public function addStaticItem(string $text): self
     {
         $this->addMenuItem(new StaticItem($text));
 
         return $this;
     }
 
-    public function addLineBreak(string $breakChar = ' ', int $lines = 1) : self
+    public function addLineBreak(string $breakChar = ' ', int $lines = 1): self
     {
         $this->addMenuItem(new LineBreakItem($breakChar, $lines));
 
         return $this;
     }
 
-    public function addAsciiArt(string $art, string $position = AsciiArtItem::POSITION_CENTER, string $alt = '') : self
+    public function addAsciiArt(string $art, string $position = AsciiArtItem::POSITION_CENTER, string $alt = ''): self
     {
         $this->addMenuItem(new AsciiArtItem($art, $position, $alt));
 
         return $this;
     }
 
-    public function addSubMenu(string $text, callable $callback) : self
+    public function addSubMenu(string $text, callable $callback): self
     {
         $builder = self::newSubMenu($this->terminal);
 
@@ -214,7 +216,7 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function addSubMenuFromBuilder(string $text, CliMenuBuilder $builder) : self
+    public function addSubMenuFromBuilder(string $text, CliMenuBuilder $builder): self
     {
         $menu = $builder->build();
         $menu->setParent($this->menu);
@@ -230,7 +232,7 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function enableAutoShortcuts(?string $regex = null) : self
+    public function enableAutoShortcuts(?string $regex = null): self
     {
         $this->autoShortcuts = true;
 
@@ -241,7 +243,7 @@ class CliMenuBuilder
         return $this;
     }
 
-    private function extractShortcut(string $title) : ?string
+    private function extractShortcut(string $title): ?string
     {
         preg_match($this->autoShortcutsRegex, $title, $match);
 
@@ -256,14 +258,14 @@ class CliMenuBuilder
         return strtolower($match[1]);
     }
 
-    private function processItemShortcut(MenuItemInterface $item) : void
+    private function processItemShortcut(MenuItemInterface $item): void
     {
         $this->processIndividualShortcut($item, function (CliMenu $menu) use ($item) {
             $menu->executeAsSelected($item);
         });
     }
 
-    private function processSplitItemShortcuts(SplitItem $splitItem) : void
+    private function processSplitItemShortcuts(SplitItem $splitItem): void
     {
         foreach ($splitItem->getItems() as $item) {
             $this->processIndividualShortcut($item, function (CliMenu $menu) use ($splitItem, $item) {
@@ -282,7 +284,7 @@ class CliMenuBuilder
         }
     }
 
-    private function processIndividualShortcut(MenuItemInterface $item, callable $callback) : void
+    private function processIndividualShortcut(MenuItemInterface $item, callable $callback): void
     {
         if (!$this->autoShortcuts) {
             return;
@@ -296,7 +298,7 @@ class CliMenuBuilder
         }
     }
 
-    public function addSplitItem(callable $callback) : self
+    public function addSplitItem(callable $callback): self
     {
         $builder = new SplitItemBuilder($this->menu);
 
@@ -322,7 +324,7 @@ class CliMenuBuilder
      *
      * @throws \InvalidArgumentException
      */
-    public function disableMenu() : self
+    public function disableMenu(): self
     {
         if (!$this->subMenu) {
             throw new \InvalidArgumentException(
@@ -335,82 +337,82 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function isMenuDisabled() : bool
+    public function isMenuDisabled(): bool
     {
         return $this->disabled;
     }
 
-    public function setGoBackButtonText(string $goBackButtonTest) : self
+    public function setGoBackButtonText(string $goBackButtonTest): self
     {
         $this->goBackButtonText = $goBackButtonTest;
 
         return $this;
     }
 
-    public function setExitButtonText(string $exitButtonText) : self
+    public function setExitButtonText(string $exitButtonText): self
     {
         $this->exitButtonText = $exitButtonText;
 
         return $this;
     }
 
-    public function setBackgroundColour(string $colour, ?string $fallback = null) : self
+    public function setBackgroundColour(string $colour, ?string $fallback = null): self
     {
         $this->style->setBg($colour, $fallback);
 
         return $this;
     }
 
-    public function setForegroundColour(string $colour, ?string $fallback = null) : self
+    public function setForegroundColour(string $colour, ?string $fallback = null): self
     {
         $this->style->setFg($colour, $fallback);
 
         return $this;
     }
 
-    public function setWidth(int $width) : self
+    public function setWidth(int $width): self
     {
         $this->style->setWidth($width);
 
         return $this;
     }
 
-    public function setPadding(int $topBottom, ?int $leftRight = null) : self
+    public function setPadding(int $topBottom, ?int $leftRight = null): self
     {
         $this->style->setPadding($topBottom, $leftRight);
 
         return $this;
     }
 
-    public function setPaddingTopBottom(int $topBottom) : self
+    public function setPaddingTopBottom(int $topBottom): self
     {
         $this->style->setPaddingTopBottom($topBottom);
 
         return $this;
     }
 
-    public function setPaddingLeftRight(int $leftRight) : self
+    public function setPaddingLeftRight(int $leftRight): self
     {
         $this->style->setPaddingLeftRight($leftRight);
 
         return $this;
     }
 
-    public function setMarginAuto() : self
+    public function setMarginAuto(): self
     {
         $this->style->setMarginAuto();
 
         return $this;
     }
 
-    public function setMargin(int $margin) : self
+    public function setMargin(int $margin): self
     {
         $this->style->setMargin($margin);
 
         return $this;
     }
 
-    public function setItemExtra(string $extra) : self
+    public function setItemExtra(string $extra): self
     {
         $this->style->setItemExtra($extra);
         $this->getSelectableStyle()->setItemExtra($extra);
@@ -421,7 +423,7 @@ class CliMenuBuilder
         return $this;
     }
 
-    public function setTitleSeparator(string $separator) : self
+    public function setTitleSeparator(string $separator): self
     {
         $this->style->setTitleSeparator($separator);
 
@@ -433,54 +435,54 @@ class CliMenuBuilder
      * @param int|string|null $bottom
      * @param int|string|null $left
      */
-    public function setBorder(int $top, $right = null, $bottom = null, $left = null, ?string $colour = null) : self
+    public function setBorder(int $top, $right = null, $bottom = null, $left = null, ?string $colour = null): self
     {
         $this->style->setBorder($top, $right, $bottom, $left, $colour);
 
         return $this;
     }
 
-    public function setBorderTopWidth(int $width) : self
+    public function setBorderTopWidth(int $width): self
     {
         $this->style->setBorderTopWidth($width);
 
         return $this;
     }
 
-    public function setBorderRightWidth(int $width) : self
+    public function setBorderRightWidth(int $width): self
     {
         $this->style->setBorderRightWidth($width);
 
         return $this;
     }
 
-    public function setBorderBottomWidth(int $width) : self
+    public function setBorderBottomWidth(int $width): self
     {
         $this->style->setBorderBottomWidth($width);
 
         return $this;
     }
 
-    public function setBorderLeftWidth(int $width) : self
+    public function setBorderLeftWidth(int $width): self
     {
         $this->style->setBorderLeftWidth($width);
 
         return $this;
     }
 
-    public function setBorderColour(string $colour, ?string $fallback = null) : self
+    public function setBorderColour(string $colour, ?string $fallback = null): self
     {
         $this->style->setBorderColour($colour, $fallback);
 
         return $this;
     }
 
-    public function getStyle() : MenuStyle
+    public function getStyle(): MenuStyle
     {
         return $this->style;
     }
 
-    public function getTerminal() : Terminal
+    public function getTerminal(): Terminal
     {
         return $this->terminal;
     }
@@ -488,25 +490,25 @@ class CliMenuBuilder
     /**
      * @return list<MenuItemInterface>
      */
-    private function getDefaultItems() : array
+    private function getDefaultItems(): array
     {
         $actions = [];
         if ($this->subMenu) {
-            $actions[] = new SelectableItem($this->goBackButtonText, new GoBackAction);
+            $actions[] = new SelectableItem($this->goBackButtonText, new GoBackAction());
         }
 
-        $actions[] = new SelectableItem($this->exitButtonText, new ExitAction);
+        $actions[] = new SelectableItem($this->exitButtonText, new ExitAction());
         return $actions;
     }
 
-    public function disableDefaultItems() : self
+    public function disableDefaultItems(): self
     {
         $this->disableDefaultItems = true;
 
         return $this;
     }
 
-    public function displayExtra() : self
+    public function displayExtra(): self
     {
         $this->style->setDisplaysExtra(true);
         $this->getSelectableStyle()->setDisplaysExtra(true);
@@ -519,14 +521,14 @@ class CliMenuBuilder
     /**
      * @param array<MenuItemInterface> $items
      */
-    private function itemsHaveExtra(array $items) : bool
+    private function itemsHaveExtra(array $items): bool
     {
         return !empty(array_filter($items, function (MenuItemInterface $item) {
             return $item->showsItemExtra();
         }));
     }
 
-    public function build() : CliMenu
+    public function build(): CliMenu
     {
         if (!$this->disableDefaultItems) {
             $this->menu->addItems($this->getDefaultItems());
@@ -543,91 +545,91 @@ class CliMenuBuilder
         return $this->menu;
     }
 
-    public function getDefaultStyle() : DefaultStyle
+    public function getDefaultStyle(): DefaultStyle
     {
         $style = $this->menu->getItemStyle(DefaultStyle::class);
         assert($style instanceof DefaultStyle);
         return $style;
     }
 
-    public function setDefaultStyle(DefaultStyle $style) : self
+    public function setDefaultStyle(DefaultStyle $style): self
     {
         $this->menu->setItemStyle($style, DefaultStyle::class);
 
         return $this;
     }
 
-    public function modifyDefaultStyle(callable $itemCallable) : self
+    public function modifyDefaultStyle(callable $itemCallable): self
     {
         $itemCallable($this->getDefaultStyle());
 
         return $this;
     }
 
-    public function getSelectableStyle() : SelectableStyle
+    public function getSelectableStyle(): SelectableStyle
     {
         $style = $this->menu->getItemStyle(SelectableStyle::class);
         assert($style instanceof SelectableStyle);
         return $style;
     }
 
-    public function setSelectableStyle(SelectableStyle $style) : self
+    public function setSelectableStyle(SelectableStyle $style): self
     {
         $this->menu->setItemStyle($style, SelectableStyle::class);
 
         return $this;
     }
 
-    public function modifySelectableStyle(callable $itemCallable) : self
+    public function modifySelectableStyle(callable $itemCallable): self
     {
         $itemCallable($this->getSelectableStyle());
 
         return $this;
     }
 
-    public function getCheckboxStyle() : CheckboxStyle
+    public function getCheckboxStyle(): CheckboxStyle
     {
         $style = $this->menu->getItemStyle(CheckboxStyle::class);
         assert($style instanceof CheckboxStyle);
         return $style;
     }
 
-    public function setCheckboxStyle(CheckboxStyle $style) : self
+    public function setCheckboxStyle(CheckboxStyle $style): self
     {
         $this->menu->setItemStyle($style, CheckboxStyle::class);
 
         return $this;
     }
 
-    public function modifyCheckboxStyle(callable $itemCallable) : self
+    public function modifyCheckboxStyle(callable $itemCallable): self
     {
         $itemCallable($this->getCheckboxStyle());
 
         return $this;
     }
 
-    public function getRadioStyle() : RadioStyle
+    public function getRadioStyle(): RadioStyle
     {
         $style = $this->menu->getItemStyle(RadioStyle::class);
         assert($style instanceof RadioStyle);
         return $style;
     }
 
-    public function setRadioStyle(RadioStyle $style) : self
+    public function setRadioStyle(RadioStyle $style): self
     {
         $this->menu->setItemStyle($style, RadioItem::class);
 
         return $this;
     }
 
-    public function modifyRadioStyle(callable $itemCallable) : self
+    public function modifyRadioStyle(callable $itemCallable): self
     {
         $itemCallable($this->getRadioStyle());
 
         return $this;
     }
 
-    public function modifyStyle(string $styleClass, callable $itemCallable) : self
+    public function modifyStyle(string $styleClass, callable $itemCallable): self
     {
         $itemCallable($this->menu->getItemStyle($styleClass));
 
@@ -637,7 +639,7 @@ class CliMenuBuilder
     /**
      * @param class-string<MenuItemInterface> $itemClass
      */
-    public function registerItemStyle(string $itemClass, ItemStyle $itemStyle) : self
+    public function registerItemStyle(string $itemClass, ItemStyle $itemStyle): self
     {
         $this->menu->getStyleLocator()
             ->registerItemStyle($itemClass, $itemStyle);

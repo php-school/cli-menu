@@ -13,11 +13,11 @@ use PHPUnit\Framework\TestCase;
 
 class SelectableItemRendererTest extends TestCase
 {
-    public function testRender() : void
+    public function testRender(): void
     {
         $renderer = new SelectableItemRenderer();
 
-        $menuStyle = new MenuStyle(new MockTerminal);
+        $menuStyle = new MenuStyle(new MockTerminal());
         $menuStyle->setWidth(35);
 
         $style = (new SelectableStyle())->setItemExtra('[DONE]');
@@ -34,11 +34,11 @@ class SelectableItemRendererTest extends TestCase
             $renderer->render($menuStyle, $item, true, false)
         );
     }
-    public function testRenderMultiLine() : void
+    public function testRenderMultiLine(): void
     {
         $renderer = new SelectableItemRenderer();
 
-        $menuStyle = new MenuStyle(new MockTerminal);
+        $menuStyle = new MenuStyle(new MockTerminal());
         $menuStyle->setWidth(35);
         $style = (new SelectableStyle())->setItemExtra('[DONE]');
 
@@ -56,11 +56,11 @@ class SelectableItemRendererTest extends TestCase
             $renderer->render($menuStyle, $item, true, false)
         );
     }
-    public function testRenderUnselected() : void
+    public function testRenderUnselected(): void
     {
         $renderer = new SelectableItemRenderer();
 
-        $menuStyle = new MenuStyle(new MockTerminal);
+        $menuStyle = new MenuStyle(new MockTerminal());
         $menuStyle->setWidth(35);
         $style = (new SelectableStyle())->setItemExtra('[DONE]');
 
@@ -76,11 +76,11 @@ class SelectableItemRendererTest extends TestCase
             $renderer->render($menuStyle, $item, false, false)
         );
     }
-    public function testRenderDisabled() : void
+    public function testRenderDisabled(): void
     {
         $renderer = new SelectableItemRenderer();
 
-        $menuStyle = new MenuStyle(new MockTerminal);
+        $menuStyle = new MenuStyle(new MockTerminal());
         $menuStyle->setWidth(35);
         $style = (new SelectableStyle())->setItemExtra('[DONE]');
 
@@ -94,7 +94,7 @@ class SelectableItemRendererTest extends TestCase
             escapeshellcmd($renderer->render($menuStyle, $item, true, true)[0])
         );
     }
-    public function testWrapAndIndentText() : void
+    public function testWrapAndIndentText(): void
     {
         $renderer = new SelectableItemRenderer();
 
@@ -109,7 +109,7 @@ class SelectableItemRendererTest extends TestCase
             $renderer->wrapAndIndentText('[ ] ', $text, 20)
         );
     }
-    public function testLineWithExtra() : void
+    public function testLineWithExtra(): void
     {
         $renderer = new SelectableItemRenderer();
         $style = (new SelectableStyle())->setItemExtra('[DONE]');
@@ -119,7 +119,7 @@ class SelectableItemRendererTest extends TestCase
             $renderer->lineWithExtra('FIRST LINE', 15, $style)
         );
     }
-    public function testEmptyString() : void
+    public function testEmptyString(): void
     {
         $renderer = new SelectableItemRenderer();
 
@@ -127,22 +127,22 @@ class SelectableItemRendererTest extends TestCase
         self::assertEquals('   ', $renderer->emptyString(3));
         self::assertEquals('     ', $renderer->emptyString(5));
     }
-    public function testGetAvailableTextWidthWithoutExtra() : void
+    public function testGetAvailableTextWidthWithoutExtra(): void
     {
         $renderer = new SelectableItemRenderer();
 
-        $menuStyle = new MenuStyle(new MockTerminal);
+        $menuStyle = new MenuStyle(new MockTerminal());
         $menuStyle->setWidth(100);
 
         $itemStyle = new SelectableStyle();
 
         self::assertEquals(92, $renderer->getAvailableTextWidth($menuStyle, $itemStyle));
     }
-    public function testGetAvailableTextWidthWithExtra() : void
+    public function testGetAvailableTextWidthWithExtra(): void
     {
         $renderer = new SelectableItemRenderer();
 
-        $menuStyle = new MenuStyle(new MockTerminal);
+        $menuStyle = new MenuStyle(new MockTerminal());
         $menuStyle->setWidth(100);
 
         $itemStyle = new SelectableStyle();
