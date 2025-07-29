@@ -11,6 +11,22 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ### Removed
 
+## [4.4.0]
+### Added
+ - Added strict_types everywhere (#253)
+ - Support for full-width unicode characters (#274)
+ - Support for special chars with custom control mappings (#283)
+
+### Changed
+ - `addSubMenu` & `addSplitItem` in `CliMenuBuilder` to accept any callable (#275)
+
+### Fixed
+ - Using backspaces in input dialogs (#260, #267)
+
+### Removed
+ - Support for PHP 7.1 - 8.1 (#287, #289)
+ - ctype extension usages (#272)
+
 ## [4.3.0]
 ### Fixed
  - PHP 8.1 Support (#252, #249)
