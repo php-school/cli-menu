@@ -115,7 +115,7 @@ class MenuStyle
      *     marginAuto: bool
      * }
      */
-    private static $defaultStyleValues = [
+    private static array $defaultStyleValues = [
         'fg' => 'white',
         'bg' => 'blue',
         'width' => 100,
@@ -136,7 +136,7 @@ class MenuStyle
     /**
      * @var array<string, int>
      */
-    private static $availableForegroundColors = [
+    private static array $availableForegroundColors = [
         'black'   => 30,
         'red'     => 31,
         'green'   => 32,
@@ -151,7 +151,7 @@ class MenuStyle
     /**
      * @var array<string, int>
      */
-    private static $availableBackgroundColors = [
+    private static array $availableBackgroundColors = [
         'black'   => 40,
         'red'     => 41,
         'green'   => 42,
@@ -166,7 +166,7 @@ class MenuStyle
     /**
      * @var array<string, array{set: int, unset: int}>
      */
-    private static $availableOptions = [
+    private static array $availableOptions = [
         'bold'       => ['set' => 1, 'unset' => 22],
         'dim'        => ['set' => 2, 'unset' => 22],
         'underscore' => ['set' => 4, 'unset' => 24],

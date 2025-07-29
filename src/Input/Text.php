@@ -11,35 +11,17 @@ use PhpSchool\CliMenu\MenuStyle;
  */
 class Text implements Input
 {
-    /**
-     * @var InputIO
-     */
-    private $inputIO;
+    private InputIO $inputIO;
 
-    /**
-     * @var string
-     */
-    private $promptText = 'Enter text:';
+    private string $promptText = 'Enter text:';
 
-    /**
-     * @var string
-     */
-    private $validationFailedText = 'Invalid, try again';
+    private string $validationFailedText = 'Invalid, try again';
 
-    /**
-     * @var string
-     */
-    private $placeholderText = '';
+    private string $placeholderText = '';
 
-    /**
-     * @var null|callable
-     */
-    private $validator;
+    private \Closure|null $validator = null;
 
-    /**
-     * @var MenuStyle
-     */
-    private $style;
+    private MenuStyle $style;
 
     public function __construct(InputIO $inputIO, MenuStyle $style)
     {
@@ -85,7 +67,11 @@ class Text implements Input
 
     public function setValidator(callable $validator): Input
     {
-        $this->validator = $validator;
+        if ($validator instanceof \Closure) {
+            $validator = $validator->bindTo($this);
+        }
+
+        $this->validator = $validator(...);
 
         return $this;
     }
@@ -99,10 +85,6 @@ class Text implements Input
     {
         if ($this->validator) {
             $validator = $this->validator;
-
-            if ($validator instanceof \Closure) {
-                $validator = $validator->bindTo($this);
-            }
 
             return $validator($input);
         }

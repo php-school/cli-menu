@@ -21,30 +21,15 @@ class AsciiArtItem implements MenuItemInterface
     public const POSITION_LEFT   = 'left';
     public const POSITION_RIGHT  = 'right';
 
-    /**
-     * @var string
-     */
-    private $text;
+    private string $text;
 
-    /**
-     * @var string
-     */
-    private $position;
+    private string $position;
 
-    /**
-     * @var string
-     */
-    private $alternateText;
+    private string$alternateText;
 
-    /**
-     * @var int
-     */
-    private $artLength;
+    private int $artLength;
 
-    /**
-     * @var DefaultStyle
-     */
-    private $style;
+    private DefaultStyle $style;
 
     public function __construct(string $text, string $position = self::POSITION_CENTER, string $alt = '')
     {

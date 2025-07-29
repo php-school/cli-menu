@@ -9,10 +9,7 @@ namespace PhpSchool\CliMenu\Input;
  */
 class InputResult
 {
-    /**
-     * @var string
-     */
-    private $input;
+    private string $input;
 
     public function __construct(string $input)
     {

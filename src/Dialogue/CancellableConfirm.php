@@ -12,10 +12,7 @@ use PhpSchool\Terminal\NonCanonicalReader;
  */
 class CancellableConfirm extends Dialogue
 {
-    /**
-     * @var bool
-     */
-    private $confirm = true;
+    private bool $confirm = true;
 
     /**
      * Display confirmation with a button with the given text

@@ -11,37 +11,20 @@ use PhpSchool\CliMenu\Style\RadioStyle;
 
 class RadioItem implements MenuItemInterface
 {
-    /**
-     * @var string
-     */
-    private $text;
+    private string $text;
 
-    /**
-     * @var callable
-     */
-    private $selectAction;
+    private \Closure $selectAction;
 
-    /**
-     * @var bool
-     */
-    private $showItemExtra;
+    private bool $showItemExtra;
 
-    /**
-     * @var bool
-     */
-    private $disabled;
+    private bool $disabled;
 
     /**
      * The current checkbox state
-     *
-     * @var bool
      */
-    private $checked = false;
+    private bool $checked = false;
 
-    /**
-     * @var RadioStyle
-     */
-    private $style;
+    private RadioStyle $style;
 
     public function __construct(
         string $text,
@@ -50,7 +33,7 @@ class RadioItem implements MenuItemInterface
         bool $disabled = false
     ) {
         $this->text = $text;
-        $this->selectAction = $selectAction;
+        $this->selectAction = $selectAction(...);
         $this->showItemExtra = $showItemExtra;
         $this->disabled = $disabled;
 

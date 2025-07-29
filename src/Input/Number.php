@@ -12,35 +12,17 @@ use PhpSchool\Terminal\InputCharacter;
  */
 class Number implements Input
 {
-    /**
-     * @var InputIO
-     */
-    private $inputIO;
+    private InputIO $inputIO;
 
-    /**
-     * @var string
-     */
-    private $promptText = 'Enter a number:';
+    private string $promptText = 'Enter a number:';
 
-    /**
-     * @var string
-     */
-    private $validationFailedText = 'Not a valid number, try again';
+    private string $validationFailedText = 'Not a valid number, try again';
 
-    /**
-     * @var string
-     */
-    private $placeholderText = '';
+    private string $placeholderText = '';
 
-    /**
-     * @var null|callable
-     */
-    private $validator;
+    private \Closure|null $validator = null;
 
-    /**
-     * @var MenuStyle
-     */
-    private $style;
+    private MenuStyle $style;
 
     public function __construct(InputIO $inputIO, MenuStyle $style)
     {
@@ -86,7 +68,11 @@ class Number implements Input
 
     public function setValidator(callable $validator): Input
     {
-        $this->validator = $validator;
+        if ($validator instanceof \Closure) {
+            $validator = $validator->bindTo($this);
+        }
+
+        $this->validator = $validator(...);
 
         return $this;
     }
@@ -108,10 +94,6 @@ class Number implements Input
     {
         if ($this->validator) {
             $validator = $this->validator;
-
-            if ($validator instanceof \Closure) {
-                $validator = $validator->bindTo($this);
-            }
 
             return $validator($input);
         }

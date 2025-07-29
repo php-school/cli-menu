@@ -15,25 +15,13 @@ class SelectableStyle implements ItemStyle
         'displaysExtra' => false,
     ];
 
-    /**
-     * @var string
-     */
-    private $selectedMarker;
+    private string $selectedMarker;
 
-    /**
-     * @var string
-     */
-    private $unselectedMarker;
+    private string $unselectedMarker;
 
-    /**
-     * @var string
-     */
-    private $itemExtra;
+    private string $itemExtra;
 
-    /**
-     * @var bool
-     */
-    private $displaysExtra;
+    private bool $displaysExtra;
 
     public function __construct()
     {

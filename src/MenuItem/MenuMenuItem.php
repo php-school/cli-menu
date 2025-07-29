@@ -14,30 +14,15 @@ use PhpSchool\CliMenu\Style\SelectableStyle;
  */
 class MenuMenuItem implements MenuItemInterface, PropagatesStyles
 {
-    /**
-     * @var string
-     */
-    private $text;
+    private string $text;
 
-    /**
-     * @var CliMenu
-     */
-    private $subMenu;
+    private CliMenu $subMenu;
 
-    /**
-     * @var bool
-     */
-    private $showItemExtra = false;
+    private bool $showItemExtra = false;
 
-    /**
-     * @var bool
-     */
-    private $disabled;
+    private bool $disabled;
 
-    /**
-     * @var SelectableStyle
-     */
-    private $style;
+    private SelectableStyle $style;
 
     public function __construct(
         string $text,

@@ -14,15 +14,9 @@ use PhpSchool\CliMenu\Util\StringUtil;
  */
 class StaticItem implements MenuItemInterface
 {
-    /**
-     * @var string
-     */
-    private $text;
+    private string $text;
 
-    /**
-     * @var DefaultStyle
-     */
-    private $style;
+    private DefaultStyle $style;
 
     public function __construct(string $text)
     {

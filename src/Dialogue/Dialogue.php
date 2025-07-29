@@ -14,40 +14,19 @@ use PhpSchool\Terminal\Terminal;
  */
 abstract class Dialogue
 {
-    /**
-     * @var MenuStyle
-     */
-    protected $style;
+    protected MenuStyle $style;
 
-    /**
-     * @var CliMenu
-     */
-    protected $parentMenu;
+    protected CliMenu $parentMenu;
 
-    /**
-     * @var Terminal
-     */
-    protected $terminal;
+    protected Terminal $terminal;
 
-    /**
-     * @var string $text
-     */
-    protected $text;
+    protected string $text;
 
-    /**
-     * @var bool $cancellable
-     */
-    protected $cancellable;
+    protected bool $cancellable;
 
-    /**
-     * @var int
-     */
-    protected $x;
+    protected int $x;
 
-    /**
-     * @var int
-     */
-    protected $y;
+    protected int $y;
 
     public function __construct(
         CliMenu $parentMenu,

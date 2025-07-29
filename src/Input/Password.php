@@ -11,40 +11,19 @@ use PhpSchool\CliMenu\MenuStyle;
  */
 class Password implements Input
 {
-    /**
-     * @var InputIO
-     */
-    private $inputIO;
+    private InputIO $inputIO;
 
-    /**
-     * @var string
-     */
-    private $promptText = 'Enter password:';
+    private string $promptText = 'Enter password:';
 
-    /**
-     * @var string
-     */
-    private $validationFailedText = 'Invalid password, try again';
+    private string $validationFailedText = 'Invalid password, try again';
 
-    /**
-     * @var string
-     */
-    private $placeholderText = '';
+    private string $placeholderText = '';
 
-    /**
-     * @var null|callable
-     */
-    private $validator;
+    private \Closure|null $validator = null;
 
-    /**
-     * @var MenuStyle
-     */
-    private $style;
+    private MenuStyle $style;
 
-    /**
-     * @var int
-     */
-    private $passwordLength = 16;
+    private int $passwordLength = 16;
 
     public function __construct(InputIO $inputIO, MenuStyle $style)
     {
@@ -90,7 +69,11 @@ class Password implements Input
 
     public function setValidator(callable $validator): Input
     {
-        $this->validator = $validator;
+        if ($validator instanceof \Closure) {
+            $validator = $validator->bindTo($this);
+        }
+
+        $this->validator = $validator(...);
 
         return $this;
     }
@@ -104,10 +87,6 @@ class Password implements Input
     {
         if ($this->validator) {
             $validator = $this->validator;
-
-            if ($validator instanceof \Closure) {
-                $validator = $validator->bindTo($this);
-            }
 
             return $validator($input);
         }

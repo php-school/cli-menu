@@ -14,20 +14,11 @@ use PhpSchool\CliMenu\Style\ItemStyle;
  */
 class LineBreakItem implements MenuItemInterface
 {
-    /**
-     * @var string
-     */
-    private $breakChar;
+    private string $breakChar;
 
-    /**
-     * @var int
-     */
-    private $lines;
+    private int $lines;
 
-    /**
-     * @var DefaultStyle
-     */
-    private $style;
+    private DefaultStyle $style;
 
     public function __construct(string $breakChar = ' ', int $lines = 1)
     {

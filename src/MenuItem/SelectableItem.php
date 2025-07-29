@@ -19,27 +19,15 @@ class SelectableItem implements MenuItemInterface
     /**
      * @var string
      */
-    private $text;
+    private string $text;
 
-    /**
-     * @var callable
-     */
-    private $selectAction;
+    private \Closure $selectAction;
 
-    /**
-     * @var bool
-     */
-    private $showItemExtra;
+    private bool $showItemExtra;
 
-    /**
-     * @var bool
-     */
-    private $disabled;
+    private bool $disabled;
 
-    /**
-     * @var SelectableStyle
-     */
-    private $style;
+    private SelectableStyle $style;
 
     public function __construct(
         string $text,
@@ -48,7 +36,7 @@ class SelectableItem implements MenuItemInterface
         bool $disabled = false
     ) {
         $this->text = $text;
-        $this->selectAction = $selectAction;
+        $this->selectAction = $selectAction(...);
         $this->showItemExtra = $showItemExtra;
         $this->disabled = $disabled;
 

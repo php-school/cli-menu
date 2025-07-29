@@ -16,25 +16,13 @@ class RadioStyle implements ItemStyle
         'displaysExtra' => false,
     ];
 
-    /**
-     * @var string
-     */
-    private $checkedMarker;
+    private string $checkedMarker;
 
-    /**
-     * @var string
-     */
-    private $uncheckedMarker;
+    private string $uncheckedMarker;
 
-    /**
-     * @var string
-     */
-    private $itemExtra;
+    private string $itemExtra;
 
-    /**
-     * @var bool
-     */
-    private $displaysExtra;
+    private bool $displaysExtra;
 
     public function __construct()
     {
