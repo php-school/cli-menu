@@ -8,6 +8,7 @@ use PhpSchool\CliMenu\Exception\CannotShrinkMenuException;
 use PhpSchool\CliMenu\Exception\InvalidInstantiationException;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\Terminal\UnixTerminal;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -552,9 +553,7 @@ class MenuStyleTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider belowZeroProvider
-     */
+    #[DataProvider('belowZeroProvider')]
     public function testSetWidthThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
@@ -562,7 +561,7 @@ class MenuStyleTest extends TestCase
         $this->getMenuStyle()->setWidth($value);
     }
 
-    public function belowZeroProvider() : array
+    public static function belowZeroProvider() : array
     {
         return [[-1], [-2], [-10]];
     }
@@ -615,9 +614,7 @@ class MenuStyleTest extends TestCase
         self::assertEquals(4, $style->getPaddingLeftRight());
     }
 
-    /**
-     * @dataProvider belowZeroProvider
-     */
+    #[DataProvider('belowZeroProvider')]
     public function testSetPaddingTopAndBottomThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
@@ -625,9 +622,7 @@ class MenuStyleTest extends TestCase
         $this->getMenuStyle()->setPaddingTopBottom($value);
     }
 
-    /**
-     * @dataProvider belowZeroProvider
-     */
+    #[DataProvider('belowZeroProvider')]
     public function testSetPaddingLeftAndRightThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
@@ -635,9 +630,7 @@ class MenuStyleTest extends TestCase
         $this->getMenuStyle()->setPaddingLeftRight($value);
     }
 
-    /**
-     * @dataProvider belowZeroProvider
-     */
+    #[DataProvider('belowZeroProvider')]
     public function testSetPaddingThrowsExceptionIfTopBottomValueIsNotZeroOrAbove(int $value) : void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
@@ -645,9 +638,7 @@ class MenuStyleTest extends TestCase
         $this->getMenuStyle()->setPadding($value, 1);
     }
 
-    /**
-     * @dataProvider belowZeroProvider
-     */
+    #[DataProvider('belowZeroProvider')]
     public function testSetPaddingThrowsExceptionIfLeftRightValueIsNotZeroOrAbove(int $value) : void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
@@ -655,9 +646,7 @@ class MenuStyleTest extends TestCase
         $this->getMenuStyle()->setPadding(1, $value);
     }
 
-    /**
-     * @dataProvider belowZeroProvider
-     */
+    #[DataProvider('belowZeroProvider')]
     public function testSetMarginThrowsExceptionIfValueIsNotZeroOrAbove(int $value) : void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
@@ -715,9 +704,7 @@ class MenuStyleTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider cannotShrinkProvider
-     */
+    #[DataProvider('cannotShrinkProvider')]
     public function testSetWidthThrowsExceptionIfMenuTooWideAndMarginConsumesTerminal(int $margin) : void
     {
         $this->expectException(CannotShrinkMenuException::class);
@@ -730,7 +717,7 @@ class MenuStyleTest extends TestCase
         $style->setWidth(10);
     }
 
-    public function cannotShrinkProvider() : array
+    public static function cannotShrinkProvider() : array
     {
         return [[50], [51], [100]];
     }

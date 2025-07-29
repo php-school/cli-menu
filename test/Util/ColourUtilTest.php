@@ -5,6 +5,7 @@ namespace PhpSchool\CliMenuTest\Util;
 
 use PhpSchool\CliMenu\Util\ColourUtil;
 use PhpSchool\Terminal\Terminal;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -88,9 +89,7 @@ class ColourUtilTest extends TestCase
         self::assertEquals('yellow', ColourUtil::validateColour($terminal, '148'));
     }
 
-    /**
-     * @dataProvider invalidColourCodeProvider
-     */
+    #[DataProvider('invalidColourCodeProvider')]
     public function testValidateColourThrowsExceptionIfInvalid256ColourCodeUsed(string $colourCode) : void
     {
         self::expectException(\Assert\InvalidArgumentException::class);
@@ -98,7 +97,7 @@ class ColourUtilTest extends TestCase
         ColourUtil::validateColour($this->createMock(Terminal::class), $colourCode);
     }
 
-    public function invalidColourCodeProvider() : array
+    public static function invalidColourCodeProvider() : array
     {
         return [
             ['-1'],
@@ -107,9 +106,7 @@ class ColourUtilTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider validColourCodeProvider
-     */
+    #[DataProvider('validColourCodeProvider')]
     public function testValidateColourWith256ColoursWhenTerminalSupports256Colours(string $colourCode) : void
     {
         $terminal = $this->createMock(Terminal::class);
@@ -120,7 +117,7 @@ class ColourUtilTest extends TestCase
         self::assertEquals($colourCode, ColourUtil::validateColour($terminal, $colourCode));
     }
 
-    public function validColourCodeProvider() : array
+    public static function validColourCodeProvider() : array
     {
         return [
             ['0'],

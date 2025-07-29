@@ -43,7 +43,7 @@ class StaticItemTest extends TestCase
         $menuStyle
             ->expects($this->once())
             ->method('getContentWidth')
-            ->will($this->returnValue(20));
+            ->willReturn(20);
 
         $item = new StaticItem('CONTENT 1 LINE');
         
@@ -60,7 +60,7 @@ class StaticItemTest extends TestCase
         $menuStyle
             ->expects($this->once())
             ->method('getContentWidth')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
 
         $item = new StaticItem('CONTENT 1 LINE');
 
@@ -77,7 +77,7 @@ class StaticItemTest extends TestCase
         $menuStyle
             ->expects($this->once())
             ->method('getContentWidth')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
 
         $item = new StaticItem('CONTENT');
         $item->setText('CONTENT 2 LINES');

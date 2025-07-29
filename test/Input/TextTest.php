@@ -8,6 +8,7 @@ use PhpSchool\CliMenu\Input\InputIO;
 use PhpSchool\CliMenu\Input\Text;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\Terminal\Terminal;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -64,15 +65,13 @@ class TextTest extends TestCase
         static::assertEquals('My Title', $this->input->getPlaceholderText());
     }
 
-    /**
-     * @dataProvider validateProvider
-     */
+    #[DataProvider('validateProvider')]
     public function testValidate(string $value, bool $result) : void
     {
         static::assertEquals($this->input->validate($value), $result);
     }
 
-    public function validateProvider() : array
+    public static function validateProvider() : array
     {
         return [
             ['', false],

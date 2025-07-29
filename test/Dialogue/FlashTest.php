@@ -8,6 +8,7 @@ use PhpSchool\CliMenu\MenuItem\SelectableItem;
 use PhpSchool\CliMenu\MenuStyle;
 use PhpSchool\Terminal\IO\BufferedOutput;
 use PhpSchool\Terminal\Terminal;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -40,19 +41,19 @@ class FlashTest extends TestCase
 
         $this->terminal->expects($this->any())
             ->method('write')
-            ->will($this->returnCallback(function ($buffer) {
+            ->willReturnCallback(function ($buffer) {
                 $this->output->write($buffer);
-            }));
+            });
     }
 
     public function testFlashWithOddLength() : void
     {
         $this->terminal
             ->method('read')
-            ->will($this->onConsecutiveCalls(
+            ->willReturnOnConsecutiveCalls(
                 "\n",
                 "\n"
-            ));
+            );
 
         $style = $this->getStyle($this->terminal);
 
@@ -73,10 +74,10 @@ class FlashTest extends TestCase
     {
         $this->terminal
             ->method('read')
-            ->will($this->onConsecutiveCalls(
+            ->willReturnOnConsecutiveCalls(
                 "\n",
                 "\n"
-            ));
+            );
 
         $style = $this->getStyle($this->terminal);
 
@@ -93,14 +94,12 @@ class FlashTest extends TestCase
         static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    /**
-     * @dataProvider keyProvider
-     */
+    #[DataProvider('keyProvider')]
     public function testFlashCanBeClosedWithAnyKey(string $key) : void
     {
         $this->terminal
             ->method('read')
-            ->will($this->onConsecutiveCalls("\n", $key));
+            ->willReturnOnConsecutiveCalls("\n", $key);
 
         $style = $this->getStyle($this->terminal);
 
@@ -117,7 +116,7 @@ class FlashTest extends TestCase
         static::assertStringEqualsFile($this->getTestFile(), $this->output->fetch());
     }
 
-    public function keyProvider() : array
+    public static function keyProvider() : array
     {
         return [
             ["\n"],
@@ -129,7 +128,7 @@ class FlashTest extends TestCase
 
     private function getTestFile() : string
     {
-        return sprintf('%s/../res/%s.txt', __DIR__, $this->getName(false));
+        return sprintf('%s/../res/%s.txt', __DIR__, $this->name());
     }
 
     private function getStyle(Terminal $terminal) : MenuStyle

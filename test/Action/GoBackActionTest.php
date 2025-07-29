@@ -27,7 +27,7 @@ class GoBackActionTest extends TestCase
         $menu
             ->expects($this->once())
             ->method('getParent')
-            ->will($this->returnValue($parent));
+            ->willReturn($parent);
         
         $menu
             ->expects($this->once())
