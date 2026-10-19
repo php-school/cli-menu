@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpSchool\CliMenu\Terminal;
 
+use PhpSchool\Terminal\IO\PowerShellInputStream;
 use PhpSchool\Terminal\IO\ResourceInputStream;
 use PhpSchool\Terminal\IO\ResourceOutputStream;
 use PhpSchool\Terminal\Terminal;
@@ -16,6 +17,12 @@ class TerminalFactory
 {
     public static function fromSystem(): Terminal
     {
-        return new UnixTerminal(new ResourceInputStream(), new ResourceOutputStream());
+        if (PHP_OS_FAMILY === 'Windows') {
+            $input = new PowerShellInputStream();
+        } else {
+            $input = new ResourceInputStream();
+        }
+        $output = new ResourceOutputStream();
+        return new UnixTerminal($input, $output);
     }
 }
