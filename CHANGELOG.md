@@ -11,6 +11,17 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ### Removed
 
+## [4.5.0]
+### Added
+ - Support for PHP 8.5 (#294)
+
+### Changed
+ - Require php-school/terminal ^0.3 (#294)
+
+### Fixed
+ - PHP 8.5 deprecations (#294)
+ - Clearer exception when no menu item is selected (#294)
+
 ## [4.4.0]
 ### Added
  - Added strict_types everywhere (#253)
