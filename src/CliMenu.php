@@ -345,17 +345,26 @@ class CliMenu
         } while (!$this->canSelect());
     }
 
+    private function getSelectedMenuItem(): MenuItemInterface
+    {
+        if (null === $this->selectedItem) {
+            throw new \RuntimeException('No item is currently selected');
+        }
+
+        return $this->items[$this->selectedItem];
+    }
+
     /**
      * Move the selection in a given direction, left / right
      */
     protected function moveSelectionHorizontally(string $direction): void
     {
-        if (!$this->items[$this->selectedItem] instanceof SplitItem) {
+        if (!$this->getSelectedMenuItem() instanceof SplitItem) {
             return;
         }
 
         /** @var SplitItem $item */
-        $item = $this->items[$this->selectedItem];
+        $item = $this->getSelectedMenuItem();
         $itemKeys = array_keys($item->getItems());
         $selectedItemIndex = $item->getSelectedItemIndex();
 
@@ -391,7 +400,7 @@ class CliMenu
      */
     private function canSelect(): bool
     {
-        return $this->items[$this->selectedItem]->canSelect();
+        return $this->getSelectedMenuItem()->canSelect();
     }
 
     /**
@@ -404,7 +413,7 @@ class CliMenu
             throw new \RuntimeException('No selected item');
         }
 
-        $item = $this->items[$this->selectedItem];
+        $item = $this->getSelectedMenuItem();
         return $item instanceof SplitItem
             ? $item->getSelectedItem()
             : $item;
@@ -441,7 +450,7 @@ class CliMenu
 
     public function executeAsSelected(MenuItemInterface $item): void
     {
-        $current = $this->items[$this->selectedItem];
+        $current = $this->getSelectedMenuItem();
         $this->setSelectedItem($item);
         $this->executeCurrentItem();
         $this->setSelectedItem($current);
