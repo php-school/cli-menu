@@ -4,16 +4,7 @@
 
 <p align="center">
     <a href="https://github.com/php-school/cli-menu/actions" title="Build Status" target="_blank">
-     <img src="https://img.shields.io/github/actions/workflow/status/php-school/cli-menu/test.yml?style=flat-square&label=Linux" />
-    </a>
-    <a href="https://ci.appveyor.com/project/mikeymike/cli-menu" title="Windows Build Status" target="_blank">
-     <img src="https://img.shields.io/appveyor/ci/mikeymike/cli-menu/master.svg?style=flat-square&label=Windows" />
-    </a>
-    <a href="https://codecov.io/github/php-school/cli-menu" title="Coverage Status" target="_blank">
-     <img src="https://img.shields.io/codecov/c/github/php-school/cli-menu.svg?style=flat-square" />
-    </a>
-    <a href="https://scrutinizer-ci.com/g/php-school/cli-menu/" title="Scrutinizer Code Quality" target="_blank">
-     <img src="https://img.shields.io/scrutinizer/g/php-school/cli-menu.svg?style=flat-square" />
+     <img src="https://img.shields.io/github/actions/workflow/status/php-school/cli-menu/ci.yml?branch=master&style=flat-square&label=CI" />
     </a>
     <a href="https://phpschool-team.slack.com/messages">
       <img src="https://phpschool.herokuapp.com/badge.svg">
