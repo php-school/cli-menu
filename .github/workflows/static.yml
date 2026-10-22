@@ -5,9 +5,10 @@ on: ['push', 'pull_request']
 jobs:
   ci:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     strategy:
       matrix:
-        php: ['8.4']
+        php: ['8.5']
     name: Code Style
 
     steps:
