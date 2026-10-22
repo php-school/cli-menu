@@ -51,7 +51,6 @@ class MenuStyleTest extends TestCase
         self::assertTrue($reflectionMenu->hasProperty('style'));
 
         $styleProperty = $reflectionMenu->getProperty('style');
-        $styleProperty->setAccessible(true);
         $style = $styleProperty->getValue($menu);
 
         self::assertSame(MenuStyle::class, get_class($style));
@@ -678,7 +677,6 @@ class MenuStyleTest extends TestCase
         $style = $this->getMenuStyle(8, 40);
 
         $prop = new \ReflectionProperty(MenuStyle::class, 'debugMode');
-        $prop->setAccessible(true);
         $prop->setValue($style, true);
 
         $style->setWidth(30);
